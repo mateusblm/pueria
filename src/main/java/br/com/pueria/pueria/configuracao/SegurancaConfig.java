@@ -40,10 +40,6 @@ public class SegurancaConfig {
                                 "/api/status",
                                 "/actuator/health"
                         ).permitAll()
-
-                        // Temporário, até amarrarmos criança com usuário/responsável.
-                        .requestMatchers("/api/criancas/**").permitAll()
-
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(autenticacaoJwtFiltro, UsernamePasswordAuthenticationFilter.class)
