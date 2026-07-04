@@ -21,14 +21,17 @@ export const routes: Routes = [
       { path: 'criancas', loadComponent: () => import('./features/criancas/minhas-criancas/minhas-criancas.component').then((m) => m.MinhasCriancasComponent) },
       { path: 'criancas/nova', loadComponent: () => import('./features/criancas/nova-crianca/nova-crianca.component').then((m) => m.NovaCriancaComponent) },
       { path: 'criancas/:id/editar', loadComponent: () => import('./features/criancas/editar-crianca/editar-crianca.component').then((m) => m.EditarCriancaComponent) },
+      { path: 'criancas/:id/desenvolvimento', loadComponent: () => import('./features/desenvolvimento/marcos-crianca/marcos-crianca.component').then((m) => m.MarcosCriancaComponent) },
       { path: 'criancas/:id', loadComponent: () => import('./features/criancas/detalhe-crianca/detalhe-crianca.component').then((m) => m.DetalheCriancaComponent) },
       { path: 'app/criancas', pathMatch: 'full', redirectTo: 'criancas' },
       { path: 'app/criancas/nova', pathMatch: 'full', redirectTo: 'criancas/nova' },
       { path: 'app/criancas/:id/editar', redirectTo: 'criancas/:id/editar' },
+      { path: 'app/criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'app/criancas/:id', redirectTo: 'criancas/:id' },
       { path: 'minhas-criancas', pathMatch: 'full', redirectTo: 'criancas' },
       { path: 'minhas-criancas/nova', pathMatch: 'full', redirectTo: 'criancas/nova' },
       { path: 'minhas-criancas/:id/editar', redirectTo: 'criancas/:id/editar' },
+      { path: 'minhas-criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'minhas-criancas/:id', redirectTo: 'criancas/:id' }
     ]
   },

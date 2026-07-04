@@ -16,6 +16,7 @@
         <p class="pueria-subtitle">{{ calcularIdade(crianca.dataNascimento) }}</p>
       </div>
       <div class="detalhe-page__actions">
+        <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button">Desenvolvimento</a>
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
@@ -77,10 +78,11 @@
 
       <article class="pueria-card detalhe-card">
         <p class="pueria-eyebrow">Cuidado preventivo</p>
-        <h2>Próximo passo</h2>
+        <h2>Marcos do desenvolvimento</h2>
         <p>
-          Em breve este espaço pode concentrar marcos do desenvolvimento, rotina, sono, alimentação e pontos de atenção.
+          Acompanhe sinais esperados para a idade em linguagem, movimento, cognição e socialização.
         </p>
+        <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button pueria-button--secondary">Abrir marcos</a>
       </article>
     </div>
   }

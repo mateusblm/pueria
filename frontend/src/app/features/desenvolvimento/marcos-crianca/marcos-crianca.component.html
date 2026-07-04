@@ -1,0 +1,54 @@
+<section class="marcos-page">
+  <a [routerLink]="['/criancas', criancaId()]" class="marcos-page__back">← Perfil da criança</a>
+
+  <div class="pueria-card marcos-page__hero">
+    <p class="pueria-eyebrow">Desenvolvimento</p>
+    <h1 class="pueria-title">Marcos da criança</h1>
+    <p class="pueria-subtitle">
+      Registre o que já foi observado na rotina. Estes marcos ajudam a acompanhar a evolução e não substituem uma avaliação profissional.
+    </p>
+  </div>
+
+  @if (carregando()) {
+    <div class="pueria-card marcos-page__state">Carregando marcos do desenvolvimento...</div>
+  } @else if (erro()) {
+    <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+  } @else if (marcos().length === 0) {
+    <div class="pueria-card marcos-page__state">
+      Ainda não há marcos disponíveis para a idade desta criança.
+    </div>
+  } @else {
+    <div class="marcos-page__groups">
+      @for (grupo of grupos(); track grupo.idadeMeses) {
+        <section class="pueria-card marco-grupo">
+          <header>
+            <p class="pueria-eyebrow">Até {{ grupo.titulo }}</p>
+            <h2>{{ grupo.marcos.length }} marcos de referência</h2>
+          </header>
+
+          <div class="marco-lista">
+            @for (marco of grupo.marcos; track marco.id) {
+              <article class="marco-item">
+                <div>
+                  <span class="marco-area">{{ labelArea(marco.area) }}</span>
+                  <h3>{{ marco.descricao }}</h3>
+                  <p>{{ marco.fonte }}</p>
+                </div>
+
+                <div class="marco-item__actions">
+                  <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
+                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoId() === marco.id" (click)="registrar(marco, 'AINDA_NAO_OBSERVADO')">
+                    Acompanhar
+                  </button>
+                  <button type="button" class="pueria-button" [disabled]="salvandoId() === marco.id" (click)="registrar(marco, 'OBSERVADO')">
+                    Observado
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</section>
