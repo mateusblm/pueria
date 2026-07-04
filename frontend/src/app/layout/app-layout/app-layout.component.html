@@ -1,28 +1,68 @@
 <div class="app-shell">
-  <aside class="app-shell__sidebar">
-    <div class="app-shell__brand">
+  <header class="app-shell__topbar">
+    <app-brand-mark></app-brand-mark>
+
+    <button
+      type="button"
+      class="app-shell__menu-button"
+      aria-label="Abrir menu de navegação"
+      [attr.aria-expanded]="menuAberto"
+      (click)="alternarMenu()"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <div
+    class="app-shell__overlay"
+    [class.app-shell__overlay--visivel]="menuAberto"
+    (click)="fecharMenu()"
+  ></div>
+
+  <aside class="app-shell__sidebar" [class.app-shell__sidebar--aberta]="menuAberto">
+    <div class="app-shell__sidebar-header">
       <app-brand-mark></app-brand-mark>
+
+      <button
+        type="button"
+        class="app-shell__close"
+        aria-label="Fechar menu"
+        (click)="fecharMenu()"
+      >
+        ×
+      </button>
     </div>
 
     <nav class="app-shell__nav" aria-label="Navegação principal">
-      <a routerLink="/app/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">
+      <a
+        routerLink="/app/criancas"
+        routerLinkActive="ativo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="fecharMenu()"
+      >
         <span class="app-shell__nav-icon">⌂</span>
         <span>Crianças</span>
       </a>
 
-      <a routerLink="/app/criancas/nova" routerLinkActive="ativo">
+      <a
+        routerLink="/app/criancas/nova"
+        routerLinkActive="ativo"
+        (click)="fecharMenu()"
+      >
         <span class="app-shell__nav-icon">＋</span>
-        <span>Adicionar</span>
+        <span>Adicionar criança</span>
       </a>
     </nav>
 
-    <button class="app-shell__logout" type="button" (click)="sair()">
-      <span class="app-shell__nav-icon">↪</span>
+    <button type="button" class="app-shell__logout" (click)="sair()">
+      <span class="app-shell__nav-icon">↩</span>
       <span>Sair</span>
     </button>
   </aside>
 
-  <main class="app-shell__content">
+  <main class="app-shell__content" (click)="fecharMenuSeMobile()">
     <router-outlet></router-outlet>
   </main>
 </div>

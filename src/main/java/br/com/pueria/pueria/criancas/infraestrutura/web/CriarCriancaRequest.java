@@ -27,13 +27,13 @@ public record CriarCriancaRequest(
         boolean prematura,
 
         @NotNull(message = "As semanas gestacionais são obrigatórias.")
-        @Min(value = 22, message = "As semanas gestacionais devem ser no mínimo 22.")
-        @Max(value = 42, message = "As semanas gestacionais devem ser no máximo 42.")
+        @Min(value = 22, message = "As semanas gestacionais devem estar entre 22 e 42.")
+        @Max(value = 42, message = "As semanas gestacionais devem estar entre 22 e 42.")
         Integer semanasGestacionais,
 
         @NotNull(message = "O peso de nascimento é obrigatório.")
-        @Min(value = 300, message = "O peso de nascimento deve ser no mínimo 300 gramas.")
-        @Max(value = 7000, message = "O peso de nascimento deve ser no máximo 7000 gramas.")
+        @Min(value = 300, message = "O peso de nascimento informado está fora do limite operacional permitido.")
+        @Max(value = 7000, message = "O peso de nascimento informado está fora do limite operacional permitido.")
         Integer pesoNascimentoGramas,
 
         @NotNull(message = "O parentesco é obrigatório.")

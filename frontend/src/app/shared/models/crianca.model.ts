@@ -1,4 +1,4 @@
-export type Sexo = 'MASCULINO' | 'FEMININO' | 'NAO_INFORMADO';
+export type Sexo = 'MASCULINO' | 'FEMININO';
 
 export type Parentesco = 'MAE' | 'PAI' | 'RESPONSAVEL_LEGAL' | 'AVO' | 'OUTRO';
 

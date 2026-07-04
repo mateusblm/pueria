@@ -39,7 +39,7 @@ class CriancaTest {
                 null,
                 false,
                 39,
-                3200
+                3100
         );
 
         assertEquals(Sexo.NAO_INFORMADO, crianca.getSexo());
@@ -74,7 +74,7 @@ class CriancaTest {
     }
 
     @Test
-    void naoDeveCadastrarSemanasGestacionaisNulas() {
+    void naoDeveCadastrarSemSemanasGestacionais() {
         RegraDominioException exception = assertThrows(RegraDominioException.class, () -> Crianca.cadastrar(
                 "Ana",
                 LocalDate.of(2024, 1, 10),
@@ -88,7 +88,7 @@ class CriancaTest {
     }
 
     @Test
-    void naoDeveCadastrarPesoNascimentoNulo() {
+    void naoDeveCadastrarSemPesoNascimento() {
         RegraDominioException exception = assertThrows(RegraDominioException.class, () -> Crianca.cadastrar(
                 "Ana",
                 LocalDate.of(2024, 1, 10),

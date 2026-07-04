@@ -201,8 +201,7 @@ public class Crianca {
             throw new RegraDominioException("O peso de nascimento é obrigatório.");
         }
 
-        if (pesoNascimentoGramas < LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS
-                || pesoNascimentoGramas > LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS) {
+        if (pesoNascimentoGramas < LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS || pesoNascimentoGramas > LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS) {
             throw new RegraDominioException("O peso de nascimento informado está fora do limite operacional permitido.");
         }
 
