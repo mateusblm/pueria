@@ -15,7 +15,7 @@ class CriancaTest {
     @Test
     void deveCadastrarCriancaComDadosValidos() {
         Crianca crianca = Crianca.cadastrar(
-                "  Ana   Clara  ",
+                " Ana Clara ",
                 LocalDate.of(2024, 1, 10),
                 Sexo.FEMININO,
                 false,
@@ -38,8 +38,8 @@ class CriancaTest {
                 LocalDate.of(2024, 2, 15),
                 null,
                 false,
-                null,
-                null
+                39,
+                3200
         );
 
         assertEquals(Sexo.NAO_INFORMADO, crianca.getSexo());
@@ -71,6 +71,34 @@ class CriancaTest {
         ));
 
         assertEquals("A data de nascimento não pode estar no futuro.", exception.getMessage());
+    }
+
+    @Test
+    void naoDeveCadastrarSemanasGestacionaisNulas() {
+        RegraDominioException exception = assertThrows(RegraDominioException.class, () -> Crianca.cadastrar(
+                "Ana",
+                LocalDate.of(2024, 1, 10),
+                Sexo.FEMININO,
+                false,
+                null,
+                3200
+        ));
+
+        assertEquals("As semanas gestacionais são obrigatórias.", exception.getMessage());
+    }
+
+    @Test
+    void naoDeveCadastrarPesoNascimentoNulo() {
+        RegraDominioException exception = assertThrows(RegraDominioException.class, () -> Crianca.cadastrar(
+                "Ana",
+                LocalDate.of(2024, 1, 10),
+                Sexo.FEMININO,
+                false,
+                39,
+                null
+        ));
+
+        assertEquals("O peso de nascimento é obrigatório.", exception.getMessage());
     }
 
     @Test

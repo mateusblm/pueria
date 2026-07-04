@@ -35,10 +35,10 @@ public class CriancaJpaEntidade {
     @Column(nullable = false)
     private boolean prematura;
 
-    @Column(name = "semanas_gestacionais")
+    @Column(name = "semanas_gestacionais", nullable = false)
     private Integer semanasGestacionais;
 
-    @Column(name = "peso_nascimento_gramas")
+    @Column(name = "peso_nascimento_gramas", nullable = false)
     private Integer pesoNascimentoGramas;
 
     @Column(name = "criado_em", nullable = false)

@@ -1,92 +1,106 @@
-<section class="nova-crianca pueria-card">
-  <div class="nova-crianca__header">
+<section class="nova-crianca">
+  <header class="nova-crianca__header">
     <p class="pueria-eyebrow">Novo acompanhamento</p>
     <h1>Cadastrar criança</h1>
     <p>
       Informe os dados básicos para iniciar o acompanhamento preventivo. Esta etapa não realiza diagnóstico e depende do consentimento do responsável.
     </p>
-  </div>
+  </header>
 
-  @if (erro) {
-    <div class="nova-crianca__feedback" role="alert" aria-live="assertive">
-      <div class="nova-crianca__feedback-flor" aria-hidden="true"></div>
-      <div class="nova-crianca__feedback-conteudo">
-        <span>Ponto de atenção</span>
-        <p>{{ erro }}</p>
+  <form class="pueria-card pueria-form nova-crianca__form" [formGroup]="form" (ngSubmit)="criar()">
+    @if (erro) {
+      <div class="pueria-message pueria-message--erro nova-crianca__erro-desktop" role="alert">
+        {{ erro }}
       </div>
-      <button type="button" aria-label="Fechar aviso" (click)="limparErro()">×</button>
+    }
+
+    <div class="pueria-field">
+      <label for="nome">Nome da criança</label>
+      <input id="nome" type="text" formControlName="nome" autocomplete="off" />
+      @if (campoInvalido('nome')) {
+        <small class="nova-crianca__campo-erro">{{ mensagemCampo('nome') }}</small>
+      }
     </div>
-  }
 
-  <form class="pueria-form" [formGroup]="form" (ngSubmit)="criar()">
     <div class="pueria-grid-2">
-      <div class="pueria-field">
-        <label for="nome">Nome da criança</label>
-        <input id="nome" type="text" formControlName="nome" autocomplete="off" />
-        @if (campoInvalido('nome')) {
-          <small>Informe o nome da criança.</small>
-        }
-      </div>
-
       <div class="pueria-field">
         <label for="dataNascimento">Data de nascimento</label>
         <input id="dataNascimento" type="date" formControlName="dataNascimento" />
         @if (campoInvalido('dataNascimento')) {
-          <small>Informe a data de nascimento.</small>
+          <small class="nova-crianca__campo-erro">{{ mensagemCampo('dataNascimento') }}</small>
         }
       </div>
-    </div>
 
-    <div class="pueria-grid-2">
       <div class="pueria-field">
         <label for="sexo">Sexo</label>
         <select id="sexo" formControlName="sexo">
           <option [ngValue]="null">Não informar agora</option>
           @for (sexo of sexos; track sexo.valor) {
-            <option [ngValue]="sexo.valor">{{ sexo.label }}</option>
+            <option [value]="sexo.valor">{{ sexo.label }}</option>
           }
         </select>
       </div>
+    </div>
 
+    <div class="pueria-grid-2">
       <div class="pueria-field">
         <label for="parentesco">Seu vínculo com a criança</label>
         <select id="parentesco" formControlName="parentesco">
           @for (parentesco of parentescos; track parentesco.valor) {
-            <option [ngValue]="parentesco.valor">{{ parentesco.label }}</option>
+            <option [value]="parentesco.valor">{{ parentesco.label }}</option>
           }
         </select>
+        @if (campoInvalido('parentesco')) {
+          <small class="nova-crianca__campo-erro">{{ mensagemCampo('parentesco') }}</small>
+        }
       </div>
-    </div>
 
-    <label class="pueria-check">
-      <input type="checkbox" formControlName="prematura" />
-      <span>A criança nasceu prematura</span>
-    </label>
+      <label class="nova-crianca__prematura">
+        <input type="checkbox" formControlName="prematura" />
+        <span>A criança nasceu prematura</span>
+      </label>
+    </div>
 
     <div class="pueria-grid-2">
       <div class="pueria-field">
         <label for="semanasGestacionais">Semanas gestacionais</label>
-        <input id="semanasGestacionais" type="number" min="20" max="43" formControlName="semanasGestacionais" />
-        <small>Se informar menos de 37 semanas, marque prematuridade.</small>
+        <input id="semanasGestacionais" type="number" min="22" max="42" formControlName="semanasGestacionais" inputmode="numeric" />
+        @if (campoInvalido('semanasGestacionais')) {
+          <small class="nova-crianca__campo-erro">{{ mensagemCampo('semanasGestacionais') }}</small>
+        }
       </div>
 
       <div class="pueria-field">
         <label for="pesoNascimentoGramas">Peso ao nascer em gramas</label>
-        <input id="pesoNascimentoGramas" type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" />
+        <input id="pesoNascimentoGramas" type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" inputmode="numeric" />
+        @if (campoInvalido('pesoNascimentoGramas')) {
+          <small class="nova-crianca__campo-erro">{{ mensagemCampo('pesoNascimentoGramas') }}</small>
+        }
       </div>
     </div>
 
-    <input type="hidden" formControlName="versaoTermoConsentimento" />
-
-    <label class="pueria-check nova-crianca__consentimento" [class.nova-crianca__consentimento--erro]="campoInvalido('aceiteConsentimento')">
+    <label class="pueria-check nova-crianca__consentimento">
       <input type="checkbox" formControlName="aceiteConsentimento" />
       <span>
         Declaro que sou responsável ou autorizado a cadastrar esta criança e aceito o uso dos dados para acompanhamento preventivo, sem finalidade diagnóstica automática.
       </span>
     </label>
+    @if (campoInvalido('aceiteConsentimento')) {
+      <small class="nova-crianca__campo-erro">{{ mensagemCampo('aceiteConsentimento') }}</small>
+    }
 
     <button class="pueria-button" type="submit" [disabled]="carregando">
       {{ carregando ? 'Cadastrando...' : 'Cadastrar criança' }}
     </button>
   </form>
+
+  @if (erro) {
+    <aside class="nova-crianca__alerta-mobile" role="alert" aria-live="assertive">
+      <div>
+        <strong>Ponto de atenção</strong>
+        <p>{{ erro }}</p>
+      </div>
+      <button type="button" aria-label="Fechar aviso" (click)="fecharErro()">×</button>
+    </aside>
+  }
 </section>

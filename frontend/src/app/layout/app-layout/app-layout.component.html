@@ -1,13 +1,25 @@
 <div class="app-shell">
   <aside class="app-shell__sidebar">
-    <app-brand-mark></app-brand-mark>
+    <div class="app-shell__brand">
+      <app-brand-mark></app-brand-mark>
+    </div>
 
     <nav class="app-shell__nav" aria-label="Navegação principal">
-      <a routerLink="/app/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">Crianças</a>
-      <a routerLink="/app/criancas/nova" routerLinkActive="ativo">Adicionar criança</a>
+      <a routerLink="/app/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="app-shell__nav-icon">⌂</span>
+        <span>Crianças</span>
+      </a>
+
+      <a routerLink="/app/criancas/nova" routerLinkActive="ativo">
+        <span class="app-shell__nav-icon">＋</span>
+        <span>Adicionar</span>
+      </a>
     </nav>
 
-    <button type="button" class="app-shell__logout" (click)="sair()">Sair</button>
+    <button class="app-shell__logout" type="button" (click)="sair()">
+      <span class="app-shell__nav-icon">↪</span>
+      <span>Sair</span>
+    </button>
   </aside>
 
   <main class="app-shell__content">

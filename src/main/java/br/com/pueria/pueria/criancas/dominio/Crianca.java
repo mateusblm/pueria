@@ -152,6 +152,7 @@ public class Crianca {
         }
 
         String nomeTratado = nome.trim().replaceAll("\\s+", " ");
+
         if (nomeTratado.length() > TAMANHO_MAXIMO_NOME) {
             throw new RegraDominioException("O nome da criança deve ter no máximo 150 caracteres.");
         }
@@ -177,7 +178,7 @@ public class Crianca {
 
     private static Integer validarSemanasGestacionais(boolean prematura, Integer semanasGestacionais) {
         if (semanasGestacionais == null) {
-            return null;
+            throw new RegraDominioException("As semanas gestacionais são obrigatórias.");
         }
 
         if (semanasGestacionais < SEMANAS_GESTACIONAIS_MINIMAS || semanasGestacionais > SEMANAS_GESTACIONAIS_MAXIMAS) {
@@ -197,10 +198,11 @@ public class Crianca {
 
     private static Integer validarPesoNascimento(Integer pesoNascimentoGramas) {
         if (pesoNascimentoGramas == null) {
-            return null;
+            throw new RegraDominioException("O peso de nascimento é obrigatório.");
         }
 
-        if (pesoNascimentoGramas < LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS || pesoNascimentoGramas > LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS) {
+        if (pesoNascimentoGramas < LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS
+                || pesoNascimentoGramas > LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS) {
             throw new RegraDominioException("O peso de nascimento informado está fora do limite operacional permitido.");
         }
 

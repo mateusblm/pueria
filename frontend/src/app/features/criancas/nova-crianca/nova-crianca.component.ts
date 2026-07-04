@@ -7,12 +7,6 @@ import { finalize } from 'rxjs';
 import { CriancasService } from '../criancas.service';
 import { CriarCriancaRequest, Parentesco, Sexo } from '../../../shared/models/crianca.model';
 
-interface ErroApiResponse {
-  status?: number;
-  erro?: string;
-  mensagens?: string[];
-}
-
 @Component({
   selector: 'app-nova-crianca',
   imports: [ReactiveFormsModule],
@@ -29,7 +23,8 @@ export class NovaCriancaComponent {
 
   readonly sexos: Array<{ valor: Sexo; label: string }> = [
     { valor: 'FEMININO', label: 'Feminino' },
-    { valor: 'MASCULINO', label: 'Masculino' }
+    { valor: 'MASCULINO', label: 'Masculino' },
+    { valor: 'NAO_INFORMADO', label: 'Não informar agora' }
   ];
 
   readonly parentescos: Array<{ valor: Parentesco; label: string }> = [
@@ -40,16 +35,24 @@ export class NovaCriancaComponent {
     { valor: 'OUTRO', label: 'Outro' }
   ];
 
-  readonly form = this.formBuilder.group({
-    nome: this.formBuilder.nonNullable.control('', [Validators.required, Validators.maxLength(150)]),
-    dataNascimento: this.formBuilder.nonNullable.control('', [Validators.required]),
+  readonly form = this.formBuilder.nonNullable.group({
+    nome: ['', [Validators.required, Validators.maxLength(150)]],
+    dataNascimento: ['', [Validators.required]],
     sexo: this.formBuilder.control<Sexo | null>(null),
-    prematura: this.formBuilder.nonNullable.control(false),
-    semanasGestacionais: this.formBuilder.control<number | null>(null),
-    pesoNascimentoGramas: this.formBuilder.control<number | null>(null),
+    prematura: [false],
+    semanasGestacionais: this.formBuilder.control<number | null>(null, [
+      Validators.required,
+      Validators.min(22),
+      Validators.max(42)
+    ]),
+    pesoNascimentoGramas: this.formBuilder.control<number | null>(null, [
+      Validators.required,
+      Validators.min(300),
+      Validators.max(7000)
+    ]),
     parentesco: this.formBuilder.nonNullable.control<Parentesco>('MAE', [Validators.required]),
-    aceiteConsentimento: this.formBuilder.nonNullable.control(false, [Validators.requiredTrue]),
-    versaoTermoConsentimento: this.formBuilder.nonNullable.control('2026.07', [Validators.required, Validators.maxLength(30)])
+    aceiteConsentimento: [false, [Validators.requiredTrue]],
+    versaoTermoConsentimento: ['2026.07', [Validators.required, Validators.maxLength(30)]]
   });
 
   criar(): void {
@@ -57,13 +60,17 @@ export class NovaCriancaComponent {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.erro = this.obterMensagemFormulario();
+      this.erro = this.obterPrimeiraMensagemFormulario();
       return;
     }
 
     const valores = this.form.getRawValue();
+    const semanasGestacionais = valores.semanasGestacionais as number;
+    const pesoNascimentoGramas = valores.pesoNascimentoGramas as number;
 
-    if (!this.validarPrematuridade(valores.semanasGestacionais, valores.prematura)) {
+    const erroCoerencia = this.validarCoerenciaPrematuridade(valores.prematura, semanasGestacionais);
+    if (erroCoerencia) {
+      this.erro = erroCoerencia;
       return;
     }
 
@@ -72,32 +79,27 @@ export class NovaCriancaComponent {
       dataNascimento: valores.dataNascimento,
       sexo: valores.sexo,
       prematura: valores.prematura,
-      semanasGestacionais: valores.semanasGestacionais,
-      pesoNascimentoGramas: valores.pesoNascimentoGramas,
+      semanasGestacionais,
+      pesoNascimentoGramas,
       parentesco: valores.parentesco,
       aceiteConsentimento: valores.aceiteConsentimento,
-      versaoTermoConsentimento: valores.versaoTermoConsentimento
+      versaoTermoConsentimento: valores.versaoTermoConsentimento.trim()
     };
 
     this.carregando = true;
 
     this.criancasService.criar(request)
-      .pipe(finalize(() => {
-        this.carregando = false;
-      }))
+      .pipe(finalize(() => this.carregando = false))
       .subscribe({
-        next: (crianca) => {
-          if (!crianca?.id) {
-            this.erro = 'A criança foi cadastrada, mas a API não retornou o identificador para abrir o perfil.';
-            return;
-          }
-
-          void this.router.navigate(['/app/criancas', crianca.id]);
-        },
+        next: (crianca) => void this.router.navigate(['/app/criancas', crianca.id]),
         error: (erro: HttpErrorResponse) => {
-          this.erro = this.obterMensagemErro(erro);
+          this.erro = this.extrairMensagemErro(erro);
         }
       });
+  }
+
+  fecharErro(): void {
+    this.erro = '';
   }
 
   campoInvalido(campo: keyof typeof this.form.controls): boolean {
@@ -105,54 +107,91 @@ export class NovaCriancaComponent {
     return controle.invalid && (controle.touched || controle.dirty);
   }
 
-  limparErro(): void {
-    this.erro = '';
+  mensagemCampo(campo: keyof typeof this.form.controls): string {
+    const controle = this.form.controls[campo];
+
+    if (!controle.errors) {
+      return '';
+    }
+
+    if (controle.errors['required'] || controle.errors['requiredTrue']) {
+      return this.mensagemObrigatoria(campo);
+    }
+
+    if (controle.errors['min']) {
+      return campo === 'semanasGestacionais'
+        ? 'Informe no mínimo 22 semanas.'
+        : 'Informe no mínimo 300 gramas.';
+    }
+
+    if (controle.errors['max']) {
+      return campo === 'semanasGestacionais'
+        ? 'Informe no máximo 42 semanas.'
+        : 'Informe no máximo 7000 gramas.';
+    }
+
+    if (controle.errors['maxlength']) {
+      return 'O valor informado está maior que o permitido.';
+    }
+
+    return 'Revise este campo.';
   }
 
-  private validarPrematuridade(semanasGestacionais: number | null, prematura: boolean): boolean {
-    if (semanasGestacionais !== null && semanasGestacionais < 37 && !prematura) {
-      this.erro = 'Uma criança com menos de 37 semanas gestacionais deve ser marcada como prematura.';
-      return false;
-    }
+  private obterPrimeiraMensagemFormulario(): string {
+    const ordem: Array<keyof typeof this.form.controls> = [
+      'nome',
+      'dataNascimento',
+      'semanasGestacionais',
+      'pesoNascimentoGramas',
+      'parentesco',
+      'aceiteConsentimento',
+      'versaoTermoConsentimento'
+    ];
 
-    return true;
-  }
-
-  private obterMensagemFormulario(): string {
-    if (this.form.controls.nome.invalid) {
-      return 'Informe o nome da criança.';
-    }
-
-    if (this.form.controls.dataNascimento.invalid) {
-      return 'Informe a data de nascimento da criança.';
-    }
-
-    if (this.form.controls.aceiteConsentimento.invalid) {
-      return 'O consentimento precisa estar aceito para cadastrar a criança.';
-    }
-
-    return 'Revise os campos obrigatórios antes de continuar.';
-  }
-
-  private obterMensagemErro(erro: HttpErrorResponse): string {
-    const corpo = erro.error as ErroApiResponse | string | null;
-
-    if (typeof corpo === 'string' && corpo.trim().length > 0) {
-      return corpo;
-    }
-
-    if (corpo && typeof corpo === 'object') {
-      if (Array.isArray(corpo.mensagens) && corpo.mensagens.length > 0) {
-        return corpo.mensagens[0];
+    for (const campo of ordem) {
+      if (this.form.controls[campo].invalid) {
+        return this.mensagemCampo(campo);
       }
-
-      if (corpo.erro) {
-        return corpo.erro;
-      }
     }
 
-    if (erro.status === 0) {
-      return 'Não foi possível conectar ao servidor. Verifique se a API está em execução.';
+    return 'Revise os dados informados.';
+  }
+
+  private mensagemObrigatoria(campo: keyof typeof this.form.controls): string {
+    const mensagens: Record<string, string> = {
+      nome: 'O nome da criança é obrigatório.',
+      dataNascimento: 'A data de nascimento é obrigatória.',
+      semanasGestacionais: 'As semanas gestacionais são obrigatórias.',
+      pesoNascimentoGramas: 'O peso de nascimento é obrigatório.',
+      parentesco: 'O vínculo com a criança é obrigatório.',
+      aceiteConsentimento: 'O consentimento precisa estar aceito para cadastrar a criança.',
+      versaoTermoConsentimento: 'A versão do termo de consentimento é obrigatória.'
+    };
+
+    return mensagens[String(campo)] ?? 'Este campo é obrigatório.';
+  }
+
+  private validarCoerenciaPrematuridade(prematura: boolean, semanasGestacionais: number): string {
+    if (prematura && semanasGestacionais >= 37) {
+      return 'Uma criança marcada como prematura deve ter menos de 37 semanas gestacionais.';
+    }
+
+    if (!prematura && semanasGestacionais < 37) {
+      return 'Uma criança com menos de 37 semanas gestacionais deve ser marcada como prematura.';
+    }
+
+    return '';
+  }
+
+  private extrairMensagemErro(erro: HttpErrorResponse): string {
+    const mensagens = erro.error?.mensagens;
+
+    if (Array.isArray(mensagens) && mensagens.length > 0) {
+      return mensagens.join('\n');
+    }
+
+    if (typeof erro.error?.message === 'string') {
+      return erro.error.message;
     }
 
     if (erro.status === 401) {
@@ -160,7 +199,7 @@ export class NovaCriancaComponent {
     }
 
     if (erro.status === 400) {
-      return 'Revise os dados informados antes de continuar.';
+      return 'Revise os dados informados.';
     }
 
     return 'Não foi possível cadastrar a criança agora.';
