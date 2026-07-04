@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 
 import { Crianca, CriarCriancaRequest } from '../../shared/models/crianca.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class CriancasService {
   constructor(private readonly http: HttpClient) {}
 

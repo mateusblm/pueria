@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../core/auth/auth.service';
 
@@ -25,25 +26,27 @@ export class LoginComponent {
   });
 
   entrar(): void {
+    this.erro = '';
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.erro = 'Informe e-mail e senha para continuar.';
       return;
     }
 
     this.carregando = true;
-    this.erro = '';
 
-    this.authService.login(this.form.getRawValue()).subscribe({
-      next: () => void this.router.navigateByUrl('/app/criancas'),
-      error: (erro: HttpErrorResponse) => {
-        this.erro = erro.status === 401
-          ? 'E-mail ou senha inválidos.'
-          : 'Não foi possível entrar agora. Tente novamente.';
+    this.authService.login(this.form.getRawValue())
+      .pipe(finalize(() => {
         this.carregando = false;
-      },
-      complete: () => {
-        this.carregando = false;
-      }
-    });
+      }))
+      .subscribe({
+        next: () => void this.router.navigateByUrl('/app/criancas'),
+        error: (erro: HttpErrorResponse) => {
+          this.erro = erro.status === 401
+            ? 'E-mail ou senha inválidos.'
+            : 'Não foi possível entrar agora. Tente novamente.';
+        }
+      });
   }
 }

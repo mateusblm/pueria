@@ -8,7 +8,14 @@
   </div>
 
   @if (erro) {
-    <div class="pueria-message pueria-message--erro">{{ erro }}</div>
+    <div class="nova-crianca__feedback" role="alert" aria-live="assertive">
+      <div class="nova-crianca__feedback-flor" aria-hidden="true"></div>
+      <div class="nova-crianca__feedback-conteudo">
+        <span>Ponto de atenção</span>
+        <p>{{ erro }}</p>
+      </div>
+      <button type="button" aria-label="Fechar aviso" (click)="limparErro()">×</button>
+    </div>
   }
 
   <form class="pueria-form" [formGroup]="form" (ngSubmit)="criar()">
@@ -16,11 +23,17 @@
       <div class="pueria-field">
         <label for="nome">Nome da criança</label>
         <input id="nome" type="text" formControlName="nome" autocomplete="off" />
+        @if (campoInvalido('nome')) {
+          <small>Informe o nome da criança.</small>
+        }
       </div>
 
       <div class="pueria-field">
         <label for="dataNascimento">Data de nascimento</label>
         <input id="dataNascimento" type="date" formControlName="dataNascimento" />
+        @if (campoInvalido('dataNascimento')) {
+          <small>Informe a data de nascimento.</small>
+        }
       </div>
     </div>
 
@@ -28,9 +41,9 @@
       <div class="pueria-field">
         <label for="sexo">Sexo</label>
         <select id="sexo" formControlName="sexo">
-          <option value="">Não informar agora</option>
+          <option [ngValue]="null">Não informar agora</option>
           @for (sexo of sexos; track sexo.valor) {
-            <option [value]="sexo.valor">{{ sexo.label }}</option>
+            <option [ngValue]="sexo.valor">{{ sexo.label }}</option>
           }
         </select>
       </div>
@@ -39,7 +52,7 @@
         <label for="parentesco">Seu vínculo com a criança</label>
         <select id="parentesco" formControlName="parentesco">
           @for (parentesco of parentescos; track parentesco.valor) {
-            <option [value]="parentesco.valor">{{ parentesco.label }}</option>
+            <option [ngValue]="parentesco.valor">{{ parentesco.label }}</option>
           }
         </select>
       </div>
@@ -54,6 +67,7 @@
       <div class="pueria-field">
         <label for="semanasGestacionais">Semanas gestacionais</label>
         <input id="semanasGestacionais" type="number" min="20" max="43" formControlName="semanasGestacionais" />
+        <small>Se informar menos de 37 semanas, marque prematuridade.</small>
       </div>
 
       <div class="pueria-field">
@@ -64,7 +78,7 @@
 
     <input type="hidden" formControlName="versaoTermoConsentimento" />
 
-    <label class="pueria-check nova-crianca__consentimento">
+    <label class="pueria-check nova-crianca__consentimento" [class.nova-crianca__consentimento--erro]="campoInvalido('aceiteConsentimento')">
       <input type="checkbox" formControlName="aceiteConsentimento" />
       <span>
         Declaro que sou responsável ou autorizado a cadastrar esta criança e aceito o uso dos dados para acompanhamento preventivo, sem finalidade diagnóstica automática.

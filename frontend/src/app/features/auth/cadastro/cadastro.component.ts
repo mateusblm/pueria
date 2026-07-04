@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../core/auth/auth.service';
 
@@ -26,27 +27,29 @@ export class CadastroComponent {
   });
 
   cadastrar(): void {
+    this.erro = '';
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.erro = 'Preencha os dados obrigatórios para criar sua conta.';
       return;
     }
 
     this.carregando = true;
-    this.erro = '';
 
-    this.authService.cadastrar(this.form.getRawValue()).subscribe({
-      next: () => void this.router.navigate(['/login'], {
-        queryParams: { cadastro: 'realizado' }
-      }),
-      error: (erro: HttpErrorResponse) => {
-        this.erro = erro.status === 409
-          ? 'Já existe uma conta com esse e-mail.'
-          : 'Não foi possível criar a conta agora. Revise os dados e tente novamente.';
+    this.authService.cadastrar(this.form.getRawValue())
+      .pipe(finalize(() => {
         this.carregando = false;
-      },
-      complete: () => {
-        this.carregando = false;
-      }
-    });
+      }))
+      .subscribe({
+        next: () => void this.router.navigate(['/login'], {
+          queryParams: { cadastro: 'realizado' }
+        }),
+        error: (erro: HttpErrorResponse) => {
+          this.erro = erro.status === 409
+            ? 'Já existe uma conta com esse e-mail.'
+            : 'Não foi possível criar a conta agora. Revise os dados e tente novamente.';
+        }
+      });
   }
 }
