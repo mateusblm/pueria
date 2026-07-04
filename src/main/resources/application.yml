@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: pueria
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/pueria_dev
+    username: pueria
+    password: pueria
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

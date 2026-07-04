@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: pueria-postgres
+    environment:
+      POSTGRES_DB: pueria_dev
+      POSTGRES_USER: pueria
+      POSTGRES_PASSWORD: pueria
+    ports:
+      - "5433:5432"
+    volumes:
+      - pueria_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  pueria_postgres_data:
