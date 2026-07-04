@@ -1,7 +1,7 @@
 package br.com.pueria.pueria.criancas.aplicacao;
 
 import br.com.pueria.pueria.comum.excecao.RecursoNaoEncontradoException;
-import br.com.pueria.pueria.criancas.dominio.Crianca;
+import br.com.pueria.pueria.consentimentos.dominio.ConsentimentoRepositorio;
 import br.com.pueria.pueria.criancas.dominio.CriancaRepositorio;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
 import br.com.pueria.pueria.usuarios.dominio.Usuario;
@@ -12,34 +12,38 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
-public class BuscarCriancaUseCase {
+public class RemoverCriancaUseCase {
 
     private final CriancaRepositorio criancaRepositorio;
     private final UsuarioRepositorio usuarioRepositorio;
     private final VinculoResponsavelCriancaRepositorio vinculoRepositorio;
+    private final ConsentimentoRepositorio consentimentoRepositorio;
 
-    public BuscarCriancaUseCase(
+    public RemoverCriancaUseCase(
             CriancaRepositorio criancaRepositorio,
             UsuarioRepositorio usuarioRepositorio,
-            VinculoResponsavelCriancaRepositorio vinculoRepositorio
+            VinculoResponsavelCriancaRepositorio vinculoRepositorio,
+            ConsentimentoRepositorio consentimentoRepositorio
     ) {
         this.criancaRepositorio = criancaRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
         this.vinculoRepositorio = vinculoRepositorio;
+        this.consentimentoRepositorio = consentimentoRepositorio;
     }
 
-    @Transactional(readOnly = true)
-    public Crianca executar(UUID id, String emailResponsavel) {
+    @Transactional
+    public void executar(UUID criancaId, String emailResponsavel) {
         Usuario responsavel = usuarioRepositorio.buscarPorEmail(emailResponsavel)
                 .filter(Usuario::isAtivo)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Responsável autenticado não encontrado."));
 
-        boolean podeAcessar = vinculoRepositorio.usuarioPodeAcessarCrianca(responsavel.getId(), id);
-        if (!podeAcessar) {
+        boolean podeAcessar = vinculoRepositorio.usuarioPodeAcessarCrianca(responsavel.getId(), criancaId);
+        if (!podeAcessar || criancaRepositorio.buscarPorId(criancaId).isEmpty()) {
             throw new RecursoNaoEncontradoException("Criança não encontrada.");
         }
 
-        return criancaRepositorio.buscarPorId(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Criança não encontrada."));
+        consentimentoRepositorio.removerPorCrianca(criancaId);
+        vinculoRepositorio.removerPorCrianca(criancaId);
+        criancaRepositorio.removerPorId(criancaId);
     }
 }

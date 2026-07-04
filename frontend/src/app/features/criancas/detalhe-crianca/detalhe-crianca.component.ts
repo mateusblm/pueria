@@ -1,16 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-
 import { Crianca } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
-
-interface ErroApiResponse {
-  status?: number;
-  erro?: string;
-  mensagens?: string[];
-}
 
 @Component({
   selector: 'app-detalhe-crianca',
@@ -19,37 +12,77 @@ interface ErroApiResponse {
   styleUrl: './detalhe-crianca.component.scss'
 })
 export class DetalheCriancaComponent implements OnInit {
-  crianca: Crianca | null = null;
-  carregando = true;
-  erro = '';
+  readonly crianca = signal<Crianca | null>(null);
+  readonly carregando = signal(true);
+  readonly removendo = signal(false);
+  readonly confirmandoRemocao = signal(false);
+  readonly erro = signal('');
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly criancasService: CriancasService
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    this.carregarCrianca();
+  }
 
+  carregarCrianca(): void {
+    const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      this.erro = 'Criança não encontrada.';
-      this.carregando = false;
+      this.erro.set('Criança não encontrada.');
+      this.carregando.set(false);
       return;
     }
 
-    this.carregando = true;
-    this.erro = '';
+    this.carregando.set(true);
+    this.erro.set('');
 
     this.criancasService.buscarPorId(id)
-      .pipe(finalize(() => {
-        this.carregando = false;
-      }))
+      .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (crianca) => {
-          this.crianca = crianca;
+          this.crianca.set(crianca);
         },
         error: (erro: HttpErrorResponse) => {
-          this.erro = this.obterMensagemErro(erro);
+          this.erro.set(erro.status === 404
+            ? 'Criança não encontrada ou não vinculada à sua conta.'
+            : 'Não foi possível carregar os dados agora.');
+        }
+      });
+  }
+
+  abrirConfirmacaoRemocao(): void {
+    this.confirmandoRemocao.set(true);
+    this.erro.set('');
+  }
+
+  cancelarRemocao(): void {
+    this.confirmandoRemocao.set(false);
+  }
+
+  confirmarRemocao(): void {
+    const crianca = this.crianca();
+    if (!crianca) {
+      return;
+    }
+
+    this.removendo.set(true);
+    this.erro.set('');
+
+    this.criancasService.remover(crianca.id)
+      .pipe(finalize(() => this.removendo.set(false)))
+      .subscribe({
+        next: () => {
+          void this.router.navigateByUrl('/criancas');
+        },
+        error: (erro: HttpErrorResponse) => {
+          this.confirmandoRemocao.set(false);
+          const mensagens = erro.error?.mensagens;
+          this.erro.set(Array.isArray(mensagens) && mensagens.length > 0
+            ? mensagens[0]
+            : 'Não foi possível remover o perfil agora.');
         }
       });
   }
@@ -76,35 +109,15 @@ export class DetalheCriancaComponent implements OnInit {
     return `${anos} ${anos === 1 ? 'ano' : 'anos'} e ${meses} ${meses === 1 ? 'mês' : 'meses'}`;
   }
 
-  private obterMensagemErro(erro: HttpErrorResponse): string {
-    const corpo = erro.error as ErroApiResponse | string | null;
+  formatarData(data: string): string {
+    return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`));
+  }
 
-    if (typeof corpo === 'string' && corpo.trim().length > 0) {
-      return corpo;
-    }
-
-    if (corpo && typeof corpo === 'object') {
-      if (Array.isArray(corpo.mensagens) && corpo.mensagens.length > 0) {
-        return corpo.mensagens[0];
-      }
-
-      if (corpo.erro) {
-        return corpo.erro;
-      }
-    }
-
-    if (erro.status === 401) {
-      return 'Sua sessão expirou. Faça login novamente.';
-    }
-
-    if (erro.status === 404) {
-      return 'Criança não encontrada ou não vinculada ao seu usuário.';
-    }
-
-    if (erro.status === 0) {
-      return 'Não foi possível conectar ao servidor. Verifique se a API está em execução.';
-    }
-
-    return 'Não foi possível carregar os dados agora.';
+  formatarPeso(pesoGramas: number): string {
+    const pesoKg = pesoGramas / 1000;
+    return `${pesoKg.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })} kg (${pesoGramas.toLocaleString('pt-BR')} g)`;
   }
 }

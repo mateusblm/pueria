@@ -15,7 +15,8 @@ public record CriancaResponse(
         boolean prematura,
         Integer semanasGestacionais,
         Integer pesoNascimentoGramas,
-        LocalDateTime criadoEm
+        LocalDateTime criadoEm,
+        LocalDateTime atualizadoEm
 ) {
 
     public static CriancaResponse de(Crianca crianca) {
@@ -27,7 +28,8 @@ public record CriancaResponse(
                 crianca.isPrematura(),
                 crianca.getSemanasGestacionais(),
                 crianca.getPesoNascimentoGramas(),
-                crianca.getCriadoEm()
+                crianca.getCriadoEm(),
+                crianca.getAtualizadoEm()
         );
     }
 }

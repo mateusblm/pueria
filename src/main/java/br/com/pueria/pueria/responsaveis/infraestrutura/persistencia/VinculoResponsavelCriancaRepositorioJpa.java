@@ -4,6 +4,7 @@ import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCrianca;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,5 +37,15 @@ public class VinculoResponsavelCriancaRepositorioJpa implements VinculoResponsav
     @Override
     public boolean usuarioPodeAcessarCrianca(UUID usuarioId, UUID criancaId) {
         return repository.existsByUsuarioIdAndCriancaId(usuarioId, criancaId);
+    }
+
+    @Override
+    public List<UUID> listarCriancaIdsPorUsuario(UUID usuarioId) {
+        return repository.findCriancaIdsByUsuarioId(usuarioId);
+    }
+
+    @Override
+    public void removerPorCrianca(UUID criancaId) {
+        repository.deleteByCriancaId(criancaId);
     }
 }

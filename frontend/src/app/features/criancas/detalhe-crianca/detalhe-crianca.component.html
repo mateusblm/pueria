@@ -1,50 +1,87 @@
-<section class="detalhe">
-  @if (carregando) {
-    <div class="pueria-card detalhe__estado">Carregando dados da criança...</div>
-  } @else if (erro) {
-    <div class="pueria-card detalhe__estado">
-      <div class="pueria-message pueria-message--erro">{{ erro }}</div>
-      <a class="pueria-button pueria-button--secondary" routerLink="/app/criancas">Voltar</a>
+<section class="detalhe-page">
+  <a routerLink="/criancas" class="detalhe-page__back">← Minhas crianças</a>
+
+  @if (carregando()) {
+    <div class="pueria-card detalhe-page__state">Carregando dados da criança...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-card detalhe-page__state">
+      <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+      <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Voltar</a>
     </div>
-  } @else if (crianca) {
-    <article class="pueria-card detalhe__card">
-      <p class="pueria-eyebrow">Perfil da criança</p>
-      <h1>{{ crianca.nome }}</h1>
-      <p class="detalhe__idade">{{ calcularIdade(crianca.dataNascimento) }}</p>
+  } @else if (crianca(); as crianca) {
+    <div class="pueria-card detalhe-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Perfil da criança</p>
+        <h1 class="pueria-title">{{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">{{ calcularIdade(crianca.dataNascimento) }}</p>
+      </div>
+      <div class="detalhe-page__actions">
+        <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
+        <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
+          Remover perfil
+        </button>
+      </div>
+    </div>
 
-      <div class="detalhe__dados">
+    @if (confirmandoRemocao()) {
+      <section class="pueria-card detalhe-page__confirm" aria-labelledby="remover-perfil-titulo">
         <div>
-          <span>Data de nascimento</span>
-          <strong>{{ crianca.dataNascimento }}</strong>
+          <p class="pueria-eyebrow">Remoção de perfil</p>
+          <h2 id="remover-perfil-titulo">Deseja remover este perfil?</h2>
+          <p>
+            Os dados básicos de {{ crianca.nome }} sairão da sua lista. Essa ação deve ser usada apenas quando o cadastro não fizer mais parte do acompanhamento.
+          </p>
         </div>
-        <div>
-          <span>Sexo</span>
-          <strong>{{ crianca.sexo || 'Não informado' }}</strong>
-        </div>
-        <div>
-          <span>Prematuridade</span>
-          <strong>{{ crianca.prematura ? 'Sim' : 'Não' }}</strong>
-        </div>
-        <div>
-          <span>Peso ao nascer</span>
-          <strong>{{ crianca.pesoNascimentoGramas ? crianca.pesoNascimentoGramas + ' g' : 'Não informado' }}</strong>
-        </div>
-      </div>
-    </article>
 
-    <div class="detalhe__modulos">
-      <div class="detalhe__modulo">
-        <strong>Marcos</strong>
-        <span>Próximo módulo do backend.</span>
-      </div>
-      <div class="detalhe__modulo">
-        <strong>Sono</strong>
-        <span>Registro entrará depois dos marcos.</span>
-      </div>
-      <div class="detalhe__modulo">
-        <strong>Alimentação</strong>
-        <span>Base para prevenção e rotina.</span>
-      </div>
+        <div class="detalhe-page__confirm-actions">
+          <button type="button" class="pueria-button pueria-button--secondary" [disabled]="removendo()" (click)="cancelarRemocao()">
+            Manter perfil
+          </button>
+          <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="confirmarRemocao()">
+            {{ removendo() ? 'Removendo...' : 'Remover perfil' }}
+          </button>
+        </div>
+      </section>
+    }
+
+    @if (erro()) {
+      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+
+    <div class="detalhe-page__grid">
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Dados básicos</p>
+        <dl>
+          <div>
+            <dt>Data de nascimento</dt>
+            <dd>{{ formatarData(crianca.dataNascimento) }}</dd>
+          </div>
+          <div>
+            <dt>Sexo</dt>
+            <dd>{{ crianca.sexo || 'Não informado' }}</dd>
+          </div>
+          <div>
+            <dt>Prematuridade</dt>
+            <dd>{{ crianca.prematura ? 'Sim' : 'Não' }}</dd>
+          </div>
+          <div>
+            <dt>Semanas gestacionais</dt>
+            <dd>{{ crianca.semanasGestacionais }}</dd>
+          </div>
+          <div>
+            <dt>Peso ao nascer</dt>
+            <dd>{{ formatarPeso(crianca.pesoNascimentoGramas) }}</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Cuidado preventivo</p>
+        <h2>Próximo passo</h2>
+        <p>
+          Em breve este espaço pode concentrar marcos do desenvolvimento, rotina, sono, alimentação e pontos de atenção.
+        </p>
+      </article>
     </div>
   }
 </section>

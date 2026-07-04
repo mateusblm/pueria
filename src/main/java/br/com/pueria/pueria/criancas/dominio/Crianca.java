@@ -4,6 +4,7 @@ import br.com.pueria.pueria.comum.excecao.RegraDominioException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class Crianca {
     private static final int SEMANAS_GESTACIONAIS_MAXIMAS = 42;
     private static final int LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS = 300;
     private static final int LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS = 7000;
+    private static final int IDADE_MAXIMA_ANOS_MVP = 6;
 
     private final UUID id;
     private final String nome;
@@ -36,12 +38,13 @@ public class Crianca {
             Integer semanasGestacionais,
             Integer pesoNascimentoGramas,
             LocalDateTime criadoEm,
-            LocalDateTime atualizadoEm
+            LocalDateTime atualizadoEm,
+            boolean validarEscopoEtarioMvp
     ) {
         this.id = validarId(id);
         this.nome = validarNome(nome);
         this.nomeNormalizado = normalizarNome(this.nome);
-        this.dataNascimento = validarDataNascimento(dataNascimento);
+        this.dataNascimento = validarDataNascimento(dataNascimento, validarEscopoEtarioMvp);
         this.sexo = sexo == null ? Sexo.NAO_INFORMADO : sexo;
         this.prematura = prematura;
         this.semanasGestacionais = validarSemanasGestacionais(prematura, semanasGestacionais);
@@ -67,7 +70,8 @@ public class Crianca {
                 semanasGestacionais,
                 pesoNascimentoGramas,
                 LocalDateTime.now(),
-                null
+                null,
+                true
         );
     }
 
@@ -91,7 +95,30 @@ public class Crianca {
                 semanasGestacionais,
                 pesoNascimentoGramas,
                 criadoEm,
-                atualizadoEm
+                atualizadoEm,
+                false
+        );
+    }
+
+    public Crianca atualizar(
+            String nome,
+            LocalDate dataNascimento,
+            Sexo sexo,
+            boolean prematura,
+            Integer semanasGestacionais,
+            Integer pesoNascimentoGramas
+    ) {
+        return new Crianca(
+                id,
+                nome,
+                dataNascimento,
+                sexo,
+                prematura,
+                semanasGestacionais,
+                pesoNascimentoGramas,
+                criadoEm,
+                LocalDateTime.now(),
+                true
         );
     }
 
@@ -152,7 +179,6 @@ public class Crianca {
         }
 
         String nomeTratado = nome.trim().replaceAll("\\s+", " ");
-
         if (nomeTratado.length() > TAMANHO_MAXIMO_NOME) {
             throw new RegraDominioException("O nome da criança deve ter no máximo 150 caracteres.");
         }
@@ -164,13 +190,17 @@ public class Crianca {
         return nome.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
     }
 
-    private static LocalDate validarDataNascimento(LocalDate dataNascimento) {
+    private static LocalDate validarDataNascimento(LocalDate dataNascimento, boolean validarEscopoEtarioMvp) {
         if (dataNascimento == null) {
             throw new RegraDominioException("A data de nascimento é obrigatória.");
         }
 
         if (dataNascimento.isAfter(LocalDate.now())) {
             throw new RegraDominioException("A data de nascimento não pode estar no futuro.");
+        }
+
+        if (validarEscopoEtarioMvp && Period.between(dataNascimento, LocalDate.now()).getYears() > IDADE_MAXIMA_ANOS_MVP) {
+            throw new RegraDominioException("No momento, o Pueria acompanha crianças de até 6 anos neste cadastro.");
         }
 
         return dataNascimento;
@@ -198,10 +228,11 @@ public class Crianca {
 
     private static Integer validarPesoNascimento(Integer pesoNascimentoGramas) {
         if (pesoNascimentoGramas == null) {
-            throw new RegraDominioException("O peso de nascimento é obrigatório.");
+            throw new RegraDominioException("O peso ao nascer é obrigatório.");
         }
 
-        if (pesoNascimentoGramas < LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS || pesoNascimentoGramas > LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS) {
+        if (pesoNascimentoGramas < LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS
+                || pesoNascimentoGramas > LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS) {
             throw new RegraDominioException("O peso de nascimento informado está fora do limite operacional permitido.");
         }
 

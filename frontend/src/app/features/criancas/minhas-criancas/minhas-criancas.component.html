@@ -1,18 +1,56 @@
-<section class="criancas-home">
-  <div class="criancas-home__hero pueria-card">
-    <p class="pueria-eyebrow">Acompanhamento</p>
-    <h1>Minhas crianças</h1>
-    <p>
-      Comece cadastrando uma criança vinculada ao seu usuário. O consentimento é obrigatório para manter o acompanhamento responsável desde a primeira etapa.
+<section class="criancas-page">
+  <div class="criancas-page__hero pueria-card">
+    <p class="pueria-eyebrow">Família</p>
+    <h1 class="pueria-title">Minhas crianças</h1>
+    <p class="pueria-subtitle">
+      Perfis das crianças da sua família para organizar o cuidado, os registros e a evolução nos primeiros anos.
     </p>
-
-    <a class="pueria-button" routerLink="/app/criancas/nova">Adicionar criança</a>
+    <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
   </div>
 
-  <div class="criancas-home__notice">
-    <strong>Próxima etapa do backend</strong>
-    <span>
-      A listagem completa entra quando criarmos o endpoint de crianças vinculadas ao responsável autenticado. Por enquanto, o fluxo principal é cadastrar e abrir o detalhe após a criação.
-    </span>
-  </div>
+  @if (carregando()) {
+    <div class="pueria-card criancas-page__state">
+      <strong>Carregando suas crianças...</strong>
+    </div>
+  } @else if (erro()) {
+    <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+  } @else if (criancas().length === 0) {
+    <div class="pueria-card criancas-page__empty">
+      <h2>Nenhum perfil cadastrado ainda</h2>
+      <p>
+        Cadastre sua criança ou uma criança sob seus cuidados para iniciar uma linha do tempo preventiva.
+      </p>
+      <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+    </div>
+  } @else {
+    <div class="criancas-page__grid">
+      @for (crianca of criancas(); track crianca.id) {
+        <article class="crianca-card pueria-card">
+          <div>
+            <p class="pueria-eyebrow">Perfil</p>
+            <h2>{{ crianca.nome }}</h2>
+            <p>{{ calcularIdade(crianca.dataNascimento) }}</p>
+          </div>
+          <dl>
+            <div>
+              <dt>Nascimento</dt>
+              <dd>{{ formatarData(crianca.dataNascimento) }}</dd>
+            </div>
+            <div>
+              <dt>Prematuridade</dt>
+              <dd>{{ crianca.prematura ? 'Sim' : 'Não' }}</dd>
+            </div>
+            <div>
+              <dt>Peso ao nascer</dt>
+              <dd>{{ formatarPeso(crianca.pesoNascimentoGramas) }}</dd>
+            </div>
+          </dl>
+          <div class="crianca-card__actions">
+            <a class="pueria-button" [routerLink]="['/criancas', crianca.id]">Ver perfil</a>
+            <a class="pueria-button pueria-button--secondary" [routerLink]="['/criancas', crianca.id, 'editar']">Editar</a>
+          </div>
+        </article>
+      }
+    </div>
+  }
 </section>

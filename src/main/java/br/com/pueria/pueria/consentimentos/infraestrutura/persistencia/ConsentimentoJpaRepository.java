@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface ConsentimentoJpaRepository extends JpaRepository<ConsentimentoJpaEntidade, UUID> {
 
     boolean existsByUsuarioIdAndCriancaIdAndTipoAndAceitoTrue(UUID usuarioId, UUID criancaId, TipoConsentimento tipo);
+
+    void deleteByCriancaId(UUID criancaId);
 }

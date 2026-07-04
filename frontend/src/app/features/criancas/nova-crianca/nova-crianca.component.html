@@ -1,81 +1,86 @@
-<section class="nova-crianca pueria-card">
-  <div class="nova-crianca__cabecalho">
-    <p class="pueria-eyebrow">Novo acompanhamento</p>
-    <h1>Cadastrar criança</h1>
-    <p>
-      Informe os dados básicos para iniciar o acompanhamento preventivo. Esta etapa não realiza diagnóstico e depende do consentimento do responsável.
+<section class="crianca-form-page">
+  <div class="crianca-form-page__header">
+    <a routerLink="/criancas" class="crianca-form-page__back">← Minhas crianças</a>
+    <p class="pueria-eyebrow">Novo perfil</p>
+    <h1 class="pueria-title">Adicionar criança</h1>
+    <p class="pueria-subtitle">
+      Cadastre as informações iniciais com atenção. Elas ajudam a organizar uma linha do tempo preventiva desde o primeiro registro.
     </p>
   </div>
 
-  @if (erro) {
-    <div class="nova-crianca__alerta" role="alert" aria-live="assertive">
-      <div>
-        <strong>Ponto de atenção</strong>
-        <p>{{ erro }}</p>
-      </div>
+  <form class="pueria-card pueria-form crianca-form" [formGroup]="form" (ngSubmit)="cadastrar()">
+    <label class="pueria-field">
+      <span>Nome da criança</span>
+      <input type="text" formControlName="nome" autocomplete="off" />
+    </label>
 
-      <button type="button" aria-label="Fechar aviso" (click)="fecharErro()">×</button>
-    </div>
-  }
+    <div class="pueria-grid-2">
+      <label class="pueria-field">
+        <span>Data de nascimento</span>
+        <input type="date" formControlName="dataNascimento" [min]="dataMinimaNascimento" [max]="dataMaximaNascimento" />
+        <small>O cadastro atual contempla crianças de 0 a 6 anos.</small>
+      </label>
 
-  <form class="pueria-form" [formGroup]="form" (ngSubmit)="criar()" novalidate>
-    <div class="pueria-field">
-      <label for="nome">Nome da criança</label>
-      <input id="nome" type="text" formControlName="nome" autocomplete="off" />
+      <label class="pueria-field">
+        <span>Sexo</span>
+        <select formControlName="sexo">
+          @for (sexo of sexos; track sexo.value) {
+            <option [value]="sexo.value">{{ sexo.label }}</option>
+          }
+        </select>
+      </label>
     </div>
 
     <div class="pueria-grid-2">
-      <div class="pueria-field">
-        <label for="dataNascimento">Data de nascimento</label>
-        <input id="dataNascimento" type="date" formControlName="dataNascimento" />
-      </div>
+      <label class="pueria-field">
+        <span>Semanas gestacionais</span>
+        <input type="number" min="22" max="42" formControlName="semanasGestacionais" />
+      </label>
 
-      <div class="pueria-field">
-        <label for="sexo">Sexo</label>
-        <select id="sexo" formControlName="sexo">
-          <option value="">Não informar agora</option>
-          @for (sexo of sexos; track sexo.valor) {
-            <option [value]="sexo.valor">{{ sexo.label }}</option>
-          }
-        </select>
-      </div>
-    </div>
-
-    <div class="pueria-field">
-      <label for="parentesco">Seu vínculo com a criança</label>
-      <select id="parentesco" formControlName="parentesco">
-        @for (parentesco of parentescos; track parentesco.valor) {
-          <option [value]="parentesco.valor">{{ parentesco.label }}</option>
-        }
-      </select>
+      <label class="pueria-field">
+        <span>Peso ao nascer em gramas</span>
+        <input type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" />
+      </label>
     </div>
 
     <label class="pueria-check">
       <input type="checkbox" formControlName="prematura" />
-      <span>A criança nasceu prematura</span>
+      <span>A criança nasceu antes de 37 semanas gestacionais.</span>
     </label>
 
-    <div class="pueria-grid-2">
-      <div class="pueria-field">
-        <label for="semanasGestacionais">Semanas gestacionais</label>
-        <input id="semanasGestacionais" type="number" inputmode="numeric" min="22" max="42" formControlName="semanasGestacionais" />
-      </div>
+    <label class="pueria-field">
+      <span>Seu vínculo com a criança</span>
+      <select formControlName="parentesco">
+        @for (parentesco of parentescos; track parentesco.value) {
+          <option [value]="parentesco.value">{{ parentesco.label }}</option>
+        }
+      </select>
+    </label>
 
-      <div class="pueria-field">
-        <label for="pesoNascimentoGramas">Peso ao nascer em gramas</label>
-        <input id="pesoNascimentoGramas" type="number" inputmode="numeric" min="300" max="7000" formControlName="pesoNascimentoGramas" />
-      </div>
-    </div>
-
-    <label class="pueria-check nova-crianca__consentimento">
+    <label class="pueria-check">
       <input type="checkbox" formControlName="aceiteConsentimento" />
-      <span>
-        Declaro que sou responsável ou autorizado a cadastrar esta criança e aceito o uso dos dados para acompanhamento preventivo, sem finalidade diagnóstica automática.
-      </span>
+      <span>Confirmo que sou responsável ou autorizado a registrar informações para este acompanhamento.</span>
     </label>
 
-    <button class="pueria-button" type="submit" [disabled]="carregando">
-      {{ carregando ? 'Cadastrando...' : 'Cadastrar criança' }}
-    </button>
+    @if (erro) {
+      <div class="pueria-message pueria-message--erro crianca-form__erro-desktop">{{ erro }}</div>
+    }
+
+    <div class="crianca-form__actions">
+      <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Cancelar</a>
+      <button class="pueria-button" type="submit" [disabled]="carregando">
+        {{ carregando ? 'Cadastrando...' : 'Salvar perfil' }}
+      </button>
+    </div>
   </form>
+
+  @if (erro) {
+    <div class="mobile-alert" role="alert">
+      <div>
+        <strong>Ponto de atenção</strong>
+        <p>{{ erro }}</p>
+      </div>
+      <button type="button" (click)="fecharErro()">×</button>
+    </div>
+  }
 </section>

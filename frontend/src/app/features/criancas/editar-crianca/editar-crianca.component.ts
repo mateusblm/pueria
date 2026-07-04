@@ -1,21 +1,22 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { Parentesco, Sexo } from '../../../shared/models/crianca.model';
+import { Crianca, Sexo } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
 
 @Component({
-  selector: 'app-nova-crianca',
+  selector: 'app-editar-crianca',
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './nova-crianca.component.html',
-  styleUrl: './nova-crianca.component.scss'
+  templateUrl: './editar-crianca.component.html',
+  styleUrl: './editar-crianca.component.scss'
 })
-export class NovaCriancaComponent {
+export class EditarCriancaComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
-  private readonly criancasService = inject(CriancasService);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly criancasService = inject(CriancasService);
   readonly dataMaximaNascimento = this.formatarDataInput(new Date());
   readonly dataMinimaNascimento = this.calcularDataMinimaNascimento();
 
@@ -25,70 +26,92 @@ export class NovaCriancaComponent {
     { label: 'Não informar', value: 'NAO_INFORMADO' }
   ];
 
-  readonly parentescos: { label: string; value: Parentesco }[] = [
-    { label: 'Mãe', value: 'MAE' },
-    { label: 'Pai', value: 'PAI' },
-    { label: 'Responsável legal', value: 'RESPONSAVEL_LEGAL' },
-    { label: 'Avó/avô', value: 'AVO' },
-    { label: 'Outro', value: 'OUTRO' }
-  ];
-
   readonly form = this.formBuilder.group({
     nome: this.formBuilder.nonNullable.control('', [Validators.required, Validators.maxLength(150)]),
     dataNascimento: this.formBuilder.nonNullable.control('', [Validators.required]),
     sexo: this.formBuilder.nonNullable.control<Sexo>('NAO_INFORMADO'),
     prematura: this.formBuilder.nonNullable.control(false),
     semanasGestacionais: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(22), Validators.max(42)]),
-    pesoNascimentoGramas: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(300), Validators.max(7000)]),
-    parentesco: this.formBuilder.nonNullable.control<Parentesco>('PAI', [Validators.required]),
-    aceiteConsentimento: this.formBuilder.nonNullable.control(false, [Validators.requiredTrue])
+    pesoNascimentoGramas: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(300), Validators.max(7000)])
   });
 
-  carregando = false;
-  erro = '';
+  readonly crianca = signal<Crianca | null>(null);
+  readonly carregando = signal(true);
+  readonly salvando = signal(false);
+  readonly erro = signal('');
 
-  cadastrar(): void {
-    this.erro = '';
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
+      this.erro.set('Criança não encontrada.');
+      this.carregando.set(false);
+      return;
+    }
+
+    this.criancasService.buscarPorId(id)
+      .pipe(finalize(() => this.carregando.set(false)))
+      .subscribe({
+        next: (crianca) => {
+          this.crianca.set(crianca);
+          this.form.patchValue({
+            nome: crianca.nome,
+            dataNascimento: crianca.dataNascimento,
+            sexo: crianca.sexo ?? 'NAO_INFORMADO',
+            prematura: crianca.prematura,
+            semanasGestacionais: crianca.semanasGestacionais,
+            pesoNascimentoGramas: crianca.pesoNascimentoGramas
+          });
+        },
+        error: (erro: HttpErrorResponse) => {
+          this.erro.set(this.extrairMensagemErro(erro, 'Não foi possível carregar os dados da criança.'));
+        }
+      });
+  }
+
+  salvar(): void {
+    const crianca = this.crianca();
+    if (!crianca) {
+      return;
+    }
+
+    this.erro.set('');
     this.form.markAllAsTouched();
 
     const erroRegra = this.validarRegraIdade() || this.validarRegraPrematuridade();
     if (erroRegra) {
-      this.erro = erroRegra;
+      this.erro.set(erroRegra);
       return;
     }
 
     if (this.form.invalid) {
-      this.erro = 'Revise os campos obrigatórios antes de cadastrar a criança.';
+      this.erro.set('Revise os campos obrigatórios antes de salvar.');
       return;
     }
 
     const valor = this.form.getRawValue();
-    this.carregando = true;
+    this.salvando.set(true);
 
-    this.criancasService.criar({
+    this.criancasService.atualizar(crianca.id, {
       nome: valor.nome,
       dataNascimento: valor.dataNascimento,
       sexo: valor.sexo,
       prematura: valor.prematura,
       semanasGestacionais: valor.semanasGestacionais as number,
-      pesoNascimentoGramas: valor.pesoNascimentoGramas as number,
-      parentesco: valor.parentesco,
-      aceiteConsentimento: valor.aceiteConsentimento,
-      versaoTermoConsentimento: '2026.07'
+      pesoNascimentoGramas: valor.pesoNascimentoGramas as number
     })
-      .pipe(finalize(() => this.carregando = false))
+      .pipe(finalize(() => this.salvando.set(false)))
       .subscribe({
         next: (crianca) => {
           void this.router.navigate(['/criancas', crianca.id]);
         },
         error: (erro: HttpErrorResponse) => {
-          this.erro = this.extrairMensagemErro(erro);
+          this.erro.set(this.extrairMensagemErro(erro, 'Não foi possível salvar as alterações agora.'));
         }
       });
   }
 
   fecharErro(): void {
-    this.erro = '';
+    this.erro.set('');
   }
 
   private validarRegraPrematuridade(): string {
@@ -148,12 +171,12 @@ export class NovaCriancaComponent {
     return `${ano}-${mes}-${dia}`;
   }
 
-  private extrairMensagemErro(erro: HttpErrorResponse): string {
+  private extrairMensagemErro(erro: HttpErrorResponse, fallback: string): string {
     const mensagens = erro.error?.mensagens;
     if (Array.isArray(mensagens) && mensagens.length > 0) {
       return mensagens[0];
     }
 
-    return 'Não foi possível cadastrar a criança agora.';
+    return fallback;
   }
 }

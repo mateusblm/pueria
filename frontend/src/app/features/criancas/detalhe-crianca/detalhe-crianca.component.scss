@@ -1,58 +1,111 @@
-.detalhe {
+.detalhe-page {
   display: grid;
   gap: 18px;
-  max-width: 960px;
 }
 
-.detalhe__estado,
-.detalhe__card {
-  display: grid;
-  gap: 16px;
+.detalhe-page__back {
+  width: fit-content;
+  color: var(--pueria-vermelho-profundo);
+  font-weight: 780;
+  text-decoration: none;
+}
+
+.detalhe-page__state,
+.detalhe-page__hero,
+.detalhe-page__confirm,
+.detalhe-card {
   padding: 24px;
 }
 
-.detalhe__card h1 {
-  margin: 0;
-  font-size: clamp(2.1rem, 8vw, 3.4rem);
-  letter-spacing: -0.06em;
+.detalhe-page__hero {
+  display: grid;
+  gap: 20px;
 }
 
-.detalhe__idade {
-  margin: 0;
-  color: var(--pueria-coral-escuro);
-  font-weight: 800;
+.detalhe-page__actions {
+  display: grid;
+  gap: 10px;
 }
 
-.detalhe__dados,
-.detalhe__modulos {
+.detalhe-page__danger {
+  background: #fff7f4;
+  border: 1px solid rgba(159, 31, 53, 0.24);
+  color: var(--pueria-vermelho-profundo);
+}
+
+.detalhe-page__grid {
+  display: grid;
+  gap: 16px;
+}
+
+.detalhe-page__confirm {
+  display: grid;
+  gap: 18px;
+  border-color: rgba(159, 31, 53, 0.18);
+  background: #fffaf7;
+}
+
+.detalhe-page__confirm h2,
+.detalhe-page__confirm p {
+  margin: 0;
+}
+
+.detalhe-page__confirm p {
+  color: var(--pueria-texto-suave);
+  line-height: 1.6;
+}
+
+.detalhe-page__confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.detalhe-card h2,
+.detalhe-card p {
+  margin: 0;
+}
+
+.detalhe-card p {
+  color: var(--pueria-texto-suave);
+  line-height: 1.6;
+}
+
+.detalhe-card dl {
   display: grid;
   gap: 12px;
+  margin: 0;
 }
 
-.detalhe__dados div,
-.detalhe__modulo {
-  display: grid;
-  gap: 5px;
-  border: 1px solid var(--pueria-borda);
-  border-radius: 18px;
-  background: var(--pueria-superficie-suave);
-  padding: 15px;
+.detalhe-card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid var(--pueria-borda);
+  padding-top: 12px;
 }
 
-.detalhe__dados span,
-.detalhe__modulo span {
+.detalhe-card dt {
   color: var(--pueria-texto-suave);
-  font-size: 0.88rem;
 }
 
-.detalhe__dados strong,
-.detalhe__modulo strong {
-  color: var(--pueria-texto);
+.detalhe-card dd {
+  margin: 0;
+  font-weight: 800;
+  text-align: right;
 }
 
-@media (min-width: 720px) {
-  .detalhe__dados,
-  .detalhe__modulos {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+@media (min-width: 760px) {
+  .detalhe-page__hero {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .detalhe-page__actions {
+    display: flex;
+  }
+
+  .detalhe-page__grid {
+    grid-template-columns: 1.1fr 0.9fr;
   }
 }

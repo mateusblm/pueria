@@ -1,4 +1,4 @@
-export type Sexo = 'MASCULINO' | 'FEMININO';
+export type Sexo = 'MASCULINO' | 'FEMININO' | 'NAO_INFORMADO';
 
 export type Parentesco = 'MAE' | 'PAI' | 'RESPONSAVEL_LEGAL' | 'AVO' | 'OUTRO';
 
@@ -11,6 +11,7 @@ export interface Crianca {
   semanasGestacionais: number;
   pesoNascimentoGramas: number;
   criadoEm: string;
+  atualizadoEm?: string | null;
 }
 
 export interface CriarCriancaRequest {
@@ -23,4 +24,13 @@ export interface CriarCriancaRequest {
   parentesco: Parentesco;
   aceiteConsentimento: boolean;
   versaoTermoConsentimento: string;
+}
+
+export interface AtualizarCriancaRequest {
+  nome: string;
+  dataNascimento: string;
+  sexo: Sexo | null;
+  prematura: boolean;
+  semanasGestacionais: number;
+  pesoNascimentoGramas: number;
 }

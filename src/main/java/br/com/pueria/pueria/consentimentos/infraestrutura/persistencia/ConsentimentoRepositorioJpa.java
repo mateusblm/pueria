@@ -33,4 +33,9 @@ public class ConsentimentoRepositorioJpa implements ConsentimentoRepositorio {
     public boolean existeAceite(UUID usuarioId, UUID criancaId, TipoConsentimento tipo) {
         return repository.existsByUsuarioIdAndCriancaIdAndTipoAndAceitoTrue(usuarioId, criancaId, tipo);
     }
+
+    @Override
+    public void removerPorCrianca(UUID criancaId) {
+        repository.deleteByCriancaId(criancaId);
+    }
 }

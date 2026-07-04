@@ -41,7 +41,7 @@ export class LoginComponent {
         this.carregando = false;
       }))
       .subscribe({
-        next: () => void this.router.navigateByUrl('/app/criancas'),
+        next: () => void this.router.navigateByUrl('/criancas'),
         error: (erro: HttpErrorResponse) => {
           this.erro = erro.status === 401
             ? 'E-mail ou senha inválidos.'

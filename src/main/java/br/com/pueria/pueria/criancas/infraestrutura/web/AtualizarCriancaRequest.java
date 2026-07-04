@@ -1,9 +1,7 @@
 package br.com.pueria.pueria.criancas.infraestrutura.web;
 
-import br.com.pueria.pueria.criancas.aplicacao.CriarCriancaComando;
+import br.com.pueria.pueria.criancas.aplicacao.AtualizarCriancaComando;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
-import br.com.pueria.pueria.responsaveis.dominio.Parentesco;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,8 +10,9 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
-public record CriarCriancaRequest(
+public record AtualizarCriancaRequest(
         @NotBlank(message = "O nome é obrigatório.")
         @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres.")
         String nome,
@@ -34,31 +33,19 @@ public record CriarCriancaRequest(
         @NotNull(message = "O peso ao nascer é obrigatório.")
         @Min(value = 300, message = "O peso de nascimento informado está fora do limite operacional permitido.")
         @Max(value = 7000, message = "O peso de nascimento informado está fora do limite operacional permitido.")
-        Integer pesoNascimentoGramas,
-
-        @NotNull(message = "O parentesco é obrigatório.")
-        Parentesco parentesco,
-
-        @AssertTrue(message = "O consentimento precisa estar aceito para cadastrar a criança.")
-        boolean aceiteConsentimento,
-
-        @NotBlank(message = "A versão do termo de consentimento é obrigatória.")
-        @Size(max = 30, message = "A versão do termo de consentimento deve ter no máximo 30 caracteres.")
-        String versaoTermoConsentimento
+        Integer pesoNascimentoGramas
 ) {
 
-    public CriarCriancaComando paraComando(String emailResponsavel) {
-        return new CriarCriancaComando(
+    public AtualizarCriancaComando paraComando(UUID id, String emailResponsavel) {
+        return new AtualizarCriancaComando(
+                id,
                 emailResponsavel,
                 nome,
                 dataNascimento,
                 sexo,
                 prematura,
                 semanasGestacionais,
-                pesoNascimentoGramas,
-                parentesco,
-                aceiteConsentimento,
-                versaoTermoConsentimento
+                pesoNascimentoGramas
         );
     }
 }

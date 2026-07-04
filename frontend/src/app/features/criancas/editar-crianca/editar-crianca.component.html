@@ -1,0 +1,74 @@
+<section class="crianca-form-page">
+  <div class="crianca-form-page__header">
+    <a [routerLink]="crianca() ? ['/criancas', crianca()?.id] : ['/criancas']" class="crianca-form-page__back">← Voltar</a>
+    <p class="pueria-eyebrow">Editar perfil</p>
+    <h1 class="pueria-title">Dados da criança</h1>
+    <p class="pueria-subtitle">Mantenha as informações básicas atualizadas para preservar a qualidade dos registros.</p>
+  </div>
+
+  @if (carregando()) {
+    <div class="pueria-card crianca-form__state">Carregando dados...</div>
+  } @else {
+    <form class="pueria-card pueria-form crianca-form" [formGroup]="form" (ngSubmit)="salvar()">
+      <label class="pueria-field">
+        <span>Nome da criança</span>
+        <input type="text" formControlName="nome" autocomplete="off" />
+      </label>
+
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Data de nascimento</span>
+          <input type="date" formControlName="dataNascimento" [min]="dataMinimaNascimento" [max]="dataMaximaNascimento" />
+          <small>O cadastro atual contempla crianças de 0 a 6 anos.</small>
+        </label>
+
+        <label class="pueria-field">
+          <span>Sexo</span>
+          <select formControlName="sexo">
+            @for (sexo of sexos; track sexo.value) {
+              <option [value]="sexo.value">{{ sexo.label }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Semanas gestacionais</span>
+          <input type="number" min="22" max="42" formControlName="semanasGestacionais" />
+        </label>
+
+        <label class="pueria-field">
+          <span>Peso ao nascer em gramas</span>
+          <input type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" />
+        </label>
+      </div>
+
+      <label class="pueria-check">
+        <input type="checkbox" formControlName="prematura" />
+        <span>A criança nasceu antes de 37 semanas gestacionais.</span>
+      </label>
+
+      @if (erro()) {
+        <div class="pueria-message pueria-message--erro crianca-form__erro-desktop">{{ erro() }}</div>
+      }
+
+      <div class="crianca-form__actions">
+        <a [routerLink]="crianca() ? ['/criancas', crianca()?.id] : ['/criancas']" class="pueria-button pueria-button--secondary">Cancelar</a>
+        <button class="pueria-button" type="submit" [disabled]="salvando()">
+          {{ salvando() ? 'Salvando...' : 'Salvar alterações' }}
+        </button>
+      </div>
+    </form>
+  }
+
+  @if (erro()) {
+    <div class="mobile-alert" role="alert">
+      <div>
+        <strong>Ponto de atenção</strong>
+        <p>{{ erro() }}</p>
+      </div>
+      <button type="button" (click)="fecharErro()">×</button>
+    </div>
+  }
+</section>

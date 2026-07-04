@@ -10,4 +10,6 @@ public interface ConsentimentoRepositorio {
     Optional<Consentimento> buscarPorId(UUID id);
 
     boolean existeAceite(UUID usuarioId, UUID criancaId, TipoConsentimento tipo);
+
+    void removerPorCrianca(UUID criancaId);
 }

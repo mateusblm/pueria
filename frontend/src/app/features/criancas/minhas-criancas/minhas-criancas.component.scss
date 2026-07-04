@@ -1,46 +1,103 @@
-.criancas-home {
+.criancas-page {
+  display: grid;
+  gap: 20px;
+}
+
+.criancas-page__hero,
+.criancas-page__empty,
+.criancas-page__state {
+  padding: 26px;
+}
+
+.criancas-page__hero {
   display: grid;
   gap: 18px;
-  max-width: 920px;
 }
 
-.criancas-home__hero {
+.criancas-page__hero .pueria-button,
+.criancas-page__empty .pueria-button {
+  width: fit-content;
+}
+
+.criancas-page__empty {
   display: grid;
-  gap: 16px;
-  padding: 24px;
+  gap: 14px;
 }
 
-.criancas-home__hero h1 {
-  margin: 0;
-  font-size: clamp(2rem, 7vw, 3.2rem);
-  letter-spacing: -0.055em;
-}
-
-.criancas-home__hero p {
-  max-width: 660px;
-  margin: 0;
-  color: var(--pueria-texto-suave);
-  line-height: 1.65;
-}
-
-.criancas-home__hero .pueria-button {
-  width: max-content;
-}
-
-.criancas-home__notice {
+.criancas-page__state {
   display: grid;
   gap: 6px;
-  border: 1px dashed rgba(184, 74, 69, 0.32);
-  border-radius: 20px;
-  background: rgba(255, 250, 244, 0.78);
-  padding: 16px;
-}
-
-.criancas-home__notice strong {
-  color: var(--pueria-coral-escuro);
-}
-
-.criancas-home__notice span {
   color: var(--pueria-texto-suave);
-  line-height: 1.55;
+}
+
+.criancas-page__state strong {
+  color: var(--pueria-texto);
+}
+
+.criancas-page__empty h2,
+.crianca-card h2 {
+  margin: 0;
+  color: var(--pueria-texto);
+}
+
+.criancas-page__empty p,
+.crianca-card p {
+  margin: 0;
+  color: var(--pueria-texto-suave);
+  line-height: 1.6;
+}
+
+.criancas-page__grid {
+  display: grid;
+  gap: 16px;
+}
+
+.crianca-card {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.crianca-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pueria-sombra);
+}
+
+.crianca-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.crianca-card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid var(--pueria-borda);
+  padding-top: 10px;
+}
+
+.crianca-card dt {
+  color: var(--pueria-texto-suave);
+  font-size: 0.86rem;
+}
+
+.crianca-card dd {
+  margin: 0;
+  color: var(--pueria-texto);
+  font-weight: 780;
+  text-align: right;
+}
+
+.crianca-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (min-width: 760px) {
+  .criancas-page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
