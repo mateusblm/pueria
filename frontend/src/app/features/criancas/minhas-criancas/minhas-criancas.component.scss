@@ -1,0 +1,46 @@
+.criancas-home {
+  display: grid;
+  gap: 18px;
+  max-width: 920px;
+}
+
+.criancas-home__hero {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.criancas-home__hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  letter-spacing: -0.055em;
+}
+
+.criancas-home__hero p {
+  max-width: 660px;
+  margin: 0;
+  color: var(--pueria-texto-suave);
+  line-height: 1.65;
+}
+
+.criancas-home__hero .pueria-button {
+  width: max-content;
+}
+
+.criancas-home__notice {
+  display: grid;
+  gap: 6px;
+  border: 1px dashed rgba(184, 74, 69, 0.32);
+  border-radius: 20px;
+  background: rgba(255, 250, 244, 0.78);
+  padding: 16px;
+}
+
+.criancas-home__notice strong {
+  color: var(--pueria-coral-escuro);
+}
+
+.criancas-home__notice span {
+  color: var(--pueria-texto-suave);
+  line-height: 1.55;
+}

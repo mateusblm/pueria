@@ -1,0 +1,50 @@
+<section class="detalhe">
+  @if (carregando) {
+    <div class="pueria-card detalhe__estado">Carregando dados da criança...</div>
+  } @else if (erro) {
+    <div class="pueria-card detalhe__estado">
+      <div class="pueria-message pueria-message--erro">{{ erro }}</div>
+      <a class="pueria-button pueria-button--secondary" routerLink="/app/criancas">Voltar</a>
+    </div>
+  } @else if (crianca) {
+    <article class="pueria-card detalhe__card">
+      <p class="pueria-eyebrow">Perfil da criança</p>
+      <h1>{{ crianca.nome }}</h1>
+      <p class="detalhe__idade">{{ calcularIdade(crianca.dataNascimento) }}</p>
+
+      <div class="detalhe__dados">
+        <div>
+          <span>Data de nascimento</span>
+          <strong>{{ crianca.dataNascimento }}</strong>
+        </div>
+        <div>
+          <span>Sexo</span>
+          <strong>{{ crianca.sexo || 'Não informado' }}</strong>
+        </div>
+        <div>
+          <span>Prematuridade</span>
+          <strong>{{ crianca.prematura ? 'Sim' : 'Não' }}</strong>
+        </div>
+        <div>
+          <span>Peso ao nascer</span>
+          <strong>{{ crianca.pesoNascimentoGramas ? crianca.pesoNascimentoGramas + ' g' : 'Não informado' }}</strong>
+        </div>
+      </div>
+    </article>
+
+    <div class="detalhe__modulos">
+      <div class="detalhe__modulo">
+        <strong>Marcos</strong>
+        <span>Próximo módulo do backend.</span>
+      </div>
+      <div class="detalhe__modulo">
+        <strong>Sono</strong>
+        <span>Registro entrará depois dos marcos.</span>
+      </div>
+      <div class="detalhe__modulo">
+        <strong>Alimentação</strong>
+        <span>Base para prevenção e rotina.</span>
+      </div>
+    </div>
+  }
+</section>

@@ -1,1 +1,211 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --pueria-coral: #b84a45;
+  --pueria-coral-escuro: #8f302d;
+  --pueria-coral-claro: #f5d7d3;
+  --pueria-verde: #2f7d73;
+  --pueria-verde-claro: #d9eee9;
+  --pueria-azul: #476d8a;
+  --pueria-fundo: #fbf7f0;
+  --pueria-superficie: #ffffff;
+  --pueria-superficie-suave: #fffaf4;
+  --pueria-texto: #273331;
+  --pueria-texto-suave: #62716d;
+  --pueria-borda: #eadfd2;
+  --pueria-erro: #9f2d2d;
+  --pueria-sucesso: #2e725b;
+  --pueria-sombra: 0 20px 60px rgba(89, 66, 48, 0.13);
+  --pueria-raio: 28px;
+  --pueria-raio-menor: 18px;
+  --pueria-fonte: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--pueria-texto);
+  background:
+    radial-gradient(circle at top left, rgba(184, 74, 69, 0.12), transparent 32rem),
+    linear-gradient(180deg, #fffaf4 0%, var(--pueria-fundo) 45%, #f7efe5 100%);
+  font-family: var(--pueria-fonte);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.pueria-page {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.pueria-card {
+  width: 100%;
+  border: 1px solid var(--pueria-borda);
+  border-radius: var(--pueria-raio);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: var(--pueria-sombra);
+  backdrop-filter: blur(14px);
+}
+
+.pueria-eyebrow {
+  margin: 0 0 8px;
+  color: var(--pueria-coral-escuro);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pueria-title {
+  margin: 0;
+  color: var(--pueria-texto);
+  font-size: clamp(2rem, 8vw, 3.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.pueria-subtitle {
+  margin: 16px 0 0;
+  color: var(--pueria-texto-suave);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.pueria-form {
+  display: grid;
+  gap: 16px;
+}
+
+.pueria-field {
+  display: grid;
+  gap: 8px;
+}
+
+.pueria-field label,
+.pueria-check span {
+  color: var(--pueria-texto);
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.pueria-field input,
+.pueria-field select {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--pueria-borda);
+  border-radius: 16px;
+  background: #fffdf9;
+  color: var(--pueria-texto);
+  outline: none;
+  padding: 0 15px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.pueria-field input:focus,
+.pueria-field select:focus {
+  border-color: rgba(184, 74, 69, 0.68);
+  box-shadow: 0 0 0 4px rgba(184, 74, 69, 0.12);
+  background: #fff;
+}
+
+.pueria-check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  color: var(--pueria-texto-suave);
+  line-height: 1.45;
+}
+
+.pueria-check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--pueria-coral);
+}
+
+.pueria-button {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pueria-coral);
+  color: #fffaf6;
+  font-weight: 800;
+  padding: 0 22px;
+  text-decoration: none;
+  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.pueria-button:hover:not(:disabled) {
+  background: var(--pueria-coral-escuro);
+  box-shadow: 0 14px 32px rgba(143, 48, 45, 0.22);
+  transform: translateY(-1px);
+}
+
+.pueria-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.pueria-button--secondary {
+  border: 1px solid var(--pueria-borda);
+  background: #fffaf4;
+  color: var(--pueria-texto);
+}
+
+.pueria-button--secondary:hover:not(:disabled) {
+  background: #fff2e4;
+  box-shadow: none;
+}
+
+.pueria-message {
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.pueria-message--erro {
+  border: 1px solid rgba(159, 45, 45, 0.18);
+  background: rgba(159, 45, 45, 0.08);
+  color: var(--pueria-erro);
+}
+
+.pueria-message--sucesso {
+  border: 1px solid rgba(46, 114, 91, 0.18);
+  background: rgba(46, 114, 91, 0.08);
+  color: var(--pueria-sucesso);
+}
+
+.pueria-grid-2 {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .pueria-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

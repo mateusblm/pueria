@@ -1,0 +1,16 @@
+<div class="app-shell">
+  <aside class="app-shell__sidebar">
+    <app-brand-mark></app-brand-mark>
+
+    <nav class="app-shell__nav" aria-label="Navegação principal">
+      <a routerLink="/app/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">Crianças</a>
+      <a routerLink="/app/criancas/nova" routerLinkActive="ativo">Adicionar criança</a>
+    </nav>
+
+    <button type="button" class="app-shell__logout" (click)="sair()">Sair</button>
+  </aside>
+
+  <main class="app-shell__content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

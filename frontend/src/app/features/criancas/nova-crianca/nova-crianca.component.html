@@ -1,0 +1,78 @@
+<section class="nova-crianca pueria-card">
+  <div class="nova-crianca__header">
+    <p class="pueria-eyebrow">Novo acompanhamento</p>
+    <h1>Cadastrar criança</h1>
+    <p>
+      Informe os dados básicos para iniciar o acompanhamento preventivo. Esta etapa não realiza diagnóstico e depende do consentimento do responsável.
+    </p>
+  </div>
+
+  @if (erro) {
+    <div class="pueria-message pueria-message--erro">{{ erro }}</div>
+  }
+
+  <form class="pueria-form" [formGroup]="form" (ngSubmit)="criar()">
+    <div class="pueria-grid-2">
+      <div class="pueria-field">
+        <label for="nome">Nome da criança</label>
+        <input id="nome" type="text" formControlName="nome" autocomplete="off" />
+      </div>
+
+      <div class="pueria-field">
+        <label for="dataNascimento">Data de nascimento</label>
+        <input id="dataNascimento" type="date" formControlName="dataNascimento" />
+      </div>
+    </div>
+
+    <div class="pueria-grid-2">
+      <div class="pueria-field">
+        <label for="sexo">Sexo</label>
+        <select id="sexo" formControlName="sexo">
+          <option value="">Não informar agora</option>
+          @for (sexo of sexos; track sexo.valor) {
+            <option [value]="sexo.valor">{{ sexo.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="pueria-field">
+        <label for="parentesco">Seu vínculo com a criança</label>
+        <select id="parentesco" formControlName="parentesco">
+          @for (parentesco of parentescos; track parentesco.valor) {
+            <option [value]="parentesco.valor">{{ parentesco.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <label class="pueria-check">
+      <input type="checkbox" formControlName="prematura" />
+      <span>A criança nasceu prematura</span>
+    </label>
+
+    <div class="pueria-grid-2">
+      <div class="pueria-field">
+        <label for="semanasGestacionais">Semanas gestacionais</label>
+        <input id="semanasGestacionais" type="number" min="20" max="43" formControlName="semanasGestacionais" />
+      </div>
+
+      <div class="pueria-field">
+        <label for="pesoNascimentoGramas">Peso ao nascer em gramas</label>
+        <input id="pesoNascimentoGramas" type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" />
+      </div>
+    </div>
+
+    <input type="hidden" formControlName="versaoTermoConsentimento" />
+
+    <label class="pueria-check nova-crianca__consentimento">
+      <input type="checkbox" formControlName="aceiteConsentimento" />
+      <span>
+        Declaro que sou responsável ou autorizado a cadastrar esta criança e aceito o uso dos dados para acompanhamento preventivo, sem finalidade diagnóstica automática.
+      </span>
+    </label>
+
+    <button class="pueria-button" type="submit" [disabled]="carregando">
+      {{ carregando ? 'Cadastrando...' : 'Cadastrar criança' }}
+    </button>
+  </form>
+</section>

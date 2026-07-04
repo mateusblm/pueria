@@ -1,0 +1,43 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand__flor {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+}
+
+.ramo,
+.petala,
+.folha {
+  stroke: var(--pueria-coral);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.petala {
+  stroke: var(--pueria-coral-escuro);
+}
+
+.folha {
+  stroke: var(--pueria-verde);
+}
+
+.brand strong {
+  display: block;
+  color: var(--pueria-texto);
+  font-size: 1.35rem;
+  letter-spacing: -0.04em;
+}
+
+.brand span {
+  display: block;
+  max-width: 210px;
+  color: var(--pueria-texto-suave);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}

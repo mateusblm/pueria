@@ -1,0 +1,32 @@
+<div class="auth-form">
+  <div>
+    <p class="pueria-eyebrow">Acesso</p>
+    <h2>Entre na sua conta</h2>
+    <p>Continue o acompanhamento preventivo das crianças vinculadas a você.</p>
+  </div>
+
+  @if (erro) {
+    <div class="pueria-message pueria-message--erro">{{ erro }}</div>
+  }
+
+  <form class="pueria-form" [formGroup]="form" (ngSubmit)="entrar()">
+    <div class="pueria-field">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="email" formControlName="email" />
+    </div>
+
+    <div class="pueria-field">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" autocomplete="current-password" formControlName="senha" />
+    </div>
+
+    <button class="pueria-button" type="submit" [disabled]="carregando">
+      {{ carregando ? 'Entrando...' : 'Entrar' }}
+    </button>
+  </form>
+
+  <p class="auth-form__link">
+    Ainda não tem conta?
+    <a routerLink="/cadastro">Criar cadastro</a>
+  </p>
+</div>
