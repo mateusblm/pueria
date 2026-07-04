@@ -1,16 +1,18 @@
 <section class="marcos-page">
-  <a [routerLink]="['/criancas', criancaId()]" class="marcos-page__back">← Perfil da criança</a>
+  <a [routerLink]="['/criancas', criancaId()]" class="marcos-page__back">&larr; Minha criança</a>
 
-  <div class="pueria-card marcos-page__hero">
-    <p class="pueria-eyebrow">Desenvolvimento</p>
-    <h1 class="pueria-title">Marcos da criança</h1>
-    <p class="pueria-subtitle">
-      Registre o que já foi observado na rotina. Estes marcos ajudam a acompanhar a evolução e não substituem uma avaliação profissional.
-    </p>
+  <div class="marcos-page__hero">
+    <div>
+      <p class="pueria-eyebrow">Desenvolvimento</p>
+      <h1 class="pueria-title">Acompanhe por idade</h1>
+      <p class="pueria-subtitle">
+        Registre o que acontece na rotina, anote dúvidas e veja quando vale conversar com o pediatra.
+      </p>
+    </div>
   </div>
 
   @if (carregando()) {
-    <div class="pueria-card marcos-page__state">Carregando marcos do desenvolvimento...</div>
+    <div class="pueria-card marcos-page__state">Preparando os marcos da criança...</div>
   } @else if (erro()) {
     <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   } @else if (marcos().length === 0) {
@@ -18,37 +20,133 @@
       Ainda não há marcos disponíveis para a idade desta criança.
     </div>
   } @else {
-    <div class="marcos-page__groups">
-      @for (grupo of grupos(); track grupo.idadeMeses) {
-        <section class="pueria-card marco-grupo">
-          <header>
-            <p class="pueria-eyebrow">Até {{ grupo.titulo }}</p>
-            <h2>{{ grupo.marcos.length }} marcos de referência</h2>
-          </header>
+    <nav class="idade-strip" aria-label="Idades dos marcos">
+      @for (idade of idadesDisponiveis(); track idade) {
+        <button
+          type="button"
+          class="idade-chip"
+          [class.idade-chip--active]="idadeSelecionada() === idade"
+          (click)="selecionarIdade(idade)">
+          {{ tituloIdade(idade) }}
+        </button>
+      }
+    </nav>
 
-          <div class="marco-lista">
-            @for (marco of grupo.marcos; track marco.id) {
-              <article class="marco-item">
-                <div>
-                  <span class="marco-area">{{ labelArea(marco.area) }}</span>
-                  <h3>{{ marco.descricao }}</h3>
-                  <p>{{ marco.fonte }}</p>
-                </div>
+    <section class="pueria-card painel-idade">
+      <div class="painel-idade__header">
+        <div>
+          <p class="pueria-eyebrow">Marco de referência</p>
+          <h2>{{ tituloIdadeSelecionada() }}</h2>
+        </div>
+        <strong>{{ progresso().respondidos }}/{{ progresso().total }}</strong>
+      </div>
+      <div class="progresso" aria-hidden="true">
+        <span [style.width.%]="progresso().percentual"></span>
+      </div>
+      <p>{{ progresso().percentual }}% dos marcos desta idade já foram registrados.</p>
+    </section>
 
-                <div class="marco-item__actions">
-                  <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
-                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoId() === marco.id" (click)="registrar(marco, 'AINDA_NAO_OBSERVADO')">
-                    Acompanhar
-                  </button>
-                  <button type="button" class="pueria-button" [disabled]="salvandoId() === marco.id" (click)="registrar(marco, 'OBSERVADO')">
-                    Observado
-                  </button>
-                </div>
+    <nav class="area-tabs" aria-label="Áreas do desenvolvimento">
+      @for (area of areasResumo(); track area.area) {
+        <button
+          type="button"
+          class="area-tab"
+          [class.area-tab--active]="areaSelecionada() === area.area"
+          (click)="selecionarArea(area.area)">
+          <span>{{ area.label }}</span>
+          <small>{{ area.pendentes }} a registrar</small>
+        </button>
+      }
+      <a class="area-tab area-tab--alerta" href="#quando-agir">
+        <span>Quando agir cedo</span>
+        <small>{{ pontosDeAtencao().length }} ponto(s)</small>
+      </a>
+    </nav>
+
+    <div class="marcos-layout">
+      <section class="marco-lista" aria-label="Marcos da área selecionada">
+        @for (marco of marcosDaArea(); track marco.id) {
+          <article class="marco-card">
+            <div class="marco-card__body">
+              <div class="marco-card__title">
+                <span class="marco-area">{{ labelArea(marco.area) }}</span>
+                <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
+              </div>
+
+              <h3>{{ marco.descricao }}</h3>
+
+              <div class="marco-card__actions" role="group" aria-label="Registrar marco">
+                <button
+                  type="button"
+                  class="resposta resposta--sim"
+                  [class.resposta--active]="marco.status === 'OBSERVADO'"
+                  [disabled]="salvandoId() === marco.id"
+                  (click)="registrar(marco, 'OBSERVADO')">
+                  Sim
+                </button>
+                <button
+                  type="button"
+                  class="resposta resposta--duvida"
+                  [class.resposta--active]="marco.status === 'NAO_TENHO_CERTEZA'"
+                  [disabled]="salvandoId() === marco.id"
+                  (click)="registrar(marco, 'NAO_TENHO_CERTEZA')">
+                  Não tenho certeza
+                </button>
+                <button
+                  type="button"
+                  class="resposta resposta--ainda-nao"
+                  [class.resposta--active]="marco.status === 'AINDA_NAO_OBSERVADO'"
+                  [disabled]="salvandoId() === marco.id"
+                  (click)="registrar(marco, 'AINDA_NAO_OBSERVADO')">
+                  Ainda não
+                </button>
+              </div>
+
+              <label class="nota-marco">
+                <span>Anotações da rotina</span>
+                <textarea
+                  rows="3"
+                  [value]="marco.observacao ?? ''"
+                  placeholder="Ex.: percebi isso durante a brincadeira, mas não acontece sempre."
+                  [disabled]="salvandoId() === marco.id"
+                  (blur)="salvarObservacao(marco, $any($event.target).value)"></textarea>
+              </label>
+
+              <small class="marco-fonte">{{ marco.fonte }}</small>
+            </div>
+          </article>
+        }
+      </section>
+
+      <aside class="apoio-coluna">
+        <section id="quando-agir" class="pueria-card apoio-card apoio-card--alerta">
+          <p class="pueria-eyebrow">Quando agir cedo</p>
+          @if (pontosDeAtencao().length === 0) {
+            <h2>Sem pontos de atenção registrados</h2>
+            <p>Continue acompanhando a rotina e registre quando surgir uma dúvida.</p>
+          } @else {
+            <h2>Vale conversar com o pediatra</h2>
+            <p>Leve estes pontos para a consulta, especialmente se eles persistirem ou vierem junto de outras preocupações.</p>
+            <ul>
+              @for (ponto of pontosDeAtencao(); track ponto.id) {
+                <li>{{ ponto.descricao }}</li>
+              }
+            </ul>
+          }
+        </section>
+
+        <section class="pueria-card apoio-card">
+          <p class="pueria-eyebrow">Atividades para estimular</p>
+          <h2>{{ labelArea(areaSelecionada()) }}</h2>
+          <div class="dicas-lista">
+            @for (dica of dicasDaArea(); track dica) {
+              <article>
+                <p>{{ dica }}</p>
               </article>
             }
           </div>
         </section>
-      }
+      </aside>
     </div>
   }
 </section>
