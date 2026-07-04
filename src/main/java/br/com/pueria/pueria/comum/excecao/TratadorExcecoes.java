@@ -25,6 +25,13 @@ public class TratadorExcecoes {
         );
     }
 
+    @ExceptionHandler(CredenciaisInvalidasException.class)
+    public ResponseEntity<ErroApi> tratarCredenciaisInvalidas(CredenciaisInvalidasException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                ErroApi.criar(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas", List.of(ex.getMessage()))
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroApi> tratarValidacao(MethodArgumentNotValidException ex) {
         List<String> mensagens = ex.getBindingResult()

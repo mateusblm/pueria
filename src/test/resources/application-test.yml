@@ -13,3 +13,8 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+seguranca:
+  jwt:
+    secret: pueria-test-secret-com-tamanho-suficiente-para-hmac-sha256
+    expiracao-segundos: 3600

@@ -27,3 +27,8 @@ management:
     web:
       exposure:
         include: health,info
+
+seguranca:
+  jwt:
+    secret: ${PUERIA_JWT_SECRET:pueria-dev-secret-altere-este-valor-em-producao-256-bits}
+    expiracao-segundos: 3600
