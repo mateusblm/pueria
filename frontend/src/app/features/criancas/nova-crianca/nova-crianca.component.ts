@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -13,14 +13,12 @@ import { CriarCriancaRequest, Parentesco, Sexo } from '../../../shared/models/cr
   styleUrl: './nova-crianca.component.scss'
 })
 export class NovaCriancaComponent {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly criancasService = inject(CriancasService);
+  private readonly router = inject(Router);
+
   carregando = false;
   erro = '';
-
-    constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly criancasService: CriancasService,
-    private readonly router: Router
-  ) {}
 
   readonly sexos: Array<{ valor: Sexo; label: string }> = [
     { valor: 'FEMININO', label: 'Feminino' },
@@ -46,8 +44,6 @@ export class NovaCriancaComponent {
     aceiteConsentimento: [false, [Validators.requiredTrue]],
     versaoTermoConsentimento: ['2026.07', [Validators.required, Validators.maxLength(30)]]
   });
-
-
 
   criar(): void {
     if (this.form.invalid) {

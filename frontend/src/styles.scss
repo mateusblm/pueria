@@ -1,20 +1,30 @@
 :root {
-  --pueria-coral: #b84a45;
-  --pueria-coral-escuro: #8f302d;
-  --pueria-coral-claro: #f5d7d3;
-  --pueria-verde: #2f7d73;
-  --pueria-verde-claro: #d9eee9;
-  --pueria-azul: #476d8a;
-  --pueria-fundo: #fbf7f0;
+  /* Identidade Pueria: flor vermelha linear, acolhedora e preventiva. */
+  --pueria-vermelho-flor: #d92d4a;
+  --pueria-vermelho-profundo: #9f1f35;
+  --pueria-coral-vivo: #ef5b66;
+  --pueria-rosa-nevoa: #fde2e6;
+  --pueria-rosa-bruma: #fff1f3;
+
+  --pueria-folha: #6b9274;
+  --pueria-folha-escura: #3c654b;
+  --pueria-folha-clara: #dcebdd;
+
+  --pueria-dourado-suave: #d6a84f;
+  --pueria-creme: #fff8f1;
+  --pueria-fundo: #fbf4ec;
   --pueria-superficie: #ffffff;
-  --pueria-superficie-suave: #fffaf4;
-  --pueria-texto: #273331;
-  --pueria-texto-suave: #62716d;
-  --pueria-borda: #eadfd2;
-  --pueria-erro: #9f2d2d;
-  --pueria-sucesso: #2e725b;
-  --pueria-sombra: 0 20px 60px rgba(89, 66, 48, 0.13);
-  --pueria-raio: 28px;
+  --pueria-superficie-suave: #fffaf5;
+
+  --pueria-texto: #2f2928;
+  --pueria-texto-suave: #706662;
+  --pueria-borda: #eadbd4;
+  --pueria-erro: #9f1f35;
+  --pueria-sucesso: #376b4b;
+
+  --pueria-sombra: 0 24px 70px rgba(101, 55, 48, 0.13);
+  --pueria-sombra-suave: 0 16px 42px rgba(101, 55, 48, 0.08);
+  --pueria-raio: 30px;
   --pueria-raio-menor: 18px;
   --pueria-fonte: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -32,9 +42,21 @@ body {
   margin: 0;
   color: var(--pueria-texto);
   background:
-    radial-gradient(circle at top left, rgba(184, 74, 69, 0.12), transparent 32rem),
-    linear-gradient(180deg, #fffaf4 0%, var(--pueria-fundo) 45%, #f7efe5 100%);
+    radial-gradient(circle at 8% 5%, rgba(217, 45, 74, 0.15), transparent 30rem),
+    radial-gradient(circle at 90% 10%, rgba(107, 146, 116, 0.16), transparent 28rem),
+    linear-gradient(180deg, #fffaf6 0%, var(--pueria-fundo) 46%, #f5eadf 100%);
   font-family: var(--pueria-fonte);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: auto -12rem -18rem auto;
+  width: 34rem;
+  height: 34rem;
+  border: 1px solid rgba(217, 45, 74, 0.10);
+  border-radius: 999px;
+  pointer-events: none;
 }
 
 a {
@@ -53,33 +75,33 @@ button {
 
 .pueria-page {
   min-height: 100vh;
-  padding: 24px;
+  padding: 22px;
 }
 
 .pueria-card {
   width: 100%;
-  border: 1px solid var(--pueria-borda);
+  border: 1px solid rgba(234, 219, 212, 0.88);
   border-radius: var(--pueria-raio);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: var(--pueria-sombra);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
 }
 
 .pueria-eyebrow {
   margin: 0 0 8px;
-  color: var(--pueria-coral-escuro);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  color: var(--pueria-vermelho-profundo);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .pueria-title {
   margin: 0;
   color: var(--pueria-texto);
-  font-size: clamp(2rem, 8vw, 3.75rem);
+  font-size: clamp(2.15rem, 8vw, 4rem);
   line-height: 0.95;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.06em;
 }
 
 .pueria-subtitle {
@@ -103,7 +125,7 @@ button {
 .pueria-check span {
   color: var(--pueria-texto);
   font-size: 0.9rem;
-  font-weight: 750;
+  font-weight: 760;
 }
 
 .pueria-field input,
@@ -121,8 +143,8 @@ button {
 
 .pueria-field input:focus,
 .pueria-field select:focus {
-  border-color: rgba(184, 74, 69, 0.68);
-  box-shadow: 0 0 0 4px rgba(184, 74, 69, 0.12);
+  border-color: rgba(217, 45, 74, 0.66);
+  box-shadow: 0 0 0 4px rgba(217, 45, 74, 0.12);
   background: #fff;
 }
 
@@ -139,7 +161,7 @@ button {
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  accent-color: var(--pueria-coral);
+  accent-color: var(--pueria-vermelho-flor);
 }
 
 .pueria-button {
@@ -150,17 +172,17 @@ button {
   gap: 8px;
   border: 0;
   border-radius: 999px;
-  background: var(--pueria-coral);
+  background: linear-gradient(135deg, var(--pueria-vermelho-flor), var(--pueria-coral-vivo));
   color: #fffaf6;
-  font-weight: 800;
+  font-weight: 850;
   padding: 0 22px;
   text-decoration: none;
-  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
 }
 
 .pueria-button:hover:not(:disabled) {
-  background: var(--pueria-coral-escuro);
-  box-shadow: 0 14px 32px rgba(143, 48, 45, 0.22);
+  box-shadow: 0 14px 32px rgba(159, 31, 53, 0.22);
+  filter: saturate(1.03);
   transform: translateY(-1px);
 }
 
@@ -188,14 +210,14 @@ button {
 }
 
 .pueria-message--erro {
-  border: 1px solid rgba(159, 45, 45, 0.18);
-  background: rgba(159, 45, 45, 0.08);
+  border: 1px solid rgba(159, 31, 53, 0.18);
+  background: rgba(159, 31, 53, 0.08);
   color: var(--pueria-erro);
 }
 
 .pueria-message--sucesso {
-  border: 1px solid rgba(46, 114, 91, 0.18);
-  background: rgba(46, 114, 91, 0.08);
+  border: 1px solid rgba(55, 107, 75, 0.18);
+  background: rgba(55, 107, 75, 0.08);
   color: var(--pueria-sucesso);
 }
 

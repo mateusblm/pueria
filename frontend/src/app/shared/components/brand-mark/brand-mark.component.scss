@@ -5,38 +5,68 @@
 }
 
 .brand__flor {
-  width: 52px;
-  height: 52px;
+  width: 58px;
+  height: 58px;
   flex: 0 0 auto;
+  overflow: visible;
 }
 
-.ramo,
-.petala,
-.folha {
-  stroke: var(--pueria-coral);
-  stroke-width: 3.2;
+.flor__haste,
+.flor__haste--secundaria,
+.flor__petala,
+.flor__fio,
+.flor__folha {
+  fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.petala {
-  stroke: var(--pueria-coral-escuro);
+.flor__haste {
+  stroke: var(--pueria-folha-escura);
+  stroke-width: 4.2;
 }
 
-.folha {
-  stroke: var(--pueria-verde);
+.flor__haste--secundaria {
+  stroke: var(--pueria-folha);
+  stroke-width: 2.8;
+}
+
+.flor__petala {
+  stroke: var(--pueria-vermelho-flor);
+  stroke-width: 4;
+}
+
+.flor__petala--solta {
+  stroke: var(--pueria-coral-vivo);
+  stroke-width: 3;
+}
+
+.flor__fio {
+  stroke: var(--pueria-vermelho-flor);
+  stroke-width: 2.4;
+}
+
+.flor__ponto {
+  fill: var(--pueria-dourado-suave);
+  stroke: var(--pueria-vermelho-profundo);
+  stroke-width: 0.6;
+}
+
+.flor__folha {
+  stroke: var(--pueria-folha);
+  stroke-width: 3;
 }
 
 .brand strong {
   display: block;
   color: var(--pueria-texto);
-  font-size: 1.35rem;
-  letter-spacing: -0.04em;
+  font-size: 1.38rem;
+  letter-spacing: -0.045em;
 }
 
 .brand span {
   display: block;
-  max-width: 210px;
+  max-width: 220px;
   color: var(--pueria-texto-suave);
   font-size: 0.78rem;
   line-height: 1.35;

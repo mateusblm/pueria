@@ -7,7 +7,7 @@
 .auth-shell__intro {
   position: relative;
   overflow: hidden;
-  min-height: 320px;
+  min-height: 330px;
   border-radius: var(--pueria-raio);
   padding: 24px;
 }
@@ -16,53 +16,30 @@
   position: relative;
   z-index: 1;
   margin-top: 52px;
-  max-width: 600px;
+  max-width: 620px;
 }
 
-.auth-shell__ramo {
+.auth-shell__flor-fundo {
   position: absolute;
-  right: -40px;
-  bottom: -50px;
-  width: 230px;
-  height: 230px;
-  border: 1px solid rgba(184, 74, 69, 0.18);
-  border-radius: 999px;
+  right: -92px;
+  bottom: -36px;
+  width: min(72vw, 390px);
+  height: auto;
+  opacity: 0.18;
+  pointer-events: none;
 }
 
-.auth-shell__ramo::before,
-.auth-shell__ramo::after,
-.auth-shell__ramo span {
-  content: '';
-  position: absolute;
-  border: 2px solid var(--pueria-coral);
-  border-bottom: 0;
-  border-left: 0;
-  border-radius: 999px 999px 0 0;
-  opacity: 0.45;
-  transform: rotate(-38deg);
+.auth-shell__flor-fundo path {
+  fill: none;
+  stroke: var(--pueria-vermelho-flor);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.auth-shell__ramo::before {
-  right: 68px;
-  bottom: 58px;
-  width: 120px;
-  height: 120px;
-}
-
-.auth-shell__ramo::after {
-  right: 105px;
-  bottom: 94px;
-  width: 80px;
-  height: 80px;
-}
-
-.auth-shell__ramo span {
-  right: 46px;
-  bottom: 108px;
-  width: 58px;
-  height: 58px;
-  border-color: var(--pueria-verde);
-  transform: rotate(22deg);
+.auth-shell__flor-fundo path:first-child {
+  stroke: var(--pueria-folha-escura);
+  stroke-width: 6;
 }
 
 .auth-shell__form {
@@ -83,6 +60,12 @@
 
   .auth-shell__copy {
     margin-top: 96px;
+  }
+
+  .auth-shell__flor-fundo {
+    right: -58px;
+    bottom: -12px;
+    width: 450px;
   }
 
   .auth-shell__form {
