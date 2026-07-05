@@ -232,9 +232,9 @@ export class MarcosCriancaComponent implements OnInit {
 
   labelPontosAtencao(total: number): string {
     if (total === 0) {
-      return 'Sem itens';
+      return 'Sem dúvidas';
     }
-    return total === 1 ? '1 item' : `${total} itens`;
+    return total === 1 ? '1 dúvida' : `${total} dúvidas`;
   }
 
   dataResumo(): string {

@@ -85,9 +85,9 @@ export class AcompanhamentoComponent implements OnInit {
 
   labelPontosAtencao(total: number): string {
     if (total === 0) {
-      return 'Sem itens para conversar';
+      return 'Sem dúvidas para a consulta';
     }
-    return total === 1 ? '1 item para conversar' : `${total} itens para conversar`;
+    return total === 1 ? '1 dúvida para a consulta' : `${total} dúvidas para a consulta`;
   }
 
   calcularIdade(dataNascimento: string): string {
