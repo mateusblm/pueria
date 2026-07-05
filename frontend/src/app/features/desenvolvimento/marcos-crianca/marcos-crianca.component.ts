@@ -208,6 +208,20 @@ export class MarcosCriancaComponent implements OnInit {
     return labels[status];
   }
 
+  labelPendencias(pendentes: number): string {
+    if (pendentes === 0) {
+      return 'Completo';
+    }
+    return pendentes === 1 ? '1 pendente' : `${pendentes} pendentes`;
+  }
+
+  labelPontosAtencao(total: number): string {
+    if (total === 0) {
+      return 'Sem pontos';
+    }
+    return total === 1 ? '1 ponto' : `${total} pontos`;
+  }
+
   classeStatus(status: StatusMarcoDesenvolvimento): string {
     return `marco-status marco-status--${status.toLowerCase().replaceAll('_', '-')}`;
   }

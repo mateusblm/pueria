@@ -54,12 +54,12 @@
           [class.area-tab--active]="areaSelecionada() === area.area"
           (click)="selecionarArea(area.area)">
           <span>{{ area.label }}</span>
-          <small>{{ area.pendentes }} a registrar</small>
+          <small>{{ labelPendencias(area.pendentes) }}</small>
         </button>
       }
       <a class="area-tab area-tab--alerta" href="#quando-agir">
         <span>Quando agir cedo</span>
-        <small>{{ pontosDeAtencao().length }} ponto(s)</small>
+        <small>{{ labelPontosAtencao(pontosDeAtencao().length) }}</small>
       </a>
     </nav>
 
