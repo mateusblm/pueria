@@ -75,7 +75,7 @@ export class CrescimentoCriancaComponent implements OnInit {
   });
 
   readonly medidasOrdenadas = computed(() =>
-    [...this.medidas()].sort((a, b) => b.dataMedicao.localeCompare(a.dataMedicao))
+    [...this.medidas()].sort((a, b) => this.compararMedidasRecentes(a, b))
   );
 
   readonly ultimaMedida = computed(() => this.medidasOrdenadas()[0] ?? null);
@@ -321,6 +321,17 @@ export class CrescimentoCriancaComponent implements OnInit {
     return `${direcao} ${this.formatarNumero(Math.abs(diferenca), unidade)} desde o registro anterior`;
   }
 
+  private compararMedidasRecentes(a: MedidaCrescimento, b: MedidaCrescimento): number {
+    const porDataMedicao = b.dataMedicao.localeCompare(a.dataMedicao);
+    if (porDataMedicao !== 0) {
+      return porDataMedicao;
+    }
+
+    const momentoA = a.atualizadoEm ?? a.criadoEm;
+    const momentoB = b.atualizadoEm ?? b.criadoEm;
+    return momentoB.localeCompare(momentoA);
+  }
+
   private montarGraficosCurva(): GraficoCrescimento[] {
     const indicadores = [
       'PESO_IDADE',
@@ -433,9 +444,9 @@ export class CrescimentoCriancaComponent implements OnInit {
 
   private orientacaoGrafico(resultado: ResultadoCurvaCrescimento): string {
     if (resultado.classificacao === 'FAIXA_ESPERADA') {
-      return 'Continue acompanhando nas próximas medidas.';
+      return 'Mantenha os registros nas consultas de rotina para observar se a trajetória permanece estável.';
     }
-    return 'Vale levar esse ponto para a próxima consulta.';
+    return 'Leve essa medida para a próxima consulta, principalmente se a mudança se repetir.';
   }
 
   private tituloIndicador(indicador: string): string {
