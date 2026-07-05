@@ -13,6 +13,8 @@ type PontoGraficoCrescimento = {
   valor: string;
   zScore: number;
   percentil: number;
+  x: number;
+  y: number;
 };
 
 type GraficoCrescimento = {
@@ -20,10 +22,14 @@ type GraficoCrescimento = {
   titulo: string;
   resumo: string;
   classe: string;
+  valorInicial: string;
+  dataInicial: string;
   valorAtual: string;
   dataAtual: string;
   marcador: number;
   pontos: PontoGraficoCrescimento[];
+  linhaTrajetoria: string;
+  ariaGrafico: string;
   tendencia: string;
   orientacao: string;
   tecnico: {
@@ -341,14 +347,31 @@ export class CrescimentoCriancaComponent implements OnInit {
 
     const zMin = -3.5;
     const zMax = 3.5;
+    const larguraGrafico = 320;
+    const alturaGrafico = 160;
+    const margemGrafico = 22;
     const posicaoPorZ = (zScore: number) => ((Math.max(zMin, Math.min(zMax, zScore)) - zMin) / (zMax - zMin)) * 100;
+    const yPorZ = (zScore: number) => {
+      const zLimitado = Math.max(zMin, Math.min(zMax, zScore));
+      const areaUtil = alturaGrafico - margemGrafico * 2;
+      return margemGrafico + ((zMax - zLimitado) / (zMax - zMin)) * areaUtil;
+    };
+    const xPorIndice = (indice: number, total: number) => {
+      if (total === 1) {
+        return larguraGrafico / 2;
+      }
+      const areaUtil = larguraGrafico - margemGrafico * 2;
+      return margemGrafico + (indice / (total - 1)) * areaUtil;
+    };
 
-    const pontos = resultados.map(({ avaliacao, resultado }) => {
+    const pontos = resultados.map(({ avaliacao, resultado }, indice) => {
       return {
         label: this.formatarData(avaliacao.dataMedicao),
         valor: `${this.formatarNumero(resultado.valor, ` ${resultado.unidade}`)}`,
         zScore: resultado.zScore,
-        percentil: resultado.percentil
+        percentil: resultado.percentil,
+        x: Number(xPorIndice(indice, resultados.length).toFixed(2)),
+        y: Number(yPorZ(resultado.zScore).toFixed(2))
       };
     });
 
@@ -364,10 +387,14 @@ export class CrescimentoCriancaComponent implements OnInit {
       titulo: this.tituloIndicador(indicador),
       resumo: this.textoFamilia(recente),
       classe: this.classeResultado(recente),
+      valorInicial: pontos[0]?.valor ?? '',
+      dataInicial: pontos[0]?.label ?? '',
       valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,
       dataAtual: pontos.at(-1)?.label ?? '',
       marcador: Number(posicaoPorZ(recente.zScore).toFixed(2)),
       pontos,
+      linhaTrajetoria: pontos.map((ponto) => `${ponto.x},${ponto.y}`).join(' '),
+      ariaGrafico: `Trajetória de ${this.tituloIndicador(indicador)} na curva OMS com ${pontos.length} medida${pontos.length === 1 ? '' : 's'}.`,
       tendencia: tendencia.texto,
       orientacao: this.orientacaoGrafico(recente),
       tecnico: {
@@ -389,7 +416,6 @@ export class CrescimentoCriancaComponent implements OnInit {
     const anterior = pontos[pontos.length - 2];
     const atual = pontos[pontos.length - 1];
     const diferencaZ = atual.zScore - anterior.zScore;
-    const variacaoPercentil = atual.percentil - anterior.percentil;
 
     if (Math.abs(diferencaZ) < 0.35) {
       return {
@@ -397,15 +423,11 @@ export class CrescimentoCriancaComponent implements OnInit {
       };
     }
 
-    const intensidade = Math.abs(diferencaZ) >= 0.67 ? 'Mudança importante' : 'Pequena mudança';
-    const direcao = diferencaZ > 0 ? 'para uma faixa mais alta' : 'para uma faixa mais baixa';
-    const pontosPercentil = Math.round(Math.abs(variacaoPercentil));
-    const detalhePercentil = pontosPercentil >= 1
-      ? `, com variação de ${pontosPercentil} ponto${pontosPercentil === 1 ? '' : 's'} na posição da curva`
-      : '';
+    const direcao = diferencaZ > 0 ? 'Subiu' : 'Desceu';
+    const intensidade = Math.abs(diferencaZ) >= 0.67 ? 'de forma mais evidente' : 'um pouco';
 
     return {
-      texto: `${intensidade} ${direcao} em relação à medida anterior${detalhePercentil}.`
+      texto: `${direcao} ${intensidade} em relação à medida anterior.`
     };
   }
 

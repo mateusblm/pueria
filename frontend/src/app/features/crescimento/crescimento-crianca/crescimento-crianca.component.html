@@ -58,6 +58,33 @@
                 </button>
               </div>
 
+                <div class="crescimento-linha" role="img" [attr.aria-label]="grafico.ariaGrafico">
+                  <svg viewBox="0 0 320 160" preserveAspectRatio="none" aria-hidden="true">
+                    <rect x="22" y="48.86" width="276" height="62.28" rx="8" fill="#dff3e5"></rect>
+                    <line x1="22" y1="80" x2="298" y2="80" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
+                    <line x1="22" y1="48.86" x2="298" y2="48.86" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
+                    <line x1="22" y1="111.14" x2="298" y2="111.14" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
+                    @if (grafico.pontos.length > 1) {
+                      <polyline [attr.points]="grafico.linhaTrajetoria" fill="none" stroke="#b63d4a" stroke-linecap="round" stroke-width="3"></polyline>
+                    }
+                    @for (ponto of grafico.pontos; track ponto.label) {
+                      <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="4.5" fill="#b63d4a" stroke="#fff" stroke-width="2">
+                        <title>{{ ponto.label }} - {{ ponto.valor }}</title>
+                      </circle>
+                    }
+                  </svg>
+                  @if (grafico.pontos.length > 1) {
+                    <div class="crescimento-grafico__legenda">
+                      <span>Anterior: {{ grafico.valorInicial }} em {{ grafico.dataInicial }}</span>
+                      <span>Atual: {{ grafico.valorAtual }} em {{ grafico.dataAtual }}</span>
+                    </div>
+                  } @else {
+                    <div class="crescimento-grafico__legenda">
+                      <span>Primeira medida: {{ grafico.valorAtual }} em {{ grafico.dataAtual }}</span>
+                    </div>
+                  }
+                </div>
+
                 <div class="crescimento-regua" role="img" [attr.aria-label]="'Posição de ' + grafico.titulo + ' na curva OMS'">
                   <div class="crescimento-regua__labels">
                     <span>Abaixo</span>

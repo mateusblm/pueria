@@ -265,6 +265,18 @@
   justify-content: space-between;
 }
 
+.crescimento-linha {
+  display: block;
+}
+
+.crescimento-linha svg {
+  background: #fffaf8;
+  border: 1px solid #f0e3de;
+  border-radius: 0.85rem;
+  height: 10rem;
+  width: 100%;
+}
+
 .crescimento-regua {
   display: grid;
   gap: 0.55rem;
