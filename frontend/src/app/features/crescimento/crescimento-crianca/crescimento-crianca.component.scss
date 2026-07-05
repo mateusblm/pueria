@@ -358,34 +358,6 @@
   padding: 0.75rem;
 }
 
-.crescimento-grafico__tecnico {
-  background: #fffaf8;
-  border: 1px solid #f0e3de;
-  border-radius: 0.85rem;
-  display: grid;
-  gap: 0.65rem;
-  margin: 0;
-  padding: 0.85rem;
-}
-
-.crescimento-grafico__tecnico div {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.crescimento-grafico__tecnico dt {
-  color: #8b7276;
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.crescimento-grafico__tecnico dd {
-  color: #4f3c40;
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
 .crescimento-medida__danger {
   background: #fff0f0;
   color: #9a3030;

@@ -40,6 +40,12 @@ type GraficoCrescimento = {
   };
 };
 
+type DetalheIndicadorCrescimento = {
+  acompanha: string;
+  interpretacao: string;
+  consulta: string;
+};
+
 @Component({
   selector: 'app-crescimento-crianca',
   imports: [ReactiveFormsModule, RouterLink],
@@ -62,7 +68,7 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly erro = signal('');
   readonly aviso = signal('');
-  readonly detalhesTecnicosAbertos = signal<Set<string>>(new Set());
+  readonly detalheAbertoIndicador = signal('');
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly form = this.fb.group({
@@ -88,6 +94,9 @@ export class CrescimentoCriancaComponent implements OnInit {
     return ultima ? this.avaliacoesPorMedida().get(ultima.id) ?? null : null;
   });
   readonly graficosCurva = computed(() => this.montarGraficosCurva());
+  readonly graficoDetalhado = computed(() =>
+    this.graficosCurva().find((grafico) => grafico.indicador === this.detalheAbertoIndicador()) ?? null
+  );
 
   ngOnInit(): void {
     this.form.patchValue({ dataMedicao: this.formatarEntradaData(this.dataMaximaIso) });
@@ -243,20 +252,37 @@ export class CrescimentoCriancaComponent implements OnInit {
     return `P${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(valor)}`;
   }
 
-  detalhesTecnicosAberto(indicador: string): boolean {
-    return this.detalhesTecnicosAbertos().has(indicador);
+  abrirDetalhes(grafico: GraficoCrescimento): void {
+    this.detalheAbertoIndicador.set(grafico.indicador);
   }
 
-  alternarDetalhesTecnicos(indicador: string): void {
-    this.detalhesTecnicosAbertos.update((atuais) => {
-      const proximos = new Set(atuais);
-      if (proximos.has(indicador)) {
-        proximos.delete(indicador);
-      } else {
-        proximos.add(indicador);
+  fecharDetalhes(): void {
+    this.detalheAbertoIndicador.set('');
+  }
+
+  detalheIndicador(indicador: string): DetalheIndicadorCrescimento {
+    const detalhes: Record<string, DetalheIndicadorCrescimento> = {
+      PESO_IDADE: {
+        acompanha: 'Ajuda a observar ganho de peso, reservas de energia e resposta à alimentação ao longo do tempo.',
+        interpretacao: 'Uma medida isolada pode variar por hidratação, horário, roupa ou balança. A trajetória repetida é mais importante do que um ponto sozinho.',
+        consulta: 'Converse com o pediatra se houver queda ou aumento persistente de faixa, dificuldade alimentar, vômitos frequentes ou perda de peso.'
+      },
+      COMPRIMENTO_IDADE: {
+        acompanha: 'Mostra o crescimento linear, que costuma mudar mais devagar do que o peso e precisa ser visto em sequência.',
+        interpretacao: 'Pequenas diferenças podem acontecer pela forma de medir. O mais importante é se a criança mantém uma linha de crescimento coerente.',
+        consulta: 'Leve para avaliação se houver desaceleração repetida, diferença importante em relação às medidas anteriores ou dúvida sobre a técnica de medição.'
+      },
+      PERIMETRO_CEFALICO_IDADE: {
+        acompanha: 'Acompanha o crescimento da cabeça, especialmente relevante nos primeiros anos de vida.',
+        interpretacao: 'A leitura depende muito de medidas bem feitas e da evolução ao longo das consultas. Um ponto isolado não define diagnóstico.',
+        consulta: 'Converse com o pediatra se houver mudança rápida de faixa, medida muito diferente da anterior ou preocupação associada ao desenvolvimento.'
       }
-      return proximos;
-    });
+    };
+    return detalhes[indicador] ?? {
+      acompanha: 'Ajuda a acompanhar o crescimento ao longo do tempo.',
+      interpretacao: 'A trajetória costuma ser mais útil do que uma medida isolada.',
+      consulta: 'Leve dúvidas ou mudanças persistentes para a consulta.'
+    };
   }
 
   textoFamilia(resultado: ResultadoCurvaCrescimento): string {
