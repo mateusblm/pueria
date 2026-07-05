@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Interacao social com a crianca">
+  <rect width="640" height="360" rx="28" fill="#fff2f2"/>
+  <circle cx="196" cy="132" r="54" fill="#f2b6b8"/>
+  <circle cx="374" cy="118" r="42" fill="#ffd7c8"/>
+  <path d="M104 305c14-84 68-128 144-128s130 44 144 128" fill="#ca2d41" opacity=".82"/>
+  <path d="M306 305c8-66 48-104 102-104s94 38 102 104" fill="#5b8c69" opacity=".82"/>
+  <path d="M216 205c34 28 92 29 126 1" fill="none" stroke="#3a2b2d" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="181" cy="126" r="8" fill="#3a2b2d"/>
+  <circle cx="213" cy="126" r="8" fill="#3a2b2d"/>
+  <circle cx="361" cy="114" r="7" fill="#3a2b2d"/>
+  <circle cx="387" cy="114" r="7" fill="#3a2b2d"/>
+</svg>

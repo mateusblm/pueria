@@ -1,62 +1,46 @@
-.marcos-page { display: grid; gap: 18px; }
+.marcos-page, .resultado-layout, .marco-lista { display: grid; gap: 18px; }
 
 .marcos-page__back {
   width: fit-content; color: var(--pueria-vermelho-profundo); font-weight: 780; text-decoration: none;
 }
 
 .marcos-page__hero {
-  display: flex; justify-content: space-between; align-items: center; gap: 22px;
-  border: 1px solid rgba(202, 45, 65, 0.10); border-radius: 22px; padding: 26px;
-  background: #fff7f1;
+  border: 1px solid rgba(202, 45, 65, 0.10); border-radius: 22px; padding: 26px; background: #fff7f1;
 }
 
 .marcos-page__hero h1, .marcos-page__hero p, .painel-idade h2, .painel-idade p,
-.apoio-card h2, .apoio-card p, .marco-card h3, .marco-fonte { margin: 0; }
+.etapa-card h2, .apoio-card h2, .apoio-card p, .marco-card h3, .marco-card p { margin: 0; }
 
 .marcos-page__state, .painel-idade, .apoio-card { padding: 22px; }
-
-.idade-strip, .area-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
-
-.idade-chip, .area-tab, .resposta {
-  border: 1px solid var(--pueria-borda); background: #fff; color: var(--pueria-texto);
-  cursor: pointer; font-family: inherit; font-weight: 820;
-}
-
-.idade-chip { min-width: 58px; min-height: 58px; border-radius: 999px; }
-.idade-chip--active { border-color: var(--pueria-vermelho); box-shadow: 0 0 0 5px rgba(202, 45, 65, 0.12); color: var(--pueria-vermelho-profundo); }
-
-.painel-idade, .apoio-card, .marco-lista, .apoio-coluna, .dicas-lista { display: grid; gap: 14px; }
+.painel-idade { display: grid; gap: 14px; }
 .painel-idade__header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .painel-idade__header strong { color: var(--pueria-vermelho-profundo); font-size: 1.55rem; }
 
 .progresso { height: 10px; overflow: hidden; border-radius: 999px; background: var(--pueria-rosa-bruma); }
 .progresso span { display: block; height: 100%; border-radius: inherit; background: var(--pueria-sucesso); transition: width 180ms ease; }
 
-.area-tab { display: grid; gap: 4px; min-width: 138px; border-radius: 16px; padding: 14px; text-align: left; text-decoration: none; }
-.area-tab small { color: var(--pueria-texto-suave); font-weight: 700; }
-.area-tab--active { background: var(--pueria-folha-clara); border-color: rgba(55, 107, 75, 0.18); color: var(--pueria-folha-escura); }
-.area-tab--alerta { background: #fff2f2; }
-
-.marcos-layout { display: grid; gap: 18px; }
-
-.marco-card {
-  display: grid; overflow: hidden; border: 1px solid var(--pueria-borda); border-radius: 18px;
-  background: #fff;
+.modo-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.modo-tabs button, .resposta {
+  border: 1px solid var(--pueria-borda); background: #fff; color: var(--pueria-texto);
+  cursor: pointer; font: inherit; font-weight: 820;
 }
+.modo-tabs button { min-height: 48px; border-radius: 999px; }
+.modo-tabs__active { border-color: rgba(202, 45, 65, 0.24) !important; background: var(--pueria-rosa-nevoa) !important; color: var(--pueria-vermelho-profundo) !important; }
 
-.marco-card__body { display: grid; gap: 16px; padding: 18px; }
-.marco-card__title { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
-.marco-card h3 { color: var(--pueria-texto); font-size: 1.18rem; line-height: 1.35; }
+.etapa-card { overflow: hidden; padding: 0; }
+.etapa-card__media img { display: block; width: 100%; max-height: 310px; object-fit: cover; }
+.etapa-card__body { display: grid; gap: 18px; padding: 22px; }
+.etapa-card__meta, .etapa-nav, .marco-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.etapa-card h2 { color: var(--pueria-texto); font-size: clamp(1.35rem, 2vw, 1.85rem); line-height: 1.25; }
 
 .marco-area, .marco-status {
   display: inline-flex; width: fit-content; border-radius: 999px; font-size: 0.78rem; font-weight: 850; padding: 7px 10px;
 }
-
 .marco-area { background: var(--pueria-folha-clara); color: var(--pueria-folha-escura); }
 .marco-status { background: var(--pueria-rosa-bruma); color: var(--pueria-texto-suave); }
 
 .marco-card__actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
-.resposta { min-height: 48px; border-radius: 14px; padding: 10px; }
+.resposta { min-height: 52px; border-radius: 14px; padding: 10px; }
 .resposta--active.resposta--sim { background: var(--pueria-folha-clara); border-color: rgba(55, 107, 75, 0.28); color: var(--pueria-folha-escura); }
 .resposta--active.resposta--duvida { background: #fff4c2; border-color: rgba(214, 168, 79, 0.34); color: #6f5012; }
 .resposta--active.resposta--ainda-nao { background: #ffe7e8; border-color: rgba(202, 45, 65, 0.24); color: var(--pueria-vermelho-profundo); }
@@ -68,17 +52,28 @@
   color: var(--pueria-texto); font: inherit; line-height: 1.45; padding: 12px;
 }
 
-.marco-fonte { color: var(--pueria-texto-suave); }
+.etapa-nav span { color: var(--pueria-texto-suave); font-size: 0.9rem; font-weight: 760; text-align: center; }
+
+.apoio-card { display: grid; gap: 12px; }
 .apoio-card--alerta { background: #fff8ee; }
 .apoio-card ul { display: grid; gap: 8px; margin: 0; padding-left: 18px; }
-.dicas-lista article { display: grid; gap: 12px; border: 1px solid var(--pueria-borda); border-radius: 14px; padding: 14px; }
 
-@media (min-width: 980px) {
-  .marcos-layout { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
-  .apoio-coluna { position: sticky; top: 18px; }
+.area-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.area-tab {
+  display: grid; gap: 4px; border: 1px solid var(--pueria-borda); border-radius: 16px;
+  background: #fff; color: var(--pueria-texto); padding: 14px;
 }
+.area-tab small { color: var(--pueria-texto-suave); font-weight: 700; }
+
+.marco-card {
+  border: 1px solid var(--pueria-borda); border-radius: 18px; background: #fff; padding: 16px;
+}
+.marco-card div { display: grid; gap: 8px; }
+.marco-card h3 { color: var(--pueria-texto); font-size: 1rem; line-height: 1.35; }
+.marco-card p { color: var(--pueria-texto-suave); font-size: 0.9rem; }
 
 @media (max-width: 620px) {
-  .marcos-page__hero { align-items: start; padding: 20px; }
-  .marco-card__actions { grid-template-columns: 1fr; }
+  .marcos-page__hero, .painel-idade, .etapa-card__body, .apoio-card { padding: 18px; }
+  .marco-card__actions, .modo-tabs { grid-template-columns: 1fr; }
+  .etapa-nav { align-items: stretch; flex-direction: column; }
 }

@@ -1,0 +1,55 @@
+<section class="acompanhamento-page">
+  <div class="acompanhamento-page__hero">
+    <p class="pueria-eyebrow">Acompanhamento</p>
+    <h1 class="pueria-title">Resumo do desenvolvimento</h1>
+    <p class="pueria-subtitle">
+      Veja onde cada criança está na faixa atual e continue o preenchimento sem precisar entrar primeiro no perfil.
+    </p>
+  </div>
+
+  @if (carregando()) {
+    <div class="pueria-card acompanhamento-page__state">Carregando acompanhamento...</div>
+  } @else if (erro()) {
+    <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+  } @else if (!possuiCriancas()) {
+    <section class="pueria-card acompanhamento-page__state">
+      <h2>Nenhuma criança cadastrada ainda</h2>
+      <p>Cadastre a primeira criança para iniciar o acompanhamento.</p>
+      <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+    </section>
+  } @else {
+    <div class="acompanhamento-lista">
+      @for (resumo of resumos(); track resumo.crianca.id) {
+        @let progressoAtual = progresso(resumo.marcos);
+        <article class="pueria-card acompanhamento-card">
+          <div>
+            <p class="pueria-eyebrow">{{ calcularIdade(resumo.crianca.dataNascimento) }}</p>
+            <h2>{{ resumo.crianca.nome }}</h2>
+            <p>Faixa de referência: {{ idadeReferencia(resumo.marcos) }}</p>
+          </div>
+
+          @if (resumo.erro) {
+            <p class="acompanhamento-card__erro">{{ resumo.erro }}</p>
+          } @else {
+            <div class="acompanhamento-card__progresso">
+              <strong>{{ progressoAtual.respondidos }}/{{ progressoAtual.total }}</strong>
+              <div class="progresso" aria-hidden="true">
+                <span [style.width.%]="progressoAtual.percentual"></span>
+              </div>
+              <small>{{ progressoAtual.percentual }}% respondido</small>
+            </div>
+
+            <div class="acompanhamento-card__badges">
+              <span>{{ labelPontosAtencao(pontosAtencao(resumo.marcos)) }}</span>
+            </div>
+          }
+
+          <div class="acompanhamento-card__actions">
+            <a [routerLink]="['/criancas', resumo.crianca.id, 'desenvolvimento']" class="pueria-button">Continuar</a>
+            <a [routerLink]="['/criancas', resumo.crianca.id]" class="pueria-button pueria-button--secondary">Perfil</a>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

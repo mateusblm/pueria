@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Comunicacao e linguagem">
+  <rect width="640" height="360" rx="28" fill="#eef9f4"/>
+  <circle cx="238" cy="164" r="72" fill="#ffd7c8"/>
+  <path d="M126 315c16-88 68-136 146-136s130 48 146 136" fill="#ca2d41" opacity=".82"/>
+  <path d="M361 96h142c28 0 51 22 51 50s-23 50-51 50h-42l-45 43v-43h-55c-28 0-51-22-51-50s23-50 51-50Z" fill="#fff" stroke="#d7c7c0" stroke-width="8"/>
+  <circle cx="397" cy="146" r="10" fill="#5b8c69"/>
+  <circle cx="438" cy="146" r="10" fill="#5b8c69"/>
+  <circle cx="479" cy="146" r="10" fill="#5b8c69"/>
+  <path d="M214 170c18 18 48 18 66 0" fill="none" stroke="#3a2b2d" stroke-width="10" stroke-linecap="round"/>
+</svg>

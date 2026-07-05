@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Brincadeira e cognicao">
+  <rect width="640" height="360" rx="28" fill="#fff8df"/>
+  <circle cx="315" cy="120" r="58" fill="#ffd7c8"/>
+  <path d="M198 306c16-78 60-122 126-122s110 44 126 122" fill="#ca2d41" opacity=".82"/>
+  <rect x="92" y="214" width="96" height="96" rx="16" fill="#9fd8c1"/>
+  <rect x="458" y="214" width="96" height="96" rx="16" fill="#f2b6b8"/>
+  <path d="M136 190h60l-30-52Z" fill="#d6a84f"/>
+  <circle cx="505" cy="162" r="36" fill="#9fd8c1"/>
+  <path d="M284 130c18 16 46 16 64 0" fill="none" stroke="#3a2b2d" stroke-width="10" stroke-linecap="round"/>
+</svg>

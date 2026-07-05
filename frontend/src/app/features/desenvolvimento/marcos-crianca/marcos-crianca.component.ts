@@ -12,6 +12,8 @@ type AreaResumo = {
   total: number;
 };
 
+type ModoTela = 'responder' | 'resultados';
+
 @Component({
   selector: 'app-marcos-crianca',
   imports: [RouterLink],
@@ -28,11 +30,10 @@ export class MarcosCriancaComponent implements OnInit {
   readonly salvandoId = signal<string | null>(null);
   readonly erro = signal('');
   readonly idadeSelecionada = signal<number | null>(null);
-  readonly areaSelecionada = signal<AreaDesenvolvimento>('SOCIAL_EMOCIONAL');
+  readonly indiceEtapa = signal(0);
+  readonly modo = signal<ModoTela>('responder');
 
   readonly areas: AreaDesenvolvimento[] = ['SOCIAL_EMOCIONAL', 'LINGUAGEM_COMUNICACAO', 'COGNITIVO', 'MOTOR'];
-
-  readonly idadesDisponiveis = computed(() => [...new Set(this.marcos().map((marco) => marco.idadeMeses))].sort((a, b) => a - b));
 
   readonly tituloIdadeSelecionada = computed(() => {
     const idade = this.idadeSelecionada();
@@ -44,6 +45,8 @@ export class MarcosCriancaComponent implements OnInit {
     return idade === null ? [] : this.marcos().filter((marco) => marco.idadeMeses === idade);
   });
 
+  readonly marcoAtual = computed(() => this.marcosDaIdade()[this.indiceEtapa()] ?? null);
+
   readonly areasResumo = computed<AreaResumo[]>(() => this.areas.map((area) => {
     const marcos = this.marcosDaIdade().filter((marco) => marco.area === area);
     return {
@@ -54,45 +57,15 @@ export class MarcosCriancaComponent implements OnInit {
     };
   }).filter((resumo) => resumo.total > 0));
 
-  readonly marcosDaArea = computed(() => this.marcosDaIdade().filter((marco) => marco.area === this.areaSelecionada()));
-
   readonly progresso = computed(() => {
     const total = this.marcosDaIdade().length;
     const respondidos = this.marcosDaIdade().filter((marco) => marco.status !== 'NAO_AVALIADO').length;
-
-    return {
-      total,
-      respondidos,
-      percentual: total === 0 ? 0 : Math.round((respondidos / total) * 100)
-    };
+    return { total, respondidos, percentual: total === 0 ? 0 : Math.round((respondidos / total) * 100) };
   });
 
   readonly pontosDeAtencao = computed(() => this.marcosDaIdade().filter((marco) =>
     marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'
   ));
-
-  readonly dicasDaArea = computed(() => {
-    const dicas: Record<AreaDesenvolvimento, string[]> = {
-      SOCIAL_EMOCIONAL: [
-        'Observe como a criança responde ao seu rosto, voz e presença durante a rotina.',
-        'Inclua momentos curtos de interação olho no olho, colo, conversa e brincadeiras simples.'
-      ],
-      LINGUAGEM_COMUNICACAO: [
-        'Converse narrando o banho, a alimentação e as brincadeiras, dando tempo para a criança responder.',
-        'Cante, leia livros curtos e valorize sons, gestos e tentativas de comunicação.'
-      ],
-      COGNITIVO: [
-        'Ofereça objetos seguros com formas, texturas e sons diferentes para exploração supervisionada.',
-        'Repita brincadeiras simples e observe curiosidade, atenção compartilhada e tentativa de resolver problemas.'
-      ],
-      MOTOR: [
-        'Garanta períodos seguros de movimento livre, com supervisão, respeitando a idade e o conforto da criança.',
-        'Evite longos períodos em cadeirinhas ou telas quando a criança poderia explorar o corpo e o ambiente.'
-      ]
-    };
-
-    return dicas[this.areaSelecionada()];
-  });
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -115,19 +88,13 @@ export class MarcosCriancaComponent implements OnInit {
       .subscribe({
         next: (marcos) => {
           const ordenados = [...marcos].sort((a, b) => a.idadeMeses - b.idadeMeses || this.areas.indexOf(a.area) - this.areas.indexOf(b.area));
-          const idades = [...new Set(ordenados.map((marco) => marco.idadeMeses))];
+          const idadeAtual = ordenados.at(-1)?.idadeMeses ?? null;
 
           this.marcos.set(ordenados);
-          if (idades.length > 0 && (this.idadeSelecionada() === null || !idades.includes(this.idadeSelecionada()!))) {
-            this.idadeSelecionada.set(idades[idades.length - 1]);
-          }
-          if (!this.areasResumo().some((resumo) => resumo.area === this.areaSelecionada())) {
-            this.areaSelecionada.set(this.areasResumo()[0]?.area ?? 'SOCIAL_EMOCIONAL');
-          }
+          this.idadeSelecionada.set(idadeAtual);
+          this.posicionarPrimeiraPendente();
         },
-        error: (erro: HttpErrorResponse) => {
-          this.erro.set(this.extrairMensagemErro(erro));
-        }
+        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }
 
@@ -143,10 +110,9 @@ export class MarcosCriancaComponent implements OnInit {
       .subscribe({
         next: () => {
           this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, status } : item));
+          this.avancarDepoisDeResponder();
         },
-        error: (erro: HttpErrorResponse) => {
-          this.erro.set(this.extrairMensagemErro(erro));
-        }
+        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }
 
@@ -167,25 +133,26 @@ export class MarcosCriancaComponent implements OnInit {
     })
       .pipe(finalize(() => this.salvandoId.set(null)))
       .subscribe({
-        next: () => {
-          this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, observacao: valor } : item));
-        },
-        error: (erro: HttpErrorResponse) => {
-          this.erro.set(this.extrairMensagemErro(erro));
-        }
+        next: () => this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, observacao: valor } : item)),
+        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }
 
-  selecionarIdade(idadeMeses: number): void {
-    this.idadeSelecionada.set(idadeMeses);
-    this.areaSelecionada.set(this.marcos()
-      .find((marco) => marco.idadeMeses === idadeMeses && marco.area === this.areaSelecionada())?.area
-      ?? this.marcos().find((marco) => marco.idadeMeses === idadeMeses)?.area
-      ?? 'SOCIAL_EMOCIONAL');
+  abrirResponder(): void {
+    this.modo.set('responder');
+    this.posicionarPrimeiraPendente();
   }
 
-  selecionarArea(area: AreaDesenvolvimento): void {
-    this.areaSelecionada.set(area);
+  abrirResultados(): void {
+    this.modo.set('resultados');
+  }
+
+  etapaAnterior(): void {
+    this.indiceEtapa.update((indice) => Math.max(0, indice - 1));
+  }
+
+  proximaEtapa(): void {
+    this.indiceEtapa.update((indice) => Math.min(this.marcosDaIdade().length - 1, indice + 1));
   }
 
   labelArea(area: string): string {
@@ -203,7 +170,7 @@ export class MarcosCriancaComponent implements OnInit {
       OBSERVADO: 'Sim',
       NAO_TENHO_CERTEZA: 'Não tenho certeza',
       AINDA_NAO_OBSERVADO: 'Ainda não',
-      NAO_AVALIADO: 'Não registrado'
+      NAO_AVALIADO: 'Não respondido'
     };
     return labels[status];
   }
@@ -226,6 +193,16 @@ export class MarcosCriancaComponent implements OnInit {
     return `marco-status marco-status--${status.toLowerCase().replaceAll('_', '-')}`;
   }
 
+  imagemArea(area: AreaDesenvolvimento): string {
+    const imagens: Record<AreaDesenvolvimento, string> = {
+      SOCIAL_EMOCIONAL: '/assets/desenvolvimento/social.svg',
+      LINGUAGEM_COMUNICACAO: '/assets/desenvolvimento/linguagem.svg',
+      COGNITIVO: '/assets/desenvolvimento/cognicao.svg',
+      MOTOR: '/assets/desenvolvimento/motor.svg'
+    };
+    return imagens[area];
+  }
+
   tituloIdade(idadeMeses: number): string {
     if (idadeMeses < 12) {
       return `${idadeMeses} meses`;
@@ -236,6 +213,29 @@ export class MarcosCriancaComponent implements OnInit {
       return `${anos} ${anos === 1 ? 'ano' : 'anos'}`;
     }
     return `${anos} ${anos === 1 ? 'ano' : 'anos'} e ${meses} meses`;
+  }
+
+  private posicionarPrimeiraPendente(): void {
+    const primeiraPendente = this.marcosDaIdade().findIndex((marco) => marco.status === 'NAO_AVALIADO');
+    this.indiceEtapa.set(primeiraPendente >= 0 ? primeiraPendente : 0);
+  }
+
+  private avancarDepoisDeResponder(): void {
+    const proximaPendente = this.marcosDaIdade().findIndex((marco, indice) =>
+      indice > this.indiceEtapa() && marco.status === 'NAO_AVALIADO'
+    );
+
+    if (proximaPendente >= 0) {
+      this.indiceEtapa.set(proximaPendente);
+      return;
+    }
+
+    if (this.progresso().respondidos === this.progresso().total) {
+      this.modo.set('resultados');
+      return;
+    }
+
+    this.proximaEtapa();
   }
 
   private extrairMensagemErro(erro: HttpErrorResponse): string {

@@ -17,6 +17,10 @@
     </div>
 
     <nav class="app-shell__nav" aria-label="Navegação principal">
+      <a routerLink="/acompanhamento" routerLinkActive="ativo" (click)="fecharMenu()">
+        <span>◷</span>
+        Acompanhamento
+      </a>
       <a routerLink="/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">
         <span>⌂</span>
         Minha criança

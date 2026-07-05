@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Movimento infantil">
+  <rect width="640" height="360" rx="28" fill="#eef9f4"/>
+  <circle cx="305" cy="132" r="54" fill="#ffd7c8"/>
+  <path d="M188 292c22-70 67-106 132-106s110 36 132 106" fill="#5b8c69" opacity=".86"/>
+  <path d="M204 218c-48 8-82 34-106 78" fill="none" stroke="#ca2d41" stroke-width="22" stroke-linecap="round"/>
+  <path d="M428 218c48 8 82 34 106 78" fill="none" stroke="#ca2d41" stroke-width="22" stroke-linecap="round"/>
+  <path d="M272 140c18 16 48 16 66 0" fill="none" stroke="#3a2b2d" stroke-width="10" stroke-linecap="round"/>
+  <path d="M114 314h412" stroke="#d7c7c0" stroke-width="12" stroke-linecap="round"/>
+</svg>

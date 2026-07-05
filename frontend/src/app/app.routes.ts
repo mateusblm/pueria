@@ -3,7 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { publicOnlyGuard } from './core/guards/public-only.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'criancas' },
+  { path: '', pathMatch: 'full', redirectTo: 'acompanhamento' },
   {
     path: '',
     canActivate: [publicOnlyGuard],
@@ -18,6 +18,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./layout/app-layout/app-layout.component').then((m) => m.AppLayoutComponent),
     children: [
+      { path: 'acompanhamento', loadComponent: () => import('./features/acompanhamento/acompanhamento.component').then((m) => m.AcompanhamentoComponent) },
       { path: 'criancas', loadComponent: () => import('./features/criancas/minhas-criancas/minhas-criancas.component').then((m) => m.MinhasCriancasComponent) },
       { path: 'criancas/nova', loadComponent: () => import('./features/criancas/nova-crianca/nova-crianca.component').then((m) => m.NovaCriancaComponent) },
       { path: 'criancas/:id/editar', loadComponent: () => import('./features/criancas/editar-crianca/editar-crianca.component').then((m) => m.EditarCriancaComponent) },
@@ -28,6 +29,8 @@ export const routes: Routes = [
       { path: 'app/criancas/:id/editar', redirectTo: 'criancas/:id/editar' },
       { path: 'app/criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'app/criancas/:id', redirectTo: 'criancas/:id' },
+      { path: 'app/acompanhamento', pathMatch: 'full', redirectTo: 'acompanhamento' },
+      { path: 'desenvolvimento', pathMatch: 'full', redirectTo: 'acompanhamento' },
       { path: 'minhas-criancas', pathMatch: 'full', redirectTo: 'criancas' },
       { path: 'minhas-criancas/nova', pathMatch: 'full', redirectTo: 'criancas/nova' },
       { path: 'minhas-criancas/:id/editar', redirectTo: 'criancas/:id/editar' },
