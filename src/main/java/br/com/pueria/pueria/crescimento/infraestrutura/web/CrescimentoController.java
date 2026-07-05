@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.crescimento.infraestrutura.web;
 
 import br.com.pueria.pueria.crescimento.aplicacao.AtualizarMedidaCrescimentoUseCase;
+import br.com.pueria.pueria.crescimento.aplicacao.ListarAvaliacoesCurvaCrescimentoUseCase;
 import br.com.pueria.pueria.crescimento.aplicacao.ListarMedidasCrescimentoUseCase;
 import br.com.pueria.pueria.crescimento.aplicacao.RegistrarMedidaCrescimentoUseCase;
 import br.com.pueria.pueria.crescimento.aplicacao.RemoverMedidaCrescimentoUseCase;
@@ -19,15 +20,25 @@ import java.util.UUID;
 public class CrescimentoController {
 
     private final ListarMedidasCrescimentoUseCase listarUseCase;
+    private final ListarAvaliacoesCurvaCrescimentoUseCase listarAvaliacoesCurvaUseCase;
     private final RegistrarMedidaCrescimentoUseCase registrarUseCase;
     private final AtualizarMedidaCrescimentoUseCase atualizarUseCase;
     private final RemoverMedidaCrescimentoUseCase removerUseCase;
 
-    public CrescimentoController(ListarMedidasCrescimentoUseCase listarUseCase, RegistrarMedidaCrescimentoUseCase registrarUseCase, AtualizarMedidaCrescimentoUseCase atualizarUseCase, RemoverMedidaCrescimentoUseCase removerUseCase) {
+    public CrescimentoController(ListarMedidasCrescimentoUseCase listarUseCase, ListarAvaliacoesCurvaCrescimentoUseCase listarAvaliacoesCurvaUseCase, RegistrarMedidaCrescimentoUseCase registrarUseCase, AtualizarMedidaCrescimentoUseCase atualizarUseCase, RemoverMedidaCrescimentoUseCase removerUseCase) {
         this.listarUseCase = listarUseCase;
+        this.listarAvaliacoesCurvaUseCase = listarAvaliacoesCurvaUseCase;
         this.registrarUseCase = registrarUseCase;
         this.atualizarUseCase = atualizarUseCase;
         this.removerUseCase = removerUseCase;
+    }
+
+    @GetMapping("/curvas")
+    public List<AvaliacaoCurvaCrescimentoResponse> listarCurvas(@PathVariable UUID criancaId, Authentication authentication) {
+        return listarAvaliacoesCurvaUseCase.executar(criancaId, authentication.getName())
+                .stream()
+                .map(AvaliacaoCurvaCrescimentoResponse::de)
+                .toList();
     }
 
     @GetMapping

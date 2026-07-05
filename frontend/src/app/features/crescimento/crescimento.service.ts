@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { MedidaCrescimento, SalvarMedidaCrescimentoRequest } from '../../shared/models/crescimento.model';
+import { AvaliacaoCurvaCrescimento, MedidaCrescimento, SalvarMedidaCrescimentoRequest } from '../../shared/models/crescimento.model';
 
 @Injectable({ providedIn: 'root' })
 export class CrescimentoService {
@@ -11,6 +11,11 @@ export class CrescimentoService {
 
   listar(criancaId: string): Observable<MedidaCrescimento[]> {
     return this.http.get<MedidaCrescimento[]>(`/api/criancas/${criancaId}/crescimento/medidas`)
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
+
+  listarCurvas(criancaId: string): Observable<AvaliacaoCurvaCrescimento[]> {
+    return this.http.get<AvaliacaoCurvaCrescimento[]>(`/api/criancas/${criancaId}/crescimento/medidas/curvas`)
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 

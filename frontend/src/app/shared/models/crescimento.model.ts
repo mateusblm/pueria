@@ -21,3 +21,26 @@ export interface SalvarMedidaCrescimentoRequest {
   origem: OrigemMedidaCrescimento;
   observacao?: string | null;
 }
+
+export type IndicadorCurvaCrescimento = 'PESO_IDADE' | 'COMPRIMENTO_IDADE' | 'PERIMETRO_CEFALICO_IDADE';
+export type ClassificacaoCurvaCrescimento = 'MUITO_ABAIXO' | 'ABAIXO' | 'FAIXA_ESPERADA' | 'ACIMA' | 'MUITO_ACIMA';
+
+export interface ResultadoCurvaCrescimento {
+  indicador: IndicadorCurvaCrescimento;
+  titulo: string;
+  valor: number;
+  unidade: string;
+  zScore: number;
+  percentil: number;
+  classificacao: ClassificacaoCurvaCrescimento;
+  classificacaoTitulo: string;
+  classificacaoDetalhe: string;
+  fonte: string;
+}
+
+export interface AvaliacaoCurvaCrescimento {
+  medidaId: string;
+  dataMedicao: string;
+  idadeDias: number;
+  resultados: ResultadoCurvaCrescimento[];
+}

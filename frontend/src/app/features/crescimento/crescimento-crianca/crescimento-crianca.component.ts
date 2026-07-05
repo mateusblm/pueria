@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { CriancasService } from '../../criancas/criancas.service';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { MedidaCrescimento, OrigemMedidaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
+import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
 
 @Component({
@@ -22,6 +22,7 @@ export class CrescimentoCriancaComponent implements OnInit {
 
   readonly crianca = signal<Crianca | null>(null);
   readonly medidas = signal<MedidaCrescimento[]>([]);
+  readonly avaliacoesCurva = signal<AvaliacaoCurvaCrescimento[]>([]);
   readonly carregando = signal(true);
   readonly salvando = signal(false);
   readonly removendoId = signal('');
@@ -46,6 +47,13 @@ export class CrescimentoCriancaComponent implements OnInit {
 
   readonly ultimaMedida = computed(() => this.medidasOrdenadas()[0] ?? null);
   readonly medidaAnterior = computed(() => this.medidasOrdenadas()[1] ?? null);
+  readonly avaliacoesPorMedida = computed(() =>
+    new Map(this.avaliacoesCurva().map((avaliacao) => [avaliacao.medidaId, avaliacao]))
+  );
+  readonly ultimaAvaliacaoCurva = computed(() => {
+    const ultima = this.ultimaMedida();
+    return ultima ? this.avaliacoesPorMedida().get(ultima.id) ?? null : null;
+  });
 
   ngOnInit(): void {
     this.form.patchValue({ dataMedicao: this.formatarEntradaData(this.dataMaximaIso) });
@@ -59,13 +67,15 @@ export class CrescimentoCriancaComponent implements OnInit {
 
     forkJoin({
       crianca: this.criancasService.buscarPorId(criancaId),
-      medidas: this.crescimentoService.listar(criancaId)
+      medidas: this.crescimentoService.listar(criancaId),
+      curvas: this.crescimentoService.listarCurvas(criancaId)
     })
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: ({ crianca, medidas }) => {
+        next: ({ crianca, medidas, curvas }) => {
           this.crianca.set(crianca);
           this.medidas.set(medidas);
+          this.avaliacoesCurva.set(curvas);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -114,6 +124,7 @@ export class CrescimentoCriancaComponent implements OnInit {
             const semAtual = medidas.filter((item) => item.id !== medida.id);
             return [...semAtual, medida];
           });
+          this.recarregarCurvas();
           this.cancelarEdicao();
           this.aviso.set('Medida salva no histórico de crescimento.');
         },
@@ -171,6 +182,7 @@ export class CrescimentoCriancaComponent implements OnInit {
         next: () => {
           this.medidas.update((medidas) => medidas.filter((medida) => medida.id !== medidaId));
           this.confirmandoRemocaoId.set('');
+          this.recarregarCurvas();
           this.aviso.set('Medida removida do histórico.');
           if (this.editandoId() === medidaId) {
             this.cancelarEdicao();
@@ -178,6 +190,23 @@ export class CrescimentoCriancaComponent implements OnInit {
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
+  }
+
+  resultadosDaMedida(medidaId: string): ResultadoCurvaCrescimento[] {
+    return this.avaliacoesPorMedida().get(medidaId)?.resultados ?? [];
+  }
+
+  classeResultado(resultado: ResultadoCurvaCrescimento): string {
+    return resultado.classificacao === 'FAIXA_ESPERADA' ? 'crescimento-curva__badge--ok' : 'crescimento-curva__badge--atencao';
+  }
+
+  formatarZScore(valor: number): string {
+    const sinal = valor > 0 ? '+' : '';
+    return `${sinal}${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(valor)} DP`;
+  }
+
+  formatarPercentil(valor: number): string {
+    return `P${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(valor)}`;
   }
 
   formatarData(data: string): string {
@@ -230,6 +259,19 @@ export class CrescimentoCriancaComponent implements OnInit {
 
     const direcao = diferenca > 0 ? 'Aumentou' : 'Reduziu';
     return `${direcao} ${this.formatarNumero(Math.abs(diferenca), unidade)} desde o registro anterior`;
+  }
+
+  private recarregarCurvas(): void {
+    const criancaId = this.crianca()?.id;
+    if (!criancaId) {
+      return;
+    }
+
+    this.crescimentoService.listarCurvas(criancaId)
+      .subscribe({
+        next: (curvas) => this.avaliacoesCurva.set(curvas),
+        error: () => this.aviso.set('Medida salva, mas as curvas OMS não foram atualizadas agora.')
+      });
   }
 
   private criarRequest(): SalvarMedidaCrescimentoRequest | null {

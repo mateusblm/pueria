@@ -109,11 +109,28 @@
         </section>
 
         <section class="pueria-card crescimento-curvas">
-          <p class="pueria-eyebrow">Curvas</p>
-          <h2>Base OMS e Caderneta</h2>
-          <p>
-            As curvas OMS/Ministério da Saúde entram na próxima etapa. Por enquanto, o Pueria organiza o histórico para observar tendência e levar medidas mais claras à consulta.
-          </p>
+          <p class="pueria-eyebrow">Curvas OMS</p>
+          <h2>Referência do último registro</h2>
+          @if (ultimaAvaliacaoCurva(); as avaliacao) {
+            @if (avaliacao.resultados.length > 0) {
+              <div class="crescimento-curva__lista">
+                @for (resultado of avaliacao.resultados; track resultado.indicador) {
+                  <article class="crescimento-curva__resultado">
+                    <strong>{{ resultado.titulo }}</strong>
+                    <span [class]="classeResultado(resultado)">
+                      {{ formatarZScore(resultado.zScore) }} · {{ formatarPercentil(resultado.percentil) }}
+                    </span>
+                    <small>{{ resultado.classificacaoTitulo }}</small>
+                  </article>
+                }
+              </div>
+              <p>Baseado nas tabelas LMS oficiais da OMS para 0 a 5 anos.</p>
+            } @else {
+              <p>As curvas aparecem quando há sexo informado e medida dentro da faixa de 0 a 5 anos da OMS.</p>
+            }
+          } @else {
+            <p>Registre uma medida para ver a posição dela nas curvas OMS.</p>
+          }
         </section>
       </aside>
     </div>
@@ -142,6 +159,15 @@
                 <span>Comprimento: {{ formatarNumero(medida.comprimentoCm, ' cm') }}</span>
                 <span>Perímetro cefálico: {{ formatarNumero(medida.perimetroCefalicoCm, ' cm') }}</span>
               </div>
+              @if (resultadosDaMedida(medida.id).length > 0) {
+                <div class="crescimento-medida__curvas">
+                  @for (resultado of resultadosDaMedida(medida.id); track resultado.indicador) {
+                    <span [class]="classeResultado(resultado)">
+                      {{ resultado.titulo }}: {{ formatarZScore(resultado.zScore) }}
+                    </span>
+                  }
+                </div>
+              }
               @if (medida.observacao) {
                 <p>{{ medida.observacao }}</p>
               }

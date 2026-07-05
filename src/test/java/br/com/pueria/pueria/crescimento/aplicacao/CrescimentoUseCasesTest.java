@@ -4,6 +4,7 @@ import br.com.pueria.pueria.comum.excecao.RecursoNaoEncontradoException;
 import br.com.pueria.pueria.crescimento.dominio.MedidaCrescimento;
 import br.com.pueria.pueria.crescimento.dominio.MedidaCrescimentoRepositorio;
 import br.com.pueria.pueria.crescimento.dominio.OrigemMedidaCrescimento;
+import br.com.pueria.pueria.crescimento.dominio.CurvaOmsCrescimentoService;
 import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.CriancaRepositorio;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
@@ -135,15 +136,39 @@ class CrescimentoUseCasesTest {
         assertFalse(ambiente.medidas.buscarPorId(medida.getId()).isPresent());
     }
 
+    @Test
+    void deveListarAvaliacoesOmsDasMedidasDaCrianca() {
+        Ambiente ambiente = new Ambiente();
+        Crianca crianca = ambiente.criarCriancaVinculada("mateus@email.com");
+        MedidaCrescimento medida = MedidaCrescimento.registrar(
+                crianca.getId(),
+                LocalDate.of(2024, 1, 10),
+                new BigDecimal("3.2322"),
+                new BigDecimal("49.1477"),
+                new BigDecimal("33.8787"),
+                OrigemMedidaCrescimento.CONSULTA,
+                null
+        );
+        ambiente.medidas.salvar(medida);
+
+        List<AvaliacaoCurvaCrescimento> avaliacoes = ambiente.listarAvaliacoesCurvaUseCase.executar(crianca.getId(), "mateus@email.com");
+
+        assertEquals(1, avaliacoes.size());
+        assertEquals(3, avaliacoes.getFirst().resultados().size());
+        assertEquals(0.0, avaliacoes.getFirst().resultados().getFirst().zScore(), 0.001);
+    }
+
     private static class Ambiente {
         private final CriancaRepositorioEmMemoria criancas = new CriancaRepositorioEmMemoria();
         private final UsuarioRepositorioEmMemoria usuarios = new UsuarioRepositorioEmMemoria();
         private final VinculoRepositorioEmMemoria vinculos = new VinculoRepositorioEmMemoria();
         private final MedidaRepositorioEmMemoria medidas = new MedidaRepositorioEmMemoria();
         private final CrescimentoAcesso acesso = new CrescimentoAcesso(criancas, usuarios, vinculos);
+        private final CurvaOmsCrescimentoService curvaOmsService = new CurvaOmsCrescimentoService();
 
         private final RegistrarMedidaCrescimentoUseCase registrarUseCase = new RegistrarMedidaCrescimentoUseCase(acesso, medidas);
         private final ListarMedidasCrescimentoUseCase listarUseCase = new ListarMedidasCrescimentoUseCase(acesso, medidas);
+        private final ListarAvaliacoesCurvaCrescimentoUseCase listarAvaliacoesCurvaUseCase = new ListarAvaliacoesCurvaCrescimentoUseCase(acesso, medidas, curvaOmsService);
         private final AtualizarMedidaCrescimentoUseCase atualizarUseCase = new AtualizarMedidaCrescimentoUseCase(acesso, medidas);
         private final RemoverMedidaCrescimentoUseCase removerUseCase = new RemoverMedidaCrescimentoUseCase(acesso, medidas);
 

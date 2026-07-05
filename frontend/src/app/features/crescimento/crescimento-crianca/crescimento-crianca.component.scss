@@ -134,6 +134,43 @@
   color: #6b5559;
 }
 
+.crescimento-curva__lista,
+.crescimento-medida__curvas {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.crescimento-curva__resultado {
+  border: 1px solid #f0e3de;
+  border-radius: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem;
+}
+
+.crescimento-curva__resultado small {
+  color: #6b5559;
+}
+
+.crescimento-curva__badge--ok,
+.crescimento-curva__badge--atencao {
+  border-radius: 999px;
+  display: inline-flex;
+  font-weight: 700;
+  padding: 0.35rem 0.65rem;
+  width: fit-content;
+}
+
+.crescimento-curva__badge--ok {
+  background: #edf8ef;
+  color: #2f6b3d;
+}
+
+.crescimento-curva__badge--atencao {
+  background: #fff5df;
+  color: #8a5a13;
+}
+
 .crescimento-lista {
   display: grid;
   gap: 1rem;
@@ -165,6 +202,10 @@
   border-radius: 999px;
   color: #5a4549;
   padding: 0.4rem 0.7rem;
+}
+
+.crescimento-medida__curvas {
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
 }
 
 .crescimento-medida__danger {
