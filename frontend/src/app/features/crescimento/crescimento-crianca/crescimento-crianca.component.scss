@@ -32,6 +32,7 @@
 .crescimento-resumo,
 .crescimento-tendencia,
 .crescimento-curvas,
+.crescimento-graficos,
 .crescimento-historico {
   padding: 1.5rem;
 }
@@ -206,6 +207,82 @@
 
 .crescimento-medida__curvas {
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.crescimento-graficos__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  margin-top: 1rem;
+}
+
+.crescimento-grafico {
+  border: 1px solid #f0e3de;
+  border-radius: 1rem;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.crescimento-grafico__header {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.crescimento-grafico__header h3,
+.crescimento-grafico__header p {
+  margin: 0;
+}
+
+.crescimento-grafico__header p,
+.crescimento-grafico__legenda {
+  color: #6b5559;
+}
+
+.crescimento-grafico svg {
+  background: #fffaf8;
+  border-radius: 0.9rem;
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.crescimento-grafico text {
+  fill: #8b7276;
+  font-size: 0.6rem;
+}
+
+.crescimento-grafico__faixa {
+  fill: #edf8ef;
+}
+
+.crescimento-grafico__linha-base {
+  stroke: #d7c4bf;
+  stroke-dasharray: 4 4;
+}
+
+.crescimento-grafico__linha {
+  fill: none;
+  stroke: #b63d4a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.crescimento-grafico__ponto {
+  fill: #b63d4a;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.crescimento-grafico__legenda {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
 }
 
 .crescimento-medida__danger {

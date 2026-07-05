@@ -110,7 +110,7 @@
 
         <section class="pueria-card crescimento-curvas">
           <p class="pueria-eyebrow">Curvas OMS</p>
-          <h2>Referência do último registro</h2>
+          <h2>Como está nas curvas</h2>
           @if (ultimaAvaliacaoCurva(); as avaliacao) {
             @if (avaliacao.resultados.length > 0) {
               <div class="crescimento-curva__lista">
@@ -118,13 +118,13 @@
                   <article class="crescimento-curva__resultado">
                     <strong>{{ resultado.titulo }}</strong>
                     <span [class]="classeResultado(resultado)">
-                      {{ formatarZScore(resultado.zScore) }} · {{ formatarPercentil(resultado.percentil) }}
+                      {{ textoFamilia(resultado) }}
                     </span>
-                    <small>{{ resultado.classificacaoTitulo }}</small>
+                    <small>Detalhe para consulta: {{ formatarPercentil(resultado.percentil) }}</small>
                   </article>
                 }
               </div>
-              <p>Baseado nas tabelas LMS oficiais da OMS para 0 a 5 anos.</p>
+              <p>Use como apoio para conversar na consulta. Uma medida isolada não define diagnóstico.</p>
             } @else {
               <p>As curvas aparecem quando há sexo informado e medida dentro da faixa de 0 a 5 anos da OMS.</p>
             }
@@ -184,6 +184,53 @@
                   </button>
                 </div>
               }
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="pueria-card crescimento-graficos" aria-labelledby="crescimento-graficos-titulo">
+      <div class="crescimento-historico__header">
+        <div>
+          <p class="pueria-eyebrow">Curvas de crescimento</p>
+          <h2 id="crescimento-graficos-titulo">Evolução visual</h2>
+        </div>
+        <span>Referência OMS</span>
+      </div>
+
+      @if (graficosCurva().length === 0) {
+        <p class="crescimento-historico__empty">Registre medidas com sexo informado no perfil para formar os gráficos.</p>
+      } @else {
+        <div class="crescimento-graficos__grid">
+          @for (grafico of graficosCurva(); track grafico.indicador) {
+            <article class="crescimento-grafico">
+              <div class="crescimento-grafico__header">
+                <div>
+                  <h3>{{ grafico.titulo }}</h3>
+                  <p>{{ grafico.resumo }}</p>
+                </div>
+                <span [class]="grafico.classe">{{ grafico.detalhe }}</span>
+              </div>
+
+              <svg viewBox="0 0 320 170" role="img" [attr.aria-label]="'Gráfico de ' + grafico.titulo">
+                <rect x="36" [attr.y]="grafico.faixaY" width="270" [attr.height]="grafico.faixaAltura" rx="8" class="crescimento-grafico__faixa" />
+                <line x1="36" x2="306" [attr.y1]="grafico.eixoY" [attr.y2]="grafico.eixoY" class="crescimento-grafico__linha-base" />
+                <text x="4" y="28">acima</text>
+                <text x="4" [attr.y]="grafico.eixoY + 4">média</text>
+                <text x="4" y="148">abaixo</text>
+                <polyline [attr.points]="grafico.linha" class="crescimento-grafico__linha" />
+                @for (ponto of grafico.pontos; track ponto.label + ponto.valor) {
+                  <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="4.5" class="crescimento-grafico__ponto">
+                    <title>{{ ponto.label }} - {{ ponto.valor }}</title>
+                  </circle>
+                }
+              </svg>
+
+              <div class="crescimento-grafico__legenda">
+                <span>A faixa clara representa a região esperada na curva OMS.</span>
+                <span>{{ grafico.pontos.length }} medida(s)</span>
+              </div>
             </article>
           }
         </div>

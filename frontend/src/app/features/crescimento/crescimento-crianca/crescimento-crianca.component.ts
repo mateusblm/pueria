@@ -8,6 +8,26 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
 
+type PontoGraficoCrescimento = {
+  x: number;
+  y: number;
+  label: string;
+  valor: string;
+};
+
+type GraficoCrescimento = {
+  indicador: string;
+  titulo: string;
+  resumo: string;
+  detalhe: string;
+  classe: string;
+  linha: string;
+  pontos: PontoGraficoCrescimento[];
+  faixaY: number;
+  faixaAltura: number;
+  eixoY: number;
+};
+
 @Component({
   selector: 'app-crescimento-crianca',
   imports: [ReactiveFormsModule, RouterLink],
@@ -54,6 +74,7 @@ export class CrescimentoCriancaComponent implements OnInit {
     const ultima = this.ultimaMedida();
     return ultima ? this.avaliacoesPorMedida().get(ultima.id) ?? null : null;
   });
+  readonly graficosCurva = computed(() => this.montarGraficosCurva());
 
   ngOnInit(): void {
     this.form.patchValue({ dataMedicao: this.formatarEntradaData(this.dataMaximaIso) });
@@ -209,6 +230,16 @@ export class CrescimentoCriancaComponent implements OnInit {
     return `P${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(valor)}`;
   }
 
+  textoFamilia(resultado: ResultadoCurvaCrescimento): string {
+    if (resultado.classificacao === 'FAIXA_ESPERADA') {
+      return 'Está dentro da faixa esperada para a idade.';
+    }
+    if (resultado.classificacao === 'ABAIXO' || resultado.classificacao === 'MUITO_ABAIXO') {
+      return 'Ficou abaixo da faixa esperada para a idade.';
+    }
+    return 'Ficou acima da faixa esperada para a idade.';
+  }
+
   formatarData(data: string): string {
     return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`));
   }
@@ -259,6 +290,83 @@ export class CrescimentoCriancaComponent implements OnInit {
 
     const direcao = diferenca > 0 ? 'Aumentou' : 'Reduziu';
     return `${direcao} ${this.formatarNumero(Math.abs(diferenca), unidade)} desde o registro anterior`;
+  }
+
+  private montarGraficosCurva(): GraficoCrescimento[] {
+    const indicadores = [
+      'PESO_IDADE',
+      'COMPRIMENTO_IDADE',
+      'PERIMETRO_CEFALICO_IDADE'
+    ];
+
+    return indicadores
+      .map((indicador) => this.montarGrafico(indicador))
+      .filter((grafico): grafico is GraficoCrescimento => grafico !== null);
+  }
+
+  private montarGrafico(indicador: string): GraficoCrescimento | null {
+    const resultados = this.avaliacoesCurva()
+      .flatMap((avaliacao) => avaliacao.resultados
+        .filter((resultado) => resultado.indicador === indicador)
+        .map((resultado) => ({ avaliacao, resultado }))
+      )
+      .sort((a, b) => a.avaliacao.idadeDias - b.avaliacao.idadeDias);
+
+    if (resultados.length === 0) {
+      return null;
+    }
+
+    const largura = 320;
+    const altura = 170;
+    const margemEsquerda = 36;
+    const margemDireita = 14;
+    const margemTopo = 16;
+    const margemBaixo = 30;
+    const menorIdade = resultados[0].avaliacao.idadeDias;
+    const maiorIdade = resultados.at(-1)?.avaliacao.idadeDias ?? menorIdade;
+    const intervaloIdade = Math.max(1, maiorIdade - menorIdade);
+    const zMin = -3.5;
+    const zMax = 3.5;
+    const areaLargura = largura - margemEsquerda - margemDireita;
+    const areaAltura = altura - margemTopo - margemBaixo;
+    const yPorZ = (zScore: number) => margemTopo + ((zMax - Math.max(zMin, Math.min(zMax, zScore))) / (zMax - zMin)) * areaAltura;
+
+    const pontos = resultados.map(({ avaliacao, resultado }) => {
+      const x = margemEsquerda + ((avaliacao.idadeDias - menorIdade) / intervaloIdade) * areaLargura;
+      return {
+        x: Number(x.toFixed(2)),
+        y: Number(yPorZ(resultado.zScore).toFixed(2)),
+        label: this.formatarData(avaliacao.dataMedicao),
+        valor: `${this.formatarNumero(resultado.valor, ` ${resultado.unidade}`)}`
+      };
+    });
+
+    const recente = resultados.at(-1)?.resultado;
+    if (!recente) {
+      return null;
+    }
+
+    return {
+      indicador,
+      titulo: this.tituloIndicador(indicador),
+      resumo: this.textoFamilia(recente),
+      detalhe: `Detalhe para consulta: ${this.formatarPercentil(recente.percentil)}`,
+      classe: this.classeResultado(recente),
+      linha: pontos.map((ponto) => `${ponto.x},${ponto.y}`).join(' '),
+      pontos,
+      faixaY: Number(yPorZ(2).toFixed(2)),
+      faixaAltura: Number((yPorZ(-2) - yPorZ(2)).toFixed(2)),
+      eixoY: Number(yPorZ(0).toFixed(2))
+    };
+  }
+
+  private tituloIndicador(indicador: string): string {
+    const titulos: Record<string, string> = {
+      PESO_IDADE: 'Peso',
+      COMPRIMENTO_IDADE: 'Comprimento/estatura',
+      PERIMETRO_CEFALICO_IDADE: 'Perímetro cefálico'
+    };
+    return titulos[indicador] ?? indicador;
   }
 
   private recarregarCurvas(): void {
