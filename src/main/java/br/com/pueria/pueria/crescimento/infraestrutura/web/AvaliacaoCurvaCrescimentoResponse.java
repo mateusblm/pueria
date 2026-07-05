@@ -14,6 +14,9 @@ public record AvaliacaoCurvaCrescimentoResponse(
         UUID medidaId,
         LocalDate dataMedicao,
         int idadeDias,
+        int idadeCronologicaDias,
+        boolean idadeCorrigida,
+        String criterioIdade,
         List<ResultadoCurvaResponse> resultados
 ) {
     static AvaliacaoCurvaCrescimentoResponse de(AvaliacaoCurvaCrescimento avaliacao) {
@@ -21,6 +24,9 @@ public record AvaliacaoCurvaCrescimentoResponse(
                 avaliacao.medidaId(),
                 avaliacao.dataMedicao(),
                 avaliacao.idadeDias(),
+                avaliacao.idadeCronologicaDias(),
+                avaliacao.idadeCorrigida(),
+                avaliacao.criterioIdade(),
                 avaliacao.resultados().stream().map(ResultadoCurvaResponse::de).toList()
         );
     }

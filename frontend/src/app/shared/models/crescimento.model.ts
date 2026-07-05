@@ -42,5 +42,8 @@ export interface AvaliacaoCurvaCrescimento {
   medidaId: string;
   dataMedicao: string;
   idadeDias: number;
+  idadeCronologicaDias: number;
+  idadeCorrigida: boolean;
+  criterioIdade: string;
   resultados: ResultadoCurvaCrescimento[];
 }

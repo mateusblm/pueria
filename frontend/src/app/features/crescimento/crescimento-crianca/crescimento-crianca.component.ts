@@ -12,6 +12,7 @@ type PontoGraficoCrescimento = {
   label: string;
   valor: string;
   zScore: number;
+  percentil: number;
 };
 
 type GraficoCrescimento = {
@@ -21,13 +22,19 @@ type GraficoCrescimento = {
   classe: string;
   valorAtual: string;
   dataAtual: string;
+  idadeLegenda: string;
+  idadeCorrigida: boolean;
   marcador: number;
   pontos: PontoGraficoCrescimento[];
+  tendencia: string;
   orientacao: string;
   tecnico: {
     percentil: string;
     zScore: string;
     classificacao: string;
+    idadeUsada: string;
+    idadeCronologica: string;
+    criterioIdade: string;
     fonte: string;
   };
 };
@@ -345,14 +352,17 @@ export class CrescimentoCriancaComponent implements OnInit {
       return {
         label: this.formatarData(avaliacao.dataMedicao),
         valor: `${this.formatarNumero(resultado.valor, ` ${resultado.unidade}`)}`,
-        zScore: resultado.zScore
+        zScore: resultado.zScore,
+        percentil: resultado.percentil
       };
     });
 
-    const recente = resultados.at(-1)?.resultado;
-    if (!recente) {
+    const itemRecente = resultados.at(-1);
+    if (!itemRecente) {
       return null;
     }
+    const recente = itemRecente.resultado;
+    const tendencia = this.descreverTendencia(pontos);
 
     return {
       indicador,
@@ -361,16 +371,79 @@ export class CrescimentoCriancaComponent implements OnInit {
       classe: this.classeResultado(recente),
       valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,
       dataAtual: pontos.at(-1)?.label ?? '',
+      idadeLegenda: this.idadeDaCurvaTexto(itemRecente.avaliacao),
+      idadeCorrigida: itemRecente.avaliacao.idadeCorrigida,
       marcador: Number(posicaoPorZ(recente.zScore).toFixed(2)),
       pontos,
+      tendencia: tendencia.texto,
       orientacao: this.orientacaoGrafico(recente),
       tecnico: {
         percentil: this.formatarPercentil(recente.percentil),
         zScore: this.formatarZScore(recente.zScore),
         classificacao: recente.classificacaoTitulo,
+        idadeUsada: this.formatarIdadeDias(itemRecente.avaliacao.idadeDias),
+        idadeCronologica: this.formatarIdadeDias(itemRecente.avaliacao.idadeCronologicaDias),
+        criterioIdade: itemRecente.avaliacao.criterioIdade,
         fonte: recente.fonte
       }
     };
+  }
+
+  private descreverTendencia(pontos: PontoGraficoCrescimento[]): { texto: string } {
+    if (pontos.length < 2) {
+      return {
+        texto: 'Com a próxima medida, a evolução da curva começa a ficar mais clara.'
+      };
+    }
+
+    const anterior = pontos[pontos.length - 2];
+    const atual = pontos[pontos.length - 1];
+    const diferencaZ = atual.zScore - anterior.zScore;
+    const variacaoPercentil = atual.percentil - anterior.percentil;
+
+    if (Math.abs(diferencaZ) < 0.35) {
+      return {
+        texto: 'Segue em trajetória parecida com a medida anterior.'
+      };
+    }
+
+    const intensidade = Math.abs(diferencaZ) >= 0.67 ? 'Mudança importante' : 'Pequena mudança';
+    const direcao = diferencaZ > 0 ? 'para uma faixa mais alta' : 'para uma faixa mais baixa';
+    const pontosPercentil = Math.round(Math.abs(variacaoPercentil));
+    const detalhePercentil = pontosPercentil >= 1
+      ? `, com variação de ${pontosPercentil} ponto${pontosPercentil === 1 ? '' : 's'} na posição da curva`
+      : '';
+
+    return {
+      texto: `${intensidade} ${direcao} em relação à medida anterior${detalhePercentil}.`
+    };
+  }
+
+  private idadeDaCurvaTexto(avaliacao: AvaliacaoCurvaCrescimento): string {
+    if (!avaliacao.idadeCorrigida) {
+      return `Idade na curva: ${this.formatarIdadeDias(avaliacao.idadeDias)}`;
+    }
+    return `Idade corrigida usada na curva: ${this.formatarIdadeDias(avaliacao.idadeDias)}`;
+  }
+
+  private formatarIdadeDias(dias: number): string {
+    if (dias < 30) {
+      return `${dias} dia${dias === 1 ? '' : 's'}`;
+    }
+
+    const meses = Math.floor(dias / 30);
+    const diasRestantes = dias % 30;
+    if (meses < 24) {
+      return diasRestantes > 0
+        ? `${meses} mes${meses === 1 ? '' : 'es'} e ${diasRestantes} dia${diasRestantes === 1 ? '' : 's'}`
+        : `${meses} mes${meses === 1 ? '' : 'es'}`;
+    }
+
+    const anos = Math.floor(meses / 12);
+    const mesesRestantes = meses % 12;
+    return mesesRestantes > 0
+      ? `${anos} ano${anos === 1 ? '' : 's'} e ${mesesRestantes} mes${mesesRestantes === 1 ? '' : 'es'}`
+      : `${anos} ano${anos === 1 ? '' : 's'}`;
   }
 
   private orientacaoGrafico(resultado: ResultadoCurvaCrescimento): string {

@@ -10,5 +10,8 @@ public record AvaliacaoCurvaCrescimento(
         UUID medidaId,
         LocalDate dataMedicao,
         int idadeDias,
+        int idadeCronologicaDias,
+        boolean idadeCorrigida,
+        String criterioIdade,
         List<ResultadoCurvaCrescimento> resultados
 ) {}

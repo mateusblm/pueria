@@ -37,16 +37,47 @@ public class ListarAvaliacoesCurvaCrescimentoUseCase {
     }
 
     private AvaliacaoCurvaCrescimento avaliarMedida(Crianca crianca, MedidaCrescimento medida) {
-        int idadeDias = Math.toIntExact(ChronoUnit.DAYS.between(crianca.getDataNascimento(), medida.getDataMedicao()));
+        IdadeParaCurva idade = calcularIdadeParaCurva(crianca, medida);
         List<ResultadoCurvaCrescimento> resultados = new ArrayList<>();
 
-        curvaOmsService.avaliar(IndicadorCurvaCrescimento.PESO_IDADE, crianca.getSexo(), idadeDias, medida.getPesoKg())
+        curvaOmsService.avaliar(IndicadorCurvaCrescimento.PESO_IDADE, crianca.getSexo(), idade.idadeUsadaDias(), medida.getPesoKg())
                 .ifPresent(resultados::add);
-        curvaOmsService.avaliar(IndicadorCurvaCrescimento.COMPRIMENTO_IDADE, crianca.getSexo(), idadeDias, medida.getComprimentoCm())
+        curvaOmsService.avaliar(IndicadorCurvaCrescimento.COMPRIMENTO_IDADE, crianca.getSexo(), idade.idadeUsadaDias(), medida.getComprimentoCm())
                 .ifPresent(resultados::add);
-        curvaOmsService.avaliar(IndicadorCurvaCrescimento.PERIMETRO_CEFALICO_IDADE, crianca.getSexo(), idadeDias, medida.getPerimetroCefalicoCm())
+        curvaOmsService.avaliar(IndicadorCurvaCrescimento.PERIMETRO_CEFALICO_IDADE, crianca.getSexo(), idade.idadeUsadaDias(), medida.getPerimetroCefalicoCm())
                 .ifPresent(resultados::add);
 
-        return new AvaliacaoCurvaCrescimento(medida.getId(), medida.getDataMedicao(), idadeDias, List.copyOf(resultados));
+        return new AvaliacaoCurvaCrescimento(
+                medida.getId(),
+                medida.getDataMedicao(),
+                idade.idadeUsadaDias(),
+                idade.idadeCronologicaDias(),
+                idade.corrigida(),
+                idade.criterio(),
+                List.copyOf(resultados)
+        );
     }
+
+    private IdadeParaCurva calcularIdadeParaCurva(Crianca crianca, MedidaCrescimento medida) {
+        int idadeCronologicaDias = Math.max(0, Math.toIntExact(ChronoUnit.DAYS.between(crianca.getDataNascimento(), medida.getDataMedicao())));
+        if (!crianca.isPrematura() || crianca.getSemanasGestacionais() == null) {
+            return new IdadeParaCurva(idadeCronologicaDias, idadeCronologicaDias, false, "Idade cronológica");
+        }
+
+        int diasAntesDoTermo = Math.max(0, (40 - crianca.getSemanasGestacionais()) * 7);
+        int limiteCorrecaoDias = deveEstenderCorrecaoAteTresAnos(crianca) ? 3 * 365 : 2 * 365;
+        if (idadeCronologicaDias > limiteCorrecaoDias) {
+            return new IdadeParaCurva(idadeCronologicaDias, idadeCronologicaDias, false, "Idade cronológica");
+        }
+
+        int idadeCorrigidaDias = Math.max(0, idadeCronologicaDias - diasAntesDoTermo);
+        return new IdadeParaCurva(idadeCorrigidaDias, idadeCronologicaDias, true, "Idade corrigida para prematuridade");
+    }
+
+    private boolean deveEstenderCorrecaoAteTresAnos(Crianca crianca) {
+        return crianca.getSemanasGestacionais() < 28
+                || (crianca.getPesoNascimentoGramas() != null && crianca.getPesoNascimentoGramas() < 1000);
+    }
+
+    private record IdadeParaCurva(int idadeUsadaDias, int idadeCronologicaDias, boolean corrigida, String criterio) {}
 }

@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CrescimentoUseCasesTest {
@@ -158,6 +159,29 @@ class CrescimentoUseCasesTest {
         assertEquals(0.0, avaliacoes.getFirst().resultados().getFirst().zScore(), 0.001);
     }
 
+    @Test
+    void deveUsarIdadeCorrigidaParaPrematuroAteDoisAnos() {
+        Ambiente ambiente = new Ambiente();
+        Crianca crianca = ambiente.criarCriancaPrematuraVinculada("mateus@email.com", 32, 1500);
+        MedidaCrescimento medida = MedidaCrescimento.registrar(
+                crianca.getId(),
+                LocalDate.of(2024, 3, 6),
+                new BigDecimal("3.3464"),
+                null,
+                null,
+                OrigemMedidaCrescimento.CONSULTA,
+                null
+        );
+        ambiente.medidas.salvar(medida);
+
+        AvaliacaoCurvaCrescimento avaliacao = ambiente.listarAvaliacoesCurvaUseCase.executar(crianca.getId(), "mateus@email.com").getFirst();
+
+        assertEquals(56, avaliacao.idadeCronologicaDias());
+        assertEquals(0, avaliacao.idadeDias());
+        assertTrue(avaliacao.idadeCorrigida());
+        assertEquals("Idade corrigida para prematuridade", avaliacao.criterioIdade());
+    }
+
     private static class Ambiente {
         private final CriancaRepositorioEmMemoria criancas = new CriancaRepositorioEmMemoria();
         private final UsuarioRepositorioEmMemoria usuarios = new UsuarioRepositorioEmMemoria();
@@ -181,6 +205,14 @@ class CrescimentoUseCasesTest {
         Crianca criarCriancaVinculada(String email) {
             Usuario responsavel = usuarios.buscarPorEmail(email).orElseGet(() -> cadastrarResponsavel(email));
             Crianca crianca = Crianca.cadastrar("Ana", LocalDate.of(2024, 1, 10), Sexo.FEMININO, false, 39, 3200);
+            criancas.salvar(crianca);
+            vinculos.salvar(VinculoResponsavelCrianca.criarPrincipal(responsavel.getId(), crianca.getId(), Parentesco.PAI));
+            return crianca;
+        }
+
+        Crianca criarCriancaPrematuraVinculada(String email, int semanasGestacionais, int pesoNascimentoGramas) {
+            Usuario responsavel = usuarios.buscarPorEmail(email).orElseGet(() -> cadastrarResponsavel(email));
+            Crianca crianca = Crianca.cadastrar("Ana", LocalDate.of(2024, 1, 10), Sexo.FEMININO, true, semanasGestacionais, pesoNascimentoGramas);
             criancas.salvar(crianca);
             vinculos.salvar(VinculoResponsavelCrianca.criarPrincipal(responsavel.getId(), crianca.getId(), Parentesco.PAI));
             return crianca;
