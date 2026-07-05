@@ -182,7 +182,9 @@ export class MarcosCriancaComponent implements OnInit {
 
   abrirResponder(): void {
     this.modo.set('responder');
-    this.posicionarPrimeiraPendente();
+    if (this.progresso().respondidos < this.progresso().total) {
+      this.posicionarPrimeiraPendente();
+    }
   }
 
   abrirResultados(): void {
@@ -287,12 +289,15 @@ export class MarcosCriancaComponent implements OnInit {
       return;
     }
 
+    if (this.indiceEtapa() < this.marcosDaIdade().length - 1) {
+      this.proximaEtapa();
+      return;
+    }
+
     if (this.progresso().respondidos === this.progresso().total) {
       this.modo.set('resultados');
       return;
     }
-
-    this.proximaEtapa();
   }
 
   private extrairMensagemErro(erro: HttpErrorResponse): string {
