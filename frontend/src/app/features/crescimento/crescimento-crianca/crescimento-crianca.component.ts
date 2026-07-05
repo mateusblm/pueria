@@ -18,13 +18,18 @@ type GraficoCrescimento = {
   indicador: string;
   titulo: string;
   resumo: string;
-  detalhe: string;
   classe: string;
   valorAtual: string;
   dataAtual: string;
   marcador: number;
   pontos: PontoGraficoCrescimento[];
   orientacao: string;
+  tecnico: {
+    percentil: string;
+    zScore: string;
+    classificacao: string;
+    fonte: string;
+  };
 };
 
 @Component({
@@ -49,6 +54,7 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly erro = signal('');
   readonly aviso = signal('');
+  readonly detalhesTecnicosAbertos = signal<Set<string>>(new Set());
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly form = this.fb.group({
@@ -229,6 +235,22 @@ export class CrescimentoCriancaComponent implements OnInit {
     return `P${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(valor)}`;
   }
 
+  detalhesTecnicosAberto(indicador: string): boolean {
+    return this.detalhesTecnicosAbertos().has(indicador);
+  }
+
+  alternarDetalhesTecnicos(indicador: string): void {
+    this.detalhesTecnicosAbertos.update((atuais) => {
+      const proximos = new Set(atuais);
+      if (proximos.has(indicador)) {
+        proximos.delete(indicador);
+      } else {
+        proximos.add(indicador);
+      }
+      return proximos;
+    });
+  }
+
   textoFamilia(resultado: ResultadoCurvaCrescimento): string {
     if (resultado.classificacao === 'FAIXA_ESPERADA') {
       return 'Está dentro da faixa esperada para a idade.';
@@ -336,13 +358,18 @@ export class CrescimentoCriancaComponent implements OnInit {
       indicador,
       titulo: this.tituloIndicador(indicador),
       resumo: this.textoFamilia(recente),
-      detalhe: `Detalhe para consulta: ${this.formatarPercentil(recente.percentil)}`,
       classe: this.classeResultado(recente),
       valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,
       dataAtual: pontos.at(-1)?.label ?? '',
       marcador: Number(posicaoPorZ(recente.zScore).toFixed(2)),
       pontos,
-      orientacao: this.orientacaoGrafico(recente)
+      orientacao: this.orientacaoGrafico(recente),
+      tecnico: {
+        percentil: this.formatarPercentil(recente.percentil),
+        zScore: this.formatarZScore(recente.zScore),
+        classificacao: recente.classificacaoTitulo,
+        fonte: recente.fonte
+      }
     };
   }
 
