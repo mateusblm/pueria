@@ -1,4 +1,4 @@
-.marcos-page, .resultado-layout, .marco-lista { display: grid; gap: 18px; }
+.marcos-page, .resultado-layout, .marco-lista, .resultado-areas, .historico-lista { display: grid; gap: 18px; }
 
 .marcos-page__back {
   width: fit-content; color: var(--pueria-vermelho-profundo); font-weight: 780; text-decoration: none;
@@ -9,7 +9,8 @@
 }
 
 .marcos-page__hero h1, .marcos-page__hero p, .painel-idade h2, .painel-idade p,
-.etapa-card h2, .apoio-card h2, .apoio-card p, .marco-card h3, .marco-card p { margin: 0; }
+.etapa-card h2, .apoio-card h2, .apoio-card p, .marco-card h3, .marco-card p,
+.resumo-consulta h2, .resumo-consulta p, .resultado-area p, .historico-card p { margin: 0; }
 
 .marcos-page__state, .painel-idade, .apoio-card { padding: 22px; }
 .painel-idade { display: grid; gap: 14px; }
@@ -58,12 +59,30 @@
 .apoio-card--alerta { background: #fff8ee; }
 .apoio-card ul { display: grid; gap: 8px; margin: 0; padding-left: 18px; }
 
-.area-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.area-tab {
-  display: grid; gap: 4px; border: 1px solid var(--pueria-borda); border-radius: 16px;
-  background: #fff; color: var(--pueria-texto); padding: 14px;
+.resumo-consulta { display: grid; gap: 18px; padding: 22px; }
+.resumo-consulta__numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.resumo-consulta__numeros article {
+  display: grid; gap: 4px; border: 1px solid var(--pueria-borda); border-radius: 16px; background: #fff; padding: 14px;
 }
-.area-tab small { color: var(--pueria-texto-suave); font-weight: 700; }
+.resumo-consulta__numeros strong { color: var(--pueria-vermelho-profundo); font-size: 1.35rem; }
+.resumo-consulta__numeros span, .resumo-consulta__acao p { color: var(--pueria-texto-suave); font-size: 0.9rem; }
+.resumo-consulta__acao { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+
+.resultado-areas { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.resultado-area { display: grid; gap: 12px; padding: 18px; }
+.resultado-area__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.resultado-area__grade span {
+  border-radius: 12px; background: #fffaf4; color: var(--pueria-texto-suave); font-size: 0.86rem; padding: 10px;
+}
+.resultado-area__grade strong { color: var(--pueria-texto); }
+
+.historico-card { display: grid; gap: 12px; padding: 22px; }
+.historico-lista article {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center;
+  border: 1px solid var(--pueria-borda); border-radius: 14px; padding: 12px;
+}
+.historico-lista span, .historico-lista small { color: var(--pueria-texto-suave); }
+.historico-lista__atual { background: var(--pueria-rosa-nevoa); border-color: rgba(202, 45, 65, 0.18) !important; }
 
 .marco-card {
   border: 1px solid var(--pueria-borda); border-radius: 18px; background: #fff; padding: 16px;
@@ -74,6 +93,12 @@
 
 @media (max-width: 620px) {
   .marcos-page__hero, .painel-idade, .etapa-card__body, .apoio-card { padding: 18px; }
-  .marco-card__actions, .modo-tabs { grid-template-columns: 1fr; }
+  .marco-card__actions, .modo-tabs, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
   .etapa-nav { align-items: stretch; flex-direction: column; }
+  .historico-lista article { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .marcos-page__back, .marcos-page__hero, .painel-idade, .modo-tabs, .etapa-card, .pueria-button { display: none !important; }
+  .pueria-card, .marco-card { box-shadow: none !important; break-inside: avoid; }
 }

@@ -12,6 +12,20 @@ type AreaResumo = {
   total: number;
 };
 
+type ResultadoArea = AreaResumo & {
+  observados: number;
+  duvidas: number;
+  aindaNao: number;
+};
+
+type HistoricoIdade = {
+  idadeMeses: number;
+  titulo: string;
+  total: number;
+  respondidos: number;
+  pontosAtencao: number;
+};
+
 type ModoTela = 'responder' | 'resultados';
 
 @Component({
@@ -66,6 +80,34 @@ export class MarcosCriancaComponent implements OnInit {
   readonly pontosDeAtencao = computed(() => this.marcosDaIdade().filter((marco) =>
     marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'
   ));
+
+  readonly marcosComObservacao = computed(() => this.marcosDaIdade().filter((marco) => !!marco.observacao));
+
+  readonly resultadoPorArea = computed<ResultadoArea[]>(() => this.areas.map((area) => {
+    const marcos = this.marcosDaIdade().filter((marco) => marco.area === area);
+    return {
+      area,
+      label: this.labelArea(area),
+      total: marcos.length,
+      pendentes: marcos.filter((marco) => marco.status === 'NAO_AVALIADO').length,
+      observados: marcos.filter((marco) => marco.status === 'OBSERVADO').length,
+      duvidas: marcos.filter((marco) => marco.status === 'NAO_TENHO_CERTEZA').length,
+      aindaNao: marcos.filter((marco) => marco.status === 'AINDA_NAO_OBSERVADO').length
+    };
+  }).filter((resumo) => resumo.total > 0));
+
+  readonly historicoPorIdade = computed<HistoricoIdade[]>(() => [...new Set(this.marcos().map((marco) => marco.idadeMeses))]
+    .sort((a, b) => a - b)
+    .map((idadeMeses) => {
+      const marcos = this.marcos().filter((marco) => marco.idadeMeses === idadeMeses);
+      return {
+        idadeMeses,
+        titulo: this.tituloIdade(idadeMeses),
+        total: marcos.length,
+        respondidos: marcos.filter((marco) => marco.status !== 'NAO_AVALIADO').length,
+        pontosAtencao: marcos.filter((marco) => marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA').length
+      };
+    }));
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -155,6 +197,10 @@ export class MarcosCriancaComponent implements OnInit {
     this.indiceEtapa.update((indice) => Math.min(this.marcosDaIdade().length - 1, indice + 1));
   }
 
+  imprimirResumo(): void {
+    window.print();
+  }
+
   labelArea(area: string): string {
     const labels: Record<string, string> = {
       SOCIAL_EMOCIONAL: 'Social',
@@ -187,6 +233,17 @@ export class MarcosCriancaComponent implements OnInit {
       return 'Sem pontos';
     }
     return total === 1 ? '1 ponto' : `${total} pontos`;
+  }
+
+  dataResumo(): string {
+    return new Intl.DateTimeFormat('pt-BR').format(new Date());
+  }
+
+  textoConduta(): string {
+    if (this.pontosDeAtencao().length === 0) {
+      return 'Manter acompanhamento de rotina, brincadeiras responsivas e novas observações conforme a criança cresce.';
+    }
+    return 'Levar os pontos de atenção para a próxima consulta. Se houver perda de habilidades, preocupação persistente ou atraso claro, antecipar contato com o pediatra.';
   }
 
   classeStatus(status: StatusMarcoDesenvolvimento): string {

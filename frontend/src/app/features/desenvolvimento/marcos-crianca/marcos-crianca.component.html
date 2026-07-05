@@ -101,6 +101,51 @@
       }
     } @else {
       <div class="resultado-layout">
+        <section class="pueria-card resumo-consulta">
+          <div>
+            <p class="pueria-eyebrow">Resumo para consulta</p>
+            <h2>{{ tituloIdadeSelecionada() }}</h2>
+            <p>
+              Registro familiar de vigilância do desenvolvimento em {{ dataResumo() }}.
+              Este resumo organiza observações da rotina e não substitui avaliação profissional.
+            </p>
+          </div>
+
+          <div class="resumo-consulta__numeros">
+            <article>
+              <strong>{{ progresso().respondidos }}/{{ progresso().total }}</strong>
+              <span>respondidos</span>
+            </article>
+            <article>
+              <strong>{{ pontosDeAtencao().length }}</strong>
+              <span>pontos de atenção</span>
+            </article>
+            <article>
+              <strong>{{ marcosComObservacao().length }}</strong>
+              <span>observações</span>
+            </article>
+          </div>
+
+          <div class="resumo-consulta__acao">
+            <p>{{ textoConduta() }}</p>
+            <button type="button" class="pueria-button" (click)="imprimirResumo()">Mostrar na consulta</button>
+          </div>
+        </section>
+
+        <section class="resultado-areas" aria-label="Resultado por área">
+          @for (area of resultadoPorArea(); track area.area) {
+            <article class="pueria-card resultado-area">
+              <p class="pueria-eyebrow">{{ area.label }}</p>
+              <div class="resultado-area__grade">
+                <span><strong>{{ area.observados }}</strong> Sim</span>
+                <span><strong>{{ area.duvidas }}</strong> Dúvidas</span>
+                <span><strong>{{ area.aindaNao }}</strong> Ainda não</span>
+                <span><strong>{{ area.pendentes }}</strong> Sem resposta</span>
+              </div>
+            </article>
+          }
+        </section>
+
         <section class="pueria-card apoio-card apoio-card--alerta">
           <p class="pueria-eyebrow">Quando agir cedo</p>
           @if (pontosDeAtencao().length === 0) {
@@ -117,12 +162,36 @@
           }
         </section>
 
-        <section class="area-tabs" aria-label="Resumo por área">
-          @for (area of areasResumo(); track area.area) {
-            <article class="area-tab">
-              <span>{{ area.label }}</span>
-              <small>{{ labelPendencias(area.pendentes) }}</small>
-            </article>
+        @if (marcosComObservacao().length > 0) {
+          <section class="pueria-card apoio-card">
+            <p class="pueria-eyebrow">Observações da família</p>
+            <ul>
+              @for (marco of marcosComObservacao(); track marco.id) {
+                <li><strong>{{ labelArea(marco.area) }}:</strong> {{ marco.observacao }}</li>
+              }
+            </ul>
+          </section>
+        }
+
+        <section class="pueria-card historico-card">
+          <p class="pueria-eyebrow">Histórico por faixa</p>
+          <div class="historico-lista">
+            @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
+              <article [class.historico-lista__atual]="grupo.idadeMeses === idadeSelecionada()">
+                <strong>{{ grupo.titulo }}</strong>
+                <span>{{ grupo.respondidos }}/{{ grupo.total }} respondidos</span>
+                <small>{{ labelPontosAtencao(grupo.pontosAtencao) }}</small>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="pueria-card apoio-card">
+          <p class="pueria-eyebrow">Próximos passos em casa</p>
+          @if (pontosDeAtencao().length === 0) {
+            <p>Continue oferecendo conversa, brincadeira, movimento livre seguro, sono adequado e rotina responsiva. Registre novas dúvidas quando aparecerem.</p>
+          } @else {
+            <p>Priorize interações simples e frequentes ligadas às áreas com dúvida. Observe se há evolução nas próximas semanas e leve os exemplos anotados para o pediatra.</p>
           }
         </section>
 
