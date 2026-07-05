@@ -17,6 +17,7 @@
       </div>
       <div class="detalhe-page__actions">
         <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button">Desenvolvimento</a>
+        <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button">Crescimento</a>
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
@@ -83,6 +84,15 @@
           Acompanhe sinais esperados para a idade em linguagem, movimento, cognição e socialização.
         </p>
         <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button pueria-button--secondary">Abrir marcos</a>
+      </article>
+
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Crescimento</p>
+        <h2>Medidas e tendência</h2>
+        <p>
+          Registre peso, comprimento ou estatura e perímetro cefálico para acompanhar a evolução nas consultas.
+        </p>
+        <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button pueria-button--secondary">Abrir crescimento</a>
       </article>
     </div>
   }

@@ -1,0 +1,167 @@
+<section class="crescimento-page">
+  <a routerLink="/acompanhamento" class="crescimento-page__back">Voltar para acompanhamento</a>
+
+  @if (carregando()) {
+    <div class="pueria-card crescimento-page__state">Carregando crescimento...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-card crescimento-page__state">
+      <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+      <a routerLink="/acompanhamento" class="pueria-button pueria-button--secondary">Voltar</a>
+    </div>
+  } @else if (crianca(); as crianca) {
+    <div class="pueria-card crescimento-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Crescimento</p>
+        <h1 class="pueria-title">{{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">
+          Registre medidas da consulta ou de casa e acompanhe a tendência ao longo do tempo.
+        </p>
+      </div>
+      <a [routerLink]="['/criancas', crianca.id]" class="pueria-button pueria-button--secondary">Perfil</a>
+    </div>
+
+    @if (aviso()) {
+      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
+    }
+    @if (erro()) {
+      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+
+    <div class="crescimento-page__grid">
+      <section class="pueria-card crescimento-form" aria-labelledby="crescimento-form-titulo">
+        <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar medida' : 'Nova medida' }}</p>
+        <h2 id="crescimento-form-titulo">{{ editandoId() ? 'Editar registro' : 'Registrar crescimento' }}</h2>
+
+        <form [formGroup]="form" (ngSubmit)="salvar()">
+          <label>
+            Data da medição
+            <input type="date" formControlName="dataMedicao" [max]="dataMaxima" />
+          </label>
+
+          <div class="crescimento-form__linha">
+            <label>
+              Peso (kg)
+              <input type="number" inputmode="decimal" min="0.3" max="80" step="0.01" formControlName="pesoKg" placeholder="Ex.: 7,35" />
+            </label>
+            <label>
+              Comprimento ou estatura (cm)
+              <input type="number" inputmode="decimal" min="20" max="140" step="0.1" formControlName="comprimentoCm" placeholder="Ex.: 68,5" />
+            </label>
+          </div>
+
+          <div class="crescimento-form__linha">
+            <label>
+              Perímetro cefálico (cm)
+              <input type="number" inputmode="decimal" min="20" max="65" step="0.1" formControlName="perimetroCefalicoCm" placeholder="Ex.: 43,2" />
+            </label>
+            <label>
+              Onde foi medido
+              <select formControlName="origem">
+                <option value="CONSULTA">Consulta</option>
+                <option value="CASA">Casa</option>
+                <option value="ESCOLA_CRECHE">Escola ou creche</option>
+                <option value="OUTRO">Outro</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Observações
+            <textarea rows="3" formControlName="observacao" placeholder="Ex.: medida feita na consulta de rotina"></textarea>
+          </label>
+
+          <div class="crescimento-form__actions">
+            @if (editandoId()) {
+              <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvando()" (click)="cancelarEdicao()">
+                Cancelar edição
+              </button>
+            }
+            <button type="submit" class="pueria-button" [disabled]="salvando()">
+              {{ salvando() ? 'Salvando...' : 'Salvar medida' }}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="crescimento-side">
+        <section class="pueria-card crescimento-resumo">
+          <p class="pueria-eyebrow">Último registro</p>
+          @if (ultimaMedida(); as ultima) {
+            <h2>{{ formatarData(ultima.dataMedicao) }}</h2>
+            <div class="crescimento-resumo__metricas">
+              <span><strong>{{ formatarNumero(ultima.pesoKg, ' kg') }}</strong>Peso</span>
+              <span><strong>{{ formatarNumero(ultima.comprimentoCm, ' cm') }}</strong>Comprimento</span>
+              <span><strong>{{ formatarNumero(ultima.perimetroCefalicoCm, ' cm') }}</strong>Perímetro cefálico</span>
+            </div>
+          } @else {
+            <h2>Sem medidas registradas</h2>
+            <p>Inclua a primeira medida para começar o histórico.</p>
+          }
+        </section>
+
+        <section class="pueria-card crescimento-tendencia">
+          <p class="pueria-eyebrow">Tendência</p>
+          <ul>
+            <li><strong>Peso</strong><span>{{ comparar('pesoKg', ' kg') }}</span></li>
+            <li><strong>Comprimento</strong><span>{{ comparar('comprimentoCm', ' cm') }}</span></li>
+            <li><strong>Perímetro cefálico</strong><span>{{ comparar('perimetroCefalicoCm', ' cm') }}</span></li>
+          </ul>
+        </section>
+
+        <section class="pueria-card crescimento-curvas">
+          <p class="pueria-eyebrow">Curvas</p>
+          <h2>Base OMS e Caderneta</h2>
+          <p>
+            As curvas OMS/Ministério da Saúde entram na próxima etapa. Por enquanto, o Pueria organiza o histórico para observar tendência e levar medidas mais claras à consulta.
+          </p>
+        </section>
+      </aside>
+    </div>
+
+    <section class="pueria-card crescimento-historico" aria-labelledby="crescimento-historico-titulo">
+      <div class="crescimento-historico__header">
+        <div>
+          <p class="pueria-eyebrow">Histórico</p>
+          <h2 id="crescimento-historico-titulo">Medidas registradas</h2>
+        </div>
+        <span>{{ medidasOrdenadas().length }} registro(s)</span>
+      </div>
+
+      @if (medidasOrdenadas().length === 0) {
+        <p class="crescimento-historico__empty">Ainda não há medidas salvas para esta criança.</p>
+      } @else {
+        <div class="crescimento-lista">
+          @for (medida of medidasOrdenadas(); track medida.id) {
+            <article class="crescimento-medida">
+              <div class="crescimento-medida__main">
+                <strong>{{ formatarData(medida.dataMedicao) }}</strong>
+                <span>{{ labelOrigem(medida.origem) }}</span>
+              </div>
+              <div class="crescimento-medida__dados">
+                <span>Peso: {{ formatarNumero(medida.pesoKg, ' kg') }}</span>
+                <span>Comprimento: {{ formatarNumero(medida.comprimentoCm, ' cm') }}</span>
+                <span>Perímetro cefálico: {{ formatarNumero(medida.perimetroCefalicoCm, ' cm') }}</span>
+              </div>
+              @if (medida.observacao) {
+                <p>{{ medida.observacao }}</p>
+              }
+              <div class="crescimento-medida__actions">
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(medida)">Editar</button>
+                <button type="button" class="pueria-button crescimento-medida__danger" (click)="pedirRemocao(medida.id)">Remover</button>
+              </div>
+              @if (confirmandoRemocaoId() === medida.id) {
+                <div class="crescimento-medida__confirm">
+                  <span>Remover esta medida do histórico?</span>
+                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="removendoId() === medida.id" (click)="cancelarRemocao()">Manter</button>
+                  <button type="button" class="pueria-button crescimento-medida__danger" [disabled]="removendoId() === medida.id" (click)="remover(medida.id)">
+                    {{ removendoId() === medida.id ? 'Removendo...' : 'Remover' }}
+                  </button>
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+</section>
