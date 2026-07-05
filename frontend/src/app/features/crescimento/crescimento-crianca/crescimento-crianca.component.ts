@@ -29,13 +29,13 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly erro = signal('');
   readonly aviso = signal('');
-  readonly dataMaxima = new Date().toISOString().slice(0, 10);
+  readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly form = this.fb.group({
     dataMedicao: ['', Validators.required],
-    pesoKg: this.fb.control<number | null>(null, [Validators.min(0.3), Validators.max(80)]),
-    comprimentoCm: this.fb.control<number | null>(null, [Validators.min(20), Validators.max(140)]),
-    perimetroCefalicoCm: this.fb.control<number | null>(null, [Validators.min(20), Validators.max(65)]),
+    pesoKg: [''],
+    comprimentoCm: [''],
+    perimetroCefalicoCm: [''],
     origem: this.fb.nonNullable.control<OrigemMedidaCrescimento>('CONSULTA', Validators.required),
     observacao: ['', Validators.maxLength(500)]
   });
@@ -48,7 +48,7 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly medidaAnterior = computed(() => this.medidasOrdenadas()[1] ?? null);
 
   ngOnInit(): void {
-    this.form.patchValue({ dataMedicao: this.dataMaxima });
+    this.form.patchValue({ dataMedicao: this.formatarEntradaData(this.dataMaximaIso) });
     this.carregar();
   }
 
@@ -81,7 +81,14 @@ export class CrescimentoCriancaComponent implements OnInit {
       return;
     }
 
-    const request = this.criarRequest();
+    let request: SalvarMedidaCrescimentoRequest | null;
+    try {
+      request = this.criarRequest();
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise as medidas informadas.');
+      return;
+    }
+
     if (!request) {
       this.erro.set('Informe pelo menos uma medida para acompanhar o crescimento.');
       return;
@@ -120,10 +127,10 @@ export class CrescimentoCriancaComponent implements OnInit {
     this.aviso.set('');
     this.erro.set('');
     this.form.patchValue({
-      dataMedicao: medida.dataMedicao,
-      pesoKg: medida.pesoKg ?? null,
-      comprimentoCm: medida.comprimentoCm ?? null,
-      perimetroCefalicoCm: medida.perimetroCefalicoCm ?? null,
+      dataMedicao: this.formatarEntradaData(medida.dataMedicao),
+      pesoKg: this.formatarEntradaDecimal(medida.pesoKg),
+      comprimentoCm: this.formatarEntradaDecimal(medida.comprimentoCm),
+      perimetroCefalicoCm: this.formatarEntradaDecimal(medida.perimetroCefalicoCm),
       origem: medida.origem,
       observacao: medida.observacao ?? ''
     });
@@ -132,10 +139,10 @@ export class CrescimentoCriancaComponent implements OnInit {
   cancelarEdicao(): void {
     this.editandoId.set('');
     this.form.reset({
-      dataMedicao: this.dataMaxima,
-      pesoKg: null,
-      comprimentoCm: null,
-      perimetroCefalicoCm: null,
+      dataMedicao: this.formatarEntradaData(this.dataMaximaIso),
+      pesoKg: '',
+      comprimentoCm: '',
+      perimetroCefalicoCm: '',
       origem: 'CONSULTA',
       observacao: ''
     });
@@ -184,6 +191,18 @@ export class CrescimentoCriancaComponent implements OnInit {
     return `${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(valor)}${unidade}`;
   }
 
+  formatarEntradaDecimal(valor?: number | null): string {
+    if (valor === null || valor === undefined) {
+      return '';
+    }
+    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(valor);
+  }
+
+  formatarEntradaData(dataIso: string): string {
+    const [ano, mes, dia] = dataIso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
   labelOrigem(origem: OrigemMedidaCrescimento): string {
     const labels: Record<OrigemMedidaCrescimento, string> = {
       CASA: 'Casa',
@@ -216,10 +235,10 @@ export class CrescimentoCriancaComponent implements OnInit {
   private criarRequest(): SalvarMedidaCrescimentoRequest | null {
     const valor = this.form.getRawValue();
     const request: SalvarMedidaCrescimentoRequest = {
-      dataMedicao: valor.dataMedicao ?? '',
-      pesoKg: this.numeroOuNulo(valor.pesoKg),
-      comprimentoCm: this.numeroOuNulo(valor.comprimentoCm),
-      perimetroCefalicoCm: this.numeroOuNulo(valor.perimetroCefalicoCm),
+      dataMedicao: this.lerDataMedicao(valor.dataMedicao),
+      pesoKg: this.lerMedida(valor.pesoKg, 'peso', 0.3, 80),
+      comprimentoCm: this.lerMedida(valor.comprimentoCm, 'comprimento ou estatura', 20, 140),
+      perimetroCefalicoCm: this.lerMedida(valor.perimetroCefalicoCm, 'perímetro cefálico', 20, 65),
       origem: valor.origem,
       observacao: valor.observacao?.trim() || null
     };
@@ -228,11 +247,45 @@ export class CrescimentoCriancaComponent implements OnInit {
     return possuiMedida ? request : null;
   }
 
-  private numeroOuNulo(valor: number | null | undefined): number | null {
-    if (valor === null || valor === undefined || Number.isNaN(valor)) {
+  private lerDataMedicao(valor: string | null | undefined): string {
+    const texto = (valor ?? '').trim();
+    const partes = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(texto);
+    if (!partes) {
+      throw new Error('Informe a data da medição no formato dd/mm/aaaa.');
+    }
+
+    const dia = Number(partes[1]);
+    const mes = Number(partes[2]);
+    const ano = Number(partes[3]);
+    const data = new Date(Date.UTC(ano, mes - 1, dia));
+    const dataExiste = data.getUTCFullYear() === ano && data.getUTCMonth() === mes - 1 && data.getUTCDate() === dia;
+    if (!dataExiste) {
+      throw new Error('Informe uma data da medição válida.');
+    }
+
+    const iso = `${ano.toString().padStart(4, '0')}-${mes.toString().padStart(2, '0')}-${dia.toString().padStart(2, '0')}`;
+    if (iso > this.dataMaximaIso) {
+      throw new Error('A data da medição não pode estar no futuro.');
+    }
+    return iso;
+  }
+
+  private lerMedida(valor: string | null | undefined, label: string, minimo: number, maximo: number): number | null {
+    const texto = (valor ?? '').trim();
+    if (!texto) {
       return null;
     }
-    return Number(valor);
+
+    const normalizado = texto.replace(',', '.');
+    if (!/^\d+(\.\d{1,2})?$/.test(normalizado)) {
+      throw new Error(`Informe ${label} usando números, vírgula ou ponto decimal.`);
+    }
+
+    const numero = Number(normalizado);
+    if (!Number.isFinite(numero) || numero < minimo || numero > maximo) {
+      throw new Error(`A medida de ${label} está fora do limite esperado.`);
+    }
+    return numero;
   }
 
   private extrairMensagemErro(erro: HttpErrorResponse): string {

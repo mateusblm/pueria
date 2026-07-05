@@ -35,24 +35,24 @@
         <form [formGroup]="form" (ngSubmit)="salvar()">
           <label>
             Data da medição
-            <input type="date" formControlName="dataMedicao" [max]="dataMaxima" />
+            <input type="text" inputmode="numeric" autocomplete="off" formControlName="dataMedicao" placeholder="dd/mm/aaaa" />
           </label>
 
           <div class="crescimento-form__linha">
             <label>
               Peso (kg)
-              <input type="number" inputmode="decimal" min="0.3" max="80" step="0.01" formControlName="pesoKg" placeholder="Ex.: 7,35" />
+              <input type="text" inputmode="decimal" autocomplete="off" formControlName="pesoKg" placeholder="Ex.: 7,35" />
             </label>
             <label>
               Comprimento ou estatura (cm)
-              <input type="number" inputmode="decimal" min="20" max="140" step="0.1" formControlName="comprimentoCm" placeholder="Ex.: 68,5" />
+              <input type="text" inputmode="decimal" autocomplete="off" formControlName="comprimentoCm" placeholder="Ex.: 68,5" />
             </label>
           </div>
 
           <div class="crescimento-form__linha">
             <label>
               Perímetro cefálico (cm)
-              <input type="number" inputmode="decimal" min="20" max="65" step="0.1" formControlName="perimetroCefalicoCm" placeholder="Ex.: 43,2" />
+              <input type="text" inputmode="decimal" autocomplete="off" formControlName="perimetroCefalicoCm" placeholder="Ex.: 43,2" />
             </label>
             <label>
               Onde foi medido
