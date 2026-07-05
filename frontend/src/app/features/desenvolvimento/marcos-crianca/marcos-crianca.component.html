@@ -118,7 +118,7 @@
             </article>
             <article>
               <strong>{{ pontosDeAtencao().length }}</strong>
-              <span>pontos de atenção</span>
+              <span>itens para conversar</span>
             </article>
             <article>
               <strong>{{ marcosComObservacao().length }}</strong>
@@ -147,16 +147,19 @@
         </section>
 
         <section class="pueria-card apoio-card apoio-card--alerta">
-          <p class="pueria-eyebrow">Quando agir cedo</p>
+          <p class="pueria-eyebrow">Quando conversar</p>
           @if (pontosDeAtencao().length === 0) {
-            <h2>Sem pontos de atenção registrados</h2>
+            <h2>Sem dúvidas registradas nesta faixa</h2>
             <p>Continue acompanhando a rotina e registre quando surgir uma dúvida.</p>
           } @else {
-            <h2>Vale conversar com o pediatra</h2>
-            <p>Leve estes pontos para a consulta, especialmente se eles persistirem ou vierem junto de outras preocupações.</p>
+            <h2>Leve estas respostas para a consulta</h2>
+            <p>
+              Estes são marcos esperados para a faixa atual que foram marcados como “Ainda não” ou “Não tenho certeza”.
+              Isso não é diagnóstico; serve para orientar a conversa e decidir se é preciso acompanhar mais de perto.
+            </p>
             <ul>
               @for (ponto of pontosDeAtencao(); track ponto.id) {
-                <li>{{ ponto.descricao }}</li>
+                <li><strong>{{ labelStatus(ponto.status) }}:</strong> {{ ponto.descricao }}</li>
               }
             </ul>
           }

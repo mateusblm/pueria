@@ -85,9 +85,9 @@ export class AcompanhamentoComponent implements OnInit {
 
   labelPontosAtencao(total: number): string {
     if (total === 0) {
-      return 'Sem pontos de atenção';
+      return 'Sem itens para conversar';
     }
-    return total === 1 ? '1 ponto de atenção' : `${total} pontos de atenção`;
+    return total === 1 ? '1 item para conversar' : `${total} itens para conversar`;
   }
 
   calcularIdade(dataNascimento: string): string {

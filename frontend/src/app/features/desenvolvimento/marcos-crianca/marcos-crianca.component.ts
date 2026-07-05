@@ -230,9 +230,9 @@ export class MarcosCriancaComponent implements OnInit {
 
   labelPontosAtencao(total: number): string {
     if (total === 0) {
-      return 'Sem pontos';
+      return 'Sem itens';
     }
-    return total === 1 ? '1 ponto' : `${total} pontos`;
+    return total === 1 ? '1 item' : `${total} itens`;
   }
 
   dataResumo(): string {
@@ -243,7 +243,7 @@ export class MarcosCriancaComponent implements OnInit {
     if (this.pontosDeAtencao().length === 0) {
       return 'Manter acompanhamento de rotina, brincadeiras responsivas e novas observações conforme a criança cresce.';
     }
-    return 'Levar os pontos de atenção para a próxima consulta. Se houver perda de habilidades, preocupação persistente ou atraso claro, antecipar contato com o pediatra.';
+    return 'Levar as respostas marcadas como dúvida ou ainda não observadas para a próxima consulta. Se houver perda de habilidades, preocupação persistente ou atraso claro, antecipar contato com o pediatra.';
   }
 
   classeStatus(status: StatusMarcoDesenvolvimento): string {
