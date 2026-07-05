@@ -47,9 +47,6 @@
                 <div>
                   <h3>{{ grafico.titulo }}</h3>
                   <p>{{ grafico.resumo }}</p>
-                  @if (grafico.idadeCorrigida) {
-                    <span class="crescimento-grafico__idade">Idade corrigida considerada</span>
-                  }
                 </div>
                 <button
                   type="button"
@@ -87,18 +84,6 @@
               @if (detalhesTecnicosAberto(grafico.indicador)) {
                 <dl class="crescimento-grafico__tecnico">
                   <div>
-                    <dt>Idade usada na curva</dt>
-                    <dd>{{ grafico.tecnico.idadeUsada }}</dd>
-                  </div>
-                  <div>
-                    <dt>Idade cronológica</dt>
-                    <dd>{{ grafico.tecnico.idadeCronologica }}</dd>
-                  </div>
-                  <div>
-                    <dt>Critério</dt>
-                    <dd>{{ grafico.tecnico.criterioIdade }}</dd>
-                  </div>
-                  <div>
                     <dt>Percentil</dt>
                     <dd>{{ grafico.tecnico.percentil }}</dd>
                   </div>
@@ -119,7 +104,6 @@
 
               <div class="crescimento-grafico__legenda">
                   <span>Última medida: {{ grafico.dataAtual }}</span>
-                  <span>{{ grafico.idadeLegenda }}</span>
                   <span>{{ grafico.pontos.length }} medida(s)</span>
                 </div>
               </article>
