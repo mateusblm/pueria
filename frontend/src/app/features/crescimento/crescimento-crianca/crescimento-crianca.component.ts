@@ -9,10 +9,9 @@ import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, 
 import { CrescimentoService } from '../crescimento.service';
 
 type PontoGraficoCrescimento = {
-  x: number;
-  y: number;
   label: string;
   valor: string;
+  zScore: number;
 };
 
 type GraficoCrescimento = {
@@ -21,11 +20,11 @@ type GraficoCrescimento = {
   resumo: string;
   detalhe: string;
   classe: string;
-  linha: string;
+  valorAtual: string;
+  dataAtual: string;
+  marcador: number;
   pontos: PontoGraficoCrescimento[];
-  faixaY: number;
-  faixaAltura: number;
-  eixoY: number;
+  orientacao: string;
 };
 
 @Component({
@@ -316,28 +315,15 @@ export class CrescimentoCriancaComponent implements OnInit {
       return null;
     }
 
-    const largura = 320;
-    const altura = 170;
-    const margemEsquerda = 36;
-    const margemDireita = 14;
-    const margemTopo = 16;
-    const margemBaixo = 30;
-    const menorIdade = resultados[0].avaliacao.idadeDias;
-    const maiorIdade = resultados.at(-1)?.avaliacao.idadeDias ?? menorIdade;
-    const intervaloIdade = Math.max(1, maiorIdade - menorIdade);
     const zMin = -3.5;
     const zMax = 3.5;
-    const areaLargura = largura - margemEsquerda - margemDireita;
-    const areaAltura = altura - margemTopo - margemBaixo;
-    const yPorZ = (zScore: number) => margemTopo + ((zMax - Math.max(zMin, Math.min(zMax, zScore))) / (zMax - zMin)) * areaAltura;
+    const posicaoPorZ = (zScore: number) => ((Math.max(zMin, Math.min(zMax, zScore)) - zMin) / (zMax - zMin)) * 100;
 
     const pontos = resultados.map(({ avaliacao, resultado }) => {
-      const x = margemEsquerda + ((avaliacao.idadeDias - menorIdade) / intervaloIdade) * areaLargura;
       return {
-        x: Number(x.toFixed(2)),
-        y: Number(yPorZ(resultado.zScore).toFixed(2)),
         label: this.formatarData(avaliacao.dataMedicao),
-        valor: `${this.formatarNumero(resultado.valor, ` ${resultado.unidade}`)}`
+        valor: `${this.formatarNumero(resultado.valor, ` ${resultado.unidade}`)}`,
+        zScore: resultado.zScore
       };
     });
 
@@ -352,12 +338,19 @@ export class CrescimentoCriancaComponent implements OnInit {
       resumo: this.textoFamilia(recente),
       detalhe: `Detalhe para consulta: ${this.formatarPercentil(recente.percentil)}`,
       classe: this.classeResultado(recente),
-      linha: pontos.map((ponto) => `${ponto.x},${ponto.y}`).join(' '),
+      valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,
+      dataAtual: pontos.at(-1)?.label ?? '',
+      marcador: Number(posicaoPorZ(recente.zScore).toFixed(2)),
       pontos,
-      faixaY: Number(yPorZ(2).toFixed(2)),
-      faixaAltura: Number((yPorZ(-2) - yPorZ(2)).toFixed(2)),
-      eixoY: Number(yPorZ(0).toFixed(2))
+      orientacao: this.orientacaoGrafico(recente)
     };
+  }
+
+  private orientacaoGrafico(resultado: ResultadoCurvaCrescimento): string {
+    if (resultado.classificacao === 'FAIXA_ESPERADA') {
+      return 'Continue acompanhando nas próximas medidas.';
+    }
+    return 'Vale levar esse ponto para a próxima consulta.';
   }
 
   private tituloIndicador(indicador: string): string {

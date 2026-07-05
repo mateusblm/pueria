@@ -213,22 +213,27 @@
                 <span [class]="grafico.classe">{{ grafico.detalhe }}</span>
               </div>
 
-              <svg viewBox="0 0 320 170" role="img" [attr.aria-label]="'Gráfico de ' + grafico.titulo">
-                <rect x="36" [attr.y]="grafico.faixaY" width="270" [attr.height]="grafico.faixaAltura" rx="8" class="crescimento-grafico__faixa" />
-                <line x1="36" x2="306" [attr.y1]="grafico.eixoY" [attr.y2]="grafico.eixoY" class="crescimento-grafico__linha-base" />
-                <text x="4" y="28">acima</text>
-                <text x="4" [attr.y]="grafico.eixoY + 4">média</text>
-                <text x="4" y="148">abaixo</text>
-                <polyline [attr.points]="grafico.linha" class="crescimento-grafico__linha" />
-                @for (ponto of grafico.pontos; track ponto.label + ponto.valor) {
-                  <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="4.5" class="crescimento-grafico__ponto">
-                    <title>{{ ponto.label }} - {{ ponto.valor }}</title>
-                  </circle>
-                }
-              </svg>
+              <div class="crescimento-regua" role="img" [attr.aria-label]="'Posição de ' + grafico.titulo + ' na curva OMS'">
+                <div class="crescimento-regua__labels">
+                  <span>Abaixo</span>
+                  <span>Faixa esperada</span>
+                  <span>Acima</span>
+                </div>
+                <div class="crescimento-regua__trilho">
+                  <span class="crescimento-regua__baixo"></span>
+                  <span class="crescimento-regua__esperado"></span>
+                  <span class="crescimento-regua__alto"></span>
+                  <span class="crescimento-regua__marcador" [style.left.%]="grafico.marcador"></span>
+                </div>
+                <div class="crescimento-regua__valor" [style.left.%]="grafico.marcador">
+                  {{ grafico.valorAtual }}
+                </div>
+              </div>
+
+              <p class="crescimento-grafico__orientacao">{{ grafico.orientacao }}</p>
 
               <div class="crescimento-grafico__legenda">
-                <span>A faixa clara representa a região esperada na curva OMS.</span>
+                <span>Última medida: {{ grafico.dataAtual }}</span>
                 <span>{{ grafico.pontos.length }} medida(s)</span>
               </div>
             </article>

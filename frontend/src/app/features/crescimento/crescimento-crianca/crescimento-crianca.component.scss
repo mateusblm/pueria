@@ -241,48 +241,93 @@
   color: #6b5559;
 }
 
-.crescimento-grafico svg {
-  background: #fffaf8;
-  border-radius: 0.9rem;
-  display: block;
-  height: auto;
-  width: 100%;
-}
-
-.crescimento-grafico text {
-  fill: #8b7276;
-  font-size: 0.6rem;
-}
-
-.crescimento-grafico__faixa {
-  fill: #edf8ef;
-}
-
-.crescimento-grafico__linha-base {
-  stroke: #d7c4bf;
-  stroke-dasharray: 4 4;
-}
-
-.crescimento-grafico__linha {
-  fill: none;
-  stroke: #b63d4a;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 3;
-}
-
-.crescimento-grafico__ponto {
-  fill: #b63d4a;
-  stroke: #fff;
-  stroke-width: 2;
-}
-
 .crescimento-grafico__legenda {
   display: flex;
   flex-wrap: wrap;
   font-size: 0.85rem;
   gap: 0.5rem 1rem;
   justify-content: space-between;
+}
+
+.crescimento-regua {
+  display: grid;
+  gap: 0.55rem;
+  padding-top: 0.25rem;
+}
+
+.crescimento-regua__labels {
+  color: #6b5559;
+  display: grid;
+  font-size: 0.85rem;
+  grid-template-columns: 1fr 1.4fr 1fr;
+}
+
+.crescimento-regua__labels span:nth-child(2) {
+  text-align: center;
+}
+
+.crescimento-regua__labels span:last-child {
+  text-align: right;
+}
+
+.crescimento-regua__trilho {
+  border-radius: 999px;
+  display: grid;
+  grid-template-columns: 21.4fr 57.2fr 21.4fr;
+  height: 1.25rem;
+  overflow: visible;
+  position: relative;
+}
+
+.crescimento-regua__baixo,
+.crescimento-regua__alto,
+.crescimento-regua__esperado {
+  display: block;
+}
+
+.crescimento-regua__baixo {
+  background: #fff0d9;
+  border-radius: 999px 0 0 999px;
+}
+
+.crescimento-regua__esperado {
+  background: #dff3e5;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+.crescimento-regua__alto {
+  background: #fff0d9;
+  border-radius: 0 999px 999px 0;
+}
+
+.crescimento-regua__marcador {
+  background: #b63d4a;
+  border: 3px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 0.25rem 0.7rem rgba(71, 38, 44, 0.2);
+  height: 1.35rem;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.35rem;
+}
+
+.crescimento-regua__valor {
+  color: #4f3c40;
+  font-size: 0.9rem;
+  font-weight: 800;
+  position: relative;
+  transform: translateX(-50%);
+  width: fit-content;
+}
+
+.crescimento-grafico__orientacao {
+  background: #fff7f5;
+  border-radius: 0.85rem;
+  color: #5a4549;
+  margin: 0;
+  padding: 0.75rem;
 }
 
 .crescimento-medida__danger {
