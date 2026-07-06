@@ -30,8 +30,6 @@ type GraficoCrescimento = {
   pontos: PontoGraficoCrescimento[];
   linhaTrajetoria: string;
   ariaGrafico: string;
-  tendencia: string;
-  orientacao: string;
   tecnico: {
     percentil: string;
     zScore: string;
@@ -417,7 +415,6 @@ export class CrescimentoCriancaComponent implements OnInit {
       return null;
     }
     const recente = itemRecente.resultado;
-    const tendencia = this.descreverTendencia(pontos);
 
     return {
       indicador,
@@ -432,8 +429,6 @@ export class CrescimentoCriancaComponent implements OnInit {
       pontos,
       linhaTrajetoria: pontos.map((ponto) => `${ponto.x},${ponto.y}`).join(' '),
       ariaGrafico: `Trajetória de ${this.tituloIndicador(indicador)} na curva OMS com ${pontos.length} medida${pontos.length === 1 ? '' : 's'}.`,
-      tendencia: tendencia.texto,
-      orientacao: this.orientacaoGrafico(recente),
       tecnico: {
         percentil: this.formatarPercentil(recente.percentil),
         zScore: this.formatarZScore(recente.zScore),
@@ -441,38 +436,6 @@ export class CrescimentoCriancaComponent implements OnInit {
         fonte: recente.fonte
       }
     };
-  }
-
-  private descreverTendencia(pontos: PontoGraficoCrescimento[]): { texto: string } {
-    if (pontos.length < 2) {
-      return {
-        texto: 'Com a próxima medida, a evolução da curva começa a ficar mais clara.'
-      };
-    }
-
-    const anterior = pontos[pontos.length - 2];
-    const atual = pontos[pontos.length - 1];
-    const diferencaZ = atual.zScore - anterior.zScore;
-
-    if (Math.abs(diferencaZ) < 0.35) {
-      return {
-        texto: 'Segue em trajetória parecida com a medida anterior.'
-      };
-    }
-
-    const direcao = diferencaZ > 0 ? 'Subiu' : 'Desceu';
-    const intensidade = Math.abs(diferencaZ) >= 0.67 ? 'de forma mais evidente' : 'um pouco';
-
-    return {
-      texto: `${direcao} ${intensidade} em relação à medida anterior.`
-    };
-  }
-
-  private orientacaoGrafico(resultado: ResultadoCurvaCrescimento): string {
-    if (resultado.classificacao === 'FAIXA_ESPERADA') {
-      return 'Mantenha os registros nas consultas de rotina para observar se a trajetória permanece estável.';
-    }
-    return 'Leve essa medida para a próxima consulta, principalmente se a mudança se repetir.';
   }
 
   private tituloIndicador(indicador: string): string {
