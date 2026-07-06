@@ -111,6 +111,100 @@
         </label>
       </div>
 
+      <div class="crianca-form__section">
+        <p class="pueria-eyebrow">Gestação</p>
+        <div class="pueria-grid-2">
+          <label class="pueria-check">
+            <input type="checkbox" formControlName="preNatalRealizado" />
+            <span>Teve acompanhamento pré-natal.</span>
+          </label>
+
+          <label class="pueria-field">
+            <span>Número de consultas de pré-natal</span>
+            <input type="number" min="0" max="60" formControlName="consultasPreNatal" />
+          </label>
+        </div>
+
+        <div class="crianca-form__checks">
+          <label class="pueria-check"><input type="checkbox" formControlName="diabetesGestacional" /><span>Diabetes gestacional.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="hipertensaoGestacional" /><span>Pressão alta ou pré-eclâmpsia na gestação.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="infeccaoGestacional" /><span>Infecção importante na gestação.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="sangramentoGestacional" /><span>Sangramento importante na gestação.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="usoAlcoolGestacao" /><span>Exposição a álcool na gestação.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="usoTabacoGestacao" /><span>Exposição a tabaco na gestação.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="outrasExposicoesGestacao" /><span>Outras exposições relevantes informadas pela família.</span></label>
+        </div>
+
+        <label class="pueria-field">
+          <span>Observações da gestação</span>
+          <textarea rows="4" formControlName="observacoesGestacao"></textarea>
+        </label>
+      </div>
+
+      <div class="crianca-form__section">
+        <p class="pueria-eyebrow">Primeiros dias</p>
+        <div class="pueria-grid-2">
+          <label class="pueria-field">
+            <span>Alta hospitalar com quantos dias</span>
+            <input type="number" min="0" max="365" formControlName="diasAltaHospitalar" />
+          </label>
+
+          <label class="pueria-field">
+            <span>Alimentação inicial</span>
+            <select formControlName="alimentacaoInicial">
+              @for (alimentacao of alimentacoesIniciais; track alimentacao.value) {
+                <option [value]="alimentacao.value">{{ alimentacao.label }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="pueria-grid-2">
+          <label class="pueria-field">
+            <span>Teste do pezinho</span>
+            <select formControlName="testePezinho">
+              @for (status of statusTriagens; track status.value) {
+                <option [value]="status.value">{{ status.label }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="pueria-field">
+            <span>Teste da orelhinha</span>
+            <select formControlName="testeOrelhinha">
+              @for (status of statusTriagens; track status.value) {
+                <option [value]="status.value">{{ status.label }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="pueria-grid-2">
+          <label class="pueria-field">
+            <span>Teste do olhinho</span>
+            <select formControlName="testeOlhinho">
+              @for (status of statusTriagens; track status.value) {
+                <option [value]="status.value">{{ status.label }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="pueria-field">
+            <span>Teste do coraçãozinho</span>
+            <select formControlName="testeCoracaozinho">
+              @for (status of statusTriagens; track status.value) {
+                <option [value]="status.value">{{ status.label }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="crianca-form__checks">
+          <label class="pueria-check"><input type="checkbox" formControlName="amamentacaoPrimeiraHora" /><span>Mamou na primeira hora de vida.</span></label>
+          <label class="pueria-check"><input type="checkbox" formControlName="retornoHospitalarPrimeiraSemana" /><span>Precisou retornar ao hospital na primeira semana.</span></label>
+        </div>
+      </div>
+
       @if (erro()) {
         <div class="pueria-message pueria-message--erro crianca-form__erro-desktop">{{ erro() }}</div>
       }

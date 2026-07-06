@@ -29,6 +29,24 @@ final class CriancaMapper {
         entidade.setDificuldadeRespiratoria(crianca.isDificuldadeRespiratoria());
         entidade.setDificuldadeAmamentacao(crianca.isDificuldadeAmamentacao());
         entidade.setObservacoesNascimento(crianca.getObservacoesNascimento());
+        entidade.setPreNatalRealizado(crianca.isPreNatalRealizado());
+        entidade.setConsultasPreNatal(crianca.getConsultasPreNatal());
+        entidade.setDiabetesGestacional(crianca.isDiabetesGestacional());
+        entidade.setHipertensaoGestacional(crianca.isHipertensaoGestacional());
+        entidade.setInfeccaoGestacional(crianca.isInfeccaoGestacional());
+        entidade.setSangramentoGestacional(crianca.isSangramentoGestacional());
+        entidade.setUsoAlcoolGestacao(crianca.isUsoAlcoolGestacao());
+        entidade.setUsoTabacoGestacao(crianca.isUsoTabacoGestacao());
+        entidade.setOutrasExposicoesGestacao(crianca.isOutrasExposicoesGestacao());
+        entidade.setObservacoesGestacao(crianca.getObservacoesGestacao());
+        entidade.setDiasAltaHospitalar(crianca.getDiasAltaHospitalar());
+        entidade.setRetornoHospitalarPrimeiraSemana(crianca.isRetornoHospitalarPrimeiraSemana());
+        entidade.setTestePezinho(crianca.getTestePezinho());
+        entidade.setTesteOrelhinha(crianca.getTesteOrelhinha());
+        entidade.setTesteOlhinho(crianca.getTesteOlhinho());
+        entidade.setTesteCoracaozinho(crianca.getTesteCoracaozinho());
+        entidade.setAmamentacaoPrimeiraHora(crianca.isAmamentacaoPrimeiraHora());
+        entidade.setAlimentacaoInicial(crianca.getAlimentacaoInicial());
         entidade.setCriadoEm(crianca.getCriadoEm());
         entidade.setAtualizadoEm(crianca.getAtualizadoEm());
         return entidade;
@@ -55,6 +73,24 @@ final class CriancaMapper {
                 entidade.isDificuldadeRespiratoria(),
                 entidade.isDificuldadeAmamentacao(),
                 entidade.getObservacoesNascimento(),
+                entidade.isPreNatalRealizado(),
+                entidade.getConsultasPreNatal(),
+                entidade.isDiabetesGestacional(),
+                entidade.isHipertensaoGestacional(),
+                entidade.isInfeccaoGestacional(),
+                entidade.isSangramentoGestacional(),
+                entidade.isUsoAlcoolGestacao(),
+                entidade.isUsoTabacoGestacao(),
+                entidade.isOutrasExposicoesGestacao(),
+                entidade.getObservacoesGestacao(),
+                entidade.getDiasAltaHospitalar(),
+                entidade.isRetornoHospitalarPrimeiraSemana(),
+                entidade.getTestePezinho(),
+                entidade.getTesteOrelhinha(),
+                entidade.getTesteOlhinho(),
+                entidade.getTesteCoracaozinho(),
+                entidade.isAmamentacaoPrimeiraHora(),
+                entidade.getAlimentacaoInicial(),
                 entidade.getCriadoEm(),
                 entidade.getAtualizadoEm()
         );

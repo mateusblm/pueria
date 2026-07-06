@@ -1,7 +1,9 @@
 package br.com.pueria.pueria.criancas.infraestrutura.web;
 
+import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
+import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
 
 import java.math.BigDecimal;
@@ -29,6 +31,24 @@ public record CriancaResponse(
         boolean dificuldadeRespiratoria,
         boolean dificuldadeAmamentacao,
         String observacoesNascimento,
+        boolean preNatalRealizado,
+        Integer consultasPreNatal,
+        boolean diabetesGestacional,
+        boolean hipertensaoGestacional,
+        boolean infeccaoGestacional,
+        boolean sangramentoGestacional,
+        boolean usoAlcoolGestacao,
+        boolean usoTabacoGestacao,
+        boolean outrasExposicoesGestacao,
+        String observacoesGestacao,
+        Integer diasAltaHospitalar,
+        boolean retornoHospitalarPrimeiraSemana,
+        StatusTriagemNeonatal testePezinho,
+        StatusTriagemNeonatal testeOrelhinha,
+        StatusTriagemNeonatal testeOlhinho,
+        StatusTriagemNeonatal testeCoracaozinho,
+        boolean amamentacaoPrimeiraHora,
+        AlimentacaoInicial alimentacaoInicial,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm
 ) {
@@ -54,6 +74,24 @@ public record CriancaResponse(
                 crianca.isDificuldadeRespiratoria(),
                 crianca.isDificuldadeAmamentacao(),
                 crianca.getObservacoesNascimento(),
+                crianca.isPreNatalRealizado(),
+                crianca.getConsultasPreNatal(),
+                crianca.isDiabetesGestacional(),
+                crianca.isHipertensaoGestacional(),
+                crianca.isInfeccaoGestacional(),
+                crianca.isSangramentoGestacional(),
+                crianca.isUsoAlcoolGestacao(),
+                crianca.isUsoTabacoGestacao(),
+                crianca.isOutrasExposicoesGestacao(),
+                crianca.getObservacoesGestacao(),
+                crianca.getDiasAltaHospitalar(),
+                crianca.isRetornoHospitalarPrimeiraSemana(),
+                crianca.getTestePezinho(),
+                crianca.getTesteOrelhinha(),
+                crianca.getTesteOlhinho(),
+                crianca.getTesteCoracaozinho(),
+                crianca.isAmamentacaoPrimeiraHora(),
+                crianca.getAlimentacaoInicial(),
                 crianca.getCriadoEm(),
                 crianca.getAtualizadoEm()
         );

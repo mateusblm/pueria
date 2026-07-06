@@ -155,6 +155,25 @@ export class DetalheCriancaComponent implements OnInit {
     return labels[tipoParto] ?? tipoParto;
   }
 
+  labelTriagem(status: string): string {
+    const labels: Record<string, string> = {
+      REALIZADO: 'Realizado',
+      PENDENTE: 'Pendente',
+      NAO_INFORMADO: 'Não informado'
+    };
+    return labels[status] ?? status;
+  }
+
+  labelAlimentacaoInicial(alimentacao: string): string {
+    const labels: Record<string, string> = {
+      ALEITAMENTO_MATERNO_EXCLUSIVO: 'Aleitamento materno exclusivo',
+      ALEITAMENTO_MISTO: 'Aleitamento misto',
+      FORMULA_INFANTIL: 'Fórmula infantil',
+      NAO_INFORMADO: 'Não informado'
+    };
+    return labels[alimentacao] ?? alimentacao;
+  }
+
   listarIntercorrencias(crianca: Crianca): string {
     const pontos = [
       crianca.utiNeonatal ? 'UTI neonatal' : '',
@@ -162,6 +181,20 @@ export class DetalheCriancaComponent implements OnInit {
       crianca.ictericiaNeonatal ? 'icterícia neonatal' : '',
       crianca.dificuldadeRespiratoria ? 'dificuldade respiratória' : '',
       crianca.dificuldadeAmamentacao ? 'dificuldade para mamar' : ''
+    ].filter(Boolean);
+
+    return pontos.length > 0 ? pontos.join(', ') : 'Sem intercorrências registradas';
+  }
+
+  listarPontosGestacao(crianca: Crianca): string {
+    const pontos = [
+      crianca.diabetesGestacional ? 'diabetes gestacional' : '',
+      crianca.hipertensaoGestacional ? 'pressão alta ou pré-eclâmpsia' : '',
+      crianca.infeccaoGestacional ? 'infecção importante' : '',
+      crianca.sangramentoGestacional ? 'sangramento importante' : '',
+      crianca.usoAlcoolGestacao ? 'exposição a álcool' : '',
+      crianca.usoTabacoGestacao ? 'exposição a tabaco' : '',
+      crianca.outrasExposicoesGestacao ? 'outras exposições relevantes' : ''
     ].filter(Boolean);
 
     return pontos.length > 0 ? pontos.join(', ') : 'Sem intercorrências registradas';

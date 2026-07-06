@@ -1,6 +1,8 @@
 package br.com.pueria.pueria.criancas.aplicacao;
 
+import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
+import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
 
 import java.math.BigDecimal;
@@ -27,7 +29,25 @@ public record AtualizarCriancaComando(
         boolean ictericiaNeonatal,
         boolean dificuldadeRespiratoria,
         boolean dificuldadeAmamentacao,
-        String observacoesNascimento
+        String observacoesNascimento,
+        boolean preNatalRealizado,
+        Integer consultasPreNatal,
+        boolean diabetesGestacional,
+        boolean hipertensaoGestacional,
+        boolean infeccaoGestacional,
+        boolean sangramentoGestacional,
+        boolean usoAlcoolGestacao,
+        boolean usoTabacoGestacao,
+        boolean outrasExposicoesGestacao,
+        String observacoesGestacao,
+        Integer diasAltaHospitalar,
+        boolean retornoHospitalarPrimeiraSemana,
+        StatusTriagemNeonatal testePezinho,
+        StatusTriagemNeonatal testeOrelhinha,
+        StatusTriagemNeonatal testeOlhinho,
+        StatusTriagemNeonatal testeCoracaozinho,
+        boolean amamentacaoPrimeiraHora,
+        AlimentacaoInicial alimentacaoInicial
 ) {
     public AtualizarCriancaComando(
             UUID id,
@@ -59,7 +79,25 @@ public record AtualizarCriancaComando(
                 false,
                 false,
                 false,
-                null
+                null,
+                false,
+                null,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                null,
+                null,
+                false,
+                StatusTriagemNeonatal.NAO_INFORMADO,
+                StatusTriagemNeonatal.NAO_INFORMADO,
+                StatusTriagemNeonatal.NAO_INFORMADO,
+                StatusTriagemNeonatal.NAO_INFORMADO,
+                false,
+                AlimentacaoInicial.NAO_INFORMADO
         );
     }
 }

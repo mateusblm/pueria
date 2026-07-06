@@ -110,6 +110,55 @@
       </article>
 
       <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Gestação e primeiros dias</p>
+        <dl>
+          <div>
+            <dt>Pré-natal</dt>
+            <dd>{{ crianca.preNatalRealizado ? 'Realizado' : 'Não informado' }}</dd>
+          </div>
+          <div>
+            <dt>Consultas de pré-natal</dt>
+            <dd>{{ crianca.consultasPreNatal ?? 'Não informado' }}</dd>
+          </div>
+          <div>
+            <dt>Gestação</dt>
+            <dd>{{ listarPontosGestacao(crianca) }}</dd>
+          </div>
+          @if (crianca.observacoesGestacao) {
+            <div>
+              <dt>Observações da gestação</dt>
+              <dd>{{ crianca.observacoesGestacao }}</dd>
+            </div>
+          }
+          <div>
+            <dt>Alta hospitalar</dt>
+            <dd>{{ crianca.diasAltaHospitalar == null ? 'Não informado' : crianca.diasAltaHospitalar + ' dia(s)' }}</dd>
+          </div>
+          <div>
+            <dt>Retorno ao hospital</dt>
+            <dd>{{ crianca.retornoHospitalarPrimeiraSemana ? 'Na primeira semana' : 'Não registrado' }}</dd>
+          </div>
+          <div>
+            <dt>Triagens neonatais</dt>
+            <dd>
+              Pezinho: {{ labelTriagem(crianca.testePezinho) }} ·
+              Orelhinha: {{ labelTriagem(crianca.testeOrelhinha) }} ·
+              Olhinho: {{ labelTriagem(crianca.testeOlhinho) }} ·
+              Coraçãozinho: {{ labelTriagem(crianca.testeCoracaozinho) }}
+            </dd>
+          </div>
+          <div>
+            <dt>Alimentação inicial</dt>
+            <dd>{{ labelAlimentacaoInicial(crianca.alimentacaoInicial) }}</dd>
+          </div>
+          <div>
+            <dt>Primeira hora</dt>
+            <dd>{{ crianca.amamentacaoPrimeiraHora ? 'Mamou na primeira hora de vida' : 'Não informado' }}</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="pueria-card detalhe-card">
         <p class="pueria-eyebrow">Cuidado preventivo</p>
         <h2>Marcos do desenvolvimento</h2>
         <p>

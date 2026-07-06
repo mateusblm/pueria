@@ -1,7 +1,9 @@
 package br.com.pueria.pueria.criancas.infraestrutura.web;
 
 import br.com.pueria.pueria.criancas.aplicacao.CriarCriancaComando;
+import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
+import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
 import br.com.pueria.pueria.responsaveis.dominio.Parentesco;
 import jakarta.validation.constraints.AssertTrue;
@@ -27,7 +29,6 @@ public record CriarCriancaRequest(
         LocalDate dataNascimento,
 
         Sexo sexo,
-
         boolean prematura,
 
         @NotNull(message = "As semanas gestacionais são obrigatórias.")
@@ -75,6 +76,35 @@ public record CriarCriancaRequest(
         @Size(max = 1000, message = "As observações do nascimento devem ter no máximo 1000 caracteres.")
         String observacoesNascimento,
 
+        boolean preNatalRealizado,
+
+        @Min(value = 0, message = "O número de consultas de pré-natal está fora do limite operacional permitido.")
+        @Max(value = 60, message = "O número de consultas de pré-natal está fora do limite operacional permitido.")
+        Integer consultasPreNatal,
+
+        boolean diabetesGestacional,
+        boolean hipertensaoGestacional,
+        boolean infeccaoGestacional,
+        boolean sangramentoGestacional,
+        boolean usoAlcoolGestacao,
+        boolean usoTabacoGestacao,
+        boolean outrasExposicoesGestacao,
+
+        @Size(max = 1000, message = "As observações da gestação devem ter no máximo 1000 caracteres.")
+        String observacoesGestacao,
+
+        @Min(value = 0, message = "Os dias até a alta hospitalar estão fora do limite operacional permitido.")
+        @Max(value = 365, message = "Os dias até a alta hospitalar estão fora do limite operacional permitido.")
+        Integer diasAltaHospitalar,
+
+        boolean retornoHospitalarPrimeiraSemana,
+        StatusTriagemNeonatal testePezinho,
+        StatusTriagemNeonatal testeOrelhinha,
+        StatusTriagemNeonatal testeOlhinho,
+        StatusTriagemNeonatal testeCoracaozinho,
+        boolean amamentacaoPrimeiraHora,
+        AlimentacaoInicial alimentacaoInicial,
+
         @NotNull(message = "O parentesco é obrigatório.")
         Parentesco parentesco,
 
@@ -88,28 +118,15 @@ public record CriarCriancaRequest(
 
     public CriarCriancaComando paraComando(String emailResponsavel) {
         return new CriarCriancaComando(
-                emailResponsavel,
-                nome,
-                dataNascimento,
-                sexo,
-                prematura,
-                semanasGestacionais,
-                diasGestacionais,
-                tipoParto,
-                pesoNascimentoGramas,
-                comprimentoNascimentoCm,
-                perimetroCefalicoNascimentoCm,
-                apgarUmMinuto,
-                apgarCincoMinutos,
-                utiNeonatal,
-                reanimacaoNeonatal,
-                ictericiaNeonatal,
-                dificuldadeRespiratoria,
-                dificuldadeAmamentacao,
-                observacoesNascimento,
-                parentesco,
-                aceiteConsentimento,
-                versaoTermoConsentimento
+                emailResponsavel, nome, dataNascimento, sexo, prematura, semanasGestacionais, diasGestacionais,
+                tipoParto, pesoNascimentoGramas, comprimentoNascimentoCm, perimetroCefalicoNascimentoCm,
+                apgarUmMinuto, apgarCincoMinutos, utiNeonatal, reanimacaoNeonatal, ictericiaNeonatal,
+                dificuldadeRespiratoria, dificuldadeAmamentacao, observacoesNascimento, preNatalRealizado,
+                consultasPreNatal, diabetesGestacional, hipertensaoGestacional, infeccaoGestacional,
+                sangramentoGestacional, usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao,
+                observacoesGestacao, diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho,
+                testeOrelhinha, testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial,
+                parentesco, aceiteConsentimento, versaoTermoConsentimento
         );
     }
 }

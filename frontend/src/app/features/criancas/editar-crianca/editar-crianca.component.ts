@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { Crianca, Sexo, TipoParto } from '../../../shared/models/crianca.model';
+import { AlimentacaoInicial, Crianca, Sexo, StatusTriagemNeonatal, TipoParto } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
 
 @Component({
@@ -33,6 +33,19 @@ export class EditarCriancaComponent implements OnInit {
     { label: 'Não informado', value: 'NAO_INFORMADO' }
   ];
 
+  readonly statusTriagens: { label: string; value: StatusTriagemNeonatal }[] = [
+    { label: 'Realizado', value: 'REALIZADO' },
+    { label: 'Pendente', value: 'PENDENTE' },
+    { label: 'Não informado', value: 'NAO_INFORMADO' }
+  ];
+
+  readonly alimentacoesIniciais: { label: string; value: AlimentacaoInicial }[] = [
+    { label: 'Aleitamento materno exclusivo', value: 'ALEITAMENTO_MATERNO_EXCLUSIVO' },
+    { label: 'Aleitamento misto', value: 'ALEITAMENTO_MISTO' },
+    { label: 'Fórmula infantil', value: 'FORMULA_INFANTIL' },
+    { label: 'Não informado', value: 'NAO_INFORMADO' }
+  ];
+
   readonly form = this.formBuilder.group({
     nome: this.formBuilder.nonNullable.control('', [Validators.required, Validators.maxLength(150)]),
     dataNascimento: this.formBuilder.nonNullable.control('', [Validators.required]),
@@ -51,7 +64,25 @@ export class EditarCriancaComponent implements OnInit {
     ictericiaNeonatal: this.formBuilder.nonNullable.control(false),
     dificuldadeRespiratoria: this.formBuilder.nonNullable.control(false),
     dificuldadeAmamentacao: this.formBuilder.nonNullable.control(false),
-    observacoesNascimento: this.formBuilder.nonNullable.control('', [Validators.maxLength(1000)])
+    observacoesNascimento: this.formBuilder.nonNullable.control('', [Validators.maxLength(1000)]),
+    preNatalRealizado: this.formBuilder.nonNullable.control(false),
+    consultasPreNatal: this.formBuilder.control<number | null>(null, [Validators.min(0), Validators.max(60)]),
+    diabetesGestacional: this.formBuilder.nonNullable.control(false),
+    hipertensaoGestacional: this.formBuilder.nonNullable.control(false),
+    infeccaoGestacional: this.formBuilder.nonNullable.control(false),
+    sangramentoGestacional: this.formBuilder.nonNullable.control(false),
+    usoAlcoolGestacao: this.formBuilder.nonNullable.control(false),
+    usoTabacoGestacao: this.formBuilder.nonNullable.control(false),
+    outrasExposicoesGestacao: this.formBuilder.nonNullable.control(false),
+    observacoesGestacao: this.formBuilder.nonNullable.control('', [Validators.maxLength(1000)]),
+    diasAltaHospitalar: this.formBuilder.control<number | null>(null, [Validators.min(0), Validators.max(365)]),
+    retornoHospitalarPrimeiraSemana: this.formBuilder.nonNullable.control(false),
+    testePezinho: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
+    testeOrelhinha: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
+    testeOlhinho: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
+    testeCoracaozinho: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
+    amamentacaoPrimeiraHora: this.formBuilder.nonNullable.control(false),
+    alimentacaoInicial: this.formBuilder.nonNullable.control<AlimentacaoInicial>('NAO_INFORMADO')
   });
 
   readonly crianca = signal<Crianca | null>(null);
@@ -90,7 +121,25 @@ export class EditarCriancaComponent implements OnInit {
             ictericiaNeonatal: crianca.ictericiaNeonatal,
             dificuldadeRespiratoria: crianca.dificuldadeRespiratoria,
             dificuldadeAmamentacao: crianca.dificuldadeAmamentacao,
-            observacoesNascimento: crianca.observacoesNascimento ?? ''
+            observacoesNascimento: crianca.observacoesNascimento ?? '',
+            preNatalRealizado: crianca.preNatalRealizado,
+            consultasPreNatal: crianca.consultasPreNatal ?? null,
+            diabetesGestacional: crianca.diabetesGestacional,
+            hipertensaoGestacional: crianca.hipertensaoGestacional,
+            infeccaoGestacional: crianca.infeccaoGestacional,
+            sangramentoGestacional: crianca.sangramentoGestacional,
+            usoAlcoolGestacao: crianca.usoAlcoolGestacao,
+            usoTabacoGestacao: crianca.usoTabacoGestacao,
+            outrasExposicoesGestacao: crianca.outrasExposicoesGestacao,
+            observacoesGestacao: crianca.observacoesGestacao ?? '',
+            diasAltaHospitalar: crianca.diasAltaHospitalar ?? null,
+            retornoHospitalarPrimeiraSemana: crianca.retornoHospitalarPrimeiraSemana,
+            testePezinho: crianca.testePezinho,
+            testeOrelhinha: crianca.testeOrelhinha,
+            testeOlhinho: crianca.testeOlhinho,
+            testeCoracaozinho: crianca.testeCoracaozinho,
+            amamentacaoPrimeiraHora: crianca.amamentacaoPrimeiraHora,
+            alimentacaoInicial: crianca.alimentacaoInicial
           });
         },
         error: (erro: HttpErrorResponse) => {
@@ -150,7 +199,25 @@ export class EditarCriancaComponent implements OnInit {
       ictericiaNeonatal: valor.ictericiaNeonatal,
       dificuldadeRespiratoria: valor.dificuldadeRespiratoria,
       dificuldadeAmamentacao: valor.dificuldadeAmamentacao,
-      observacoesNascimento: valor.observacoesNascimento.trim() || null
+      observacoesNascimento: valor.observacoesNascimento.trim() || null,
+      preNatalRealizado: valor.preNatalRealizado,
+      consultasPreNatal: valor.consultasPreNatal,
+      diabetesGestacional: valor.diabetesGestacional,
+      hipertensaoGestacional: valor.hipertensaoGestacional,
+      infeccaoGestacional: valor.infeccaoGestacional,
+      sangramentoGestacional: valor.sangramentoGestacional,
+      usoAlcoolGestacao: valor.usoAlcoolGestacao,
+      usoTabacoGestacao: valor.usoTabacoGestacao,
+      outrasExposicoesGestacao: valor.outrasExposicoesGestacao,
+      observacoesGestacao: valor.observacoesGestacao.trim() || null,
+      diasAltaHospitalar: valor.diasAltaHospitalar,
+      retornoHospitalarPrimeiraSemana: valor.retornoHospitalarPrimeiraSemana,
+      testePezinho: valor.testePezinho,
+      testeOrelhinha: valor.testeOrelhinha,
+      testeOlhinho: valor.testeOlhinho,
+      testeCoracaozinho: valor.testeCoracaozinho,
+      amamentacaoPrimeiraHora: valor.amamentacaoPrimeiraHora,
+      alimentacaoInicial: valor.alimentacaoInicial
     })
       .pipe(finalize(() => this.salvando.set(false)))
       .subscribe({

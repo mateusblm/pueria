@@ -63,7 +63,25 @@ public class CriarCriancaUseCase {
                 comando.ictericiaNeonatal(),
                 comando.dificuldadeRespiratoria(),
                 comando.dificuldadeAmamentacao(),
-                comando.observacoesNascimento()
+                comando.observacoesNascimento(),
+                comando.preNatalRealizado(),
+                comando.consultasPreNatal(),
+                comando.diabetesGestacional(),
+                comando.hipertensaoGestacional(),
+                comando.infeccaoGestacional(),
+                comando.sangramentoGestacional(),
+                comando.usoAlcoolGestacao(),
+                comando.usoTabacoGestacao(),
+                comando.outrasExposicoesGestacao(),
+                comando.observacoesGestacao(),
+                comando.diasAltaHospitalar(),
+                comando.retornoHospitalarPrimeiraSemana(),
+                comando.testePezinho(),
+                comando.testeOrelhinha(),
+                comando.testeOlhinho(),
+                comando.testeCoracaozinho(),
+                comando.amamentacaoPrimeiraHora(),
+                comando.alimentacaoInicial()
         );
 
         Crianca criancaSalva = criancaRepositorio.salvar(crianca);
