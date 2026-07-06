@@ -4,63 +4,128 @@
     <p class="pueria-eyebrow">Novo perfil</p>
     <h1 class="pueria-title">Adicionar criança</h1>
     <p class="pueria-subtitle">
-      Cadastre as informações iniciais com atenção. Elas ajudam a organizar uma linha do tempo preventiva desde o primeiro registro.
+      Registre os dados iniciais para que o acompanhamento comece com o contexto do nascimento.
     </p>
   </div>
 
   <form class="pueria-card pueria-form crianca-form" [formGroup]="form" (ngSubmit)="cadastrar()">
-    <label class="pueria-field">
-      <span>Nome da criança</span>
-      <input type="text" formControlName="nome" autocomplete="off" />
-    </label>
-
-    <div class="pueria-grid-2">
+    <div class="crianca-form__section">
+      <p class="pueria-eyebrow">Dados da criança</p>
       <label class="pueria-field">
-        <span>Data de nascimento</span>
-        <input type="date" formControlName="dataNascimento" [min]="dataMinimaNascimento" [max]="dataMaximaNascimento" />
-        <small>O cadastro atual contempla crianças de 0 a 6 anos.</small>
+        <span>Nome da criança</span>
+        <input type="text" formControlName="nome" autocomplete="off" />
       </label>
 
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Data de nascimento</span>
+          <input type="date" formControlName="dataNascimento" [min]="dataMinimaNascimento" [max]="dataMaximaNascimento" />
+          <small>O cadastro atual contempla crianças de 0 a 6 anos.</small>
+        </label>
+
+        <label class="pueria-field">
+          <span>Sexo</span>
+          <select formControlName="sexo">
+            @for (sexo of sexos; track sexo.value) {
+              <option [value]="sexo.value">{{ sexo.label }}</option>
+            }
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="crianca-form__section">
+      <p class="pueria-eyebrow">Parto e nascimento</p>
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Semanas de gestação</span>
+          <input type="number" min="22" max="42" formControlName="semanasGestacionais" />
+        </label>
+
+        <label class="pueria-field">
+          <span>Dias além da semana</span>
+          <input type="number" min="0" max="6" formControlName="diasGestacionais" />
+        </label>
+      </div>
+
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Tipo de parto</span>
+          <select formControlName="tipoParto">
+            @for (tipoParto of tiposParto; track tipoParto.value) {
+              <option [value]="tipoParto.value">{{ tipoParto.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="pueria-field">
+          <span>Peso ao nascer em gramas</span>
+          <input type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" placeholder="Ex.: 3200" />
+        </label>
+      </div>
+
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Comprimento ao nascer</span>
+          <input type="text" inputmode="decimal" formControlName="comprimentoNascimentoCm" placeholder="Ex.: 49,5 cm" />
+        </label>
+
+        <label class="pueria-field">
+          <span>Perímetro cefálico ao nascer</span>
+          <input type="text" inputmode="decimal" formControlName="perimetroCefalicoNascimentoCm" placeholder="Ex.: 34,2 cm" />
+        </label>
+      </div>
+
+      <label class="pueria-check">
+        <input type="checkbox" formControlName="prematura" />
+        <span>Nasceu antes de 37 semanas de gestação.</span>
+      </label>
+    </div>
+
+    <div class="crianca-form__section">
+      <p class="pueria-eyebrow">Primeiras horas</p>
+      <div class="pueria-grid-2">
+        <label class="pueria-field">
+          <span>Apgar no 1º minuto</span>
+          <input type="number" min="0" max="10" formControlName="apgarUmMinuto" />
+        </label>
+
+        <label class="pueria-field">
+          <span>Apgar no 5º minuto</span>
+          <input type="number" min="0" max="10" formControlName="apgarCincoMinutos" />
+        </label>
+      </div>
+
+      <div class="crianca-form__checks">
+        <label class="pueria-check"><input type="checkbox" formControlName="utiNeonatal" /><span>Precisou de UTI neonatal.</span></label>
+        <label class="pueria-check"><input type="checkbox" formControlName="reanimacaoNeonatal" /><span>Precisou de reanimação ao nascer.</span></label>
+        <label class="pueria-check"><input type="checkbox" formControlName="ictericiaNeonatal" /><span>Teve icterícia no período neonatal.</span></label>
+        <label class="pueria-check"><input type="checkbox" formControlName="dificuldadeRespiratoria" /><span>Teve dificuldade respiratória.</span></label>
+        <label class="pueria-check"><input type="checkbox" formControlName="dificuldadeAmamentacao" /><span>Teve dificuldade importante para mamar.</span></label>
+      </div>
+
       <label class="pueria-field">
-        <span>Sexo</span>
-        <select formControlName="sexo">
-          @for (sexo of sexos; track sexo.value) {
-            <option [value]="sexo.value">{{ sexo.label }}</option>
+        <span>Observações do nascimento</span>
+        <textarea rows="4" formControlName="observacoesNascimento" placeholder="Ex.: internação, exames, orientações recebidas na maternidade"></textarea>
+      </label>
+    </div>
+
+    <div class="crianca-form__section">
+      <p class="pueria-eyebrow">Responsável</p>
+      <label class="pueria-field">
+        <span>Seu vínculo com a criança</span>
+        <select formControlName="parentesco">
+          @for (parentesco of parentescos; track parentesco.value) {
+            <option [value]="parentesco.value">{{ parentesco.label }}</option>
           }
         </select>
       </label>
-    </div>
 
-    <div class="pueria-grid-2">
-      <label class="pueria-field">
-        <span>Semanas gestacionais</span>
-        <input type="number" min="22" max="42" formControlName="semanasGestacionais" />
-      </label>
-
-      <label class="pueria-field">
-        <span>Peso ao nascer em gramas</span>
-        <input type="number" min="300" max="7000" formControlName="pesoNascimentoGramas" />
+      <label class="pueria-check">
+        <input type="checkbox" formControlName="aceiteConsentimento" />
+        <span>Confirmo que sou responsável ou autorizado a registrar informações para este acompanhamento.</span>
       </label>
     </div>
-
-    <label class="pueria-check">
-      <input type="checkbox" formControlName="prematura" />
-      <span>A criança nasceu antes de 37 semanas gestacionais.</span>
-    </label>
-
-    <label class="pueria-field">
-      <span>Seu vínculo com a criança</span>
-      <select formControlName="parentesco">
-        @for (parentesco of parentescos; track parentesco.value) {
-          <option [value]="parentesco.value">{{ parentesco.label }}</option>
-        }
-      </select>
-    </label>
-
-    <label class="pueria-check">
-      <input type="checkbox" formControlName="aceiteConsentimento" />
-      <span>Confirmo que sou responsável ou autorizado a registrar informações para este acompanhamento.</span>
-    </label>
 
     @if (erro) {
       <div class="pueria-message pueria-message--erro crianca-form__erro-desktop">{{ erro }}</div>

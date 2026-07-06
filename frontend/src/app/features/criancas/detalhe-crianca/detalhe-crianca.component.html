@@ -60,20 +60,52 @@
           </div>
           <div>
             <dt>Sexo</dt>
-            <dd>{{ crianca.sexo || 'Não informado' }}</dd>
+            <dd>{{ labelSexo(crianca.sexo) }}</dd>
           </div>
           <div>
             <dt>Prematuridade</dt>
             <dd>{{ crianca.prematura ? 'Sim' : 'Não' }}</dd>
           </div>
+        </dl>
+      </article>
+
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Parto e nascimento</p>
+        <dl>
           <div>
-            <dt>Semanas gestacionais</dt>
-            <dd>{{ crianca.semanasGestacionais }}</dd>
+            <dt>Idade gestacional</dt>
+            <dd>{{ formatarIdadeGestacional(crianca.semanasGestacionais, crianca.diasGestacionais) }}</dd>
+          </div>
+          <div>
+            <dt>Tipo de parto</dt>
+            <dd>{{ labelTipoParto(crianca.tipoParto) }}</dd>
           </div>
           <div>
             <dt>Peso ao nascer</dt>
             <dd>{{ formatarPeso(crianca.pesoNascimentoGramas) }}</dd>
           </div>
+          <div>
+            <dt>Comprimento ao nascer</dt>
+            <dd>{{ formatarMedida(crianca.comprimentoNascimentoCm, 'cm') }}</dd>
+          </div>
+          <div>
+            <dt>Perímetro cefálico ao nascer</dt>
+            <dd>{{ formatarMedida(crianca.perimetroCefalicoNascimentoCm, 'cm') }}</dd>
+          </div>
+          <div>
+            <dt>Apgar</dt>
+            <dd>1º min: {{ formatarApgar(crianca.apgarUmMinuto) }} · 5º min: {{ formatarApgar(crianca.apgarCincoMinutos) }}</dd>
+          </div>
+          <div>
+            <dt>Primeiras horas</dt>
+            <dd>{{ listarIntercorrencias(crianca) }}</dd>
+          </div>
+          @if (crianca.observacoesNascimento) {
+            <div>
+              <dt>Observações</dt>
+              <dd>{{ crianca.observacoesNascimento }}</dd>
+            </div>
+          }
         </dl>
       </article>
 

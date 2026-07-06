@@ -2,6 +2,7 @@ package br.com.pueria.pueria.criancas.dominio;
 
 import br.com.pueria.pueria.comum.excecao.RegraDominioException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -12,10 +13,19 @@ import java.util.UUID;
 public class Crianca {
 
     private static final int TAMANHO_MAXIMO_NOME = 150;
+    private static final int TAMANHO_MAXIMO_OBSERVACOES_NASCIMENTO = 1000;
     private static final int SEMANAS_GESTACIONAIS_MINIMAS = 22;
     private static final int SEMANAS_GESTACIONAIS_MAXIMAS = 42;
+    private static final int DIAS_GESTACIONAIS_MINIMOS = 0;
+    private static final int DIAS_GESTACIONAIS_MAXIMOS = 6;
     private static final int LIMITE_MINIMO_PESO_NASCIMENTO_GRAMAS = 300;
     private static final int LIMITE_MAXIMO_PESO_NASCIMENTO_GRAMAS = 7000;
+    private static final BigDecimal COMPRIMENTO_NASCIMENTO_MINIMO_CM = new BigDecimal("20.0");
+    private static final BigDecimal COMPRIMENTO_NASCIMENTO_MAXIMO_CM = new BigDecimal("70.0");
+    private static final BigDecimal PERIMETRO_CEFALICO_NASCIMENTO_MINIMO_CM = new BigDecimal("20.0");
+    private static final BigDecimal PERIMETRO_CEFALICO_NASCIMENTO_MAXIMO_CM = new BigDecimal("50.0");
+    private static final int APGAR_MINIMO = 0;
+    private static final int APGAR_MAXIMO = 10;
     private static final int IDADE_MAXIMA_ANOS_MVP = 6;
 
     private final UUID id;
@@ -25,7 +35,19 @@ public class Crianca {
     private final Sexo sexo;
     private final boolean prematura;
     private final Integer semanasGestacionais;
+    private final Integer diasGestacionais;
+    private final TipoParto tipoParto;
     private final Integer pesoNascimentoGramas;
+    private final BigDecimal comprimentoNascimentoCm;
+    private final BigDecimal perimetroCefalicoNascimentoCm;
+    private final Integer apgarUmMinuto;
+    private final Integer apgarCincoMinutos;
+    private final boolean utiNeonatal;
+    private final boolean reanimacaoNeonatal;
+    private final boolean ictericiaNeonatal;
+    private final boolean dificuldadeRespiratoria;
+    private final boolean dificuldadeAmamentacao;
+    private final String observacoesNascimento;
     private final LocalDateTime criadoEm;
     private final LocalDateTime atualizadoEm;
 
@@ -36,7 +58,19 @@ public class Crianca {
             Sexo sexo,
             boolean prematura,
             Integer semanasGestacionais,
+            Integer diasGestacionais,
+            TipoParto tipoParto,
             Integer pesoNascimentoGramas,
+            BigDecimal comprimentoNascimentoCm,
+            BigDecimal perimetroCefalicoNascimentoCm,
+            Integer apgarUmMinuto,
+            Integer apgarCincoMinutos,
+            boolean utiNeonatal,
+            boolean reanimacaoNeonatal,
+            boolean ictericiaNeonatal,
+            boolean dificuldadeRespiratoria,
+            boolean dificuldadeAmamentacao,
+            String observacoesNascimento,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm,
             boolean validarEscopoEtarioMvp
@@ -48,7 +82,29 @@ public class Crianca {
         this.sexo = sexo == null ? Sexo.NAO_INFORMADO : sexo;
         this.prematura = prematura;
         this.semanasGestacionais = validarSemanasGestacionais(prematura, semanasGestacionais);
+        this.diasGestacionais = validarDiasGestacionais(diasGestacionais);
+        this.tipoParto = tipoParto == null ? TipoParto.NAO_INFORMADO : tipoParto;
         this.pesoNascimentoGramas = validarPesoNascimento(pesoNascimentoGramas);
+        this.comprimentoNascimentoCm = validarMedidaNascimento(
+                comprimentoNascimentoCm,
+                COMPRIMENTO_NASCIMENTO_MINIMO_CM,
+                COMPRIMENTO_NASCIMENTO_MAXIMO_CM,
+                "comprimento ao nascer"
+        );
+        this.perimetroCefalicoNascimentoCm = validarMedidaNascimento(
+                perimetroCefalicoNascimentoCm,
+                PERIMETRO_CEFALICO_NASCIMENTO_MINIMO_CM,
+                PERIMETRO_CEFALICO_NASCIMENTO_MAXIMO_CM,
+                "perímetro cefálico ao nascer"
+        );
+        this.apgarUmMinuto = validarApgar(apgarUmMinuto, "Apgar no 1º minuto");
+        this.apgarCincoMinutos = validarApgar(apgarCincoMinutos, "Apgar no 5º minuto");
+        this.utiNeonatal = utiNeonatal;
+        this.reanimacaoNeonatal = reanimacaoNeonatal;
+        this.ictericiaNeonatal = ictericiaNeonatal;
+        this.dificuldadeRespiratoria = dificuldadeRespiratoria;
+        this.dificuldadeAmamentacao = dificuldadeAmamentacao;
+        this.observacoesNascimento = validarObservacoesNascimento(observacoesNascimento);
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
         this.atualizadoEm = atualizadoEm;
     }
@@ -61,6 +117,48 @@ public class Crianca {
             Integer semanasGestacionais,
             Integer pesoNascimentoGramas
     ) {
+        return cadastrar(
+                nome,
+                dataNascimento,
+                sexo,
+                prematura,
+                semanasGestacionais,
+                0,
+                TipoParto.NAO_INFORMADO,
+                pesoNascimentoGramas,
+                new BigDecimal("50.0"),
+                new BigDecimal("34.0"),
+                null,
+                null,
+                false,
+                false,
+                false,
+                false,
+                false,
+                null
+        );
+    }
+
+    public static Crianca cadastrar(
+            String nome,
+            LocalDate dataNascimento,
+            Sexo sexo,
+            boolean prematura,
+            Integer semanasGestacionais,
+            Integer diasGestacionais,
+            TipoParto tipoParto,
+            Integer pesoNascimentoGramas,
+            BigDecimal comprimentoNascimentoCm,
+            BigDecimal perimetroCefalicoNascimentoCm,
+            Integer apgarUmMinuto,
+            Integer apgarCincoMinutos,
+            boolean utiNeonatal,
+            boolean reanimacaoNeonatal,
+            boolean ictericiaNeonatal,
+            boolean dificuldadeRespiratoria,
+            boolean dificuldadeAmamentacao,
+            String observacoesNascimento
+    ) {
         return new Crianca(
                 UUID.randomUUID(),
                 nome,
@@ -68,7 +166,19 @@ public class Crianca {
                 sexo,
                 prematura,
                 semanasGestacionais,
+                diasGestacionais,
+                tipoParto,
                 pesoNascimentoGramas,
+                comprimentoNascimentoCm,
+                perimetroCefalicoNascimentoCm,
+                apgarUmMinuto,
+                apgarCincoMinutos,
+                utiNeonatal,
+                reanimacaoNeonatal,
+                ictericiaNeonatal,
+                dificuldadeRespiratoria,
+                dificuldadeAmamentacao,
+                observacoesNascimento,
                 LocalDateTime.now(),
                 null,
                 true
@@ -82,7 +192,19 @@ public class Crianca {
             Sexo sexo,
             boolean prematura,
             Integer semanasGestacionais,
+            Integer diasGestacionais,
+            TipoParto tipoParto,
             Integer pesoNascimentoGramas,
+            BigDecimal comprimentoNascimentoCm,
+            BigDecimal perimetroCefalicoNascimentoCm,
+            Integer apgarUmMinuto,
+            Integer apgarCincoMinutos,
+            boolean utiNeonatal,
+            boolean reanimacaoNeonatal,
+            boolean ictericiaNeonatal,
+            boolean dificuldadeRespiratoria,
+            boolean dificuldadeAmamentacao,
+            String observacoesNascimento,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
     ) {
@@ -93,7 +215,19 @@ public class Crianca {
                 sexo,
                 prematura,
                 semanasGestacionais,
+                diasGestacionais,
+                tipoParto,
                 pesoNascimentoGramas,
+                comprimentoNascimentoCm,
+                perimetroCefalicoNascimentoCm,
+                apgarUmMinuto,
+                apgarCincoMinutos,
+                utiNeonatal,
+                reanimacaoNeonatal,
+                ictericiaNeonatal,
+                dificuldadeRespiratoria,
+                dificuldadeAmamentacao,
+                observacoesNascimento,
                 criadoEm,
                 atualizadoEm,
                 false
@@ -108,6 +242,48 @@ public class Crianca {
             Integer semanasGestacionais,
             Integer pesoNascimentoGramas
     ) {
+        return atualizar(
+                nome,
+                dataNascimento,
+                sexo,
+                prematura,
+                semanasGestacionais,
+                this.diasGestacionais,
+                this.tipoParto,
+                pesoNascimentoGramas,
+                this.comprimentoNascimentoCm,
+                this.perimetroCefalicoNascimentoCm,
+                this.apgarUmMinuto,
+                this.apgarCincoMinutos,
+                this.utiNeonatal,
+                this.reanimacaoNeonatal,
+                this.ictericiaNeonatal,
+                this.dificuldadeRespiratoria,
+                this.dificuldadeAmamentacao,
+                this.observacoesNascimento
+        );
+    }
+
+    public Crianca atualizar(
+            String nome,
+            LocalDate dataNascimento,
+            Sexo sexo,
+            boolean prematura,
+            Integer semanasGestacionais,
+            Integer diasGestacionais,
+            TipoParto tipoParto,
+            Integer pesoNascimentoGramas,
+            BigDecimal comprimentoNascimentoCm,
+            BigDecimal perimetroCefalicoNascimentoCm,
+            Integer apgarUmMinuto,
+            Integer apgarCincoMinutos,
+            boolean utiNeonatal,
+            boolean reanimacaoNeonatal,
+            boolean ictericiaNeonatal,
+            boolean dificuldadeRespiratoria,
+            boolean dificuldadeAmamentacao,
+            String observacoesNascimento
+    ) {
         return new Crianca(
                 id,
                 nome,
@@ -115,7 +291,19 @@ public class Crianca {
                 sexo,
                 prematura,
                 semanasGestacionais,
+                diasGestacionais,
+                tipoParto,
                 pesoNascimentoGramas,
+                comprimentoNascimentoCm,
+                perimetroCefalicoNascimentoCm,
+                apgarUmMinuto,
+                apgarCincoMinutos,
+                utiNeonatal,
+                reanimacaoNeonatal,
+                ictericiaNeonatal,
+                dificuldadeRespiratoria,
+                dificuldadeAmamentacao,
+                observacoesNascimento,
                 criadoEm,
                 LocalDateTime.now(),
                 true
@@ -126,45 +314,28 @@ public class Crianca {
         return IdadeCrianca.calcular(dataNascimento, dataReferencia);
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getNomeNormalizado() {
-        return nomeNormalizado;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public Sexo getSexo() {
-        return sexo;
-    }
-
-    public boolean isPrematura() {
-        return prematura;
-    }
-
-    public Integer getSemanasGestacionais() {
-        return semanasGestacionais;
-    }
-
-    public Integer getPesoNascimentoGramas() {
-        return pesoNascimentoGramas;
-    }
-
-    public LocalDateTime getCriadoEm() {
-        return criadoEm;
-    }
-
-    public LocalDateTime getAtualizadoEm() {
-        return atualizadoEm;
-    }
+    public UUID getId() { return id; }
+    public String getNome() { return nome; }
+    public String getNomeNormalizado() { return nomeNormalizado; }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public Sexo getSexo() { return sexo; }
+    public boolean isPrematura() { return prematura; }
+    public Integer getSemanasGestacionais() { return semanasGestacionais; }
+    public Integer getDiasGestacionais() { return diasGestacionais; }
+    public TipoParto getTipoParto() { return tipoParto; }
+    public Integer getPesoNascimentoGramas() { return pesoNascimentoGramas; }
+    public BigDecimal getComprimentoNascimentoCm() { return comprimentoNascimentoCm; }
+    public BigDecimal getPerimetroCefalicoNascimentoCm() { return perimetroCefalicoNascimentoCm; }
+    public Integer getApgarUmMinuto() { return apgarUmMinuto; }
+    public Integer getApgarCincoMinutos() { return apgarCincoMinutos; }
+    public boolean isUtiNeonatal() { return utiNeonatal; }
+    public boolean isReanimacaoNeonatal() { return reanimacaoNeonatal; }
+    public boolean isIctericiaNeonatal() { return ictericiaNeonatal; }
+    public boolean isDificuldadeRespiratoria() { return dificuldadeRespiratoria; }
+    public boolean isDificuldadeAmamentacao() { return dificuldadeAmamentacao; }
+    public String getObservacoesNascimento() { return observacoesNascimento; }
+    public LocalDateTime getCriadoEm() { return criadoEm; }
+    public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
 
     private static UUID validarId(UUID id) {
         if (id == null) {
@@ -226,6 +397,18 @@ public class Crianca {
         return semanasGestacionais;
     }
 
+    private static Integer validarDiasGestacionais(Integer diasGestacionais) {
+        if (diasGestacionais == null) {
+            throw new RegraDominioException("Os dias gestacionais são obrigatórios.");
+        }
+
+        if (diasGestacionais < DIAS_GESTACIONAIS_MINIMOS || diasGestacionais > DIAS_GESTACIONAIS_MAXIMOS) {
+            throw new RegraDominioException("Os dias gestacionais devem estar entre 0 e 6.");
+        }
+
+        return diasGestacionais;
+    }
+
     private static Integer validarPesoNascimento(Integer pesoNascimentoGramas) {
         if (pesoNascimentoGramas == null) {
             throw new RegraDominioException("O peso ao nascer é obrigatório.");
@@ -237,5 +420,42 @@ public class Crianca {
         }
 
         return pesoNascimentoGramas;
+    }
+
+    private static BigDecimal validarMedidaNascimento(BigDecimal medida, BigDecimal minimo, BigDecimal maximo, String nomeMedida) {
+        if (medida == null) {
+            throw new RegraDominioException("O " + nomeMedida + " é obrigatório.");
+        }
+
+        if (medida.compareTo(minimo) < 0 || medida.compareTo(maximo) > 0) {
+            throw new RegraDominioException("O " + nomeMedida + " informado está fora do limite operacional permitido.");
+        }
+
+        return medida;
+    }
+
+    private static Integer validarApgar(Integer apgar, String campo) {
+        if (apgar == null) {
+            return null;
+        }
+
+        if (apgar < APGAR_MINIMO || apgar > APGAR_MAXIMO) {
+            throw new RegraDominioException(campo + " deve estar entre 0 e 10.");
+        }
+
+        return apgar;
+    }
+
+    private static String validarObservacoesNascimento(String observacoesNascimento) {
+        if (observacoesNascimento == null || observacoesNascimento.isBlank()) {
+            return null;
+        }
+
+        String observacoesTratadas = observacoesNascimento.trim();
+        if (observacoesTratadas.length() > TAMANHO_MAXIMO_OBSERVACOES_NASCIMENTO) {
+            throw new RegraDominioException("As observações do nascimento devem ter no máximo 1000 caracteres.");
+        }
+
+        return observacoesTratadas;
     }
 }

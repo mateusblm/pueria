@@ -17,7 +17,25 @@
 }
 
 .crianca-form {
+  display: grid;
+  gap: 22px;
   padding: 22px;
+}
+
+.crianca-form__section,
+.crianca-form__checks {
+  display: grid;
+  gap: 14px;
+}
+
+.crianca-form__section {
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(159, 31, 53, 0.12);
+}
+
+.crianca-form__section:last-of-type {
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .crianca-form__actions {

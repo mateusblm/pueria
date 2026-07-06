@@ -47,7 +47,14 @@ class CriancaControllerTest {
                 .andExpect(jsonPath("$.sexo").value("FEMININO"))
                 .andExpect(jsonPath("$.prematura").value(false))
                 .andExpect(jsonPath("$.semanasGestacionais").value(39))
-                .andExpect(jsonPath("$.pesoNascimentoGramas").value(3200));
+                .andExpect(jsonPath("$.diasGestacionais").value(0))
+                .andExpect(jsonPath("$.tipoParto").value("VAGINAL"))
+                .andExpect(jsonPath("$.pesoNascimentoGramas").value(3200))
+                .andExpect(jsonPath("$.comprimentoNascimentoCm").value(49.5))
+                .andExpect(jsonPath("$.perimetroCefalicoNascimentoCm").value(34.0))
+                .andExpect(jsonPath("$.apgarUmMinuto").value(8))
+                .andExpect(jsonPath("$.apgarCincoMinutos").value(9))
+                .andExpect(jsonPath("$.utiNeonatal").value(false));
     }
 
     @Test
@@ -92,7 +99,19 @@ class CriancaControllerTest {
                   "sexo": "FEMININO",
                   "prematura": false,
                   "semanasGestacionais": 40,
-                  "pesoNascimentoGramas": 3300
+                  "diasGestacionais": 2,
+                  "tipoParto": "CESAREA",
+                  "pesoNascimentoGramas": 3300,
+                  "comprimentoNascimentoCm": 50.5,
+                  "perimetroCefalicoNascimentoCm": 34.2,
+                  "apgarUmMinuto": 8,
+                  "apgarCincoMinutos": 9,
+                  "utiNeonatal": false,
+                  "reanimacaoNeonatal": false,
+                  "ictericiaNeonatal": false,
+                  "dificuldadeRespiratoria": false,
+                  "dificuldadeAmamentacao": false,
+                  "observacoesNascimento": "Sem intercorrências relevantes"
                 }
                 """;
 
@@ -143,7 +162,18 @@ class CriancaControllerTest {
                   "sexo": "FEMININO",
                   "prematura": false,
                   "semanasGestacionais": 39,
+                  "diasGestacionais": 0,
+                  "tipoParto": "VAGINAL",
                   "pesoNascimentoGramas": 3200,
+                  "comprimentoNascimentoCm": 49.5,
+                  "perimetroCefalicoNascimentoCm": 34.0,
+                  "apgarUmMinuto": 8,
+                  "apgarCincoMinutos": 9,
+                  "utiNeonatal": false,
+                  "reanimacaoNeonatal": false,
+                  "ictericiaNeonatal": false,
+                  "dificuldadeRespiratoria": false,
+                  "dificuldadeAmamentacao": false,
                   "parentesco": "PAI",
                   "aceiteConsentimento": false,
                   "versaoTermoConsentimento": "2026.07"
@@ -170,6 +200,17 @@ class CriancaControllerTest {
                   "sexo": "FEMININO",
                   "prematura": false,
                   "semanasGestacionais": 39,
+                  "diasGestacionais": 0,
+                  "tipoParto": "VAGINAL",
+                  "comprimentoNascimentoCm": 49.5,
+                  "perimetroCefalicoNascimentoCm": 34.0,
+                  "apgarUmMinuto": 8,
+                  "apgarCincoMinutos": 9,
+                  "utiNeonatal": false,
+                  "reanimacaoNeonatal": false,
+                  "ictericiaNeonatal": false,
+                  "dificuldadeRespiratoria": false,
+                  "dificuldadeAmamentacao": false,
                   "parentesco": "PAI",
                   "aceiteConsentimento": true,
                   "versaoTermoConsentimento": "2026.07"
@@ -209,7 +250,18 @@ class CriancaControllerTest {
                   "sexo": "FEMININO",
                   "prematura": false,
                   "semanasGestacionais": 39,
+                  "diasGestacionais": 0,
+                  "tipoParto": "VAGINAL",
                   "pesoNascimentoGramas": 3200,
+                  "comprimentoNascimentoCm": 49.5,
+                  "perimetroCefalicoNascimentoCm": 34.0,
+                  "apgarUmMinuto": 8,
+                  "apgarCincoMinutos": 9,
+                  "utiNeonatal": false,
+                  "reanimacaoNeonatal": false,
+                  "ictericiaNeonatal": false,
+                  "dificuldadeRespiratoria": false,
+                  "dificuldadeAmamentacao": false,
                   "parentesco": "PAI",
                   "aceiteConsentimento": true,
                   "versaoTermoConsentimento": "2026.07"
@@ -259,7 +311,18 @@ class CriancaControllerTest {
                   "sexo": "FEMININO",
                   "prematura": %s,
                   "semanasGestacionais": %d,
+                  "diasGestacionais": 0,
+                  "tipoParto": "VAGINAL",
                   "pesoNascimentoGramas": %d,
+                  "comprimentoNascimentoCm": 49.5,
+                  "perimetroCefalicoNascimentoCm": 34.0,
+                  "apgarUmMinuto": 8,
+                  "apgarCincoMinutos": 9,
+                  "utiNeonatal": false,
+                  "reanimacaoNeonatal": false,
+                  "ictericiaNeonatal": false,
+                  "dificuldadeRespiratoria": false,
+                  "dificuldadeAmamentacao": false,
                   "parentesco": "PAI",
                   "aceiteConsentimento": true,
                   "versaoTermoConsentimento": "2026.07"

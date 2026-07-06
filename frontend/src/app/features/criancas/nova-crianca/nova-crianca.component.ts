@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { Parentesco, Sexo } from '../../../shared/models/crianca.model';
+import { Parentesco, Sexo, TipoParto } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
 
 @Component({
@@ -25,6 +25,13 @@ export class NovaCriancaComponent {
     { label: 'Não informar', value: 'NAO_INFORMADO' }
   ];
 
+  readonly tiposParto: { label: string; value: TipoParto }[] = [
+    { label: 'Vaginal', value: 'VAGINAL' },
+    { label: 'Cesárea', value: 'CESAREA' },
+    { label: 'Vaginal com instrumento', value: 'VAGINAL_INSTRUMENTADO' },
+    { label: 'Não informado', value: 'NAO_INFORMADO' }
+  ];
+
   readonly parentescos: { label: string; value: Parentesco }[] = [
     { label: 'Mãe', value: 'MAE' },
     { label: 'Pai', value: 'PAI' },
@@ -39,7 +46,19 @@ export class NovaCriancaComponent {
     sexo: this.formBuilder.nonNullable.control<Sexo>('NAO_INFORMADO'),
     prematura: this.formBuilder.nonNullable.control(false),
     semanasGestacionais: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(22), Validators.max(42)]),
+    diasGestacionais: this.formBuilder.control<number | null>(0, [Validators.required, Validators.min(0), Validators.max(6)]),
+    tipoParto: this.formBuilder.nonNullable.control<TipoParto>('NAO_INFORMADO', [Validators.required]),
     pesoNascimentoGramas: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(300), Validators.max(7000)]),
+    comprimentoNascimentoCm: this.formBuilder.nonNullable.control('', [Validators.required]),
+    perimetroCefalicoNascimentoCm: this.formBuilder.nonNullable.control('', [Validators.required]),
+    apgarUmMinuto: this.formBuilder.control<number | null>(null, [Validators.min(0), Validators.max(10)]),
+    apgarCincoMinutos: this.formBuilder.control<number | null>(null, [Validators.min(0), Validators.max(10)]),
+    utiNeonatal: this.formBuilder.nonNullable.control(false),
+    reanimacaoNeonatal: this.formBuilder.nonNullable.control(false),
+    ictericiaNeonatal: this.formBuilder.nonNullable.control(false),
+    dificuldadeRespiratoria: this.formBuilder.nonNullable.control(false),
+    dificuldadeAmamentacao: this.formBuilder.nonNullable.control(false),
+    observacoesNascimento: this.formBuilder.nonNullable.control('', [Validators.maxLength(1000)]),
     parentesco: this.formBuilder.nonNullable.control<Parentesco>('PAI', [Validators.required]),
     aceiteConsentimento: this.formBuilder.nonNullable.control(false, [Validators.requiredTrue])
   });
@@ -57,6 +76,16 @@ export class NovaCriancaComponent {
       return;
     }
 
+    const comprimento = this.lerDecimal(this.form.controls.comprimentoNascimentoCm.value, 'comprimento ao nascer', 20, 70);
+    const perimetro = this.lerDecimal(this.form.controls.perimetroCefalicoNascimentoCm.value, 'perímetro cefálico ao nascer', 20, 50);
+    const erroDecimal = this.extrairErroDecimal(comprimento, perimetro);
+    if (erroDecimal) {
+      this.erro = erroDecimal;
+      return;
+    }
+    const comprimentoNumero = comprimento as number;
+    const perimetroNumero = perimetro as number;
+
     if (this.form.invalid) {
       this.erro = 'Revise os campos obrigatórios antes de cadastrar a criança.';
       return;
@@ -71,7 +100,19 @@ export class NovaCriancaComponent {
       sexo: valor.sexo,
       prematura: valor.prematura,
       semanasGestacionais: valor.semanasGestacionais as number,
+      diasGestacionais: valor.diasGestacionais as number,
+      tipoParto: valor.tipoParto,
       pesoNascimentoGramas: valor.pesoNascimentoGramas as number,
+      comprimentoNascimentoCm: comprimentoNumero,
+      perimetroCefalicoNascimentoCm: perimetroNumero,
+      apgarUmMinuto: valor.apgarUmMinuto,
+      apgarCincoMinutos: valor.apgarCincoMinutos,
+      utiNeonatal: valor.utiNeonatal,
+      reanimacaoNeonatal: valor.reanimacaoNeonatal,
+      ictericiaNeonatal: valor.ictericiaNeonatal,
+      dificuldadeRespiratoria: valor.dificuldadeRespiratoria,
+      dificuldadeAmamentacao: valor.dificuldadeAmamentacao,
+      observacoesNascimento: valor.observacoesNascimento.trim() || null,
       parentesco: valor.parentesco,
       aceiteConsentimento: valor.aceiteConsentimento,
       versaoTermoConsentimento: '2026.07'
@@ -132,6 +173,18 @@ export class NovaCriancaComponent {
     }
 
     return '';
+  }
+
+  private lerDecimal(valor: string, campo: string, minimo: number, maximo: number): number | string {
+    const numero = Number(String(valor).replace(',', '.'));
+    if (!Number.isFinite(numero) || numero < minimo || numero > maximo) {
+      return `Informe ${campo} entre ${minimo.toLocaleString('pt-BR')} e ${maximo.toLocaleString('pt-BR')} cm.`;
+    }
+    return numero;
+  }
+
+  private extrairErroDecimal(...valores: Array<number | string>): string {
+    return valores.find((valor): valor is string => typeof valor === 'string') ?? '';
   }
 
   private calcularDataMinimaNascimento(): string {

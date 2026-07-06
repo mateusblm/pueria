@@ -51,7 +51,19 @@ public class CriarCriancaUseCase {
                 comando.sexo(),
                 comando.prematura(),
                 comando.semanasGestacionais(),
-                comando.pesoNascimentoGramas()
+                comando.diasGestacionais(),
+                comando.tipoParto(),
+                comando.pesoNascimentoGramas(),
+                comando.comprimentoNascimentoCm(),
+                comando.perimetroCefalicoNascimentoCm(),
+                comando.apgarUmMinuto(),
+                comando.apgarCincoMinutos(),
+                comando.utiNeonatal(),
+                comando.reanimacaoNeonatal(),
+                comando.ictericiaNeonatal(),
+                comando.dificuldadeRespiratoria(),
+                comando.dificuldadeAmamentacao(),
+                comando.observacoesNascimento()
         );
 
         Crianca criancaSalva = criancaRepositorio.salvar(crianca);

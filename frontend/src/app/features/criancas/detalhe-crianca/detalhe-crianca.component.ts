@@ -120,4 +120,50 @@ export class DetalheCriancaComponent implements OnInit {
       maximumFractionDigits: 2
     })} kg (${pesoGramas.toLocaleString('pt-BR')} g)`;
   }
+
+  formatarMedida(valor: number, unidade: string): string {
+    return `${valor.toLocaleString('pt-BR', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2
+    })} ${unidade}`;
+  }
+
+  formatarIdadeGestacional(semanas: number, dias: number): string {
+    return `${semanas} semanas${dias > 0 ? ` e ${dias} dias` : ''}`;
+  }
+
+  formatarApgar(valor?: number | null): string {
+    return valor == null ? 'Não informado' : `${valor}/10`;
+  }
+
+  labelSexo(sexo: string | null): string {
+    const labels: Record<string, string> = {
+      FEMININO: 'Feminino',
+      MASCULINO: 'Masculino',
+      NAO_INFORMADO: 'Não informado'
+    };
+    return sexo ? labels[sexo] ?? sexo : 'Não informado';
+  }
+
+  labelTipoParto(tipoParto: string): string {
+    const labels: Record<string, string> = {
+      VAGINAL: 'Vaginal',
+      CESAREA: 'Cesárea',
+      VAGINAL_INSTRUMENTADO: 'Vaginal com instrumento',
+      NAO_INFORMADO: 'Não informado'
+    };
+    return labels[tipoParto] ?? tipoParto;
+  }
+
+  listarIntercorrencias(crianca: Crianca): string {
+    const pontos = [
+      crianca.utiNeonatal ? 'UTI neonatal' : '',
+      crianca.reanimacaoNeonatal ? 'reanimação ao nascer' : '',
+      crianca.ictericiaNeonatal ? 'icterícia neonatal' : '',
+      crianca.dificuldadeRespiratoria ? 'dificuldade respiratória' : '',
+      crianca.dificuldadeAmamentacao ? 'dificuldade para mamar' : ''
+    ].filter(Boolean);
+
+    return pontos.length > 0 ? pontos.join(', ') : 'Sem intercorrências registradas';
+  }
 }
