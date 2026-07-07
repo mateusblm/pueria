@@ -16,10 +16,6 @@
         <p class="pueria-subtitle">{{ calcularIdade(crianca.dataNascimento) }}</p>
       </div>
       <div class="detalhe-page__actions">
-        <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button">Desenvolvimento</a>
-        <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button">Crescimento</a>
-        <a [routerLink]="['/criancas', crianca.id, 'alimentacao']" class="pueria-button">Alimentação</a>
-        <a [routerLink]="['/criancas', crianca.id, 'sono']" class="pueria-button">Sono</a>
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
@@ -50,6 +46,51 @@
 
     @if (erro()) {
       <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+
+    @if (painel(); as painel) {
+      <section class="pueria-card painel-integrado">
+        <div class="painel-integrado__header">
+          <div>
+            <p class="pueria-eyebrow">Acompanhamento integrado</p>
+            <h2>Como está a rotina agora</h2>
+            <p>{{ painel.frase }}</p>
+          </div>
+          <a routerLink="/acompanhamento" class="pueria-button pueria-button--secondary">Ver todas as crianças</a>
+        </div>
+
+        <div class="painel-integrado__modulos">
+          @for (modulo of painel.modulos; track modulo.titulo) {
+            <article class="painel-modulo" [class]="classeEstado(modulo.estado)">
+              <div class="painel-modulo__topo">
+                <span>{{ labelEstado(modulo.estado) }}</span>
+                <small>{{ modulo.subtitulo }}</small>
+              </div>
+              <h3>{{ modulo.titulo }}</h3>
+              <strong>{{ modulo.valor }}</strong>
+              <p>{{ modulo.detalhe }}</p>
+              <a [routerLink]="modulo.rota" class="pueria-button pueria-button--secondary">{{ modulo.acao }}</a>
+            </article>
+          }
+        </div>
+
+        <div class="painel-integrado__prioridades">
+          <div>
+            <p class="pueria-eyebrow">Próximos passos</p>
+            <h3>O que observar</h3>
+          </div>
+
+          @if (painel.prioridades.length > 0) {
+            <ul>
+              @for (prioridade of painel.prioridades; track prioridade) {
+                <li>{{ prioridade }}</li>
+              }
+            </ul>
+          } @else {
+            <p class="painel-integrado__vazio">Continue registrando os módulos para o Pueria identificar padrões com mais clareza.</p>
+          }
+        </div>
+      </section>
     }
 
     <div class="detalhe-page__grid">
@@ -160,41 +201,6 @@
         </dl>
       </article>
 
-      <article class="pueria-card detalhe-card">
-        <p class="pueria-eyebrow">Cuidado preventivo</p>
-        <h2>Marcos do desenvolvimento</h2>
-        <p>
-          Acompanhe sinais esperados para a idade em linguagem, movimento, cognição e socialização.
-        </p>
-        <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button pueria-button--secondary">Abrir marcos</a>
-      </article>
-
-      <article class="pueria-card detalhe-card">
-        <p class="pueria-eyebrow">Crescimento</p>
-        <h2>Medidas e tendência</h2>
-        <p>
-          Registre peso, comprimento ou estatura e perímetro cefálico para acompanhar a evolução nas consultas.
-        </p>
-        <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button pueria-button--secondary">Abrir crescimento</a>
-      </article>
-
-      <article class="pueria-card detalhe-card">
-        <p class="pueria-eyebrow">Alimentação</p>
-        <h2>Rotina alimentar</h2>
-        <p>
-          Registre leite, introdução alimentar, variedade e sinais da rotina para apoiar o acompanhamento preventivo.
-        </p>
-        <a [routerLink]="['/criancas', crianca.id, 'alimentacao']" class="pueria-button pueria-button--secondary">Abrir alimentação</a>
-      </article>
-
-      <article class="pueria-card detalhe-card">
-        <p class="pueria-eyebrow">Sono</p>
-        <h2>Descanso e rotina</h2>
-        <p>
-          Registre horários, cochilos, despertares e hábitos antes de dormir para acompanhar o sono em 24 horas.
-        </p>
-        <a [routerLink]="['/criancas', crianca.id, 'sono']" class="pueria-button pueria-button--secondary">Abrir sono</a>
-      </article>
     </div>
   }
 </section>

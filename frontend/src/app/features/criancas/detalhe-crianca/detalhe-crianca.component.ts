@@ -1,9 +1,35 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
+import { RegistroAlimentacao } from '../../../shared/models/alimentacao.model';
+import { AvaliacaoCurvaCrescimento } from '../../../shared/models/crescimento.model';
 import { Crianca } from '../../../shared/models/crianca.model';
+import { MarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
+import { RegistroSono } from '../../../shared/models/sono.model';
+import { AlimentacaoService } from '../../alimentacao/alimentacao.service';
+import { CrescimentoService } from '../../crescimento/crescimento.service';
+import { DesenvolvimentoService } from '../../desenvolvimento/desenvolvimento.service';
+import { SonoService } from '../../sono/sono.service';
 import { CriancasService } from '../criancas.service';
+
+type EstadoModulo = 'ok' | 'atencao' | 'pendente' | 'indisponivel';
+
+type ModuloResumo = {
+  titulo: string;
+  subtitulo: string;
+  estado: EstadoModulo;
+  valor: string;
+  detalhe: string;
+  acao: string;
+  rota: string[];
+};
+
+type PainelAcompanhamento = {
+  frase: string;
+  prioridades: string[];
+  modulos: ModuloResumo[];
+};
 
 @Component({
   selector: 'app-detalhe-crianca',
@@ -13,15 +39,29 @@ import { CriancasService } from '../criancas.service';
 })
 export class DetalheCriancaComponent implements OnInit {
   readonly crianca = signal<Crianca | null>(null);
+  readonly marcos = signal<MarcoDesenvolvimento[]>([]);
+  readonly curvasCrescimento = signal<AvaliacaoCurvaCrescimento[]>([]);
+  readonly registrosAlimentacao = signal<RegistroAlimentacao[]>([]);
+  readonly registrosSono = signal<RegistroSono[]>([]);
+  readonly errosModulos = signal<Record<string, string>>({});
   readonly carregando = signal(true);
   readonly removendo = signal(false);
   readonly confirmandoRemocao = signal(false);
   readonly erro = signal('');
 
+  readonly ultimoRegistroAlimentacao = computed(() => this.maisRecente(this.registrosAlimentacao(), (item) => item.dataRegistro));
+  readonly ultimoRegistroSono = computed(() => this.maisRecente(this.registrosSono(), (item) => item.dataRegistro));
+  readonly ultimaAvaliacaoCrescimento = computed(() => this.maisRecente(this.curvasCrescimento(), (item) => item.dataMedicao));
+  readonly painel = computed(() => this.montarPainel());
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly criancasService: CriancasService
+    private readonly criancasService: CriancasService,
+    private readonly desenvolvimentoService: DesenvolvimentoService,
+    private readonly crescimentoService: CrescimentoService,
+    private readonly alimentacaoService: AlimentacaoService,
+    private readonly sonoService: SonoService
   ) {}
 
   ngOnInit(): void {
@@ -38,12 +78,35 @@ export class DetalheCriancaComponent implements OnInit {
 
     this.carregando.set(true);
     this.erro.set('');
+    this.errosModulos.set({});
 
-    this.criancasService.buscarPorId(id)
+    forkJoin({
+      crianca: this.criancasService.buscarPorId(id),
+      marcos: this.desenvolvimentoService.listarMarcos(id).pipe(catchError(() => {
+        this.registrarErroModulo('desenvolvimento', 'Não foi possível carregar o desenvolvimento agora.');
+        return of([]);
+      })),
+      curvas: this.crescimentoService.listarCurvas(id).pipe(catchError(() => {
+        this.registrarErroModulo('crescimento', 'Não foi possível carregar o crescimento agora.');
+        return of([]);
+      })),
+      alimentacao: this.alimentacaoService.listar(id).pipe(catchError(() => {
+        this.registrarErroModulo('alimentacao', 'Não foi possível carregar a alimentação agora.');
+        return of([]);
+      })),
+      sono: this.sonoService.listar(id).pipe(catchError(() => {
+        this.registrarErroModulo('sono', 'Não foi possível carregar o sono agora.');
+        return of([]);
+      }))
+    })
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: (crianca) => {
+        next: ({ crianca, marcos, curvas, alimentacao, sono }) => {
           this.crianca.set(crianca);
+          this.marcos.set(marcos);
+          this.curvasCrescimento.set(curvas);
+          this.registrosAlimentacao.set(alimentacao);
+          this.registrosSono.set(sono);
         },
         error: (erro: HttpErrorResponse) => {
           this.erro.set(erro.status === 404
@@ -51,6 +114,236 @@ export class DetalheCriancaComponent implements OnInit {
             : 'Não foi possível carregar os dados agora.');
         }
       });
+  }
+
+  private registrarErroModulo(modulo: string, mensagem: string): void {
+    this.errosModulos.update((erros) => ({ ...erros, [modulo]: mensagem }));
+  }
+
+  private montarPainel(): PainelAcompanhamento {
+    const crianca = this.crianca();
+    if (!crianca) {
+      return { frase: '', prioridades: [], modulos: [] };
+    }
+
+    const modulos = [
+      this.resumoDesenvolvimento(crianca),
+      this.resumoCrescimento(crianca),
+      this.resumoAlimentacao(crianca),
+      this.resumoSono(crianca)
+    ];
+    const prioridades = this.prioridadesDoPainel(modulos, crianca);
+    const frase = prioridades.length > 0
+      ? 'Há pontos úteis para acompanhar com mais atenção nos próximos registros.'
+      : 'Os registros disponíveis não mostram pontos prioritários neste momento.';
+
+    return { frase, prioridades, modulos };
+  }
+
+  private resumoDesenvolvimento(crianca: Crianca): ModuloResumo {
+    if (this.errosModulos()['desenvolvimento']) {
+      return this.moduloIndisponivel('Desenvolvimento', 'Marcos da idade', ['/criancas', crianca.id, 'desenvolvimento']);
+    }
+
+    const marcos = this.marcos();
+    if (marcos.length === 0) {
+      return {
+        titulo: 'Desenvolvimento',
+        subtitulo: 'Marcos da idade',
+        estado: 'pendente',
+        valor: 'Sem faixa carregada',
+        detalhe: 'Abra os marcos para iniciar o acompanhamento da idade atual.',
+        acao: 'Abrir marcos',
+        rota: ['/criancas', crianca.id, 'desenvolvimento']
+      };
+    }
+
+    const idade = marcos.at(-1)?.idadeMeses;
+    const marcosDaIdade = idade === undefined ? [] : marcos.filter((marco) => marco.idadeMeses === idade);
+    const respondidos = marcosDaIdade.filter((marco) => marco.status !== 'NAO_AVALIADO').length;
+    const pontosConsulta = marcosDaIdade.filter((marco) => marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA').length;
+    const total = marcosDaIdade.length;
+
+    return {
+      titulo: 'Desenvolvimento',
+      subtitulo: `Faixa: ${idade === undefined ? 'idade atual' : this.tituloIdade(idade)}`,
+      estado: total === 0 ? 'pendente' : pontosConsulta > 0 ? 'atencao' : respondidos === total ? 'ok' : 'pendente',
+      valor: total === 0 ? 'Sem marcos' : `${respondidos}/${total}`,
+      detalhe: pontosConsulta > 0
+        ? `${pontosConsulta} ${pontosConsulta === 1 ? 'ponto pode ajudar na conversa com o pediatra.' : 'pontos podem ajudar na conversa com o pediatra.'}`
+        : total > 0 && respondidos === total
+          ? 'Faixa atual preenchida.'
+          : 'Continue a sequência da idade atual.',
+      acao: total > 0 && respondidos > 0 ? 'Continuar' : 'Iniciar',
+      rota: ['/criancas', crianca.id, 'desenvolvimento']
+    };
+  }
+
+  private resumoCrescimento(crianca: Crianca): ModuloResumo {
+    if (this.errosModulos()['crescimento']) {
+      return this.moduloIndisponivel('Crescimento', 'Curvas OMS', ['/criancas', crianca.id, 'crescimento']);
+    }
+
+    const avaliacao = this.ultimaAvaliacaoCrescimento();
+    if (!avaliacao) {
+      return {
+        titulo: 'Crescimento',
+        subtitulo: 'Curvas OMS',
+        estado: 'pendente',
+        valor: 'Sem medida',
+        detalhe: 'Registre peso, comprimento ou perímetro cefálico para ver a evolução.',
+        acao: 'Registrar',
+        rota: ['/criancas', crianca.id, 'crescimento']
+      };
+    }
+
+    const foraDaFaixa = avaliacao.resultados.filter((resultado) => resultado.classificacao !== 'FAIXA_ESPERADA');
+    return {
+      titulo: 'Crescimento',
+      subtitulo: `Última medida: ${this.formatarData(avaliacao.dataMedicao)}`,
+      estado: foraDaFaixa.length > 0 ? 'atencao' : 'ok',
+      valor: foraDaFaixa.length > 0 ? `${foraDaFaixa.length} atenção` : 'Na faixa',
+      detalhe: foraDaFaixa.length > 0
+        ? 'Há medida fora da faixa esperada; observe junto da trajetória.'
+        : 'Últimas curvas avaliadas estão dentro da faixa esperada.',
+      acao: 'Ver curvas',
+      rota: ['/criancas', crianca.id, 'crescimento']
+    };
+  }
+
+  private resumoAlimentacao(crianca: Crianca): ModuloResumo {
+    if (this.errosModulos()['alimentacao']) {
+      return this.moduloIndisponivel('Alimentação', 'Rotina alimentar', ['/criancas', crianca.id, 'alimentacao']);
+    }
+
+    const registro = this.ultimoRegistroAlimentacao();
+    if (!registro) {
+      return {
+        titulo: 'Alimentação',
+        subtitulo: 'Rotina alimentar',
+        estado: 'pendente',
+        valor: 'Sem registro',
+        detalhe: 'Registre a rotina para observar variedade, hábitos e pontos para consulta.',
+        acao: 'Registrar',
+        rota: ['/criancas', crianca.id, 'alimentacao']
+      };
+    }
+
+    const pontosConsulta = registro.analise.conversaConsulta.length;
+    return {
+      titulo: 'Alimentação',
+      subtitulo: `Último registro: ${this.formatarData(registro.dataRegistro)}`,
+      estado: pontosConsulta > 0 ? 'atencao' : 'ok',
+      valor: pontosConsulta > 0 ? `${pontosConsulta} ponto(s)` : 'Registrada',
+      detalhe: pontosConsulta > 0 ? registro.analise.resumo : 'Rotina alimentar registrada para acompanhamento.',
+      acao: 'Ver rotina',
+      rota: ['/criancas', crianca.id, 'alimentacao']
+    };
+  }
+
+  private resumoSono(crianca: Crianca): ModuloResumo {
+    if (this.errosModulos()['sono']) {
+      return this.moduloIndisponivel('Sono', 'Descanso em 24h', ['/criancas', crianca.id, 'sono']);
+    }
+
+    const registro = this.ultimoRegistroSono();
+    if (!registro) {
+      return {
+        titulo: 'Sono',
+        subtitulo: 'Descanso em 24h',
+        estado: 'pendente',
+        valor: 'Sem registro',
+        detalhe: 'Registre sono noturno, cochilos e despertares para acompanhar a rotina.',
+        acao: 'Registrar',
+        rota: ['/criancas', crianca.id, 'sono']
+      };
+    }
+
+    const atencao = registro.analise.classificacaoDuracao !== 'FAIXA_ESPERADA' && registro.analise.classificacaoDuracao !== 'SEM_DADOS';
+    return {
+      titulo: 'Sono',
+      subtitulo: `Último registro: ${this.formatarData(registro.dataRegistro)}`,
+      estado: atencao || registro.analise.conversaConsulta.length > 0 ? 'atencao' : 'ok',
+      valor: this.formatarDuracao(registro.minutosSonoTotal24h),
+      detalhe: registro.analise.resumo,
+      acao: 'Ver sono',
+      rota: ['/criancas', crianca.id, 'sono']
+    };
+  }
+
+  private moduloIndisponivel(titulo: string, subtitulo: string, rota: string[]): ModuloResumo {
+    return {
+      titulo,
+      subtitulo,
+      estado: 'indisponivel',
+      valor: 'Indisponível',
+      detalhe: 'Não foi possível carregar estes dados agora.',
+      acao: 'Abrir',
+      rota
+    };
+  }
+
+  private prioridadesDoPainel(modulos: ModuloResumo[], crianca: Crianca): string[] {
+    const prioridades = modulos
+      .filter((modulo) => modulo.estado === 'atencao')
+      .map((modulo) => `${modulo.titulo}: ${modulo.detalhe}`);
+
+    if (modulos.some((modulo) => modulo.estado === 'pendente')) {
+      prioridades.push('Complete os módulos sem registro para que o Pueria consiga cruzar melhor rotina, crescimento e desenvolvimento.');
+    }
+    if (crianca.prematura) {
+      prioridades.push('Prematuridade registrada: mantenha esse contexto nas conversas de crescimento e desenvolvimento.');
+    }
+
+    return prioridades.slice(0, 4);
+  }
+
+  private maisRecente<T>(itens: T[], data: (item: T) => string): T | null {
+    return [...itens].sort((a, b) => data(b).localeCompare(data(a)))[0] ?? null;
+  }
+
+  private tituloIdade(idadeMeses: number): string {
+    if (idadeMeses < 12) {
+      return `${idadeMeses} meses`;
+    }
+    const anos = Math.floor(idadeMeses / 12);
+    const meses = idadeMeses % 12;
+    if (meses === 0) {
+      return `${anos} ${anos === 1 ? 'ano' : 'anos'}`;
+    }
+    return `${anos} ${anos === 1 ? 'ano' : 'anos'} e ${meses} meses`;
+  }
+
+  formatarDuracao(minutos?: number | null): string {
+    if (minutos === null || minutos === undefined) {
+      return 'Sem duração';
+    }
+    const horas = Math.floor(minutos / 60);
+    const resto = minutos % 60;
+    if (resto === 0) {
+      return `${horas}h`;
+    }
+    return `${horas}h${resto.toString().padStart(2, '0')}`;
+  }
+
+  classeEstado(estado: EstadoModulo): string {
+    const classes: Record<EstadoModulo, string> = {
+      ok: 'painel-modulo--ok',
+      atencao: 'painel-modulo--atencao',
+      pendente: 'painel-modulo--pendente',
+      indisponivel: 'painel-modulo--indisponivel'
+    };
+    return classes[estado];
+  }
+
+  labelEstado(estado: EstadoModulo): string {
+    const labels: Record<EstadoModulo, string> = {
+      ok: 'Acompanhado',
+      atencao: 'Observar',
+      pendente: 'Pendente',
+      indisponivel: 'Indisponível'
+    };
+    return labels[estado];
   }
 
   abrirConfirmacaoRemocao(): void {
