@@ -18,6 +18,7 @@
       <div class="detalhe-page__actions">
         <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button">Desenvolvimento</a>
         <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button">Crescimento</a>
+        <a [routerLink]="['/criancas', crianca.id, 'alimentacao']" class="pueria-button">Alimentação</a>
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
@@ -174,6 +175,15 @@
           Registre peso, comprimento ou estatura e perímetro cefálico para acompanhar a evolução nas consultas.
         </p>
         <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button pueria-button--secondary">Abrir crescimento</a>
+      </article>
+
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Alimentação</p>
+        <h2>Rotina alimentar</h2>
+        <p>
+          Registre leite, introdução alimentar, variedade e sinais da rotina para apoiar o acompanhamento preventivo.
+        </p>
+        <a [routerLink]="['/criancas', crianca.id, 'alimentacao']" class="pueria-button pueria-button--secondary">Abrir alimentação</a>
       </article>
     </div>
   }

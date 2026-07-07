@@ -24,12 +24,14 @@ export const routes: Routes = [
       { path: 'criancas/:id/editar', loadComponent: () => import('./features/criancas/editar-crianca/editar-crianca.component').then((m) => m.EditarCriancaComponent) },
       { path: 'criancas/:id/desenvolvimento', loadComponent: () => import('./features/desenvolvimento/marcos-crianca/marcos-crianca.component').then((m) => m.MarcosCriancaComponent) },
       { path: 'criancas/:id/crescimento', loadComponent: () => import('./features/crescimento/crescimento-crianca/crescimento-crianca.component').then((m) => m.CrescimentoCriancaComponent) },
+      { path: 'criancas/:id/alimentacao', loadComponent: () => import('./features/alimentacao/alimentacao-crianca/alimentacao-crianca.component').then((m) => m.AlimentacaoCriancaComponent) },
       { path: 'criancas/:id', loadComponent: () => import('./features/criancas/detalhe-crianca/detalhe-crianca.component').then((m) => m.DetalheCriancaComponent) },
       { path: 'app/criancas', pathMatch: 'full', redirectTo: 'criancas' },
       { path: 'app/criancas/nova', pathMatch: 'full', redirectTo: 'criancas/nova' },
       { path: 'app/criancas/:id/editar', redirectTo: 'criancas/:id/editar' },
       { path: 'app/criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'app/criancas/:id/crescimento', redirectTo: 'criancas/:id/crescimento' },
+      { path: 'app/criancas/:id/alimentacao', redirectTo: 'criancas/:id/alimentacao' },
       { path: 'app/criancas/:id', redirectTo: 'criancas/:id' },
       { path: 'app/acompanhamento', pathMatch: 'full', redirectTo: 'acompanhamento' },
       { path: 'desenvolvimento', pathMatch: 'full', redirectTo: 'acompanhamento' },
@@ -38,6 +40,7 @@ export const routes: Routes = [
       { path: 'minhas-criancas/:id/editar', redirectTo: 'criancas/:id/editar' },
       { path: 'minhas-criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'minhas-criancas/:id/crescimento', redirectTo: 'criancas/:id/crescimento' },
+      { path: 'minhas-criancas/:id/alimentacao', redirectTo: 'criancas/:id/alimentacao' },
       { path: 'minhas-criancas/:id', redirectTo: 'criancas/:id' }
     ]
   },

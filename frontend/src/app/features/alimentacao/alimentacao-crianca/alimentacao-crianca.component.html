@@ -1,0 +1,222 @@
+<section class="alimentacao-page">
+  <a [routerLink]="['/criancas', crianca()?.id]" class="alimentacao-page__back">← Perfil</a>
+
+  @if (carregando()) {
+    <div class="pueria-card alimentacao-page__state">Carregando alimentação...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-card alimentacao-page__state">
+      <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+      <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Voltar</a>
+    </div>
+  } @else if (crianca(); as crianca) {
+    <div class="alimentacao-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Alimentação</p>
+        <h1 class="pueria-title">{{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">Registre a rotina alimentar para observar hábitos, variedade e pontos que merecem conversa na consulta.</p>
+      </div>
+    </div>
+
+    @if (erro()) {
+      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+    @if (aviso()) {
+      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
+    }
+
+    @if (ultimoRegistro(); as registro) {
+      <section class="pueria-card alimentacao-sintese">
+        <div class="alimentacao-sintese__header">
+          <div>
+            <p class="pueria-eyebrow">Último registro</p>
+            <h2>{{ registro.analise.titulo }}</h2>
+            <p>{{ registro.analise.resumo }}</p>
+          </div>
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+        </div>
+
+        <div class="alimentacao-sintese__grid">
+          <article>
+            <span>Leite</span>
+            <strong>{{ labelTipoLeite(registro.tipoLeite) }}</strong>
+          </article>
+          <article>
+            <span>Fase alimentar</span>
+            <strong>{{ labelEstagio(registro.estagioAlimentar) }}</strong>
+          </article>
+          <article>
+            <span>Textura</span>
+            <strong>{{ labelTextura(registro.texturaPredominante) }}</strong>
+          </article>
+          <article>
+            <span>Data</span>
+            <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+          </article>
+        </div>
+
+        @if (possuiAlgumaAnalise(registro)) {
+          <div class="alimentacao-analise">
+            @if (registro.analise.rotina.length > 0) {
+              <div>
+                <h3>Rotina registrada</h3>
+                <ul>
+                  @for (item of registro.analise.rotina; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.conversaConsulta.length > 0) {
+              <div>
+                <h3>Para conversar na consulta</h3>
+                <ul>
+                  @for (item of registro.analise.conversaConsulta; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.habitosApoio.length > 0) {
+              <div>
+                <h3>Hábitos da rotina</h3>
+                <ul>
+                  @for (item of registro.analise.habitosApoio; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    } @else {
+      <section class="pueria-card alimentacao-page__state">
+        <h2>Nenhum registro alimentar ainda</h2>
+        <p>Preencha o primeiro registro para acompanhar a rotina alimentar junto do crescimento e do desenvolvimento.</p>
+      </section>
+    }
+
+    <div class="alimentacao-layout">
+      <form class="pueria-card alimentacao-form" [formGroup]="form" (ngSubmit)="salvar()">
+        <div class="alimentacao-form__header">
+          <div>
+            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
+            <h2>Rotina alimentar</h2>
+          </div>
+          @if (editandoId()) {
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
+          }
+        </div>
+
+        <div class="alimentacao-form__grid">
+          <label>
+            <span>Data</span>
+            <input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Leite</span>
+            <select formControlName="tipoLeite">
+              @for (opcao of tiposLeite; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>Fase alimentar</span>
+            <select formControlName="estagioAlimentar">
+              @for (opcao of estagios; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>Textura predominante</span>
+            <select formControlName="texturaPredominante">
+              @for (opcao of texturas; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>Início da alimentação complementar</span>
+            <input type="text" formControlName="idadeInicioAlimentacaoComplementarMeses" placeholder="idade em meses" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Refeições por dia</span>
+            <input type="text" formControlName="refeicoesPorDia" placeholder="ex.: 3" inputmode="numeric" />
+          </label>
+        </div>
+
+        <fieldset>
+          <legend>Como acontece nas refeições</legend>
+          <div class="alimentacao-checks">
+            <label><input type="checkbox" formControlName="consomeAgua" /> Toma água</label>
+            <label><input type="checkbox" formControlName="usaMamadeira" /> Usa mamadeira</label>
+            <label><input type="checkbox" formControlName="usaCopo" /> Usa copo</label>
+            <label><input type="checkbox" formControlName="usaColher" /> Usa colher</label>
+            <label><input type="checkbox" formControlName="autoalimentacao" /> Participa da própria alimentação</label>
+            <label><input type="checkbox" formControlName="refeicoesEmFamilia" /> Faz refeições com a família</label>
+            <label><input type="checkbox" formControlName="rotinaAlimentarRegular" /> Tem rotina alimentar previsível</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Variedade alimentar</legend>
+          <div class="alimentacao-checks">
+            <label><input type="checkbox" formControlName="consomeFrutas" /> Frutas</label>
+            <label><input type="checkbox" formControlName="consomeLegumesVerduras" /> Legumes e verduras</label>
+            <label><input type="checkbox" formControlName="consomeCereaisTuberculos" /> Cereais, raízes ou tubérculos</label>
+            <label><input type="checkbox" formControlName="consomeFeijoesLeguminosas" /> Feijões ou leguminosas</label>
+            <label><input type="checkbox" formControlName="consomeCarnesOvos" /> Carnes ou ovos</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Hábitos e sinais observados</legend>
+          <div class="alimentacao-checks">
+            <label><input type="checkbox" formControlName="ultraprocessadosFrequentes" /> Ultraprocessados com frequência</label>
+            <label><input type="checkbox" formControlName="bebidasAdocadas" /> Bebidas adoçadas</label>
+            <label><input type="checkbox" formControlName="acucarAdicionado" /> Açúcar adicionado</label>
+            <label><input type="checkbox" formControlName="salAdicionado" /> Sal adicionado</label>
+            <label><input type="checkbox" formControlName="telasDuranteRefeicoes" /> Telas durante refeições</label>
+            <label><input type="checkbox" formControlName="seletividadeAlimentar" /> Seletividade alimentar</label>
+            <label><input type="checkbox" formControlName="recusaPersistente" /> Recusa persistente</label>
+            <label><input type="checkbox" formControlName="engasgosFrequentes" /> Engasgos frequentes</label>
+            <label><input type="checkbox" formControlName="vomitosRecorrentes" /> Vômitos recorrentes</label>
+            <label><input type="checkbox" formControlName="constipacao" /> Constipação</label>
+            <label><input type="checkbox" formControlName="diarreiaRecorrente" /> Diarreia recorrente</label>
+            <label><input type="checkbox" formControlName="dificuldadeGanhoPesoPercebida" /> Preocupação com ganho de peso</label>
+            <label><input type="checkbox" formControlName="preocupacaoFamilia" /> Há preocupação da família</label>
+          </div>
+        </fieldset>
+
+        <label>
+          <span>Observações</span>
+          <textarea formControlName="observacao" rows="4" placeholder="Ex.: alimentos aceitos, recusas, rotina da creche ou dúvidas para a consulta."></textarea>
+        </label>
+
+        <button type="submit" class="pueria-button" [disabled]="salvando()">
+          {{ salvando() ? 'Salvando...' : 'Salvar alimentação' }}
+        </button>
+      </form>
+
+      <aside class="pueria-card alimentacao-historico">
+        <p class="pueria-eyebrow">Histórico</p>
+        <h2>Registros</h2>
+        @if (registrosOrdenados().length === 0) {
+          <p>Nenhum registro salvo.</p>
+        } @else {
+          <div class="alimentacao-historico__lista">
+            @for (registro of registrosOrdenados(); track registro.id) {
+              <article>
+                <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+                <span>{{ labelEstagio(registro.estagioAlimentar) }}</span>
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
+              </article>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</section>
