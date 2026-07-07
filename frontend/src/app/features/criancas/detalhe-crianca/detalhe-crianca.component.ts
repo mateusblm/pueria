@@ -25,9 +25,19 @@ type ModuloResumo = {
   rota: string[];
 };
 
+type PainelAcao = {
+  titulo: string;
+  texto: string;
+};
+
 type PainelAcompanhamento = {
   frase: string;
   prioridades: string[];
+  acompanharCasa: PainelAcao[];
+  completarApp: PainelAcao[];
+  conversarConsulta: PainelAcao[];
+  pontosFortes: PainelAcao[];
+  periodo: string;
   modulos: ModuloResumo[];
 };
 
@@ -123,7 +133,16 @@ export class DetalheCriancaComponent implements OnInit {
   private montarPainel(): PainelAcompanhamento {
     const crianca = this.crianca();
     if (!crianca) {
-      return { frase: '', prioridades: [], modulos: [] };
+      return {
+        frase: '',
+        prioridades: [],
+        acompanharCasa: [],
+        completarApp: [],
+        conversarConsulta: [],
+        pontosFortes: [],
+        periodo: '',
+        modulos: []
+      };
     }
 
     const modulos = [
@@ -133,11 +152,24 @@ export class DetalheCriancaComponent implements OnInit {
       this.resumoSono(crianca)
     ];
     const prioridades = this.prioridadesDoPainel(modulos, crianca);
+    const acompanharCasa = this.acoesParaAcompanharEmCasa();
+    const completarApp = this.acoesParaCompletarNoApp(modulos);
+    const conversarConsulta = this.acoesParaConsulta(crianca, modulos);
+    const pontosFortes = this.pontosFortesDoPainel(modulos);
     const frase = prioridades.length > 0
       ? 'Há pontos úteis para acompanhar com mais atenção nos próximos registros.'
       : 'Os registros disponíveis não mostram pontos prioritários neste momento.';
 
-    return { frase, prioridades, modulos };
+    return {
+      frase,
+      prioridades,
+      acompanharCasa,
+      completarApp,
+      conversarConsulta,
+      pontosFortes,
+      periodo: this.periodoPainel(),
+      modulos
+    };
   }
 
   private resumoDesenvolvimento(crianca: Crianca): ModuloResumo {
@@ -298,8 +330,202 @@ export class DetalheCriancaComponent implements OnInit {
     return prioridades.slice(0, 4);
   }
 
+  private acoesParaAcompanharEmCasa(): PainelAcao[] {
+    const acoes: PainelAcao[] = [];
+    const ultimosSono = this.ultimos(this.registrosSono(), 5, (item) => item.dataRegistro);
+    const ultimosAlimentacao = this.ultimos(this.registrosAlimentacao(), 5, (item) => item.dataRegistro);
+
+    const sonoForaFaixa = ultimosSono.filter((registro) =>
+      registro.analise.classificacaoDuracao === 'ABAIXO_DA_FAIXA'
+      || registro.analise.classificacaoDuracao === 'ACIMA_DA_FAIXA'
+    ).length;
+    if (sonoForaFaixa >= 2) {
+      acoes.push({
+        titulo: 'Sono',
+        texto: `Em ${sonoForaFaixa} dos últimos ${ultimosSono.length} registros, o sono ficou fora da faixa esperada. Registre mais alguns dias e observe horários, cochilos e despertares.`
+      });
+    }
+
+    const telasSono = ultimosSono.filter((registro) => registro.telasAntesDormir).length;
+    if (telasSono >= 2) {
+      acoes.push({
+        titulo: 'Rotina antes de dormir',
+        texto: 'Telas perto do sono apareceram em mais de um registro. Vale observar se retirar telas antes de dormir melhora início do sono ou despertares.'
+      });
+    }
+
+    const despertares = ultimosSono.filter((registro) => (registro.despertaresNoturnos ?? 0) >= 3).length;
+    if (despertares >= 2) {
+      acoes.push({
+        titulo: 'Despertares',
+        texto: 'Despertares frequentes se repetiram. Anote se acontecem em horários parecidos e se há fome, desconforto, tela, luz ou mudança de rotina.'
+      });
+    }
+
+    const baixaVariedade = ultimosAlimentacao.filter((registro) =>
+      registro.consomeFrutas === false
+      || registro.consomeLegumesVerduras === false
+      || registro.consomeCarnesOvos === false
+    ).length;
+    if (baixaVariedade >= 2) {
+      acoes.push({
+        titulo: 'Variedade alimentar',
+        texto: 'A variedade apareceu como ponto a observar em mais de um registro. Planeje uma oferta por vez e registre aceitação sem transformar em pressão.'
+      });
+    }
+
+    const telasAlimentacao = ultimosAlimentacao.filter((registro) => registro.telasDuranteRefeicoes).length;
+    if (telasAlimentacao >= 2) {
+      acoes.push({
+        titulo: 'Refeições',
+        texto: 'Telas durante refeições se repetiram. Observe se refeições sem tela ajudam na atenção aos sinais de fome, saciedade e interação.'
+      });
+    }
+
+    if (acoes.length === 0 && (ultimosSono.length > 0 || ultimosAlimentacao.length > 0)) {
+      acoes.push({
+        titulo: 'Rotina',
+        texto: 'Os últimos registros não mostram repetição clara de um ponto modificável. Continue registrando para confirmar a estabilidade da rotina.'
+      });
+    }
+
+    return acoes.slice(0, 4);
+  }
+
+  private acoesParaCompletarNoApp(modulos: ModuloResumo[]): PainelAcao[] {
+    const acoes: PainelAcao[] = [];
+    const pendentes = modulos.filter((modulo) => modulo.estado === 'pendente');
+
+    if (pendentes.length > 0) {
+      acoes.push({
+        titulo: 'Registros pendentes',
+        texto: `Complete ${pendentes.map((modulo) => modulo.titulo.toLowerCase()).join(', ')} para o Pueria cruzar melhor rotina, crescimento e desenvolvimento.`
+      });
+    }
+
+    const marcos = this.marcos();
+    const idade = marcos.at(-1)?.idadeMeses;
+    const marcosDaIdade = idade === undefined ? [] : marcos.filter((marco) => marco.idadeMeses === idade);
+    const total = marcosDaIdade.length;
+    const respondidos = marcosDaIdade.filter((marco) => marco.status !== 'NAO_AVALIADO').length;
+    if (total > 0 && respondidos < total) {
+      acoes.push({
+        titulo: 'Desenvolvimento',
+        texto: `Faltam ${total - respondidos} marco(s) da faixa atual. Responder essa etapa melhora a leitura integrada do acompanhamento.`
+      });
+    }
+
+    if (this.registrosSono().length > 0 && this.registrosSono().length < 3) {
+      acoes.push({
+        titulo: 'Sono',
+        texto: 'Com 3 ou mais registros de sono, o painel consegue enxergar melhor se existe padrão ou se foi apenas um dia diferente.'
+      });
+    }
+
+    if (this.registrosAlimentacao().length > 0 && this.registrosAlimentacao().length < 3) {
+      acoes.push({
+        titulo: 'Alimentação',
+        texto: 'Com mais registros de alimentação, fica mais fácil diferenciar preferência ocasional de padrão persistente da rotina.'
+      });
+    }
+
+    return acoes.slice(0, 4);
+  }
+
+  private acoesParaConsulta(crianca: Crianca, modulos: ModuloResumo[]): PainelAcao[] {
+    const acoes: PainelAcao[] = [];
+    const ultimosSono = this.ultimos(this.registrosSono(), 5, (item) => item.dataRegistro);
+    const ultimosAlimentacao = this.ultimos(this.registrosAlimentacao(), 5, (item) => item.dataRegistro);
+
+    if (crianca.prematura) {
+      acoes.push({
+        titulo: 'Contexto de nascimento',
+        texto: 'Prematuridade registrada. Mantenha esse dado presente nas conversas sobre crescimento e desenvolvimento.'
+      });
+    }
+
+    const roncosOuPausas = ultimosSono.filter((registro) => registro.roncosFrequentes || registro.pausasRespiratoriasPercebidas).length;
+    if (roncosOuPausas > 0) {
+      acoes.push({
+        titulo: 'Sono',
+        texto: 'Roncos frequentes ou pausas respiratórias percebidas foram registrados. Vale levar esse ponto ao pediatra, especialmente se persistirem.'
+      });
+    }
+
+    const sonolenciaOuIrritabilidade = ultimosSono.filter((registro) => registro.sonolenciaDiurna || registro.irritabilidadeCansaco).length;
+    if (sonolenciaOuIrritabilidade >= 2) {
+      acoes.push({
+        titulo: 'Comportamento e descanso',
+        texto: 'Sonolência, irritabilidade ou cansaço apareceram em mais de um registro. Leve junto do histórico de sono para contextualizar.'
+      });
+    }
+
+    const sinaisAlimentares = ultimosAlimentacao.filter((registro) =>
+      registro.engasgosFrequentes
+      || registro.vomitosRecorrentes
+      || registro.dificuldadeGanhoPesoPercebida
+      || registro.preocupacaoFamilia
+    ).length;
+    if (sinaisAlimentares > 0) {
+      acoes.push({
+        titulo: 'Alimentação',
+        texto: 'Há sinal alimentar registrado que pode ajudar a conversa na consulta. Leve exemplos, frequência e quando acontece.'
+      });
+    }
+
+    const modulosAtencao = modulos.filter((modulo) => modulo.estado === 'atencao');
+    if (modulosAtencao.length >= 2) {
+      acoes.push({
+        titulo: 'Visão integrada',
+        texto: 'Mais de um módulo está marcado para observar. Use o painel como resumo para orientar a próxima conversa com o pediatra.'
+      });
+    }
+
+    return acoes.slice(0, 4);
+  }
+
+  private pontosFortesDoPainel(modulos: ModuloResumo[]): PainelAcao[] {
+    const pontos = modulos
+      .filter((modulo) => modulo.estado === 'ok')
+      .map((modulo) => ({
+        titulo: modulo.titulo,
+        texto: modulo.detalhe
+      }));
+
+    if (pontos.length === 0 && modulos.some((modulo) => modulo.estado === 'pendente')) {
+      pontos.push({
+        titulo: 'Começo do acompanhamento',
+        texto: 'Os módulos iniciais já estão organizados. O próximo ganho vem de completar registros e acompanhar evolução.'
+      });
+    }
+
+    return pontos.slice(0, 3);
+  }
+
+  private periodoPainel(): string {
+    const datas = [
+      ...this.registrosSono().map((registro) => registro.dataRegistro),
+      ...this.registrosAlimentacao().map((registro) => registro.dataRegistro),
+      ...this.curvasCrescimento().map((avaliacao) => avaliacao.dataMedicao)
+    ].sort();
+
+    if (datas.length === 0) {
+      return 'Sem registros longitudinais ainda';
+    }
+
+    const primeira = datas[0];
+    const ultima = datas.at(-1) ?? primeira;
+    return primeira === ultima
+      ? `Registro de ${this.formatarData(ultima)}`
+      : `${this.formatarData(primeira)} a ${this.formatarData(ultima)}`;
+  }
+
   private maisRecente<T>(itens: T[], data: (item: T) => string): T | null {
     return [...itens].sort((a, b) => data(b).localeCompare(data(a)))[0] ?? null;
+  }
+
+  private ultimos<T>(itens: T[], total: number, data: (item: T) => string): T[] {
+    return [...itens].sort((a, b) => data(b).localeCompare(data(a))).slice(0, total);
   }
 
   private tituloIdade(idadeMeses: number): string {

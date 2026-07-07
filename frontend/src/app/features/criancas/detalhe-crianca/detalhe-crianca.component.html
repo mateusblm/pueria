@@ -55,6 +55,7 @@
             <p class="pueria-eyebrow">Acompanhamento integrado</p>
             <h2>Como está a rotina agora</h2>
             <p>{{ painel.frase }}</p>
+            <small>{{ painel.periodo }}</small>
           </div>
           <a routerLink="/acompanhamento" class="pueria-button pueria-button--secondary">Ver todas as crianças</a>
         </div>
@@ -74,21 +75,66 @@
           }
         </div>
 
-        <div class="painel-integrado__prioridades">
-          <div>
-            <p class="pueria-eyebrow">Próximos passos</p>
-            <h3>O que observar</h3>
-          </div>
-
-          @if (painel.prioridades.length > 0) {
-            <ul>
-              @for (prioridade of painel.prioridades; track prioridade) {
-                <li>{{ prioridade }}</li>
+        <div class="painel-integrado__acoes">
+          <article class="painel-acao painel-acao--casa">
+            <p class="pueria-eyebrow">Em casa</p>
+            <h3>Acompanhar na rotina</h3>
+            @if (painel.acompanharCasa.length > 0) {
+              @for (acao of painel.acompanharCasa; track acao.titulo + acao.texto) {
+                <div>
+                  <strong>{{ acao.titulo }}</strong>
+                  <p>{{ acao.texto }}</p>
+                </div>
               }
-            </ul>
-          } @else {
-            <p class="painel-integrado__vazio">Continue registrando os módulos para o Pueria identificar padrões com mais clareza.</p>
-          }
+            } @else {
+              <p class="painel-integrado__vazio">Ainda não há padrão repetido suficiente para sugerir uma observação específica em casa.</p>
+            }
+          </article>
+
+          <article class="painel-acao painel-acao--app">
+            <p class="pueria-eyebrow">No app</p>
+            <h3>Completar registros</h3>
+            @if (painel.completarApp.length > 0) {
+              @for (acao of painel.completarApp; track acao.titulo + acao.texto) {
+                <div>
+                  <strong>{{ acao.titulo }}</strong>
+                  <p>{{ acao.texto }}</p>
+                </div>
+              }
+            } @else {
+              <p class="painel-integrado__vazio">Os principais módulos já têm dados suficientes para uma primeira leitura integrada.</p>
+            }
+          </article>
+
+          <article class="painel-acao painel-acao--consulta">
+            <p class="pueria-eyebrow">Consulta</p>
+            <h3>Levar ao pediatra</h3>
+            @if (painel.conversarConsulta.length > 0) {
+              @for (acao of painel.conversarConsulta; track acao.titulo + acao.texto) {
+                <div>
+                  <strong>{{ acao.titulo }}</strong>
+                  <p>{{ acao.texto }}</p>
+                </div>
+              }
+            } @else {
+              <p class="painel-integrado__vazio">Não há ponto prioritário para consulta identificado pelos registros atuais.</p>
+            }
+          </article>
+
+          <article class="painel-acao painel-acao--fortes">
+            <p class="pueria-eyebrow">Indo bem</p>
+            <h3>Pontos preservados</h3>
+            @if (painel.pontosFortes.length > 0) {
+              @for (acao of painel.pontosFortes; track acao.titulo + acao.texto) {
+                <div>
+                  <strong>{{ acao.titulo }}</strong>
+                  <p>{{ acao.texto }}</p>
+                </div>
+              }
+            } @else {
+              <p class="painel-integrado__vazio">Com mais registros, o Pueria também passa a destacar o que está estável.</p>
+            }
+          </article>
         </div>
       </section>
     }
