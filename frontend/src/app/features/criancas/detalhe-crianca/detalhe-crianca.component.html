@@ -19,6 +19,7 @@
         <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" class="pueria-button">Desenvolvimento</a>
         <a [routerLink]="['/criancas', crianca.id, 'crescimento']" class="pueria-button">Crescimento</a>
         <a [routerLink]="['/criancas', crianca.id, 'alimentacao']" class="pueria-button">Alimentação</a>
+        <a [routerLink]="['/criancas', crianca.id, 'sono']" class="pueria-button">Sono</a>
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
@@ -184,6 +185,15 @@
           Registre leite, introdução alimentar, variedade e sinais da rotina para apoiar o acompanhamento preventivo.
         </p>
         <a [routerLink]="['/criancas', crianca.id, 'alimentacao']" class="pueria-button pueria-button--secondary">Abrir alimentação</a>
+      </article>
+
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Sono</p>
+        <h2>Descanso e rotina</h2>
+        <p>
+          Registre horários, cochilos, despertares e hábitos antes de dormir para acompanhar o sono em 24 horas.
+        </p>
+        <a [routerLink]="['/criancas', crianca.id, 'sono']" class="pueria-button pueria-button--secondary">Abrir sono</a>
       </article>
     </div>
   }

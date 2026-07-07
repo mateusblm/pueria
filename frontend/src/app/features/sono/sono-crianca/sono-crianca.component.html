@@ -1,0 +1,197 @@
+<section class="sono-page">
+  <a [routerLink]="['/criancas', crianca()?.id]" class="sono-page__back">← Perfil</a>
+
+  @if (carregando()) {
+    <div class="pueria-card sono-page__state">Carregando sono...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-card sono-page__state">
+      <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+      <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Voltar</a>
+    </div>
+  } @else if (crianca(); as crianca) {
+    <div class="sono-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Sono</p>
+        <h1 class="pueria-title">{{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">Registre horários, cochilos, despertares e hábitos que podem influenciar descanso, comportamento e rotina familiar.</p>
+      </div>
+    </div>
+
+    @if (erro()) {
+      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+    @if (aviso()) {
+      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
+    }
+
+    @if (ultimoRegistro(); as registro) {
+      <section class="pueria-card sono-sintese">
+        <div class="sono-sintese__header">
+          <div>
+            <p class="pueria-eyebrow">Último registro</p>
+            <h2>{{ registro.analise.titulo }}</h2>
+            <p>{{ registro.analise.resumo }}</p>
+          </div>
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+        </div>
+
+        <div class="sono-sintese__grid">
+          <article>
+            <span>Sono em 24h</span>
+            <strong>{{ formatarDuracao(registro.minutosSonoTotal24h) }}</strong>
+            <small [class]="classeDuracao(registro)">{{ registro.analise.classificacaoDuracao === 'FAIXA_ESPERADA' ? 'Faixa esperada' : 'Acompanhar' }}</small>
+          </article>
+          <article>
+            <span>Faixa esperada</span>
+            <strong>{{ formatarDuracao(registro.analise.minutosSonoEsperadoMinimo) }} a {{ formatarDuracao(registro.analise.minutosSonoEsperadoMaximo) }}</strong>
+          </article>
+          <article>
+            <span>Sono noturno</span>
+            <strong>{{ formatarDuracao(registro.minutosSonoNoturno) }}</strong>
+          </article>
+          <article>
+            <span>Local</span>
+            <strong>{{ labelLocalSono(registro.localSono) }}</strong>
+          </article>
+        </div>
+
+        @if (possuiAlgumaAnalise(registro)) {
+          <div class="sono-analise">
+            @if (registro.analise.rotina.length > 0) {
+              <div>
+                <h3>Rotina registrada</h3>
+                <ul>
+                  @for (item of registro.analise.rotina; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.conversaConsulta.length > 0) {
+              <div>
+                <h3>Para conversar na consulta</h3>
+                <ul>
+                  @for (item of registro.analise.conversaConsulta; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.habitosApoio.length > 0) {
+              <div>
+                <h3>Hábitos da rotina</h3>
+                <ul>
+                  @for (item of registro.analise.habitosApoio; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    } @else {
+      <section class="pueria-card sono-page__state">
+        <h2>Nenhum registro de sono ainda</h2>
+        <p>Preencha o primeiro registro para acompanhar descanso, cochilos e hábitos antes de dormir.</p>
+      </section>
+    }
+
+    <div class="sono-layout">
+      <form class="pueria-card sono-form" [formGroup]="form" (ngSubmit)="salvar()">
+        <div class="sono-form__header">
+          <div>
+            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
+            <h2>Rotina de sono</h2>
+          </div>
+          @if (editandoId()) {
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
+          }
+        </div>
+
+        <div class="sono-form__grid">
+          <label>
+            <span>Data</span>
+            <input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Dormiu</span>
+            <input type="text" formControlName="horarioDormiu" placeholder="hh:mm" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Acordou</span>
+            <input type="text" formControlName="horarioAcordou" placeholder="hh:mm" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Local do sono</span>
+            <select formControlName="localSono">
+              @for (opcao of locaisSono; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>Cochilos no dia</span>
+            <input type="text" formControlName="quantidadeCochilos" placeholder="ex.: 2" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Tempo total de cochilos</span>
+            <input type="text" formControlName="minutosCochilos" placeholder="minutos" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Despertares noturnos</span>
+            <input type="text" formControlName="despertaresNoturnos" placeholder="ex.: 1" inputmode="numeric" />
+          </label>
+        </div>
+
+        <fieldset>
+          <legend>Hábitos antes e durante o sono</legend>
+          <div class="sono-checks">
+            <label><input type="checkbox" formControlName="rotinaSonoConsistente" /> Tem rotina previsível antes de dormir</label>
+            <label><input type="checkbox" formControlName="dificuldadeIniciarSono" /> Tem dificuldade para iniciar o sono</label>
+            <label><input type="checkbox" formControlName="telasAntesDormir" /> Usa telas perto do horário de dormir</label>
+            <label><input type="checkbox" formControlName="sonoAgitado" /> Sono agitado</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Sinais observados</legend>
+          <div class="sono-checks">
+            <label><input type="checkbox" formControlName="roncosFrequentes" /> Roncos frequentes</label>
+            <label><input type="checkbox" formControlName="pausasRespiratoriasPercebidas" /> Pausas respiratórias percebidas</label>
+            <label><input type="checkbox" formControlName="sonolenciaDiurna" /> Sonolência durante o dia</label>
+            <label><input type="checkbox" formControlName="irritabilidadeCansaco" /> Irritabilidade ou cansaço</label>
+            <label><input type="checkbox" formControlName="preocupacaoFamilia" /> Há preocupação da família</label>
+          </div>
+        </fieldset>
+
+        <label>
+          <span>Observações</span>
+          <textarea formControlName="observacao" rows="4" placeholder="Ex.: rotina antes de dormir, mudanças recentes, despertares, cochilos ou dúvidas para a consulta."></textarea>
+        </label>
+
+        <button type="submit" class="pueria-button" [disabled]="salvando()">
+          {{ salvando() ? 'Salvando...' : 'Salvar sono' }}
+        </button>
+      </form>
+
+      <aside class="pueria-card sono-historico">
+        <p class="pueria-eyebrow">Histórico</p>
+        <h2>Registros</h2>
+        @if (registrosOrdenados().length === 0) {
+          <p>Nenhum registro salvo.</p>
+        } @else {
+          <div class="sono-historico__lista">
+            @for (registro of registrosOrdenados(); track registro.id) {
+              <article>
+                <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+                <span>{{ formatarDuracao(registro.minutosSonoTotal24h) }} em 24h</span>
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
+              </article>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</section>
