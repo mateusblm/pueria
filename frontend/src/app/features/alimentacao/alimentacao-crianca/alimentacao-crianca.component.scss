@@ -34,8 +34,15 @@
 .alimentacao-form__header {
   align-items: flex-start;
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   justify-content: space-between;
+}
+
+.alimentacao-sintese {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
 }
 
 .alimentacao-sintese__grid,
@@ -43,7 +50,6 @@
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
-  margin-top: 1.25rem;
 }
 
 .alimentacao-sintese__grid article {
@@ -64,8 +70,7 @@
 .alimentacao-analise {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
 }
 
 .alimentacao-analise div {
