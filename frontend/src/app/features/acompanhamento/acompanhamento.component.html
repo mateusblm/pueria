@@ -14,8 +14,8 @@
   } @else if (!possuiCriancas()) {
     <section class="pueria-card acompanhamento-page__state">
       <h2>Nenhuma criança cadastrada ainda</h2>
-      <p>Cadastre a primeira criança para iniciar o acompanhamento.</p>
-      <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+      <p>Vamos criar o primeiro perfil em poucos passos para iniciar a linha do tempo preventiva.</p>
+      <button type="button" class="pueria-button" (click)="abrirCadastroInicial()">Começar cadastro</button>
     </section>
   } @else {
     <div class="acompanhamento-lista">
@@ -54,6 +54,125 @@
           </div>
         </article>
       }
+    </div>
+  }
+
+  @if (cadastroInicialAberto()) {
+    <div class="cadastro-modal" role="dialog" aria-modal="true" aria-labelledby="cadastro-inicial-titulo">
+      <form class="cadastro-modal__panel" [formGroup]="formCadastro" (ngSubmit)="cadastrarPrimeiraCrianca()">
+        <div class="cadastro-modal__topo">
+          <div>
+            <p class="pueria-eyebrow">Primeiro acompanhamento</p>
+            <h2 id="cadastro-inicial-titulo">Vamos criar o perfil inicial</h2>
+            <p>São só os dados essenciais para o Pueria começar a linha do tempo com segurança.</p>
+          </div>
+          <button type="button" class="cadastro-modal__fechar" aria-label="Fechar cadastro" (click)="fecharCadastroInicial()">×</button>
+        </div>
+
+        <div class="cadastro-modal__etapas" aria-label="Etapas do cadastro">
+          <span [class.cadastro-modal__etapa--ativa]="etapaCadastro() === 1">Criança</span>
+          <span [class.cadastro-modal__etapa--ativa]="etapaCadastro() === 2">Nascimento</span>
+          <span [class.cadastro-modal__etapa--ativa]="etapaCadastro() === 3">Vínculo</span>
+        </div>
+
+        @if (etapaCadastro() === 1) {
+          <section class="cadastro-modal__step">
+            <h3>Quem será acompanhado?</h3>
+            <div class="cadastro-modal__grid">
+              <label>
+                Nome da criança
+                <input type="text" formControlName="nome" autocomplete="name" placeholder="Ex.: Helena" />
+              </label>
+              <label>
+                Data de nascimento
+                <input
+                  type="date"
+                  formControlName="dataNascimento"
+                  [min]="dataMinimaNascimento"
+                  [max]="dataMaximaNascimento"
+                />
+              </label>
+              <label>
+                Sexo
+                <select formControlName="sexo">
+                  @for (sexo of sexos; track sexo.value) {
+                    <option [value]="sexo.value">{{ sexo.label }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+          </section>
+        }
+
+        @if (etapaCadastro() === 2) {
+          <section class="cadastro-modal__step">
+            <h3>Dados de nascimento</h3>
+            <div class="cadastro-modal__grid">
+              <label>
+                Semanas de gestação
+                <input type="number" formControlName="semanasGestacionais" inputmode="numeric" placeholder="Ex.: 39" />
+              </label>
+              <label>
+                Dias
+                <input type="number" formControlName="diasGestacionais" inputmode="numeric" placeholder="0 a 6" />
+              </label>
+              <label>
+                Peso ao nascer (g)
+                <input type="number" formControlName="pesoNascimentoGramas" inputmode="numeric" placeholder="Ex.: 3200" />
+              </label>
+              <label>
+                Comprimento ao nascer (cm)
+                <input type="text" formControlName="comprimentoNascimentoCm" inputmode="decimal" placeholder="Ex.: 49,5" />
+              </label>
+              <label>
+                Perímetro cefálico (cm)
+                <input type="text" formControlName="perimetroCefalicoNascimentoCm" inputmode="decimal" placeholder="Ex.: 34" />
+              </label>
+            </div>
+            <label class="cadastro-modal__check">
+              <input type="checkbox" formControlName="prematura" />
+              Nasceu antes de 37 semanas
+            </label>
+          </section>
+        }
+
+        @if (etapaCadastro() === 3) {
+          <section class="cadastro-modal__step">
+            <h3>Seu vínculo com a criança</h3>
+            <div class="cadastro-modal__grid">
+              <label>
+                Vínculo
+                <select formControlName="parentesco">
+                  @for (parentesco of parentescos; track parentesco.value) {
+                    <option [value]="parentesco.value">{{ parentesco.label }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+            <label class="cadastro-modal__check">
+              <input type="checkbox" formControlName="aceiteConsentimento" />
+              Autorizo o registro das informações para acompanhamento preventivo da criança.
+            </label>
+          </section>
+        }
+
+        @if (erroCadastro()) {
+          <p class="pueria-message pueria-message--erro">{{ erroCadastro() }}</p>
+        }
+
+        <div class="cadastro-modal__actions">
+          @if (etapaCadastro() > 1) {
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="voltarCadastro()">Voltar</button>
+          }
+          @if (etapaCadastro() < 3) {
+            <button type="button" class="pueria-button" (click)="avancarCadastro()">Continuar</button>
+          } @else {
+            <button type="submit" class="pueria-button" [disabled]="salvandoCrianca()">
+              {{ salvandoCrianca() ? 'Criando...' : 'Criar perfil' }}
+            </button>
+          }
+        </div>
+      </form>
     </div>
   }
 </section>

@@ -5,7 +5,9 @@
     <p class="pueria-subtitle">
       Perfis das crianças da sua família para organizar o cuidado, os registros e a evolução nos primeiros anos.
     </p>
-    <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+    @if (!carregando() && !erro() && criancas().length > 0) {
+      <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+    }
   </div>
 
   @if (carregando()) {
