@@ -1,9 +1,9 @@
 <section class="acompanhamento-page">
   <div class="acompanhamento-page__hero">
     <p class="pueria-eyebrow">Acompanhamento</p>
-    <h1 class="pueria-title">Como vai o desenvolvimento</h1>
+    <h1 class="pueria-title">Cuidado contínuo da criança</h1>
     <p class="pueria-subtitle">
-      Acompanhe os marcos da idade, registre dúvidas da rotina e prepare uma conversa mais clara com o pediatra.
+      Veja o que merece atenção agora e mantenha desenvolvimento, crescimento, sono, alimentação e telas em uma mesma linha de cuidado.
     </p>
   </div>
 
@@ -14,47 +14,102 @@
   } @else if (!possuiCriancas()) {
     <section class="pueria-card acompanhamento-page__state">
       <h2>Nenhuma criança cadastrada ainda</h2>
-      <p>Vamos criar o primeiro perfil em poucos passos para iniciar a linha do tempo preventiva.</p>
+      <p>Vamos cadastrar a criança em poucos passos para começar o acompanhamento.</p>
       <button type="button" class="pueria-button" (click)="abrirCadastroInicial()">Começar cadastro</button>
     </section>
   } @else {
-    <div class="acompanhamento-lista">
-      @for (resumo of resumos(); track resumo.crianca.id) {
-        @let progressoAtual = progresso(resumo.marcos);
-        <article class="pueria-card acompanhamento-card">
+    @let foco = criancaEmFoco();
+    @let progressoAtual = progresso(foco.marcos);
+    @let pontos = pontosAtencao(foco.marcos);
+
+    <section class="acompanhamento-home">
+      <article class="pueria-card acompanhamento-destaque">
+        <div class="acompanhamento-destaque__conteudo">
+          <p class="pueria-eyebrow">Hoje no acompanhamento</p>
+          <h2>{{ foco.crianca.nome }}</h2>
+          <p>{{ calcularIdade(foco.crianca.dataNascimento) }} · Faixa de referência: {{ idadeReferencia(foco.marcos) }}</p>
+          <strong>{{ mensagemDoDia(foco) }}</strong>
+        </div>
+
+        <div class="acompanhamento-destaque__painel">
           <div>
-            <p class="pueria-eyebrow">{{ calcularIdade(resumo.crianca.dataNascimento) }}</p>
-            <h2>{{ resumo.crianca.nome }}</h2>
-            <p>Faixa de referência: {{ idadeReferencia(resumo.marcos) }}</p>
+            <span>Marcos preenchidos</span>
+            <strong>{{ progressoAtual.respondidos }}/{{ progressoAtual.total }}</strong>
           </div>
+          <div class="progresso" aria-hidden="true">
+            <span [style.width.%]="progressoAtual.percentual"></span>
+          </div>
+          <small>{{ progressoAtual.percentual }}% da idade atual</small>
+          <a [routerLink]="rotaAcaoPrincipal(foco)" class="pueria-button">{{ textoAcaoPrincipal(foco) }}</a>
+        </div>
+      </article>
 
-          @if (resumo.erro) {
-            <p class="acompanhamento-card__erro">{{ resumo.erro }}</p>
-          } @else {
-            <div class="acompanhamento-card__progresso">
-              <strong>{{ progressoAtual.respondidos }}/{{ progressoAtual.total }}</strong>
-              <div class="progresso" aria-hidden="true">
-                <span [style.width.%]="progressoAtual.percentual"></span>
-              </div>
-              <small>{{ progressoAtual.percentual }}% respondido</small>
-            </div>
+      <aside class="pueria-card acompanhamento-prioridades">
+        <div>
+          <p class="pueria-eyebrow">Próximos passos</p>
+          <h2>O que fazer agora</h2>
+        </div>
 
-            <div class="acompanhamento-card__badges">
-              <span>{{ labelPontosAtencao(pontosAtencao(resumo.marcos)) }}</span>
-            </div>
+        <div class="acompanhamento-prioridades__lista">
+          @for (passo of proximosPassos(foco); track passo.titulo) {
+            <a [routerLink]="passo.rota" class="prioridade" [class.prioridade--destaque]="passo.destaque">
+              <strong>{{ passo.titulo }}</strong>
+              <span>{{ passo.detalhe }}</span>
+            </a>
           }
+        </div>
+      </aside>
+    </section>
 
-          <div class="acompanhamento-card__actions">
-            <a [routerLink]="['/criancas', resumo.crianca.id, 'desenvolvimento']" class="pueria-button">Continuar</a>
-            <a [routerLink]="['/criancas', resumo.crianca.id, 'crescimento']" class="pueria-button pueria-button--secondary">Crescimento</a>
-            <a [routerLink]="['/criancas', resumo.crianca.id, 'alimentacao']" class="pueria-button pueria-button--secondary">Alimentação</a>
-            <a [routerLink]="['/criancas', resumo.crianca.id, 'sono']" class="pueria-button pueria-button--secondary">Sono</a>
-            <a [routerLink]="['/criancas', resumo.crianca.id, 'telas']" class="pueria-button pueria-button--secondary">Telas</a>
-            <a [routerLink]="['/criancas', resumo.crianca.id]" class="pueria-button pueria-button--secondary">Perfil</a>
-          </div>
-        </article>
+    @if (!foco.erro) {
+      <section class="pueria-card acompanhamento-consulta">
+        <div>
+          <p class="pueria-eyebrow">Consulta</p>
+          <h2>{{ labelPontosAtencao(pontos) }}</h2>
+          <p>
+            Use as respostas dos marcos junto com crescimento, sono, alimentação e telas para levar uma visão mais completa à consulta.
+          </p>
+        </div>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" class="pueria-button pueria-button--secondary">
+          Revisar desenvolvimento
+        </a>
+      </section>
+    }
+
+    <section class="acompanhamento-modulos" aria-label="Módulos de acompanhamento">
+      @for (modulo of modulosCuidado(foco); track modulo.titulo) {
+        <a [routerLink]="modulo.rota" class="pueria-card modulo-cuidado" [class.modulo-cuidado--destaque]="modulo.destaque">
+          <span>{{ modulo.titulo }}</span>
+          <strong>{{ modulo.detalhe }}</strong>
+        </a>
       }
-    </div>
+    </section>
+
+    @if (outrasCriancas().length > 0) {
+      <section class="acompanhamento-outras">
+        <div>
+          <p class="pueria-eyebrow">Família</p>
+          <h2>Outras crianças</h2>
+        </div>
+
+        <div class="acompanhamento-outras__grid">
+          @for (resumo of outrasCriancas(); track resumo.crianca.id) {
+            @let progressoResumo = progresso(resumo.marcos);
+            <article class="pueria-card outra-crianca">
+              <div class="outra-crianca__identidade">
+                <strong>{{ resumo.crianca.nome }}</strong>
+                <span>{{ calcularIdade(resumo.crianca.dataNascimento) }}</span>
+              </div>
+              <small>{{ progressoResumo.percentual }}% dos marcos da idade atual</small>
+              <div class="outra-crianca__acoes">
+                <button type="button" class="pueria-button" (click)="selecionarCriancaEmFoco(resumo)">Ver resumo</button>
+                <a [routerLink]="['/criancas', resumo.crianca.id]" class="pueria-button pueria-button--secondary">Acompanhar</a>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
   }
 
   @if (cadastroInicialAberto()) {
@@ -64,7 +119,7 @@
           <div>
             <p class="pueria-eyebrow">Primeiro acompanhamento</p>
             <h2 id="cadastro-inicial-titulo">Vamos criar o perfil inicial</h2>
-            <p>São só os dados essenciais para o Pueria começar a linha do tempo com segurança.</p>
+            <p>São só os dados essenciais para começarmos o acompanhamento com segurança.</p>
           </div>
           <button type="button" class="cadastro-modal__fechar" aria-label="Fechar cadastro" (click)="fecharCadastroInicial()">×</button>
         </div>

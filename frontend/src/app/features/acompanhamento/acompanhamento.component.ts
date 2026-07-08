@@ -14,6 +14,13 @@ type ResumoCrianca = {
   erro?: string;
 };
 
+type AtalhoCuidado = {
+  titulo: string;
+  detalhe: string;
+  rota: string[];
+  destaque?: boolean;
+};
+
 @Component({
   selector: 'app-acompanhamento',
   imports: [RouterLink, ReactiveFormsModule],
@@ -32,8 +39,18 @@ export class AcompanhamentoComponent implements OnInit {
   readonly etapaCadastro = signal(1);
   readonly erro = signal('');
   readonly erroCadastro = signal('');
+  readonly criancaEmFocoId = signal<string | null>(this.lerCriancaEmFocoSalva());
 
   readonly possuiCriancas = computed(() => this.resumos().length > 0);
+  readonly criancaEmFoco = computed(() => {
+    const resumos = this.resumos();
+    const id = this.criancaEmFocoId();
+    return (resumos.find((resumo) => resumo.crianca.id === id) ?? this.escolherResumoInicial(resumos)) as ResumoCrianca;
+  });
+  readonly outrasCriancas = computed(() => {
+    const foco = this.criancaEmFoco();
+    return this.resumos().filter((resumo) => resumo.crianca.id !== foco?.crianca.id);
+  });
   readonly dataMaximaNascimento = this.formatarDataInput(new Date());
   readonly dataMinimaNascimento = this.calcularDataMinimaNascimento();
 
@@ -125,6 +142,11 @@ export class AcompanhamentoComponent implements OnInit {
   voltarCadastro(): void {
     this.erroCadastro.set('');
     this.etapaCadastro.update((etapa) => Math.max(etapa - 1, 1));
+  }
+
+  selecionarCriancaEmFoco(resumo: ResumoCrianca): void {
+    this.criancaEmFocoId.set(resumo.crianca.id);
+    localStorage.setItem('pueria.criancaEmFocoId', resumo.crianca.id);
   }
 
   formatarDataNascimento(evento: Event): void {
@@ -242,6 +264,123 @@ export class AcompanhamentoComponent implements OnInit {
     return total === 1 ? '1 dúvida para a consulta' : `${total} dúvidas para a consulta`;
   }
 
+  mensagemDoDia(resumo: ResumoCrianca): string {
+    if (resumo.erro) {
+      return 'Não conseguimos atualizar os marcos agora, mas os outros registros continuam disponíveis.';
+    }
+
+    const progresso = this.progresso(resumo.marcos);
+    const pontos = this.pontosAtencao(resumo.marcos);
+
+    if (progresso.total === 0) {
+      return 'O perfil já está criado. O próximo passo é fazer os primeiros registros.';
+    }
+    if (pontos > 0) {
+      return 'Há respostas que merecem ser observadas com calma e levadas para a próxima conversa com o pediatra.';
+    }
+    if (progresso.percentual < 100) {
+      return 'Continue pelos marcos da idade atual para deixar a leitura do desenvolvimento mais completa.';
+    }
+    return 'Os marcos da idade atual foram preenchidos. Mantenha os registros de rotina para acompanhar a evolução.';
+  }
+
+  textoAcaoPrincipal(resumo: ResumoCrianca): string {
+    if (resumo.erro) {
+      return 'Ver perfil';
+    }
+    return this.progresso(resumo.marcos).percentual < 100 ? 'Continuar marcos' : 'Ver desenvolvimento';
+  }
+
+  rotaAcaoPrincipal(resumo: ResumoCrianca): string[] {
+    if (resumo.erro) {
+      return ['/criancas', resumo.crianca.id];
+    }
+    return ['/criancas', resumo.crianca.id, 'desenvolvimento'];
+  }
+
+  proximosPassos(resumo: ResumoCrianca): AtalhoCuidado[] {
+    const progresso = this.progresso(resumo.marcos);
+    const pontos = this.pontosAtencao(resumo.marcos);
+    const passos: AtalhoCuidado[] = [];
+
+    if (resumo.erro) {
+      return [{
+        titulo: 'Abrir perfil',
+        detalhe: 'Confira os dados da criança enquanto o desenvolvimento não carrega.',
+        rota: ['/criancas', resumo.crianca.id],
+        destaque: true
+      }];
+    }
+
+    if (progresso.total === 0 || progresso.percentual < 100) {
+      passos.push({
+        titulo: 'Responder marcos da idade',
+        detalhe: `${progresso.respondidos}/${progresso.total} respostas preenchidas na idade atual.`,
+        rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
+        destaque: true
+      });
+    }
+
+    if (pontos > 0) {
+      passos.push({
+        titulo: 'Preparar conversa com o pediatra',
+        detalhe: this.labelPontosAtencao(pontos),
+        rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
+        destaque: true
+      });
+    }
+
+    passos.push(
+      {
+        titulo: 'Atualizar crescimento',
+        detalhe: 'Peso, altura e medida da cabeça ajudam a acompanhar o crescimento.',
+        rota: ['/criancas', resumo.crianca.id, 'crescimento']
+      },
+      {
+        titulo: 'Registrar sono e rotina',
+        detalhe: 'Sono, alimentação e telas ajudam a entender melhor a rotina da criança.',
+        rota: ['/criancas', resumo.crianca.id, 'sono']
+      }
+    );
+
+    return passos.slice(0, 4);
+  }
+
+  modulosCuidado(resumo: ResumoCrianca): AtalhoCuidado[] {
+    const progresso = this.progresso(resumo.marcos);
+
+    return [
+      {
+        titulo: 'Desenvolvimento',
+        detalhe: progresso.total === 0
+          ? 'Inicie os marcos da idade atual.'
+          : `${progresso.percentual}% dos marcos da idade atual preenchidos.`,
+        rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
+        destaque: progresso.percentual < 100
+      },
+      {
+        titulo: 'Crescimento',
+        detalhe: 'Veja se peso, altura e medida da cabeça seguem o esperado para a idade.',
+        rota: ['/criancas', resumo.crianca.id, 'crescimento']
+      },
+      {
+        titulo: 'Alimentação',
+        detalhe: 'Observe rotina, variedade alimentar e pontos úteis para a consulta.',
+        rota: ['/criancas', resumo.crianca.id, 'alimentacao']
+      },
+      {
+        titulo: 'Sono',
+        detalhe: 'Registre duração, qualidade e padrão de descanso em 24 horas.',
+        rota: ['/criancas', resumo.crianca.id, 'sono']
+      },
+      {
+        titulo: 'Telas',
+        detalhe: 'Acompanhe tempo, contexto de uso e oportunidades de ajuste.',
+        rota: ['/criancas', resumo.crianca.id, 'telas']
+      }
+    ];
+  }
+
   calcularIdade(dataNascimento: string): string {
     const nascimento = new Date(`${dataNascimento}T00:00:00`);
     const hoje = new Date();
@@ -259,6 +398,31 @@ export class AcompanhamentoComponent implements OnInit {
       return `${meses} ${meses === 1 ? 'mês' : 'meses'}`;
     }
     return `${anos} ${anos === 1 ? 'ano' : 'anos'} e ${meses} ${meses === 1 ? 'mês' : 'meses'}`;
+  }
+
+  private escolherResumoInicial(resumos: ResumoCrianca[]): ResumoCrianca | undefined {
+    return [...resumos].sort((a, b) => {
+      const diferencaPrioridade = this.pontuacaoResumo(b) - this.pontuacaoResumo(a);
+      if (diferencaPrioridade !== 0) {
+        return diferencaPrioridade;
+      }
+      return a.crianca.nome.localeCompare(b.crianca.nome, 'pt-BR');
+    })[0];
+  }
+
+  private pontuacaoResumo(resumo: ResumoCrianca): number {
+    if (resumo.erro) {
+      return 0;
+    }
+
+    const progresso = this.progresso(resumo.marcos);
+    return (this.pontosAtencao(resumo.marcos) * 100)
+      + (progresso.total === 0 ? 30 : 0)
+      + (progresso.percentual < 100 ? 20 : 0);
+  }
+
+  private lerCriancaEmFocoSalva(): string | null {
+    return localStorage.getItem('pueria.criancaEmFocoId');
   }
 
   private tituloIdade(idadeMeses: number): string {
