@@ -1,6 +1,6 @@
 <section class="crianca-form-page">
   <div class="crianca-form-page__header">
-    <a [routerLink]="crianca() ? ['/criancas', crianca()?.id] : ['/criancas']" class="crianca-form-page__back">← Voltar</a>
+    <a [routerLink]="rotaCancelar()" class="crianca-form-page__back">← Voltar</a>
     <p class="pueria-eyebrow">Editar perfil</p>
     <h1 class="pueria-title">Dados da criança</h1>
     <p class="pueria-subtitle">Mantenha o contexto inicial atualizado para preservar a qualidade do acompanhamento.</p>
@@ -211,7 +211,7 @@
       }
 
       <div class="crianca-form__actions">
-        <a [routerLink]="crianca() ? ['/criancas', crianca()?.id] : ['/criancas']" class="pueria-button pueria-button--secondary">Cancelar</a>
+        <a [routerLink]="rotaCancelar()" class="pueria-button pueria-button--secondary">Cancelar</a>
         <button class="pueria-button" type="submit" [disabled]="salvando()">
           {{ salvando() ? 'Salvando...' : 'Salvar alterações' }}
         </button>

@@ -234,6 +234,16 @@ export class EditarCriancaComponent implements OnInit {
     this.erro.set('');
   }
 
+  rotaCancelar(): string[] {
+    const origem = this.route.snapshot.queryParamMap.get('origem');
+    if (origem === 'minhas-criancas') {
+      return ['/criancas'];
+    }
+
+    const crianca = this.crianca();
+    return crianca ? ['/criancas', crianca.id] : ['/criancas'];
+  }
+
   private validarRegraPrematuridade(): string {
     const semanas = this.form.controls.semanasGestacionais.value;
     const prematura = this.form.controls.prematura.value;
