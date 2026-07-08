@@ -1,0 +1,30 @@
+CREATE TABLE registros_telas (
+    id UUID PRIMARY KEY,
+    crianca_id UUID NOT NULL,
+    data_registro DATE NOT NULL,
+    minutos_dia_semana INTEGER,
+    minutos_fim_semana INTEGER,
+    tipo_conteudo_predominante VARCHAR(40) NOT NULL,
+    tela_ao_acordar BOOLEAN,
+    tela_durante_refeicoes BOOLEAN,
+    tela_antes_dormir BOOLEAN,
+    tela_para_acalmar BOOLEAN,
+    tela_em_segundo_plano BOOLEAN,
+    uso_acompanhado_adulto BOOLEAN,
+    conteudo_adulto_supervisionado BOOLEAN,
+    videochamada_familia BOOLEAN,
+    autoplay_ativo BOOLEAN,
+    notificacoes_ativas BOOLEAN,
+    dispositivo_no_quarto BOOLEAN,
+    brinca_ao_ar_livre BOOLEAN,
+    leitura_brincadeira_sem_tela BOOLEAN,
+    preocupacao_familia BOOLEAN,
+    observacao VARCHAR(1000),
+    criado_em TIMESTAMP NOT NULL,
+    atualizado_em TIMESTAMP,
+    CONSTRAINT fk_registros_telas_crianca FOREIGN KEY (crianca_id) REFERENCES criancas(id) ON DELETE CASCADE,
+    CONSTRAINT ck_registros_telas_minutos_semana CHECK (minutos_dia_semana IS NULL OR minutos_dia_semana BETWEEN 0 AND 1440),
+    CONSTRAINT ck_registros_telas_minutos_fim_semana CHECK (minutos_fim_semana IS NULL OR minutos_fim_semana BETWEEN 0 AND 1440)
+);
+
+CREATE INDEX idx_registros_telas_crianca_data ON registros_telas(crianca_id, data_registro);

@@ -1,0 +1,217 @@
+<section class="telas-page">
+  <a [routerLink]="['/criancas', crianca()?.id]" class="telas-page__back">← Perfil</a>
+
+  @if (carregando()) {
+    <div class="pueria-card telas-page__state">Carregando telas...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-card telas-page__state">
+      <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+      <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Voltar</a>
+    </div>
+  } @else if (crianca(); as crianca) {
+    <div class="telas-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Telas</p>
+        <h1 class="pueria-title">{{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">Observe tempo, momentos do dia e contexto de uso para apoiar sono, refeições, brincadeira e interação familiar.</p>
+      </div>
+    </div>
+
+    @if (erro()) {
+      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+    @if (aviso()) {
+      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
+    }
+
+    @if (ultimoRegistro(); as registro) {
+      <section class="pueria-card telas-sintese">
+        <div class="telas-sintese__header">
+          <div>
+            <p class="pueria-eyebrow">Último registro</p>
+            <h2>{{ registro.analise.titulo }}</h2>
+            <p>{{ registro.analise.resumo }}</p>
+          </div>
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+        </div>
+
+        <div class="telas-sintese__grid">
+          <article class="telas-sintese__metric">
+            <span>Tempo médio</span>
+            <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
+            <small [class]="classeTempo(registro)">
+              {{ registro.analise.classificacaoTempo === 'DENTRO_DA_REFERENCIA' ? 'Dentro da referência' : 'Acompanhar' }}
+            </small>
+          </article>
+          <article>
+            <span>Referência por idade</span>
+            <strong>{{ textoReferencia(registro) }}</strong>
+          </article>
+          <article>
+            <span>Conteúdo predominante</span>
+            <strong>{{ labelTipoConteudo(registro.tipoConteudoPredominante) }}</strong>
+          </article>
+          <article>
+            <span>Data</span>
+            <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+          </article>
+        </div>
+
+        @if (possuiAlgumaAnalise(registro)) {
+          <div class="telas-analise">
+            @if (registro.analise.rotina.length > 0) {
+              <div>
+                <h3>Rotina observada</h3>
+                <ul>
+                  @for (item of registro.analise.rotina; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.habitosApoio.length > 0) {
+              <div>
+                <h3>Ajustes possíveis</h3>
+                <ul>
+                  @for (item of registro.analise.habitosApoio; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.conversaConsulta.length > 0) {
+              <div>
+                <h3>Para conversar na consulta</h3>
+                <ul>
+                  @for (item of registro.analise.conversaConsulta; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    } @else {
+      <section class="pueria-card telas-page__state">
+        <h2>Nenhum registro de telas ainda</h2>
+        <p>Comece por um dia comum. O Pueria vai olhar tempo, contexto e momentos da rotina, não apenas o número de minutos.</p>
+      </section>
+    }
+
+    <div class="telas-layout">
+      <form class="pueria-card telas-form" [formGroup]="form" (ngSubmit)="salvar()">
+        <div class="telas-form__header">
+          <div>
+            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
+            <h2>Mapa da rotina com telas</h2>
+          </div>
+          @if (editandoId()) {
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
+          }
+        </div>
+
+        <section class="telas-form__bloco telas-form__tempo">
+          <div class="telas-form__bloco-titulo">
+            <span>1</span>
+            <div>
+              <h3>Tempo aproximado</h3>
+              <p>Use uma estimativa do dia. A comparação é feita pela idade.</p>
+            </div>
+          </div>
+
+          <div class="telas-form__grid">
+            <label>
+              <span>Data</span>
+              <input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" />
+            </label>
+            <label>
+              <span>Dia de semana</span>
+              <input type="text" formControlName="minutosDiaSemana" placeholder="minutos" inputmode="numeric" />
+            </label>
+            <label>
+              <span>Fim de semana</span>
+              <input type="text" formControlName="minutosFimSemana" placeholder="minutos" inputmode="numeric" />
+            </label>
+            <label>
+              <span>Mais comum</span>
+              <select formControlName="tipoConteudoPredominante">
+                @for (opcao of tiposConteudo; track opcao.valor) {
+                  <option [value]="opcao.valor">{{ opcao.label }}</option>
+                }
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="telas-form__bloco">
+          <div class="telas-form__bloco-titulo">
+            <span>2</span>
+            <div>
+              <h3>Onde aparece na rotina</h3>
+              <p>Marque os momentos em que a tela costuma entrar.</p>
+            </div>
+          </div>
+
+          <div class="telas-pills">
+            <label><input type="checkbox" formControlName="telaAoAcordar" /> Ao acordar</label>
+            <label><input type="checkbox" formControlName="telaDuranteRefeicoes" /> Durante refeições</label>
+            <label><input type="checkbox" formControlName="telaAntesDormir" /> Antes de dormir</label>
+            <label><input type="checkbox" formControlName="telaParaAcalmar" /> Para acalmar</label>
+            <label><input type="checkbox" formControlName="telaEmSegundoPlano" /> Ligada ao fundo</label>
+            <label><input type="checkbox" formControlName="dispositivoNoQuarto" /> Dispositivo no quarto</label>
+          </div>
+        </section>
+
+        <section class="telas-form__bloco">
+          <div class="telas-form__bloco-titulo">
+            <span>3</span>
+            <div>
+              <h3>Como a família conduz</h3>
+              <p>Esses detalhes mudam bastante a orientação.</p>
+            </div>
+          </div>
+
+          <div class="telas-pills telas-pills--apoio">
+            <label><input type="checkbox" formControlName="usoAcompanhadoAdulto" /> Adulto assiste junto</label>
+            <label><input type="checkbox" formControlName="conteudoAdultoSupervisionado" /> Conteúdo escolhido pela família</label>
+            <label><input type="checkbox" formControlName="videochamadaFamilia" /> Videochamada com familiares</label>
+            <label><input type="checkbox" formControlName="autoplayAtivo" /> Autoplay ativo</label>
+            <label><input type="checkbox" formControlName="notificacoesAtivas" /> Notificações ativas</label>
+            <label><input type="checkbox" formControlName="brincaAoArLivre" /> Brincou ao ar livre</label>
+            <label><input type="checkbox" formControlName="leituraBrincadeiraSemTela" /> Leitura ou brincadeira sem tela</label>
+            <label><input type="checkbox" formControlName="preocupacaoFamilia" /> Família quer conversar sobre isso</label>
+          </div>
+        </section>
+
+        <label class="telas-form__observacao">
+          <span>Observações</span>
+          <textarea formControlName="observacao" rows="4" placeholder="Ex.: momento em que a tela ajuda, quando atrapalha, combinados da casa ou dúvidas para a consulta."></textarea>
+        </label>
+
+        <button type="submit" class="pueria-button" [disabled]="salvando()">
+          {{ salvando() ? 'Salvando...' : 'Salvar registro' }}
+        </button>
+      </form>
+
+      <aside class="pueria-card telas-historico">
+        <p class="pueria-eyebrow">Histórico</p>
+        <h2>Registros</h2>
+        @if (registrosOrdenados().length === 0) {
+          <p>Nenhum registro salvo.</p>
+        } @else {
+          <div class="telas-historico__lista">
+            @for (registro of registrosOrdenados(); track registro.id) {
+              <article>
+                <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+                <span>{{ formatarDuracao(registro.minutosMediosDia) }} por dia</span>
+                <small>{{ labelTipoConteudo(registro.tipoConteudoPredominante) }}</small>
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
+              </article>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</section>

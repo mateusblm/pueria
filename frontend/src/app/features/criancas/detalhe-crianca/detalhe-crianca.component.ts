@@ -7,10 +7,12 @@ import { AvaliacaoCurvaCrescimento } from '../../../shared/models/crescimento.mo
 import { Crianca } from '../../../shared/models/crianca.model';
 import { MarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
 import { RegistroSono } from '../../../shared/models/sono.model';
+import { RegistroTelas } from '../../../shared/models/telas.model';
 import { AlimentacaoService } from '../../alimentacao/alimentacao.service';
 import { CrescimentoService } from '../../crescimento/crescimento.service';
 import { DesenvolvimentoService } from '../../desenvolvimento/desenvolvimento.service';
 import { SonoService } from '../../sono/sono.service';
+import { TelasService } from '../../telas/telas.service';
 import { CriancasService } from '../criancas.service';
 
 type EstadoModulo = 'ok' | 'atencao' | 'pendente' | 'indisponivel';
@@ -53,6 +55,7 @@ export class DetalheCriancaComponent implements OnInit {
   readonly curvasCrescimento = signal<AvaliacaoCurvaCrescimento[]>([]);
   readonly registrosAlimentacao = signal<RegistroAlimentacao[]>([]);
   readonly registrosSono = signal<RegistroSono[]>([]);
+  readonly registrosTelas = signal<RegistroTelas[]>([]);
   readonly errosModulos = signal<Record<string, string>>({});
   readonly carregando = signal(true);
   readonly removendo = signal(false);
@@ -61,6 +64,7 @@ export class DetalheCriancaComponent implements OnInit {
 
   readonly ultimoRegistroAlimentacao = computed(() => this.maisRecente(this.registrosAlimentacao(), (item) => item.dataRegistro));
   readonly ultimoRegistroSono = computed(() => this.maisRecente(this.registrosSono(), (item) => item.dataRegistro));
+  readonly ultimoRegistroTelas = computed(() => this.maisRecente(this.registrosTelas(), (item) => item.dataRegistro));
   readonly ultimaAvaliacaoCrescimento = computed(() => this.maisRecente(this.curvasCrescimento(), (item) => item.dataMedicao));
   readonly painel = computed(() => this.montarPainel());
 
@@ -71,7 +75,8 @@ export class DetalheCriancaComponent implements OnInit {
     private readonly desenvolvimentoService: DesenvolvimentoService,
     private readonly crescimentoService: CrescimentoService,
     private readonly alimentacaoService: AlimentacaoService,
-    private readonly sonoService: SonoService
+    private readonly sonoService: SonoService,
+    private readonly telasService: TelasService
   ) {}
 
   ngOnInit(): void {
@@ -107,16 +112,21 @@ export class DetalheCriancaComponent implements OnInit {
       sono: this.sonoService.listar(id).pipe(catchError(() => {
         this.registrarErroModulo('sono', 'Não foi possível carregar o sono agora.');
         return of([]);
+      })),
+      telas: this.telasService.listar(id).pipe(catchError(() => {
+        this.registrarErroModulo('telas', 'NÃ£o foi possÃ­vel carregar telas agora.');
+        return of([]);
       }))
     })
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: ({ crianca, marcos, curvas, alimentacao, sono }) => {
+        next: ({ crianca, marcos, curvas, alimentacao, sono, telas }) => {
           this.crianca.set(crianca);
           this.marcos.set(marcos);
           this.curvasCrescimento.set(curvas);
           this.registrosAlimentacao.set(alimentacao);
           this.registrosSono.set(sono);
+          this.registrosTelas.set(telas);
         },
         error: (erro: HttpErrorResponse) => {
           this.erro.set(erro.status === 404
@@ -149,7 +159,8 @@ export class DetalheCriancaComponent implements OnInit {
       this.resumoDesenvolvimento(crianca),
       this.resumoCrescimento(crianca),
       this.resumoAlimentacao(crianca),
-      this.resumoSono(crianca)
+      this.resumoSono(crianca),
+      this.resumoTelas(crianca)
     ];
     const prioridades = this.prioridadesDoPainel(modulos, crianca);
     const acompanharCasa = this.acoesParaAcompanharEmCasa();
@@ -303,6 +314,36 @@ export class DetalheCriancaComponent implements OnInit {
     };
   }
 
+  private resumoTelas(crianca: Crianca): ModuloResumo {
+    if (this.errosModulos()['telas']) {
+      return this.moduloIndisponivel('Telas', 'Tempo e contexto', ['/criancas', crianca.id, 'telas']);
+    }
+
+    const registro = this.ultimoRegistroTelas();
+    if (!registro) {
+      return {
+        titulo: 'Telas',
+        subtitulo: 'Tempo e contexto',
+        estado: 'pendente',
+        valor: 'Sem registro',
+        detalhe: 'Registre quando a tela aparece para observar sono, refeicoes e brincadeira junto da rotina.',
+        acao: 'Registrar',
+        rota: ['/criancas', crianca.id, 'telas']
+      };
+    }
+
+    const atencao = registro.analise.classificacaoTempo === 'ACIMA_DA_REFERENCIA' || registro.analise.conversaConsulta.length > 0;
+    return {
+      titulo: 'Telas',
+      subtitulo: `Ultimo registro: ${this.formatarData(registro.dataRegistro)}`,
+      estado: atencao ? 'atencao' : 'ok',
+      valor: this.formatarDuracaoTela(registro.minutosMediosDia),
+      detalhe: registro.analise.resumo,
+      acao: 'Ver rotina',
+      rota: ['/criancas', crianca.id, 'telas']
+    };
+  }
+
   private moduloIndisponivel(titulo: string, subtitulo: string, rota: string[]): ModuloResumo {
     return {
       titulo,
@@ -334,6 +375,7 @@ export class DetalheCriancaComponent implements OnInit {
     const acoes: PainelAcao[] = [];
     const ultimosSono = this.ultimos(this.registrosSono(), 5, (item) => item.dataRegistro);
     const ultimosAlimentacao = this.ultimos(this.registrosAlimentacao(), 5, (item) => item.dataRegistro);
+    const ultimosTelas = this.ultimos(this.registrosTelas(), 5, (item) => item.dataRegistro);
 
     const sonoForaFaixa = ultimosSono.filter((registro) =>
       registro.analise.classificacaoDuracao === 'ABAIXO_DA_FAIXA'
@@ -382,7 +424,25 @@ export class DetalheCriancaComponent implements OnInit {
       });
     }
 
-    if (acoes.length === 0 && (ultimosSono.length > 0 || ultimosAlimentacao.length > 0)) {
+    const telasAcimaReferencia = ultimosTelas.filter((registro) => registro.analise.classificacaoTempo === 'ACIMA_DA_REFERENCIA').length;
+    if (telasAcimaReferencia >= 2) {
+      acoes.push({
+        titulo: 'Telas',
+        texto: `Em ${telasAcimaReferencia} dos ultimos ${ultimosTelas.length} registros, o tempo ficou acima da referencia. Observe quais momentos da rotina sao mais faceis de ajustar primeiro.`
+      });
+    }
+
+    const telasContextoSonoRefeicao = ultimosTelas.filter((registro) =>
+      registro.telaAntesDormir || registro.telaDuranteRefeicoes || registro.telaParaAcalmar
+    ).length;
+    if (telasContextoSonoRefeicao >= 2) {
+      acoes.push({
+        titulo: 'Contexto das telas',
+        texto: 'Telas perto do sono, nas refeicoes ou para acalmar apareceram mais de uma vez. Esses contextos costumam ser bons pontos de comeco para mudancas pequenas.'
+      });
+    }
+
+    if (acoes.length === 0 && (ultimosSono.length > 0 || ultimosAlimentacao.length > 0 || ultimosTelas.length > 0)) {
       acoes.push({
         titulo: 'Rotina',
         texto: 'Os últimos registros não mostram repetição clara de um ponto modificável. Continue registrando para confirmar a estabilidade da rotina.'
@@ -429,6 +489,13 @@ export class DetalheCriancaComponent implements OnInit {
       });
     }
 
+    if (this.registrosTelas().length > 0 && this.registrosTelas().length < 3) {
+      acoes.push({
+        titulo: 'Telas',
+        texto: 'Com mais alguns registros de telas, fica mais facil diferenciar um dia pontual de um padrao da rotina.'
+      });
+    }
+
     return acoes.slice(0, 4);
   }
 
@@ -436,6 +503,7 @@ export class DetalheCriancaComponent implements OnInit {
     const acoes: PainelAcao[] = [];
     const ultimosSono = this.ultimos(this.registrosSono(), 5, (item) => item.dataRegistro);
     const ultimosAlimentacao = this.ultimos(this.registrosAlimentacao(), 5, (item) => item.dataRegistro);
+    const ultimosTelas = this.ultimos(this.registrosTelas(), 5, (item) => item.dataRegistro);
 
     if (crianca.prematura) {
       acoes.push({
@@ -473,6 +541,14 @@ export class DetalheCriancaComponent implements OnInit {
       });
     }
 
+    const preocupacaoTelas = ultimosTelas.filter((registro) => registro.preocupacaoFamilia || registro.analise.conversaConsulta.length > 0).length;
+    if (preocupacaoTelas > 0) {
+      acoes.push({
+        titulo: 'Telas',
+        texto: 'Ha contexto de telas que pode valer conversa na consulta. Leve tempo aproximado, momento do dia e o que a familia ja tentou ajustar.'
+      });
+    }
+
     const modulosAtencao = modulos.filter((modulo) => modulo.estado === 'atencao');
     if (modulosAtencao.length >= 2) {
       acoes.push({
@@ -506,6 +582,7 @@ export class DetalheCriancaComponent implements OnInit {
     const datas = [
       ...this.registrosSono().map((registro) => registro.dataRegistro),
       ...this.registrosAlimentacao().map((registro) => registro.dataRegistro),
+      ...this.registrosTelas().map((registro) => registro.dataRegistro),
       ...this.curvasCrescimento().map((avaliacao) => avaliacao.dataMedicao)
     ].sort();
 
@@ -550,6 +627,18 @@ export class DetalheCriancaComponent implements OnInit {
       return `${horas}h`;
     }
     return `${horas}h${resto.toString().padStart(2, '0')}`;
+  }
+
+  formatarDuracaoTela(minutos?: number | null): string {
+    if (minutos === null || minutos === undefined) {
+      return 'Sem tempo';
+    }
+    if (minutos < 60) {
+      return `${minutos} min`;
+    }
+    const horas = Math.floor(minutos / 60);
+    const resto = minutos % 60;
+    return resto === 0 ? `${horas}h` : `${horas}h${resto.toString().padStart(2, '0')}`;
   }
 
   classeEstado(estado: EstadoModulo): string {
