@@ -127,6 +127,20 @@ export class AcompanhamentoComponent implements OnInit {
     this.etapaCadastro.update((etapa) => Math.max(etapa - 1, 1));
   }
 
+  formatarDataNascimento(evento: Event): void {
+    const campo = evento.target as HTMLInputElement;
+    const digitos = campo.value.replace(/\D/g, '').slice(0, 8);
+    const partes = [
+      digitos.slice(0, 2),
+      digitos.slice(2, 4),
+      digitos.slice(4, 8)
+    ].filter(Boolean);
+    const valorFormatado = partes.join('/');
+
+    campo.value = valorFormatado;
+    this.formCadastro.controls.dataNascimento.setValue(valorFormatado, { emitEvent: false });
+  }
+
   cadastrarPrimeiraCrianca(): void {
     this.erroCadastro.set('');
     const erro = this.validarEtapa(1) || this.validarEtapa(2) || this.validarEtapa(3);
@@ -136,6 +150,7 @@ export class AcompanhamentoComponent implements OnInit {
     }
 
     const valor = this.formCadastro.getRawValue();
+    const dataNascimento = this.converterDataBrasileiraParaIso(valor.dataNascimento);
     const comprimento = this.lerDecimal(valor.comprimentoNascimentoCm, 'comprimento ao nascer', 20, 70);
     const perimetro = this.lerDecimal(valor.perimetroCefalicoNascimentoCm, 'perímetro cefálico ao nascer', 20, 50);
     const erroDecimal = this.extrairErroDecimal(comprimento, perimetro);
@@ -147,7 +162,7 @@ export class AcompanhamentoComponent implements OnInit {
     this.salvandoCrianca.set(true);
     this.criancasService.criar({
       nome: valor.nome.trim(),
-      dataNascimento: valor.dataNascimento,
+      dataNascimento: dataNascimento as string,
       sexo: valor.sexo,
       prematura: valor.prematura,
       semanasGestacionais: valor.semanasGestacionais as number,
@@ -311,9 +326,9 @@ export class AcompanhamentoComponent implements OnInit {
   }
 
   private validarRegraIdade(): string {
-    const dataNascimento = this.formCadastro.controls.dataNascimento.value;
+    const dataNascimento = this.converterDataBrasileiraParaIso(this.formCadastro.controls.dataNascimento.value);
     if (!dataNascimento) {
-      return '';
+      return 'Informe a data de nascimento no formato dd/mm/aaaa.';
     }
 
     const nascimento = new Date(`${dataNascimento}T00:00:00`);
@@ -329,6 +344,24 @@ export class AcompanhamentoComponent implements OnInit {
       return 'No momento, o Pueria acompanha crianças de até 6 anos neste cadastro.';
     }
     return '';
+  }
+
+  private converterDataBrasileiraParaIso(valor: string): string | null {
+    const partes = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(valor.trim());
+    if (!partes) {
+      return null;
+    }
+
+    const dia = Number(partes[1]);
+    const mes = Number(partes[2]);
+    const ano = Number(partes[3]);
+    const data = new Date(ano, mes - 1, dia);
+
+    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
+      return null;
+    }
+
+    return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
   }
 
   private lerDecimal(valor: string, campo: string, minimo: number, maximo: number): number | string {

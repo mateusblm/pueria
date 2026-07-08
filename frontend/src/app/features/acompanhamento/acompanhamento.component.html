@@ -86,10 +86,12 @@
               <label>
                 Data de nascimento
                 <input
-                  type="date"
+                  type="text"
                   formControlName="dataNascimento"
-                  [min]="dataMinimaNascimento"
-                  [max]="dataMaximaNascimento"
+                  inputmode="numeric"
+                  maxlength="10"
+                  placeholder="dd/mm/aaaa"
+                  (input)="formatarDataNascimento($event)"
                 />
               </label>
               <label>

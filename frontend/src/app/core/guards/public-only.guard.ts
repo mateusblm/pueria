@@ -11,5 +11,5 @@ export const publicOnlyGuard: CanActivateFn = () => {
     return true;
   }
 
-  return router.parseUrl('/criancas');
+  return router.parseUrl('/acompanhamento');
 };
