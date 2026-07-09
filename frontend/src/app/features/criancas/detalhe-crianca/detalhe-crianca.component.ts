@@ -8,11 +8,13 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { MarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
 import { RegistroSono } from '../../../shared/models/sono.model';
 import { RegistroTelas } from '../../../shared/models/telas.model';
+import { RegistroTransitoIntestinal } from '../../../shared/models/transito-intestinal.model';
 import { AlimentacaoService } from '../../alimentacao/alimentacao.service';
 import { CrescimentoService } from '../../crescimento/crescimento.service';
 import { DesenvolvimentoService } from '../../desenvolvimento/desenvolvimento.service';
 import { SonoService } from '../../sono/sono.service';
 import { TelasService } from '../../telas/telas.service';
+import { TransitoIntestinalService } from '../../transito-intestinal/transito-intestinal.service';
 import { CriancasService } from '../criancas.service';
 
 type EstadoModulo = 'ok' | 'atencao' | 'pendente' | 'indisponivel';
@@ -54,6 +56,7 @@ export class DetalheCriancaComponent implements OnInit {
   readonly marcos = signal<MarcoDesenvolvimento[]>([]);
   readonly curvasCrescimento = signal<AvaliacaoCurvaCrescimento[]>([]);
   readonly registrosAlimentacao = signal<RegistroAlimentacao[]>([]);
+  readonly registrosTransitoIntestinal = signal<RegistroTransitoIntestinal[]>([]);
   readonly registrosSono = signal<RegistroSono[]>([]);
   readonly registrosTelas = signal<RegistroTelas[]>([]);
   readonly errosModulos = signal<Record<string, string>>({});
@@ -63,6 +66,7 @@ export class DetalheCriancaComponent implements OnInit {
   readonly erro = signal('');
 
   readonly ultimoRegistroAlimentacao = computed(() => this.maisRecente(this.registrosAlimentacao(), (item) => item.dataRegistro));
+  readonly ultimoRegistroTransitoIntestinal = computed(() => this.maisRecente(this.registrosTransitoIntestinal(), (item) => item.dataRegistro));
   readonly ultimoRegistroSono = computed(() => this.maisRecente(this.registrosSono(), (item) => item.dataRegistro));
   readonly ultimoRegistroTelas = computed(() => this.maisRecente(this.registrosTelas(), (item) => item.dataRegistro));
   readonly ultimaAvaliacaoCrescimento = computed(() => this.maisRecente(this.curvasCrescimento(), (item) => item.dataMedicao));
@@ -75,6 +79,7 @@ export class DetalheCriancaComponent implements OnInit {
     private readonly desenvolvimentoService: DesenvolvimentoService,
     private readonly crescimentoService: CrescimentoService,
     private readonly alimentacaoService: AlimentacaoService,
+    private readonly transitoIntestinalService: TransitoIntestinalService,
     private readonly sonoService: SonoService,
     private readonly telasService: TelasService
   ) {}
@@ -109,6 +114,10 @@ export class DetalheCriancaComponent implements OnInit {
         this.registrarErroModulo('alimentacao', 'Não foi possível carregar a alimentação agora.');
         return of([]);
       })),
+      transitoIntestinal: this.transitoIntestinalService.listar(id).pipe(catchError(() => {
+        this.registrarErroModulo('transitoIntestinal', 'Não foi possível carregar o trânsito intestinal agora.');
+        return of([]);
+      })),
       sono: this.sonoService.listar(id).pipe(catchError(() => {
         this.registrarErroModulo('sono', 'Não foi possível carregar o sono agora.');
         return of([]);
@@ -120,11 +129,12 @@ export class DetalheCriancaComponent implements OnInit {
     })
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: ({ crianca, marcos, curvas, alimentacao, sono, telas }) => {
+        next: ({ crianca, marcos, curvas, alimentacao, transitoIntestinal, sono, telas }) => {
           this.crianca.set(crianca);
           this.marcos.set(marcos);
           this.curvasCrescimento.set(curvas);
           this.registrosAlimentacao.set(alimentacao);
+          this.registrosTransitoIntestinal.set(transitoIntestinal);
           this.registrosSono.set(sono);
           this.registrosTelas.set(telas);
         },
@@ -159,6 +169,7 @@ export class DetalheCriancaComponent implements OnInit {
       this.resumoDesenvolvimento(crianca),
       this.resumoCrescimento(crianca),
       this.resumoAlimentacao(crianca),
+      this.resumoTransitoIntestinal(crianca),
       this.resumoSono(crianca),
       this.resumoTelas(crianca)
     ];
@@ -284,6 +295,36 @@ export class DetalheCriancaComponent implements OnInit {
     };
   }
 
+  private resumoTransitoIntestinal(crianca: Crianca): ModuloResumo {
+    if (this.errosModulos()['transitoIntestinal']) {
+      return this.moduloIndisponivel('Trânsito intestinal', 'Fezes e assaduras', ['/criancas', crianca.id, 'transito-intestinal']);
+    }
+
+    const registro = this.ultimoRegistroTransitoIntestinal();
+    if (!registro) {
+      return {
+        titulo: 'Trânsito intestinal',
+        subtitulo: 'Fezes e assaduras',
+        estado: 'pendente',
+        valor: 'Sem registro',
+        detalhe: 'Registre aspecto das fezes, frequência e sinais associados.',
+        acao: 'Registrar',
+        rota: ['/criancas', crianca.id, 'transito-intestinal']
+      };
+    }
+
+    const pontosConsulta = registro.analise.conversaConsulta.length;
+    return {
+      titulo: 'Trânsito intestinal',
+      subtitulo: `Último registro: ${this.formatarData(registro.dataRegistro)}`,
+      estado: pontosConsulta > 0 ? 'atencao' : 'ok',
+      valor: this.labelClassificacaoFezes(registro.analise.classificacaoFezes),
+      detalhe: pontosConsulta > 0 ? registro.analise.resumo : 'Registro intestinal salvo para acompanhar padrões ao longo dos dias.',
+      acao: 'Ver registro',
+      rota: ['/criancas', crianca.id, 'transito-intestinal']
+    };
+  }
+
   private resumoSono(crianca: Crianca): ModuloResumo {
     if (this.errosModulos()['sono']) {
       return this.moduloIndisponivel('Sono', 'Descanso em 24h', ['/criancas', crianca.id, 'sono']);
@@ -375,6 +416,7 @@ export class DetalheCriancaComponent implements OnInit {
     const acoes: PainelAcao[] = [];
     const ultimosSono = this.ultimos(this.registrosSono(), 5, (item) => item.dataRegistro);
     const ultimosAlimentacao = this.ultimos(this.registrosAlimentacao(), 5, (item) => item.dataRegistro);
+    const ultimosIntestinal = this.ultimos(this.registrosTransitoIntestinal(), 5, (item) => item.dataRegistro);
     const ultimosTelas = this.ultimos(this.registrosTelas(), 5, (item) => item.dataRegistro);
 
     const sonoForaFaixa = ultimosSono.filter((registro) =>
@@ -424,6 +466,19 @@ export class DetalheCriancaComponent implements OnInit {
       });
     }
 
+    const fezesForaEsperado = ultimosIntestinal.filter((registro) =>
+      registro.analise.classificacaoFezes === 'ENDURECIDA'
+      || registro.analise.classificacaoFezes === 'LIQUIDA'
+      || registro.constipacao
+      || registro.diarreia
+    ).length;
+    if (fezesForaEsperado >= 2) {
+      acoes.push({
+        titulo: 'Trânsito intestinal',
+        texto: 'Fezes endurecidas, líquidas ou evacuação difícil apareceram mais de uma vez. Observe hidratação, alimentos recentes e repetição do padrão.'
+      });
+    }
+
     const telasAcimaReferencia = ultimosTelas.filter((registro) => registro.analise.classificacaoTempo === 'ACIMA_DA_REFERENCIA').length;
     if (telasAcimaReferencia >= 2) {
       acoes.push({
@@ -442,7 +497,7 @@ export class DetalheCriancaComponent implements OnInit {
       });
     }
 
-    if (acoes.length === 0 && (ultimosSono.length > 0 || ultimosAlimentacao.length > 0 || ultimosTelas.length > 0)) {
+    if (acoes.length === 0 && (ultimosSono.length > 0 || ultimosAlimentacao.length > 0 || ultimosIntestinal.length > 0 || ultimosTelas.length > 0)) {
       acoes.push({
         titulo: 'Rotina',
         texto: 'Os últimos registros não mostram repetição clara de um ponto modificável. Continue registrando para confirmar a estabilidade da rotina.'
@@ -489,6 +544,13 @@ export class DetalheCriancaComponent implements OnInit {
       });
     }
 
+    if (this.registrosTransitoIntestinal().length > 0 && this.registrosTransitoIntestinal().length < 3) {
+      acoes.push({
+        titulo: 'Trânsito intestinal',
+        texto: 'Com mais alguns registros, fica mais fácil diferenciar uma mudança pontual de um padrão intestinal.'
+      });
+    }
+
     if (this.registrosTelas().length > 0 && this.registrosTelas().length < 3) {
       acoes.push({
         titulo: 'Telas',
@@ -503,6 +565,7 @@ export class DetalheCriancaComponent implements OnInit {
     const acoes: PainelAcao[] = [];
     const ultimosSono = this.ultimos(this.registrosSono(), 5, (item) => item.dataRegistro);
     const ultimosAlimentacao = this.ultimos(this.registrosAlimentacao(), 5, (item) => item.dataRegistro);
+    const ultimosIntestinal = this.ultimos(this.registrosTransitoIntestinal(), 5, (item) => item.dataRegistro);
     const ultimosTelas = this.ultimos(this.registrosTelas(), 5, (item) => item.dataRegistro);
 
     if (crianca.prematura) {
@@ -538,6 +601,23 @@ export class DetalheCriancaComponent implements OnInit {
       acoes.push({
         titulo: 'Alimentação',
         texto: 'Há sinal alimentar registrado que pode ajudar a conversa na consulta. Leve exemplos, frequência e quando acontece.'
+      });
+    }
+
+    const sinaisIntestinais = ultimosIntestinal.filter((registro) =>
+      registro.raiasSangue
+      || registro.muco
+      || registro.dorEvacuar
+      || registro.escapeFecal
+      || registro.assaduraFrequente
+      || registro.assaduraPontosVermelhos
+      || registro.preocupacaoFamilia
+      || registro.analise.conversaConsulta.length > 0
+    ).length;
+    if (sinaisIntestinais > 0) {
+      acoes.push({
+        titulo: 'Trânsito intestinal',
+        texto: 'Há sinais intestinais ou de pele registrados. Leve frequência, aspecto das fezes e presença de assaduras para a consulta.'
       });
     }
 
@@ -582,6 +662,7 @@ export class DetalheCriancaComponent implements OnInit {
     const datas = [
       ...this.registrosSono().map((registro) => registro.dataRegistro),
       ...this.registrosAlimentacao().map((registro) => registro.dataRegistro),
+      ...this.registrosTransitoIntestinal().map((registro) => registro.dataRegistro),
       ...this.registrosTelas().map((registro) => registro.dataRegistro),
       ...this.curvasCrescimento().map((avaliacao) => avaliacao.dataMedicao)
     ].sort();
@@ -659,6 +740,17 @@ export class DetalheCriancaComponent implements OnInit {
       indisponivel: 'Indisponível'
     };
     return labels[estado];
+  }
+
+  labelClassificacaoFezes(classificacao: string): string {
+    const labels: Record<string, string> = {
+      ENDURECIDA: 'Endurecida',
+      ESPERADA: 'Na faixa esperada',
+      MAIS_MACIA: 'Mais macia',
+      LIQUIDA: 'Líquida',
+      SEM_DADOS: 'Sem dados'
+    };
+    return labels[classificacao] ?? classificacao;
   }
 
   abrirConfirmacaoRemocao(): void {

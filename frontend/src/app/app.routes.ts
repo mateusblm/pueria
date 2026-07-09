@@ -25,6 +25,7 @@ export const routes: Routes = [
       { path: 'criancas/:id/desenvolvimento', loadComponent: () => import('./features/desenvolvimento/marcos-crianca/marcos-crianca.component').then((m) => m.MarcosCriancaComponent) },
       { path: 'criancas/:id/crescimento', loadComponent: () => import('./features/crescimento/crescimento-crianca/crescimento-crianca.component').then((m) => m.CrescimentoCriancaComponent) },
       { path: 'criancas/:id/alimentacao', loadComponent: () => import('./features/alimentacao/alimentacao-crianca/alimentacao-crianca.component').then((m) => m.AlimentacaoCriancaComponent) },
+      { path: 'criancas/:id/transito-intestinal', loadComponent: () => import('./features/transito-intestinal/transito-intestinal-crianca/transito-intestinal-crianca.component').then((m) => m.TransitoIntestinalCriancaComponent) },
       { path: 'criancas/:id/sono', loadComponent: () => import('./features/sono/sono-crianca/sono-crianca.component').then((m) => m.SonoCriancaComponent) },
       { path: 'criancas/:id/telas', loadComponent: () => import('./features/telas/telas-crianca/telas-crianca.component').then((m) => m.TelasCriancaComponent) },
       { path: 'criancas/:id', loadComponent: () => import('./features/criancas/detalhe-crianca/detalhe-crianca.component').then((m) => m.DetalheCriancaComponent) },
@@ -34,6 +35,7 @@ export const routes: Routes = [
       { path: 'app/criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'app/criancas/:id/crescimento', redirectTo: 'criancas/:id/crescimento' },
       { path: 'app/criancas/:id/alimentacao', redirectTo: 'criancas/:id/alimentacao' },
+      { path: 'app/criancas/:id/transito-intestinal', redirectTo: 'criancas/:id/transito-intestinal' },
       { path: 'app/criancas/:id/sono', redirectTo: 'criancas/:id/sono' },
       { path: 'app/criancas/:id/telas', redirectTo: 'criancas/:id/telas' },
       { path: 'app/criancas/:id', redirectTo: 'criancas/:id' },
@@ -45,6 +47,7 @@ export const routes: Routes = [
       { path: 'minhas-criancas/:id/desenvolvimento', redirectTo: 'criancas/:id/desenvolvimento' },
       { path: 'minhas-criancas/:id/crescimento', redirectTo: 'criancas/:id/crescimento' },
       { path: 'minhas-criancas/:id/alimentacao', redirectTo: 'criancas/:id/alimentacao' },
+      { path: 'minhas-criancas/:id/transito-intestinal', redirectTo: 'criancas/:id/transito-intestinal' },
       { path: 'minhas-criancas/:id/sono', redirectTo: 'criancas/:id/sono' },
       { path: 'minhas-criancas/:id/telas', redirectTo: 'criancas/:id/telas' },
       { path: 'minhas-criancas/:id', redirectTo: 'criancas/:id' }

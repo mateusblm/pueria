@@ -74,12 +74,12 @@ Status usados:
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| INT-01 | Criar aba/módulo `Trânsito intestinal` no acompanhamento. | Pendente | Deve ficar entre alimentação e sono no fluxo sugerido. |
-| INT-02 | Registrar fezes com escala de Bristol. | Pesquisa/validação | Usar ilustrações e explicação lado a lado. Para crianças pequenas, validar se usaremos Bristol padrão ou adaptação pediátrica. |
-| INT-03 | Registrar elementos anormais nas fezes. | Pendente | Muco, restos alimentares, raias de sangue. |
-| INT-04 | Registrar facilidade de limpeza. | Pendente | Fezes difíceis de limpar e fáceis de limpar. |
-| INT-05 | Migrar constipação e diarreia recorrente para este módulo. | Pendente | Requer migração/ajuste de dados se quisermos preservar registros antigos. |
-| INT-06 | Registrar assaduras. | Pendente | Opções sugeridas: assaduras frequentes com vermelhidão; assaduras com pontos vermelhos. |
+| INT-01 | Criar aba/módulo `Trânsito intestinal` no acompanhamento. | Implementado | Módulo criado e integrado ao perfil/acompanhamento da criança. |
+| INT-02 | Registrar fezes com escala de Bristol. | Implementado | Escala visual de 1 a 7 incluída com descrição e alerta de que é guia de consistência, não diagnóstico. |
+| INT-03 | Registrar elementos anormais nas fezes. | Implementado | Muco, restos alimentares e raias de sangue incluídos. |
+| INT-04 | Registrar facilidade de limpeza. | Implementado | Opções: fácil de limpar, difícil de limpar e não informado. |
+| INT-05 | Migrar constipação e diarreia recorrente para este módulo. | Implementado | Novos registros ficam no módulo intestinal. Campos antigos da alimentação foram preservados apenas por compatibilidade. |
+| INT-06 | Registrar assaduras. | Implementado | Inclui assaduras frequentes, com vermelhidão e com pontos vermelhos. |
 
 ## Crescimento 0-2 anos
 

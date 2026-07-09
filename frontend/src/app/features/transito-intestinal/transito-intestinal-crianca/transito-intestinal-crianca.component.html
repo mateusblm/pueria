@@ -1,0 +1,216 @@
+<section class="intestinal-page">
+  <a [routerLink]="['/criancas', crianca()?.id]" class="intestinal-page__back">← Perfil</a>
+
+  @if (carregando()) {
+    <div class="pueria-card intestinal-page__state">Carregando trânsito intestinal...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-card intestinal-page__state">
+      <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+      <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Voltar</a>
+    </div>
+  } @else if (crianca(); as crianca) {
+    <div class="intestinal-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Trânsito intestinal</p>
+        <h1 class="pueria-title">{{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">Registre o aspecto das fezes, frequência e sinais associados para observar padrões ao longo dos dias.</p>
+      </div>
+    </div>
+
+    @if (erro()) {
+      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+    }
+    @if (aviso()) {
+      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
+    }
+
+    @if (ultimoRegistro(); as registro) {
+      <section class="pueria-card intestinal-sintese">
+        <div class="intestinal-sintese__header">
+          <div>
+            <p class="pueria-eyebrow">Último registro</p>
+            <h2>{{ registro.analise.titulo }}</h2>
+            <p>{{ registro.analise.resumo }}</p>
+          </div>
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+        </div>
+
+        <div class="intestinal-sintese__grid">
+          <article>
+            <span>Aspecto</span>
+            <strong>{{ labelTipoFezes(registro.tipoFezes) }}</strong>
+          </article>
+          <article>
+            <span>Classificação</span>
+            <strong>{{ registro.analise.classificacaoFezes }}</strong>
+          </article>
+          <article>
+            <span>Evacuações</span>
+            <strong>{{ registro.evacuacoesPorDia ?? 'Não informado' }}</strong>
+          </article>
+          <article>
+            <span>Data</span>
+            <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+          </article>
+        </div>
+
+        @if (possuiAlgumaAnalise(registro)) {
+          <div class="intestinal-analise">
+            @if (registro.analise.rotina.length > 0) {
+              <div>
+                <h3>Rotina registrada</h3>
+                <ul>
+                  @for (item of registro.analise.rotina; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.conversaConsulta.length > 0) {
+              <div>
+                <h3>Para conversar na consulta</h3>
+                <ul>
+                  @for (item of registro.analise.conversaConsulta; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (registro.analise.habitosApoio.length > 0) {
+              <div>
+                <h3>Hábitos da rotina</h3>
+                <ul>
+                  @for (item of registro.analise.habitosApoio; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    } @else {
+      <section class="pueria-card intestinal-page__state">
+        <h2>Nenhum registro intestinal ainda</h2>
+        <p>Comece por um dia comum. O mais útil é observar repetição do padrão, não um registro isolado.</p>
+      </section>
+    }
+
+    <div class="intestinal-layout">
+      <form class="pueria-card intestinal-form" [formGroup]="form" (ngSubmit)="salvar()">
+        <div class="intestinal-form__header">
+          <div>
+            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
+            <h2>Registro do dia</h2>
+          </div>
+          @if (editandoId()) {
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
+          }
+        </div>
+
+        <div class="intestinal-form__grid">
+          <label>
+            <span>Data</span>
+            <input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Evacuações no dia</span>
+            <input type="text" formControlName="evacuacoesPorDia" placeholder="ex.: 2" inputmode="numeric" />
+          </label>
+          <label>
+            <span>Limpeza</span>
+            <select formControlName="facilidadeLimpeza">
+              @for (opcao of facilidadesLimpeza; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <section class="intestinal-scale" aria-labelledby="bristol-titulo">
+          <div>
+            <p class="pueria-eyebrow">Escala de Bristol</p>
+            <h3 id="bristol-titulo">Qual mais se parece?</h3>
+            <p>Use como guia visual de consistência. Em crianças pequenas, o padrão pode variar; o mais importante é observar repetição e sinais associados.</p>
+          </div>
+
+          <div class="intestinal-scale__grid">
+            @for (tipo of tiposBristol; track tipo.valor) {
+              <button
+                type="button"
+                class="intestinal-scale__card"
+                [class.intestinal-scale__card--selected]="tipoSelecionado() === tipo.valor"
+                (click)="selecionarTipo(tipo.valor)"
+              >
+                <span class="intestinal-scale__number">{{ tipo.numero }}</span>
+                <span class="intestinal-scale__drawing" [class]="'intestinal-scale__drawing--' + tipo.numero" aria-hidden="true">
+                  <i></i><i></i><i></i>
+                </span>
+                <strong>{{ tipo.titulo }}</strong>
+                <small>{{ tipo.descricao }}</small>
+              </button>
+            }
+          </div>
+
+          @if (opcaoSelecionada(); as selecionada) {
+            <aside class="intestinal-scale__hint">
+              <strong>Tipo {{ selecionada.numero }}</strong>
+              <span>{{ selecionada.pista }}</span>
+            </aside>
+          }
+        </section>
+
+        <fieldset>
+          <legend>Sinais observados</legend>
+          <div class="intestinal-checks">
+            <label><input type="checkbox" formControlName="muco" /> Muco</label>
+            <label><input type="checkbox" formControlName="restosAlimentares" /> Restos alimentares</label>
+            <label><input type="checkbox" formControlName="raiasSangue" /> Raias de sangue</label>
+            <label><input type="checkbox" formControlName="constipacao" /> Constipação ou fezes muito ressecadas</label>
+            <label><input type="checkbox" formControlName="diarreia" /> Diarreia ou fezes muito líquidas</label>
+            <label><input type="checkbox" formControlName="dorEvacuar" /> Dor ou esforço para evacuar</label>
+            <label><input type="checkbox" formControlName="escapeFecal" /> Escape de fezes</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Pele e assaduras</legend>
+          <div class="intestinal-checks">
+            <label><input type="checkbox" formControlName="assaduraFrequente" /> Assaduras frequentes</label>
+            <label><input type="checkbox" formControlName="assaduraVermelhidao" /> Assadura com vermelhidão</label>
+            <label><input type="checkbox" formControlName="assaduraPontosVermelhos" /> Assadura com pontos vermelhos</label>
+            <label><input type="checkbox" formControlName="preocupacaoFamilia" /> Família quer conversar sobre isso</label>
+          </div>
+        </fieldset>
+
+        <label>
+          <span>Observações</span>
+          <textarea formControlName="observacao" rows="4" placeholder="Ex.: alimentos do dia, mudança de fórmula, hidratação, dor, febre ou dúvidas para a consulta."></textarea>
+        </label>
+
+        <button type="submit" class="pueria-button" [disabled]="salvando()">
+          {{ salvando() ? 'Salvando...' : 'Salvar registro' }}
+        </button>
+      </form>
+
+      <aside class="pueria-card intestinal-historico">
+        <p class="pueria-eyebrow">Histórico</p>
+        <h2>Registros</h2>
+        @if (registrosOrdenados().length === 0) {
+          <p>Nenhum registro salvo.</p>
+        } @else {
+          <div class="intestinal-historico__lista">
+            @for (registro of registrosOrdenados(); track registro.id) {
+              <article>
+                <strong>{{ formatarData(registro.dataRegistro) }}</strong>
+                <span>{{ labelTipoFezes(registro.tipoFezes) }}</span>
+                <small>{{ labelFacilidade(registro.facilidadeLimpeza) }}</small>
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
+              </article>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</section>
