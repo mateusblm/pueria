@@ -94,7 +94,7 @@
             <div class="etapa-nav">
               <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() === 0" (click)="etapaAnterior()">Anterior</button>
               <span>Etapa {{ indiceEtapa() + 1 }} de {{ marcosDaIdade().length }}</span>
-              <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() >= marcosDaIdade().length - 1" (click)="proximaEtapa()">Pular</button>
+              <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() >= marcosDaIdade().length - 1" (click)="proximaEtapa()">Seguinte</button>
             </div>
           </div>
         </article>

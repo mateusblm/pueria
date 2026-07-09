@@ -1,4 +1,4 @@
-export type LocalSono = 'BERCO' | 'CAMA_PROPRIA' | 'CAMA_COMPARTILHADA' | 'QUARTO_DOS_RESPONSAVEIS' | 'OUTRO' | 'NAO_INFORMADO';
+export type LocalSono = 'BERCO' | 'CAMA_PROPRIA' | 'CAMA_COMPARTILHADA' | 'QUARTO_DOS_RESPONSAVEIS' | 'QUARTO_DA_PROPRIA_CRIANCA' | 'OUTRO' | 'NAO_INFORMADO';
 export type ClassificacaoDuracaoSono = 'SEM_DADOS' | 'ABAIXO_DA_FAIXA' | 'FAIXA_ESPERADA' | 'ACIMA_DA_FAIXA';
 
 export interface AnaliseSono {

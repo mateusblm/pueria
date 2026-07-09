@@ -24,10 +24,13 @@ public record AlimentacaoRequest(
         Boolean usaMamadeira,
         Boolean usaCopo,
         Boolean usaColher,
+        Boolean blwMisto,
         Boolean autoalimentacao,
         TexturaAlimentar texturaPredominante,
         Boolean consomeFrutas,
         Boolean consomeLegumesVerduras,
+        Boolean consomeLegumes,
+        Boolean consomeVerduras,
         Boolean consomeCereaisTuberculos,
         Boolean consomeFeijoesLeguminosas,
         Boolean consomeCarnesOvos,
@@ -45,6 +48,7 @@ public record AlimentacaoRequest(
         Boolean constipacao,
         Boolean diarreiaRecorrente,
         Boolean dificuldadeGanhoPesoPercebida,
+        Boolean familiaTranquilaGanhoPesoAtual,
         Boolean preocupacaoFamilia,
         @Size(max = 1000) String observacao
 ) {
@@ -67,10 +71,13 @@ public record AlimentacaoRequest(
                 usaMamadeira,
                 usaCopo,
                 usaColher,
+                blwMisto,
                 autoalimentacao,
                 texturaPredominante,
                 consomeFrutas,
                 consomeLegumesVerduras,
+                consomeLegumes,
+                consomeVerduras,
                 consomeCereaisTuberculos,
                 consomeFeijoesLeguminosas,
                 consomeCarnesOvos,
@@ -88,6 +95,7 @@ public record AlimentacaoRequest(
                 constipacao,
                 diarreiaRecorrente,
                 dificuldadeGanhoPesoPercebida,
+                familiaTranquilaGanhoPesoAtual,
                 preocupacaoFamilia,
                 observacao
         );

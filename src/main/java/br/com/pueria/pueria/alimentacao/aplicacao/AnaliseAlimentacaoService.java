@@ -30,7 +30,10 @@ public class AnaliseAlimentacaoService {
             if (registro.getEstagioAlimentar() == EstagioAlimentar.APENAS_LEITE) {
                 conversaConsulta.add("Se a alimentação complementar ainda não começou, leve esse ponto à próxima consulta.");
             }
-            if (Boolean.FALSE.equals(registro.getConsomeFrutas()) || Boolean.FALSE.equals(registro.getConsomeLegumesVerduras()) || Boolean.FALSE.equals(registro.getConsomeCarnesOvos())) {
+            if (Boolean.FALSE.equals(registro.getConsomeFrutas())
+                    || Boolean.FALSE.equals(registro.getConsomeLegumes())
+                    || Boolean.FALSE.equals(registro.getConsomeVerduras())
+                    || Boolean.FALSE.equals(registro.getConsomeCarnesOvos())) {
                 habitosApoio.add("Observar variedade de grupos alimentares ajuda a planejar próximas ofertas com mais clareza.");
             }
         } else {
@@ -66,7 +69,7 @@ public class AnaliseAlimentacaoService {
             habitosApoio.add("Refeições sem telas favorecem atenção aos sinais de fome, saciedade e interação familiar.");
         }
         if (Boolean.FALSE.equals(registro.getRotinaAlimentarRegular())) {
-            habitosApoio.add("Uma rotina previsível de refeições pode facilitar a aceitação gradual dos alimentos.");
+            habitosApoio.add("Local e horários previsíveis para as refeições podem facilitar a aceitação gradual dos alimentos.");
         }
         if (Boolean.TRUE.equals(registro.getRefeicoesEmFamilia())) {
             rotina.add("Refeições em família foram registradas como parte da rotina.");

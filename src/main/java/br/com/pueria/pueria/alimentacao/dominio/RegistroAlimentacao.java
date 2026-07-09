@@ -20,10 +20,13 @@ public class RegistroAlimentacao {
     private final Boolean usaMamadeira;
     private final Boolean usaCopo;
     private final Boolean usaColher;
+    private final Boolean blwMisto;
     private final Boolean autoalimentacao;
     private final TexturaAlimentar texturaPredominante;
     private final Boolean consomeFrutas;
     private final Boolean consomeLegumesVerduras;
+    private final Boolean consomeLegumes;
+    private final Boolean consomeVerduras;
     private final Boolean consomeCereaisTuberculos;
     private final Boolean consomeFeijoesLeguminosas;
     private final Boolean consomeCarnesOvos;
@@ -41,6 +44,7 @@ public class RegistroAlimentacao {
     private final Boolean constipacao;
     private final Boolean diarreiaRecorrente;
     private final Boolean dificuldadeGanhoPesoPercebida;
+    private final Boolean familiaTranquilaGanhoPesoAtual;
     private final Boolean preocupacaoFamilia;
     private final String observacao;
     private final LocalDateTime criadoEm;
@@ -58,10 +62,13 @@ public class RegistroAlimentacao {
             Boolean usaMamadeira,
             Boolean usaCopo,
             Boolean usaColher,
+            Boolean blwMisto,
             Boolean autoalimentacao,
             TexturaAlimentar texturaPredominante,
             Boolean consomeFrutas,
             Boolean consomeLegumesVerduras,
+            Boolean consomeLegumes,
+            Boolean consomeVerduras,
             Boolean consomeCereaisTuberculos,
             Boolean consomeFeijoesLeguminosas,
             Boolean consomeCarnesOvos,
@@ -79,6 +86,7 @@ public class RegistroAlimentacao {
             Boolean constipacao,
             Boolean diarreiaRecorrente,
             Boolean dificuldadeGanhoPesoPercebida,
+            Boolean familiaTranquilaGanhoPesoAtual,
             Boolean preocupacaoFamilia,
             String observacao,
             LocalDateTime criadoEm,
@@ -95,10 +103,13 @@ public class RegistroAlimentacao {
         this.usaMamadeira = usaMamadeira;
         this.usaCopo = usaCopo;
         this.usaColher = usaColher;
+        this.blwMisto = blwMisto;
         this.autoalimentacao = autoalimentacao;
         this.texturaPredominante = texturaPredominante == null ? TexturaAlimentar.NAO_INFORMADO : texturaPredominante;
         this.consomeFrutas = consomeFrutas;
         this.consomeLegumesVerduras = consomeLegumesVerduras;
+        this.consomeLegumes = consomeLegumes;
+        this.consomeVerduras = consomeVerduras;
         this.consomeCereaisTuberculos = consomeCereaisTuberculos;
         this.consomeFeijoesLeguminosas = consomeFeijoesLeguminosas;
         this.consomeCarnesOvos = consomeCarnesOvos;
@@ -116,6 +127,7 @@ public class RegistroAlimentacao {
         this.constipacao = constipacao;
         this.diarreiaRecorrente = diarreiaRecorrente;
         this.dificuldadeGanhoPesoPercebida = dificuldadeGanhoPesoPercebida;
+        this.familiaTranquilaGanhoPesoAtual = familiaTranquilaGanhoPesoAtual;
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = tratarObservacao(observacao);
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
@@ -135,10 +147,13 @@ public class RegistroAlimentacao {
                 dados.usaMamadeira(),
                 dados.usaCopo(),
                 dados.usaColher(),
+                dados.blwMisto(),
                 dados.autoalimentacao(),
                 dados.texturaPredominante(),
                 dados.consomeFrutas(),
                 dados.consomeLegumesVerduras(),
+                dados.consomeLegumes(),
+                dados.consomeVerduras(),
                 dados.consomeCereaisTuberculos(),
                 dados.consomeFeijoesLeguminosas(),
                 dados.consomeCarnesOvos(),
@@ -156,6 +171,7 @@ public class RegistroAlimentacao {
                 dados.constipacao(),
                 dados.diarreiaRecorrente(),
                 dados.dificuldadeGanhoPesoPercebida(),
+                dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
                 LocalDateTime.now(),
@@ -176,10 +192,13 @@ public class RegistroAlimentacao {
                 dados.usaMamadeira(),
                 dados.usaCopo(),
                 dados.usaColher(),
+                dados.blwMisto(),
                 dados.autoalimentacao(),
                 dados.texturaPredominante(),
                 dados.consomeFrutas(),
                 dados.consomeLegumesVerduras(),
+                dados.consomeLegumes(),
+                dados.consomeVerduras(),
                 dados.consomeCereaisTuberculos(),
                 dados.consomeFeijoesLeguminosas(),
                 dados.consomeCarnesOvos(),
@@ -197,6 +216,7 @@ public class RegistroAlimentacao {
                 dados.constipacao(),
                 dados.diarreiaRecorrente(),
                 dados.dificuldadeGanhoPesoPercebida(),
+                dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
                 criadoEm,
@@ -217,10 +237,13 @@ public class RegistroAlimentacao {
                 dados.usaMamadeira(),
                 dados.usaCopo(),
                 dados.usaColher(),
+                dados.blwMisto(),
                 dados.autoalimentacao(),
                 dados.texturaPredominante(),
                 dados.consomeFrutas(),
                 dados.consomeLegumesVerduras(),
+                dados.consomeLegumes(),
+                dados.consomeVerduras(),
                 dados.consomeCereaisTuberculos(),
                 dados.consomeFeijoesLeguminosas(),
                 dados.consomeCarnesOvos(),
@@ -238,6 +261,7 @@ public class RegistroAlimentacao {
                 dados.constipacao(),
                 dados.diarreiaRecorrente(),
                 dados.dificuldadeGanhoPesoPercebida(),
+                dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
                 criadoEm,
@@ -287,10 +311,13 @@ public class RegistroAlimentacao {
     public Boolean getUsaMamadeira() { return usaMamadeira; }
     public Boolean getUsaCopo() { return usaCopo; }
     public Boolean getUsaColher() { return usaColher; }
+    public Boolean getBlwMisto() { return blwMisto; }
     public Boolean getAutoalimentacao() { return autoalimentacao; }
     public TexturaAlimentar getTexturaPredominante() { return texturaPredominante; }
     public Boolean getConsomeFrutas() { return consomeFrutas; }
     public Boolean getConsomeLegumesVerduras() { return consomeLegumesVerduras; }
+    public Boolean getConsomeLegumes() { return consomeLegumes; }
+    public Boolean getConsomeVerduras() { return consomeVerduras; }
     public Boolean getConsomeCereaisTuberculos() { return consomeCereaisTuberculos; }
     public Boolean getConsomeFeijoesLeguminosas() { return consomeFeijoesLeguminosas; }
     public Boolean getConsomeCarnesOvos() { return consomeCarnesOvos; }
@@ -308,6 +335,7 @@ public class RegistroAlimentacao {
     public Boolean getConstipacao() { return constipacao; }
     public Boolean getDiarreiaRecorrente() { return diarreiaRecorrente; }
     public Boolean getDificuldadeGanhoPesoPercebida() { return dificuldadeGanhoPesoPercebida; }
+    public Boolean getFamiliaTranquilaGanhoPesoAtual() { return familiaTranquilaGanhoPesoAtual; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getCriadoEm() { return criadoEm; }

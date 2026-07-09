@@ -143,8 +143,8 @@ export class TelasCriancaComponent implements OnInit {
     this.aviso.set('');
     this.form.patchValue({
       dataRegistro: this.formatarEntradaData(registro.dataRegistro),
-      minutosDiaSemana: this.formatarInteiro(registro.minutosDiaSemana),
-      minutosFimSemana: this.formatarInteiro(registro.minutosFimSemana),
+      minutosDiaSemana: this.formatarHorasEntrada(registro.minutosDiaSemana),
+      minutosFimSemana: this.formatarHorasEntrada(registro.minutosFimSemana),
       tipoConteudoPredominante: registro.tipoConteudoPredominante,
       telaAoAcordar: !!registro.telaAoAcordar,
       telaDuranteRefeicoes: !!registro.telaDuranteRefeicoes,
@@ -234,8 +234,8 @@ export class TelasCriancaComponent implements OnInit {
     const valor = this.form.getRawValue();
     return {
       dataRegistro: this.lerData(valor.dataRegistro),
-      minutosDiaSemana: this.lerInteiro(valor.minutosDiaSemana, 'tempo em dias de semana', 0, 1440),
-      minutosFimSemana: this.lerInteiro(valor.minutosFimSemana, 'tempo em fim de semana', 0, 1440),
+      minutosDiaSemana: this.lerHorasParaMinutos(valor.minutosDiaSemana, 'tempo em dias de semana'),
+      minutosFimSemana: this.lerHorasParaMinutos(valor.minutosFimSemana, 'tempo em fim de semana'),
       tipoConteudoPredominante: valor.tipoConteudoPredominante,
       telaAoAcordar: valor.telaAoAcordar,
       telaDuranteRefeicoes: valor.telaDuranteRefeicoes,
@@ -278,6 +278,21 @@ export class TelasCriancaComponent implements OnInit {
     return iso;
   }
 
+  private lerHorasParaMinutos(valor: string | null | undefined, label: string): number | null {
+    const texto = (valor ?? '').trim().replace(',', '.');
+    if (!texto) {
+      return null;
+    }
+    if (!/^\d+(\.\d{1,2})?$/.test(texto)) {
+      throw new Error(`Informe ${label} em horas por dia. Exemplo: 1,5.`);
+    }
+    const horas = Number(texto);
+    if (horas < 0 || horas > 24) {
+      throw new Error(`O campo ${label} deve ficar entre 0 e 24 horas por dia.`);
+    }
+    return Math.round(horas * 60);
+  }
+
   private lerInteiro(valor: string | null | undefined, label: string, minimo: number, maximo: number): number | null {
     const texto = (valor ?? '').trim();
     if (!texto) {
@@ -295,6 +310,14 @@ export class TelasCriancaComponent implements OnInit {
 
   private formatarInteiro(valor?: number | null): string {
     return valor === null || valor === undefined ? '' : String(valor);
+  }
+
+  private formatarHorasEntrada(valor?: number | null): string {
+    if (valor === null || valor === undefined) {
+      return '';
+    }
+    const horas = valor / 60;
+    return Number.isInteger(horas) ? String(horas) : String(Number(horas.toFixed(2))).replace('.', ',');
   }
 
   private formatarEntradaData(dataIso: string): string {

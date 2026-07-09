@@ -12,10 +12,13 @@ public record DadosAlimentacao(
         Boolean usaMamadeira,
         Boolean usaCopo,
         Boolean usaColher,
+        Boolean blwMisto,
         Boolean autoalimentacao,
         TexturaAlimentar texturaPredominante,
         Boolean consomeFrutas,
         Boolean consomeLegumesVerduras,
+        Boolean consomeLegumes,
+        Boolean consomeVerduras,
         Boolean consomeCereaisTuberculos,
         Boolean consomeFeijoesLeguminosas,
         Boolean consomeCarnesOvos,
@@ -33,6 +36,7 @@ public record DadosAlimentacao(
         Boolean constipacao,
         Boolean diarreiaRecorrente,
         Boolean dificuldadeGanhoPesoPercebida,
+        Boolean familiaTranquilaGanhoPesoAtual,
         Boolean preocupacaoFamilia,
         String observacao
 ) {}

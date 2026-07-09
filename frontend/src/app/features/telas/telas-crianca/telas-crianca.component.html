@@ -126,12 +126,12 @@
               <input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" />
             </label>
             <label>
-              <span>Dia de semana</span>
-              <input type="text" formControlName="minutosDiaSemana" placeholder="minutos" inputmode="numeric" />
+              <span>Dia de semana (horas por dia)</span>
+              <input type="text" formControlName="minutosDiaSemana" placeholder="ex.: 1,5" inputmode="decimal" />
             </label>
             <label>
-              <span>Fim de semana</span>
-              <input type="text" formControlName="minutosFimSemana" placeholder="minutos" inputmode="numeric" />
+              <span>Fim de semana (horas por dia)</span>
+              <input type="text" formControlName="minutosFimSemana" placeholder="ex.: 2" inputmode="decimal" />
             </label>
             <label>
               <span>Mais comum</span>
@@ -157,8 +157,8 @@
             <label><input type="checkbox" formControlName="telaAoAcordar" /> Ao acordar</label>
             <label><input type="checkbox" formControlName="telaDuranteRefeicoes" /> Durante refeições</label>
             <label><input type="checkbox" formControlName="telaAntesDormir" /> Antes de dormir</label>
-            <label><input type="checkbox" formControlName="telaParaAcalmar" /> Para acalmar</label>
-            <label><input type="checkbox" formControlName="telaEmSegundoPlano" /> Ligada ao fundo</label>
+            <label><input type="checkbox" formControlName="telaParaAcalmar" /> Para acalmar ou distrair</label>
+            <label><input type="checkbox" formControlName="telaEmSegundoPlano" /> TV ou tela ligada enquanto a criança faz outra atividade</label>
             <label><input type="checkbox" formControlName="dispositivoNoQuarto" /> Dispositivo no quarto</label>
           </div>
         </section>

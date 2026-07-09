@@ -36,6 +36,7 @@ export class SonoCriancaComponent implements OnInit {
     { valor: 'CAMA_PROPRIA', label: 'Cama própria' },
     { valor: 'CAMA_COMPARTILHADA', label: 'Cama compartilhada' },
     { valor: 'QUARTO_DOS_RESPONSAVEIS', label: 'Quarto dos responsáveis' },
+    { valor: 'QUARTO_DA_PROPRIA_CRIANCA', label: 'Quarto da própria criança' },
     { valor: 'OUTRO', label: 'Outro' },
     { valor: 'NAO_INFORMADO', label: 'Não informado' }
   ];
@@ -190,6 +191,14 @@ export class SonoCriancaComponent implements OnInit {
     return this.locaisSono.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
   }
 
+  normalizarCampoHorario(campo: 'horarioDormiu' | 'horarioAcordou'): void {
+    const controle = this.form.controls[campo];
+    const horario = this.normalizarHorario(controle.value);
+    if (horario) {
+      controle.setValue(horario);
+    }
+  }
+
   formatarDuracao(minutos?: number | null): string {
     if (minutos === null || minutos === undefined) {
       return 'Não informado';
@@ -269,15 +278,30 @@ export class SonoCriancaComponent implements OnInit {
   }
 
   private lerHorario(valor: string | null | undefined, label: string): string | null {
-    const texto = (valor ?? '').trim();
-    if (!texto) {
+    const horario = this.normalizarHorario(valor);
+    if (!horario) {
       return null;
     }
-    const partes = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(texto);
+    const partes = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(horario);
     if (!partes) {
-      throw new Error(`Informe ${label} no formato hh:mm.`);
+      throw new Error(`Informe ${label} no formato hh:mm. Exemplo: 20:00.`);
     }
     return `${partes[1]}:${partes[2]}`;
+  }
+
+  private normalizarHorario(valor: string | null | undefined): string {
+    const texto = (valor ?? '').trim().toLowerCase();
+    if (!texto) {
+      return '';
+    }
+    const numeros = texto.replace(/\D/g, '');
+    if (numeros.length === 3) {
+      return `0${numeros[0]}:${numeros.slice(1)}`;
+    }
+    if (numeros.length === 4) {
+      return `${numeros.slice(0, 2)}:${numeros.slice(2)}`;
+    }
+    return texto.replace(/[h.\s]/g, ':').replace(/:+/g, ':');
   }
 
   private lerInteiro(valor: string | null | undefined, label: string, minimo: number, maximo: number): number | null {

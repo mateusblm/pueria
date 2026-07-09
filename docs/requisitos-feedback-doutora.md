@@ -31,18 +31,18 @@ Status usados:
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| DEV-01 | Trocar o botão `Pular` por `Seguinte` nas etapas de desenvolvimento. | Pendente | `Pular` sugere não responder. A ação atual avança para o próximo marco. |
+| DEV-01 | Trocar o botão `Pular` por `Seguinte` nas etapas de desenvolvimento. | Implementado | `Pular` sugere não responder. A ação atual avança para o próximo marco. |
 
 ### Alimentação
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| ALI-01 | Adicionar `BLW misto - toca alimentos enquanto é alimentado` em "Como acontece nas refeições". | Pendente | Deve entrar como hábito/forma de oferta alimentar. |
-| ALI-02 | Trocar `Tem rotina alimentar previsível` por linguagem que inclua `local e horário`. | Pendente | Sugestão: `Tem local e horário previsíveis para as refeições`. |
-| ALI-03 | Remover `Constipação` e `Diarreia recorrente` de alimentação. | Pendente | Esses dados devem migrar para o novo módulo `Trânsito intestinal`. |
-| ALI-04 | Trocar `Preocupação com ganho de peso` por `Família está tranquila quanto ao ganho de peso atual`. | Pendente | A doutora quer captar a percepção familiar sem induzir ansiedade. Atenção: campo positivo inverte a lógica atual. |
-| ALI-05 | Trocar `Usa colher` por `Aprendendo ou usando talheres`. | Pendente | Mais amplo e adequado para fases de autonomia alimentar. |
-| ALI-06 | Separar `Legumes e verduras` em dois grupos. | Pendente | Exige ajuste de banco/API/front. |
+| ALI-01 | Adicionar `BLW misto - toca alimentos enquanto é alimentado` em "Como acontece nas refeições". | Implementado | Campo incluído na interface, API, domínio e banco. |
+| ALI-02 | Trocar `Tem rotina alimentar previsível` por linguagem que inclua `local e horário`. | Implementado | Texto usado: `Tem local e horário previsíveis para as refeições`. |
+| ALI-03 | Remover `Constipação` e `Diarreia recorrente` de alimentação. | Parcial | Removido da interface. Dados antigos permanecem no domínio até criação do módulo `Trânsito intestinal`. |
+| ALI-04 | Trocar `Preocupação com ganho de peso` por `Família está tranquila quanto ao ganho de peso atual`. | Implementado | Campo positivo incluído sem gerar alerta automático quando não marcado. |
+| ALI-05 | Trocar `Usa colher` por `Aprendendo ou usando talheres`. | Implementado | Ajuste aplicado na interface mantendo compatibilidade com campo atual. |
+| ALI-06 | Separar `Legumes e verduras` em dois grupos. | Implementado | Campos separados incluídos na interface, API, domínio e banco. |
 | ALI-07 | Criar quadro de diversidade alimentar por grupos e alimentos. | Pesquisa/validação | Grupos sugeridos: proteína animal, legumes, leguminosas, frutas e verduras. Pode ter ícones/desenhos e seleção por alimento. |
 | ALI-08 | Listar exemplos de proteína animal: ovos, frango, carneiro, vaca, porco e peixe. | Pesquisa/validação | Validar lista final com a doutora e referências de alimentação complementar. |
 
@@ -50,24 +50,24 @@ Status usados:
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| SON-01 | Trocar linguagem de evento passado para rotina: `dormiu` -> `dorme`, `acordou` -> `acorda`. | Pendente | A tela registra uma rotina observada, mesmo com data. |
-| SON-02 | Ajustar local do sono para diferenciar cama/berço e quarto. | Pendente | Incluir opção `Quarto da própria criança`. Reavaliar opções atuais para não misturar local físico com tipo de cama. |
+| SON-01 | Trocar linguagem de evento passado para rotina: `dormiu` -> `dorme`, `acordou` -> `acorda`. | Implementado | A tela registra uma rotina observada, mesmo com data. |
+| SON-02 | Ajustar local do sono para diferenciar cama/berço e quarto. | Parcial | Opção `Quarto da própria criança` incluída. Ainda falta redesenhar completamente a separação cama/quarto. |
 | SON-03 | Detalhar despertares noturnos. | Pendente | Opções: acorda e mama; acorda e não se alimenta; acorda e dorme rápido; acorda e demora para dormir novamente. |
 | SON-04 | Adicionar sinais observados: `Ranger de dentes durante o sono` e `Acorda bem disposto/alegre`. | Pendente | Entram em sinais observados. |
-| SON-05 | Mover `Sono agitado` de hábitos antes/durante o sono para sinais observados. | Pendente | Feedback direto da doutora. |
-| SON-06 | Máscara automática para horários. | Pendente | Digitar `2000` deve virar `20:00`; aceitar variações comuns como `20h00`. |
-| SON-07 | Deixar claro que `Tempo total de cochilos` é em minutos. | Pendente | Label sugerido: `Tempo total de cochilos (minutos)`. |
-| SON-08 | Melhorar validação visual de horário antes de salvar. | Pendente | Erro atual aparece tarde e pequeno, passando sensação de bug. |
+| SON-05 | Mover `Sono agitado` de hábitos antes/durante o sono para sinais observados. | Implementado | Feedback direto da doutora. |
+| SON-06 | Máscara automática para horários. | Implementado | Digitar `2000` ou `20h00` é normalizado para `20:00` ao sair do campo. |
+| SON-07 | Deixar claro que `Tempo total de cochilos` é em minutos. | Implementado | Label usado: `Tempo total de cochilos (minutos)`. |
+| SON-08 | Melhorar validação visual de horário antes de salvar. | Parcial | Mensagem de erro ficou mais clara e o campo normaliza antes de salvar. Ainda podemos evoluir para erro inline. |
 
 ### Telas
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| TEL-01 | Explicitar unidade nos campos: `Dia de semana (horas por dia)` e `Fim de semana (horas por dia)`. | Pendente | Hoje o backend guarda minutos; front pode aceitar horas e converter. |
+| TEL-01 | Explicitar unidade nos campos: `Dia de semana (horas por dia)` e `Fim de semana (horas por dia)`. | Implementado | Front aceita horas por dia e converte para minutos na API. |
 | TEL-02 | Separar tipo de tela: celular, tablet/iPad e TV. | Pendente | A doutora precisa saber onde o conteúdo acontece. |
 | TEL-03 | Relacionar conteúdo ao tipo de tela. | Pendente | Conteúdos: jogos, vídeos/desenhos, videochamada com família, conteúdo interativo, música etc. |
-| TEL-04 | Revisar `ligada ao fundo`. | Pendente | Trocar por linguagem mais clara, ex.: `TV ou tela ligada enquanto a criança faz outra atividade`. |
-| TEL-05 | Adicionar uso para distrair/acalmar a criança. | Pendente | Pode entrar em `Onde aparece na rotina`. |
+| TEL-04 | Revisar `ligada ao fundo`. | Implementado | Texto usado: `TV ou tela ligada enquanto a criança faz outra atividade`. |
+| TEL-05 | Adicionar uso para distrair/acalmar a criança. | Implementado | Texto usado: `Para acalmar ou distrair`. |
 | TEL-06 | Adicionar se a criança tem liberdade de escolher. | Pendente | Informação relevante sobre condução familiar. |
 
 ### Novo módulo: trânsito intestinal

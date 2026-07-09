@@ -95,6 +95,7 @@ class AlimentacaoUseCasesTest {
                 false,
                 true,
                 true,
+                false,
                 true,
                 TexturaAlimentar.AMASSADA,
                 true,
@@ -102,6 +103,8 @@ class AlimentacaoUseCasesTest {
                 true,
                 true,
                 true,
+                true,
+                true,
                 false,
                 false,
                 false,
@@ -116,6 +119,7 @@ class AlimentacaoUseCasesTest {
                 false,
                 false,
                 false,
+                true,
                 false,
                 null
         );

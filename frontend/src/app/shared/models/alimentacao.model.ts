@@ -22,10 +22,13 @@ export interface RegistroAlimentacao {
   usaMamadeira?: boolean | null;
   usaCopo?: boolean | null;
   usaColher?: boolean | null;
+  blwMisto?: boolean | null;
   autoalimentacao?: boolean | null;
   texturaPredominante: TexturaAlimentar;
   consomeFrutas?: boolean | null;
   consomeLegumesVerduras?: boolean | null;
+  consomeLegumes?: boolean | null;
+  consomeVerduras?: boolean | null;
   consomeCereaisTuberculos?: boolean | null;
   consomeFeijoesLeguminosas?: boolean | null;
   consomeCarnesOvos?: boolean | null;
@@ -43,6 +46,7 @@ export interface RegistroAlimentacao {
   constipacao?: boolean | null;
   diarreiaRecorrente?: boolean | null;
   dificuldadeGanhoPesoPercebida?: boolean | null;
+  familiaTranquilaGanhoPesoAtual?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
   criadoEm: string;
@@ -60,10 +64,13 @@ export interface SalvarRegistroAlimentacaoRequest {
   usaMamadeira?: boolean | null;
   usaCopo?: boolean | null;
   usaColher?: boolean | null;
+  blwMisto?: boolean | null;
   autoalimentacao?: boolean | null;
   texturaPredominante: TexturaAlimentar;
   consomeFrutas?: boolean | null;
   consomeLegumesVerduras?: boolean | null;
+  consomeLegumes?: boolean | null;
+  consomeVerduras?: boolean | null;
   consomeCereaisTuberculos?: boolean | null;
   consomeFeijoesLeguminosas?: boolean | null;
   consomeCarnesOvos?: boolean | null;
@@ -81,6 +88,7 @@ export interface SalvarRegistroAlimentacaoRequest {
   constipacao?: boolean | null;
   diarreiaRecorrente?: boolean | null;
   dificuldadeGanhoPesoPercebida?: boolean | null;
+  familiaTranquilaGanhoPesoAtual?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
 }

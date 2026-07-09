@@ -67,6 +67,10 @@ class RegistroAlimentacaoTest {
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                null,
                 observacao
         );
     }

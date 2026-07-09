@@ -115,12 +115,12 @@
             <input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" />
           </label>
           <label>
-            <span>Dormiu</span>
-            <input type="text" formControlName="horarioDormiu" placeholder="hh:mm" inputmode="numeric" />
+            <span>Dorme</span>
+            <input type="text" formControlName="horarioDormiu" placeholder="ex.: 20:00" inputmode="numeric" (blur)="normalizarCampoHorario('horarioDormiu')" />
           </label>
           <label>
-            <span>Acordou</span>
-            <input type="text" formControlName="horarioAcordou" placeholder="hh:mm" inputmode="numeric" />
+            <span>Acorda</span>
+            <input type="text" formControlName="horarioAcordou" placeholder="ex.: 07:00" inputmode="numeric" (blur)="normalizarCampoHorario('horarioAcordou')" />
           </label>
           <label>
             <span>Local do sono</span>
@@ -135,7 +135,7 @@
             <input type="text" formControlName="quantidadeCochilos" placeholder="ex.: 2" inputmode="numeric" />
           </label>
           <label>
-            <span>Tempo total de cochilos</span>
+            <span>Tempo total de cochilos (minutos)</span>
             <input type="text" formControlName="minutosCochilos" placeholder="minutos" inputmode="numeric" />
           </label>
           <label>
@@ -150,7 +150,6 @@
             <label><input type="checkbox" formControlName="rotinaSonoConsistente" /> Tem rotina previsível antes de dormir</label>
             <label><input type="checkbox" formControlName="dificuldadeIniciarSono" /> Tem dificuldade para iniciar o sono</label>
             <label><input type="checkbox" formControlName="telasAntesDormir" /> Usa telas perto do horário de dormir</label>
-            <label><input type="checkbox" formControlName="sonoAgitado" /> Sono agitado</label>
           </div>
         </fieldset>
 
@@ -159,6 +158,7 @@
           <div class="sono-checks">
             <label><input type="checkbox" formControlName="roncosFrequentes" /> Roncos frequentes</label>
             <label><input type="checkbox" formControlName="pausasRespiratoriasPercebidas" /> Pausas respiratórias percebidas</label>
+            <label><input type="checkbox" formControlName="sonoAgitado" /> Sono agitado</label>
             <label><input type="checkbox" formControlName="sonolenciaDiurna" /> Sonolência durante o dia</label>
             <label><input type="checkbox" formControlName="irritabilidadeCansaco" /> Irritabilidade ou cansaço</label>
             <label><input type="checkbox" formControlName="preocupacaoFamilia" /> Há preocupação da família</label>

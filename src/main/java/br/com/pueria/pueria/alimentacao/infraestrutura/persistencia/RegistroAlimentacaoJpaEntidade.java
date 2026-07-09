@@ -40,6 +40,7 @@ public class RegistroAlimentacaoJpaEntidade {
     private Boolean usaMamadeira;
     private Boolean usaCopo;
     private Boolean usaColher;
+    private Boolean blwMisto;
     private Boolean autoalimentacao;
 
     @Enumerated(EnumType.STRING)
@@ -48,6 +49,8 @@ public class RegistroAlimentacaoJpaEntidade {
 
     private Boolean consomeFrutas;
     private Boolean consomeLegumesVerduras;
+    private Boolean consomeLegumes;
+    private Boolean consomeVerduras;
     private Boolean consomeCereaisTuberculos;
     private Boolean consomeFeijoesLeguminosas;
     private Boolean consomeCarnesOvos;
@@ -65,6 +68,7 @@ public class RegistroAlimentacaoJpaEntidade {
     private Boolean constipacao;
     private Boolean diarreiaRecorrente;
     private Boolean dificuldadeGanhoPesoPercebida;
+    private Boolean familiaTranquilaGanhoPesoAtual;
     private Boolean preocupacaoFamilia;
 
     @Column(length = 1000)
@@ -78,7 +82,7 @@ public class RegistroAlimentacaoJpaEntidade {
 
     protected RegistroAlimentacaoJpaEntidade() {}
 
-    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
@@ -90,10 +94,13 @@ public class RegistroAlimentacaoJpaEntidade {
         this.usaMamadeira = usaMamadeira;
         this.usaCopo = usaCopo;
         this.usaColher = usaColher;
+        this.blwMisto = blwMisto;
         this.autoalimentacao = autoalimentacao;
         this.texturaPredominante = texturaPredominante;
         this.consomeFrutas = consomeFrutas;
         this.consomeLegumesVerduras = consomeLegumesVerduras;
+        this.consomeLegumes = consomeLegumes;
+        this.consomeVerduras = consomeVerduras;
         this.consomeCereaisTuberculos = consomeCereaisTuberculos;
         this.consomeFeijoesLeguminosas = consomeFeijoesLeguminosas;
         this.consomeCarnesOvos = consomeCarnesOvos;
@@ -111,6 +118,7 @@ public class RegistroAlimentacaoJpaEntidade {
         this.constipacao = constipacao;
         this.diarreiaRecorrente = diarreiaRecorrente;
         this.dificuldadeGanhoPesoPercebida = dificuldadeGanhoPesoPercebida;
+        this.familiaTranquilaGanhoPesoAtual = familiaTranquilaGanhoPesoAtual;
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = observacao;
         this.criadoEm = criadoEm;
@@ -128,10 +136,13 @@ public class RegistroAlimentacaoJpaEntidade {
     public Boolean getUsaMamadeira() { return usaMamadeira; }
     public Boolean getUsaCopo() { return usaCopo; }
     public Boolean getUsaColher() { return usaColher; }
+    public Boolean getBlwMisto() { return blwMisto; }
     public Boolean getAutoalimentacao() { return autoalimentacao; }
     public TexturaAlimentar getTexturaPredominante() { return texturaPredominante; }
     public Boolean getConsomeFrutas() { return consomeFrutas; }
     public Boolean getConsomeLegumesVerduras() { return consomeLegumesVerduras; }
+    public Boolean getConsomeLegumes() { return consomeLegumes; }
+    public Boolean getConsomeVerduras() { return consomeVerduras; }
     public Boolean getConsomeCereaisTuberculos() { return consomeCereaisTuberculos; }
     public Boolean getConsomeFeijoesLeguminosas() { return consomeFeijoesLeguminosas; }
     public Boolean getConsomeCarnesOvos() { return consomeCarnesOvos; }
@@ -149,6 +160,7 @@ public class RegistroAlimentacaoJpaEntidade {
     public Boolean getConstipacao() { return constipacao; }
     public Boolean getDiarreiaRecorrente() { return diarreiaRecorrente; }
     public Boolean getDificuldadeGanhoPesoPercebida() { return dificuldadeGanhoPesoPercebida; }
+    public Boolean getFamiliaTranquilaGanhoPesoAtual() { return familiaTranquilaGanhoPesoAtual; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
