@@ -3,6 +3,7 @@ export type EstagioAlimentar = 'APENAS_LEITE' | 'INICIANDO_ALIMENTACAO_COMPLEMEN
 export type TexturaAlimentar = 'LIQUIDA' | 'PASTOSA' | 'AMASSADA' | 'PEDACOS_MACIOS' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
 export type GrupoAlimento = 'FRUTA' | 'LEGUME' | 'VERDURA' | 'RAIZ_TUBERCULO' | 'FEIJAO_LEGUMINOSA' | 'CEREAL' | 'PROTEINA';
 
+
 export interface AlimentoRegistroAlimentacao {
   codigo: string;
   nome: string;
