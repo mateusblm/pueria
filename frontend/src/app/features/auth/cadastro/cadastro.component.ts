@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { finalize, TimeoutError } from 'rxjs';
 
 import { AuthService } from '../../../core/auth/auth.service';
 
@@ -38,6 +38,10 @@ export class CadastroComponent {
   }
 
   cadastrar(): void {
+    if (this.carregando) {
+      return;
+    }
+
     this.erro = '';
     if (this.form.controls.confirmarSenha.hasError('senhasDiferentes')) {
       this.form.controls.confirmarSenha.setErrors(null);
@@ -70,20 +74,46 @@ export class CadastroComponent {
         next: () => void this.router.navigate(['/login'], {
           queryParams: { cadastro: 'realizado' }
         }),
-        error: (erro: HttpErrorResponse) => {
+        error: (erro: unknown) => {
           this.erro = this.extrairMensagemErro(erro);
         }
       });
   }
 
-  private extrairMensagemErro(erro: HttpErrorResponse): string {
-    const mensagens = erro.error?.mensagens;
-    const mensagem = Array.isArray(mensagens) && mensagens.length > 0 ? String(mensagens[0]) : '';
+  private extrairMensagemErro(erro: unknown): string {
+    if (erro instanceof TimeoutError) {
+      return 'Não foi possível concluir o cadastro agora. Verifique sua conexão e tente novamente.';
+    }
 
-    if (erro.status === 409 || (/e-?mail|email/i.test(mensagem) && /existe|cadastrad/i.test(mensagem))) {
+    if (!(erro instanceof HttpErrorResponse)) {
+      return 'Não foi possível criar a conta agora. Revise os dados e tente novamente.';
+    }
+
+    const mensagem = this.extrairMensagemApi(erro.error);
+    if (this.ehEmailJaCadastrado(erro.status, mensagem)) {
       return 'Já existe uma conta com esse e-mail.';
     }
 
     return mensagem || 'Não foi possível criar a conta agora. Revise os dados e tente novamente.';
+  }
+
+  private extrairMensagemApi(error: unknown): string {
+    if (typeof error === 'string') {
+      return error;
+    }
+
+    if (error && typeof error === 'object' && 'mensagens' in error) {
+      const mensagens = (error as { mensagens?: unknown }).mensagens;
+      if (Array.isArray(mensagens) && mensagens.length > 0) {
+        return String(mensagens[0]);
+      }
+    }
+
+    return '';
+  }
+
+  private ehEmailJaCadastrado(status: number, mensagem: string): boolean {
+    return status === 409
+      || (status === 400 && /e-?mail|email/i.test(mensagem) && /existe|cadastrad/i.test(mensagem));
   }
 }

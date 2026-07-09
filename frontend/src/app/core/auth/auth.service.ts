@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, timeout } from 'rxjs';
 
 import { Usuario } from '../../shared/models/usuario.model';
 import { AuthResponse, CadastroUsuarioRequest, LoginRequest } from './auth.models';
@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   cadastrar(request: CadastroUsuarioRequest): Observable<Usuario> {
-    return this.http.post<Usuario>('/api/auth/cadastro', request);
+    return this.http.post<Usuario>('/api/auth/cadastro', request).pipe(timeout(15000));
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {

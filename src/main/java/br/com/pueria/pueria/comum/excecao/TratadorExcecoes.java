@@ -7,14 +7,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestControllerAdvice
 public class TratadorExcecoes {
 
     @ExceptionHandler(RegraDominioException.class)
     public ResponseEntity<ErroApi> tratarRegraDominio(RegraDominioException ex) {
-        return ResponseEntity.badRequest().body(
-                ErroApi.criar(HttpStatus.BAD_REQUEST.value(), "Regra de domínio violada", List.of(ex.getMessage()))
+        HttpStatus status = conflitoDeEmail(ex) ? HttpStatus.CONFLICT : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(
+                ErroApi.criar(status.value(), "Regra de domínio violada", List.of(ex.getMessage()))
         );
     }
 
@@ -43,5 +46,14 @@ public class TratadorExcecoes {
         return ResponseEntity.badRequest().body(
                 ErroApi.criar(HttpStatus.BAD_REQUEST.value(), "Dados inválidos", mensagens)
         );
+    }
+
+    private boolean conflitoDeEmail(RegraDominioException ex) {
+        if (ex.getMessage() == null) {
+            return false;
+        }
+
+        String mensagem = ex.getMessage().toLowerCase(Locale.ROOT);
+        return mensagem.contains("usuário cadastrado") && mensagem.contains("e-mail");
     }
 }
