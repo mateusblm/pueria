@@ -44,7 +44,7 @@ describe('CadastroComponent', () => {
     component.cadastrar();
 
     expect(authService.cadastrar).not.toHaveBeenCalled();
-    expect(component.erro).toBe('Preencha os dados obrigatórios para criar sua conta.');
+    expect(component.erro()).toBe('Preencha os dados obrigatórios para criar sua conta.');
   });
 
   it('bloqueia cadastro quando as senhas não coincidem', () => {
@@ -59,8 +59,8 @@ describe('CadastroComponent', () => {
     component.cadastrar();
 
     expect(authService.cadastrar).not.toHaveBeenCalled();
-    expect(component.carregando).toBe(false);
-    expect(component.erro).toBe('As senhas informadas não coincidem.');
+    expect(component.carregando()).toBe(false);
+    expect(component.erro()).toBe('As senhas informadas não coincidem.');
     expect(component.form.controls.confirmarSenha.hasError('senhasDiferentes')).toBe(true);
   });
 
@@ -83,7 +83,7 @@ describe('CadastroComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/login'], {
       queryParams: { cadastro: 'realizado' }
     });
-    expect(component.carregando).toBe(false);
+    expect(component.carregando()).toBe(false);
   });
 
   it('exibe mensagem específica e libera o botão quando o backend legado retorna 400 para e-mail cadastrado', () => {
@@ -96,8 +96,8 @@ describe('CadastroComponent', () => {
 
     component.cadastrar();
 
-    expect(component.erro).toBe('Já existe uma conta com esse e-mail.');
-    expect(component.carregando).toBe(false);
+    expect(component.erro()).toBe('Já existe uma conta com esse e-mail.');
+    expect(component.carregando()).toBe(false);
   });
 
   it('exibe mensagem específica e libera o botão quando o backend retorna 409 para e-mail cadastrado', () => {
@@ -110,8 +110,8 @@ describe('CadastroComponent', () => {
 
     component.cadastrar();
 
-    expect(component.erro).toBe('Já existe uma conta com esse e-mail.');
-    expect(component.carregando).toBe(false);
+    expect(component.erro()).toBe('Já existe uma conta com esse e-mail.');
+    expect(component.carregando()).toBe(false);
   });
 
   it('libera o botão quando a requisição de cadastro expira', () => {
@@ -121,13 +121,13 @@ describe('CadastroComponent', () => {
 
     component.cadastrar();
 
-    expect(component.erro).toBe('Não foi possível concluir o cadastro agora. Verifique sua conexão e tente novamente.');
-    expect(component.carregando).toBe(false);
+    expect(component.erro()).toBe('Não foi possível concluir o cadastro agora. Verifique sua conexão e tente novamente.');
+    expect(component.carregando()).toBe(false);
   });
 
   it('ignora novo envio enquanto já existe cadastro em andamento', () => {
     const component = criarComponente();
-    component.carregando = true;
+    component.carregando.set(true);
     preencherCadastroValido(component);
 
     component.cadastrar();
