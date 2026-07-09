@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -74,6 +76,11 @@ public class RegistroAlimentacaoJpaEntidade {
     @Column(length = 1000)
     private String observacao;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "registros_alimentacao_alimentos", joinColumns = @JoinColumn(name = "registro_alimentacao_id"))
+    @OrderBy("grupo ASC, nome ASC")
+    private List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosOferecidos = new ArrayList<>();
+
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
 
@@ -82,7 +89,7 @@ public class RegistroAlimentacaoJpaEntidade {
 
     protected RegistroAlimentacaoJpaEntidade() {}
 
-    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosOferecidos, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
@@ -121,6 +128,7 @@ public class RegistroAlimentacaoJpaEntidade {
         this.familiaTranquilaGanhoPesoAtual = familiaTranquilaGanhoPesoAtual;
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = observacao;
+        this.alimentosOferecidos = alimentosOferecidos == null ? new ArrayList<>() : new ArrayList<>(alimentosOferecidos);
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
     }
@@ -163,6 +171,7 @@ public class RegistroAlimentacaoJpaEntidade {
     public Boolean getFamiliaTranquilaGanhoPesoAtual() { return familiaTranquilaGanhoPesoAtual; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
+    public List<AlimentoRegistroAlimentacaoJpaEmbeddable> getAlimentosOferecidos() { return alimentosOferecidos; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
 }

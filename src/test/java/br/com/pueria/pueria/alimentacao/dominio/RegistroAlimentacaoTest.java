@@ -4,6 +4,7 @@ import br.com.pueria.pueria.comum.excecao.RegraDominioException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +22,19 @@ class RegistroAlimentacaoTest {
     }
 
     @Test
+    void deveNormalizarAlimentosOferecidosRemovendoDuplicados() {
+        DadosAlimentacao dados = dadosValidos(null, null, null, null, List.of(
+                new AlimentoRegistroAlimentacao("banana", "Banana", GrupoAlimento.FRUTA),
+                new AlimentoRegistroAlimentacao("banana", "Banana prata", GrupoAlimento.FRUTA),
+                new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME)
+        ));
+
+        RegistroAlimentacao registro = RegistroAlimentacao.registrar(UUID.randomUUID(), dados);
+
+        assertEquals(2, registro.getAlimentosOferecidos().size());
+    }
+
+    @Test
     void naoDevePermitirDataFutura() {
         assertThrows(RegraDominioException.class, () ->
                 RegistroAlimentacao.registrar(UUID.randomUUID(), dadosValidos(LocalDate.now().plusDays(1), null, null, null))
@@ -35,6 +49,10 @@ class RegistroAlimentacaoTest {
     }
 
     private DadosAlimentacao dadosValidos(LocalDate data, Integer idadeInicio, Integer refeicoes, String observacao) {
+        return dadosValidos(data, idadeInicio, refeicoes, observacao, List.of());
+    }
+
+    private DadosAlimentacao dadosValidos(LocalDate data, Integer idadeInicio, Integer refeicoes, String observacao, List<AlimentoRegistroAlimentacao> alimentos) {
         return new DadosAlimentacao(
                 data == null ? LocalDate.now() : data,
                 null,
@@ -71,7 +89,8 @@ class RegistroAlimentacaoTest {
                 null,
                 null,
                 null,
-                observacao
+                observacao,
+                alimentos
         );
     }
 }

@@ -52,6 +52,10 @@
             <span>Data</span>
             <strong>{{ formatarData(registro.dataRegistro) }}</strong>
           </article>
+          <article>
+            <span>Alimentos marcados</span>
+            <strong>{{ registro.alimentosOferecidos.length }}</strong>
+          </article>
         </div>
 
         @if (possuiAlgumaAnalise(registro)) {
@@ -161,17 +165,52 @@
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend>Variedade alimentar</legend>
-          <div class="alimentacao-checks">
-            <label><input type="checkbox" formControlName="consomeFrutas" /> Frutas</label>
-            <label><input type="checkbox" formControlName="consomeLegumes" /> Legumes</label>
-            <label><input type="checkbox" formControlName="consomeVerduras" /> Verduras</label>
-            <label><input type="checkbox" formControlName="consomeCereaisTuberculos" /> Cereais, raízes ou tubérculos</label>
-            <label><input type="checkbox" formControlName="consomeFeijoesLeguminosas" /> Feijões ou leguminosas</label>
-            <label><input type="checkbox" formControlName="consomeCarnesOvos" /> Carnes ou ovos</label>
+        <section class="alimentacao-variedade">
+          <div class="alimentacao-variedade__header">
+            <div>
+              <p class="pueria-eyebrow">Variedade alimentar</p>
+              <h3>Alimentos oferecidos</h3>
+              <p>Marque os alimentos que fizeram parte da rotina. Isso ajuda a observar variedade ao longo do tempo, sem transformar a refeição em prova.</p>
+            </div>
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="abrirModalAlimentos()">Editar alimentos</button>
           </div>
-        </fieldset>
+
+          <div class="alimentacao-variedade__resumo">
+            <article>
+              <span>Frutas</span>
+              <strong>{{ resumoVariedade().FRUTA }}</strong>
+            </article>
+            <article>
+              <span>Legumes</span>
+              <strong>{{ resumoVariedade().LEGUME }}</strong>
+            </article>
+            <article>
+              <span>Verduras</span>
+              <strong>{{ resumoVariedade().VERDURA }}</strong>
+            </article>
+            <article>
+              <span>Raízes</span>
+              <strong>{{ resumoVariedade().RAIZ_TUBERCULO }}</strong>
+            </article>
+            <article>
+              <span>Feijões</span>
+              <strong>{{ resumoVariedade().FEIJAO_LEGUMINOSA }}</strong>
+            </article>
+          </div>
+
+          @if (alimentosSelecionados().length > 0) {
+            <div class="alimentacao-variedade__chips" aria-label="Alimentos selecionados">
+              @for (alimento of alimentosSelecionados(); track alimento.codigo) {
+                <button type="button" (click)="removerAlimento(alimento.codigo)">
+                  {{ alimento.nome }}
+                  <span aria-hidden="true">×</span>
+                </button>
+              }
+            </div>
+          } @else {
+            <p class="alimentacao-variedade__vazio">Nenhum alimento específico marcado neste registro.</p>
+          }
+        </section>
 
         <fieldset>
           <legend>Hábitos e sinais observados</legend>
@@ -217,6 +256,57 @@
           </div>
         }
       </aside>
+    </div>
+  }
+
+  @if (modalAlimentosAberta()) {
+    <div class="alimentacao-modal" role="dialog" aria-modal="true" aria-labelledby="modal-alimentos-titulo">
+      <section class="alimentacao-modal__painel">
+        <div class="alimentacao-modal__topo">
+          <div>
+            <p class="pueria-eyebrow">Variedade alimentar</p>
+            <h2 id="modal-alimentos-titulo">Quais alimentos entraram na rotina?</h2>
+            <p>Use a busca ou filtre por grupo. Marque apenas o que foi oferecido ou aceito neste registro.</p>
+          </div>
+          <button type="button" class="alimentacao-modal__fechar" aria-label="Fechar seleção de alimentos" (click)="fecharModalAlimentos()">×</button>
+        </div>
+
+        <label class="alimentacao-modal__busca">
+          <span>Buscar alimento</span>
+          <input type="search" [value]="buscaAlimento()" (input)="alterarBuscaAlimento($event)" placeholder="Ex.: banana, cenoura, feijão" />
+        </label>
+
+        <div class="alimentacao-modal__grupos" aria-label="Grupos de alimentos">
+          @for (grupo of gruposAlimentos; track grupo.valor) {
+            <button
+              type="button"
+              [class.alimentacao-modal__grupo--ativo]="grupoAlimentoAtivo() === grupo.valor"
+              (click)="selecionarGrupoAlimento(grupo.valor)"
+            >
+              {{ grupo.label }}
+            </button>
+          }
+        </div>
+
+        <div class="alimentacao-modal__lista">
+          @for (alimento of alimentosFiltrados(); track alimento.codigo) {
+            <button
+              type="button"
+              class="alimentacao-modal__alimento"
+              [class.alimentacao-modal__alimento--selecionado]="alimentoSelecionado(alimento.codigo)"
+              (click)="alternarAlimento(alimento)"
+            >
+              <strong>{{ alimento.nome }}</strong>
+              <span>{{ labelGrupoAlimento(alimento.grupo) }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="alimentacao-modal__rodape">
+          <span>{{ alimentosSelecionados().length }} alimento(s) marcado(s)</span>
+          <button type="button" class="pueria-button" (click)="fecharModalAlimentos()">Concluir</button>
+        </div>
+      </section>
     </div>
   }
 </section>

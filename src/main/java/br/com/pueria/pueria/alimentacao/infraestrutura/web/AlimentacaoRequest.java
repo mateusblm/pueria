@@ -6,12 +6,14 @@ import br.com.pueria.pueria.alimentacao.dominio.DadosAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.EstagioAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.TexturaAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.TipoLeiteAlimentacao;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public record AlimentacaoRequest(
@@ -50,7 +52,8 @@ public record AlimentacaoRequest(
         Boolean dificuldadeGanhoPesoPercebida,
         Boolean familiaTranquilaGanhoPesoAtual,
         Boolean preocupacaoFamilia,
-        @Size(max = 1000) String observacao
+        @Size(max = 1000) String observacao,
+        @Valid @Size(max = 150) List<AlimentoRegistroAlimentacaoRequest> alimentosOferecidos
 ) {
     RegistroAlimentacaoComando paraRegistrar(UUID criancaId, String emailResponsavel) {
         return new RegistroAlimentacaoComando(criancaId, emailResponsavel, dados());
@@ -97,7 +100,10 @@ public record AlimentacaoRequest(
                 dificuldadeGanhoPesoPercebida,
                 familiaTranquilaGanhoPesoAtual,
                 preocupacaoFamilia,
-                observacao
+                observacao,
+                alimentosOferecidos == null ? List.of() : alimentosOferecidos.stream()
+                        .map(AlimentoRegistroAlimentacaoRequest::paraDominio)
+                        .toList()
         );
     }
 }

@@ -4,6 +4,11 @@ import br.com.pueria.pueria.comum.excecao.RegraDominioException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -47,6 +52,7 @@ public class RegistroAlimentacao {
     private final Boolean familiaTranquilaGanhoPesoAtual;
     private final Boolean preocupacaoFamilia;
     private final String observacao;
+    private final List<AlimentoRegistroAlimentacao> alimentosOferecidos;
     private final LocalDateTime criadoEm;
     private final LocalDateTime atualizadoEm;
 
@@ -89,6 +95,7 @@ public class RegistroAlimentacao {
             Boolean familiaTranquilaGanhoPesoAtual,
             Boolean preocupacaoFamilia,
             String observacao,
+            List<AlimentoRegistroAlimentacao> alimentosOferecidos,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
     ) {
@@ -130,6 +137,7 @@ public class RegistroAlimentacao {
         this.familiaTranquilaGanhoPesoAtual = familiaTranquilaGanhoPesoAtual;
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = tratarObservacao(observacao);
+        this.alimentosOferecidos = tratarAlimentos(alimentosOferecidos);
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
         this.atualizadoEm = atualizadoEm;
     }
@@ -174,6 +182,7 @@ public class RegistroAlimentacao {
                 dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
+                dados.alimentosOferecidos(),
                 LocalDateTime.now(),
                 null
         );
@@ -219,6 +228,7 @@ public class RegistroAlimentacao {
                 dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
+                dados.alimentosOferecidos(),
                 criadoEm,
                 atualizadoEm
         );
@@ -264,6 +274,7 @@ public class RegistroAlimentacao {
                 dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
+                dados.alimentosOferecidos(),
                 criadoEm,
                 LocalDateTime.now()
         );
@@ -298,6 +309,26 @@ public class RegistroAlimentacao {
             throw new RegraDominioException("A observação deve ter no máximo 1000 caracteres.");
         }
         return texto;
+    }
+
+    private static List<AlimentoRegistroAlimentacao> tratarAlimentos(List<AlimentoRegistroAlimentacao> alimentos) {
+        if (alimentos == null || alimentos.isEmpty()) {
+            return List.of();
+        }
+        if (alimentos.size() > 150) {
+            throw new RegraDominioException("Selecione no máximo 150 alimentos por registro.");
+        }
+
+        Map<String, AlimentoRegistroAlimentacao> unicos = new LinkedHashMap<>();
+        for (AlimentoRegistroAlimentacao alimento : alimentos) {
+            if (alimento != null) {
+                unicos.putIfAbsent(alimento.codigo(), alimento);
+            }
+        }
+
+        return new ArrayList<>(unicos.values()).stream()
+                .sorted(Comparator.comparing(AlimentoRegistroAlimentacao::grupo).thenComparing(AlimentoRegistroAlimentacao::nome))
+                .toList();
     }
 
     public UUID getId() { return id; }
@@ -338,6 +369,7 @@ public class RegistroAlimentacao {
     public Boolean getFamiliaTranquilaGanhoPesoAtual() { return familiaTranquilaGanhoPesoAtual; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
+    public List<AlimentoRegistroAlimentacao> getAlimentosOferecidos() { return alimentosOferecidos; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
 }

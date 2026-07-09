@@ -43,8 +43,8 @@ Status usados:
 | ALI-04 | Trocar `Preocupação com ganho de peso` por `Família está tranquila quanto ao ganho de peso atual`. | Implementado | Campo positivo incluído sem gerar alerta automático quando não marcado. |
 | ALI-05 | Trocar `Usa colher` por `Aprendendo ou usando talheres`. | Implementado | Ajuste aplicado na interface mantendo compatibilidade com campo atual. |
 | ALI-06 | Separar `Legumes e verduras` em dois grupos. | Implementado | Campos separados incluídos na interface, API, domínio e banco. |
-| ALI-07 | Criar quadro de diversidade alimentar por grupos e alimentos. | Pesquisa/validação | Grupos sugeridos: proteína animal, legumes, leguminosas, frutas e verduras. Pode ter ícones/desenhos e seleção por alimento. |
-| ALI-08 | Listar exemplos de proteína animal: ovos, frango, carneiro, vaca, porco e peixe. | Pesquisa/validação | Validar lista final com a doutora e referências de alimentação complementar. |
+| ALI-07 | Criar quadro de diversidade alimentar por grupos e alimentos. | Implementado | Bloco compacto com modal, busca, filtros por grupo e chips de alimentos oferecidos; seleção é salva no banco por registro alimentar. |
+| ALI-08 | Listar exemplos de proteína animal: ovos, frango, carneiro, vaca, porco e peixe. | Parcial | Incluídos ovo, frango, carne bovina e peixe no catálogo inicial. Carneiro e porco ficaram para validação antes de ampliar o MVP. |
 
 ### Sono
 

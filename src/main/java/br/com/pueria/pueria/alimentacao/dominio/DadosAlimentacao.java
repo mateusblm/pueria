@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.alimentacao.dominio;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record DadosAlimentacao(
         LocalDate dataRegistro,
@@ -38,5 +39,6 @@ public record DadosAlimentacao(
         Boolean dificuldadeGanhoPesoPercebida,
         Boolean familiaTranquilaGanhoPesoAtual,
         Boolean preocupacaoFamilia,
-        String observacao
+        String observacao,
+        List<AlimentoRegistroAlimentacao> alimentosOferecidos
 ) {}

@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.alimentacao.aplicacao;
 
 import br.com.pueria.pueria.alimentacao.dominio.EstagioAlimentar;
+import br.com.pueria.pueria.alimentacao.dominio.GrupoAlimento;
 import br.com.pueria.pueria.alimentacao.dominio.RegistroAlimentacao;
 import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.IdadeCrianca;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AnaliseAlimentacaoService {
@@ -74,6 +76,21 @@ public class AnaliseAlimentacaoService {
         if (Boolean.TRUE.equals(registro.getRefeicoesEmFamilia())) {
             rotina.add("Refeições em família foram registradas como parte da rotina.");
         }
+        if (!registro.getAlimentosOferecidos().isEmpty()) {
+            rotina.add("Foram marcados " + registro.getAlimentosOferecidos().size() + " alimento(s) neste registro.");
+            long grupos = registro.getAlimentosOferecidos().stream()
+                    .map(alimento -> alimento.grupo())
+                    .collect(Collectors.toSet())
+                    .size();
+            if (grupos >= 3) {
+                habitosApoio.add("O registro mostra contato com diferentes grupos de alimentos, o que ajuda a acompanhar variedade sem pressa e sem pressão.");
+            }
+            boolean temFruta = temGrupo(registro, GrupoAlimento.FRUTA);
+            boolean temLegumeOuVerdura = temGrupo(registro, GrupoAlimento.LEGUME) || temGrupo(registro, GrupoAlimento.VERDURA);
+            if (!temFruta || !temLegumeOuVerdura) {
+                habitosApoio.add("Registrar frutas, legumes e verduras separadamente ajuda a perceber quais alimentos já entraram na rotina e quais podem ser oferecidos aos poucos.");
+            }
+        }
 
         String resumo = conversaConsulta.isEmpty()
                 ? "Registro alimentar salvo para acompanhar a rotina e observar mudanças ao longo do tempo."
@@ -86,5 +103,9 @@ public class AnaliseAlimentacaoService {
                 List.copyOf(conversaConsulta),
                 List.copyOf(habitosApoio)
         );
+    }
+
+    private boolean temGrupo(RegistroAlimentacao registro, GrupoAlimento grupo) {
+        return registro.getAlimentosOferecidos().stream().anyMatch(alimento -> alimento.grupo() == grupo);
     }
 }

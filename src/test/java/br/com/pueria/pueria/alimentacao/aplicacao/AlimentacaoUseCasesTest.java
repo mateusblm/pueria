@@ -38,6 +38,7 @@ class AlimentacaoUseCasesTest {
         ));
 
         assertEquals(crianca.getId(), detalhado.registro().getCriancaId());
+        assertEquals(2, detalhado.registro().getAlimentosOferecidos().size());
         assertEquals(1, ambiente.registros.listarPorCrianca(crianca.getId()).size());
     }
 
@@ -121,7 +122,11 @@ class AlimentacaoUseCasesTest {
                 false,
                 true,
                 false,
-                null
+                null,
+                List.of(
+                        new AlimentoRegistroAlimentacao("banana", "Banana", GrupoAlimento.FRUTA),
+                        new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME)
+                )
         );
     }
 

@@ -1,7 +1,10 @@
 package br.com.pueria.pueria.alimentacao.infraestrutura.persistencia;
 
+import br.com.pueria.pueria.alimentacao.dominio.AlimentoRegistroAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.DadosAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.RegistroAlimentacao;
+
+import java.util.List;
 
 class RegistroAlimentacaoMapper {
 
@@ -55,6 +58,7 @@ class RegistroAlimentacaoMapper {
                 registro.getFamiliaTranquilaGanhoPesoAtual(),
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
+                alimentosParaEntidade(registro.getAlimentosOferecidos()),
                 registro.getCriadoEm(),
                 registro.getAtualizadoEm()
         );
@@ -97,7 +101,20 @@ class RegistroAlimentacaoMapper {
                 entidade.getDificuldadeGanhoPesoPercebida(),
                 entidade.getFamiliaTranquilaGanhoPesoAtual(),
                 entidade.getPreocupacaoFamilia(),
-                entidade.getObservacao()
+                entidade.getObservacao(),
+                alimentosParaDominio(entidade.getAlimentosOferecidos())
         );
+    }
+
+    private static List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosParaEntidade(List<AlimentoRegistroAlimentacao> alimentos) {
+        return alimentos.stream()
+                .map((alimento) -> new AlimentoRegistroAlimentacaoJpaEmbeddable(alimento.codigo(), alimento.nome(), alimento.grupo()))
+                .toList();
+    }
+
+    private static List<AlimentoRegistroAlimentacao> alimentosParaDominio(List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentos) {
+        return alimentos.stream()
+                .map((alimento) -> new AlimentoRegistroAlimentacao(alimento.getCodigo(), alimento.getNome(), alimento.getGrupo()))
+                .toList();
     }
 }

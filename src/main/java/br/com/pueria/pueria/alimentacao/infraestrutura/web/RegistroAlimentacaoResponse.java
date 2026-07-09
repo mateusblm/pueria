@@ -8,6 +8,7 @@ import br.com.pueria.pueria.alimentacao.dominio.TipoLeiteAlimentacao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record RegistroAlimentacaoResponse(
@@ -49,6 +50,7 @@ public record RegistroAlimentacaoResponse(
         Boolean familiaTranquilaGanhoPesoAtual,
         Boolean preocupacaoFamilia,
         String observacao,
+        List<AlimentoRegistroAlimentacaoResponse> alimentosOferecidos,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm,
         AnaliseAlimentacaoResponse analise
@@ -94,6 +96,9 @@ public record RegistroAlimentacaoResponse(
                 registro.getFamiliaTranquilaGanhoPesoAtual(),
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
+                registro.getAlimentosOferecidos().stream()
+                        .map(AlimentoRegistroAlimentacaoResponse::de)
+                        .toList(),
                 registro.getCriadoEm(),
                 registro.getAtualizadoEm(),
                 AnaliseAlimentacaoResponse.de(detalhado.analise())

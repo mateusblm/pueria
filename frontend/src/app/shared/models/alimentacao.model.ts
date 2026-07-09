@@ -1,6 +1,13 @@
 export type TipoLeiteAlimentacao = 'LEITE_MATERNO' | 'FORMULA_INFANTIL' | 'MISTO' | 'NAO_CONSOME_LEITE' | 'NAO_INFORMADO';
 export type EstagioAlimentar = 'APENAS_LEITE' | 'INICIANDO_ALIMENTACAO_COMPLEMENTAR' | 'ALIMENTACAO_COMPLEMENTAR_ESTABELECIDA' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
 export type TexturaAlimentar = 'LIQUIDA' | 'PASTOSA' | 'AMASSADA' | 'PEDACOS_MACIOS' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
+export type GrupoAlimento = 'FRUTA' | 'LEGUME' | 'VERDURA' | 'RAIZ_TUBERCULO' | 'FEIJAO_LEGUMINOSA' | 'CEREAL' | 'PROTEINA';
+
+export interface AlimentoRegistroAlimentacao {
+  codigo: string;
+  nome: string;
+  grupo: GrupoAlimento;
+}
 
 export interface AnaliseAlimentacao {
   titulo: string;
@@ -49,6 +56,7 @@ export interface RegistroAlimentacao {
   familiaTranquilaGanhoPesoAtual?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
+  alimentosOferecidos: AlimentoRegistroAlimentacao[];
   criadoEm: string;
   atualizadoEm?: string | null;
   analise: AnaliseAlimentacao;
@@ -91,4 +99,5 @@ export interface SalvarRegistroAlimentacaoRequest {
   familiaTranquilaGanhoPesoAtual?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
+  alimentosOferecidos?: AlimentoRegistroAlimentacao[];
 }
