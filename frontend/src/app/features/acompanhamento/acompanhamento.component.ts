@@ -369,6 +369,11 @@ export class AcompanhamentoComponent implements OnInit {
         rota: ['/criancas', resumo.crianca.id, 'alimentacao']
       },
       {
+        titulo: 'Trânsito intestinal',
+        detalhe: 'Registre aspecto das fezes, frequência, assaduras e sinais que merecem observação.',
+        rota: ['/criancas', resumo.crianca.id, 'transito-intestinal']
+      },
+      {
         titulo: 'Sono',
         detalhe: 'Registre duração, qualidade e padrão de descanso em 24 horas.',
         rota: ['/criancas', resumo.crianca.id, 'sono']
