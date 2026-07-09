@@ -19,11 +19,16 @@ export class LoginComponent {
 
   carregando = false;
   erro = '';
+  senhaVisivel = false;
 
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required]]
   });
+
+  alternarSenha(): void {
+    this.senhaVisivel = !this.senhaVisivel;
+  }
 
   entrar(): void {
     this.erro = '';

@@ -19,15 +19,29 @@ export class CadastroComponent {
 
   carregando = false;
   erro = '';
+  senhaVisivel = false;
+  confirmarSenhaVisivel = false;
 
   readonly form = this.formBuilder.nonNullable.group({
     nome: ['', [Validators.required, Validators.maxLength(150)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(150)]],
-    senha: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]]
+    senha: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]],
+    confirmarSenha: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]]
   });
+
+  alternarSenha(): void {
+    this.senhaVisivel = !this.senhaVisivel;
+  }
+
+  alternarConfirmarSenha(): void {
+    this.confirmarSenhaVisivel = !this.confirmarSenhaVisivel;
+  }
 
   cadastrar(): void {
     this.erro = '';
+    if (this.form.controls.confirmarSenha.hasError('senhasDiferentes')) {
+      this.form.controls.confirmarSenha.setErrors(null);
+    }
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -35,9 +49,20 @@ export class CadastroComponent {
       return;
     }
 
+    const valor = this.form.getRawValue();
+    if (valor.senha !== valor.confirmarSenha) {
+      this.form.controls.confirmarSenha.setErrors({ senhasDiferentes: true });
+      this.erro = 'As senhas informadas não coincidem.';
+      return;
+    }
+
     this.carregando = true;
 
-    this.authService.cadastrar(this.form.getRawValue())
+    this.authService.cadastrar({
+      nome: valor.nome,
+      email: valor.email,
+      senha: valor.senha
+    })
       .pipe(finalize(() => {
         this.carregando = false;
       }))
@@ -46,10 +71,19 @@ export class CadastroComponent {
           queryParams: { cadastro: 'realizado' }
         }),
         error: (erro: HttpErrorResponse) => {
-          this.erro = erro.status === 409
-            ? 'Já existe uma conta com esse e-mail.'
-            : 'Não foi possível criar a conta agora. Revise os dados e tente novamente.';
+          this.erro = this.extrairMensagemErro(erro);
         }
       });
+  }
+
+  private extrairMensagemErro(erro: HttpErrorResponse): string {
+    const mensagens = erro.error?.mensagens;
+    const mensagem = Array.isArray(mensagens) && mensagens.length > 0 ? String(mensagens[0]) : '';
+
+    if (erro.status === 409 || (/e-?mail|email/i.test(mensagem) && /existe|cadastrad/i.test(mensagem))) {
+      return 'Já existe uma conta com esse e-mail.';
+    }
+
+    return mensagem || 'Não foi possível criar a conta agora. Revise os dados e tente novamente.';
   }
 }

@@ -17,7 +17,22 @@
 
     <div class="pueria-field">
       <label for="senha">Senha</label>
-      <input id="senha" type="password" autocomplete="current-password" formControlName="senha" />
+      <div class="auth-password">
+        <input
+          id="senha"
+          [type]="senhaVisivel ? 'text' : 'password'"
+          autocomplete="current-password"
+          formControlName="senha"
+        />
+        <button
+          type="button"
+          class="auth-password__toggle"
+          [attr.aria-label]="senhaVisivel ? 'Ocultar senha' : 'Mostrar senha'"
+          (click)="alternarSenha()"
+        >
+          <span class="auth-password__eye" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
 
     <button class="pueria-button" type="submit" [disabled]="carregando">

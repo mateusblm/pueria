@@ -25,3 +25,46 @@
   font-weight: 800;
   text-decoration: none;
 }
+
+.auth-password {
+  position: relative;
+}
+
+.auth-password input {
+  padding-right: 3rem;
+}
+
+.auth-password__toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.auth-password__eye {
+  position: relative;
+  display: block;
+  width: 1.15rem;
+  height: 0.72rem;
+  margin: auto;
+  border: 2px solid var(--pueria-texto-suave);
+  border-radius: 999px / 700px;
+}
+
+.auth-password__eye::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 999px;
+  background: var(--pueria-texto-suave);
+  transform: translate(-50%, -50%);
+}
