@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { finalize, TimeoutError } from 'rxjs';
 
 import { AuthService } from '../../../core/auth/auth.service';
 
@@ -17,9 +17,9 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  carregando = false;
-  erro = '';
-  senhaVisivel = false;
+  readonly carregando = signal(false);
+  readonly erro = signal('');
+  readonly senhaVisivel = signal(false);
 
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -27,30 +27,39 @@ export class LoginComponent {
   });
 
   alternarSenha(): void {
-    this.senhaVisivel = !this.senhaVisivel;
+    this.senhaVisivel.update((visivel) => !visivel);
   }
 
   entrar(): void {
-    this.erro = '';
-
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.erro = 'Informe e-mail e senha para continuar.';
+    if (this.carregando()) {
       return;
     }
 
-    this.carregando = true;
+    this.erro.set('');
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.erro.set('Informe e-mail e senha para continuar.');
+      return;
+    }
+
+    this.carregando.set(true);
 
     this.authService.login(this.form.getRawValue())
       .pipe(finalize(() => {
-        this.carregando = false;
+        this.carregando.set(false);
       }))
       .subscribe({
         next: () => void this.router.navigateByUrl('/acompanhamento'),
-        error: (erro: HttpErrorResponse) => {
-          this.erro = erro.status === 401
+        error: (erro: unknown) => {
+          if (erro instanceof TimeoutError) {
+            this.erro.set('A conexão demorou mais que o esperado. Verifique sua internet e tente novamente.');
+            return;
+          }
+
+          this.erro.set(erro instanceof HttpErrorResponse && erro.status === 401
             ? 'E-mail ou senha inválidos.'
-            : 'Não foi possível entrar agora. Tente novamente.';
+            : 'Não foi possível entrar agora. Tente novamente.');
         }
       });
   }

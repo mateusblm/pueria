@@ -27,6 +27,7 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>('/api/auth/login', request).pipe(
+      timeout(15000),
       tap((response) => this.salvarToken(response.token))
     );
   }

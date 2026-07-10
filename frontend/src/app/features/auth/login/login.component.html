@@ -5,8 +5,8 @@
     <p>Continue o acompanhamento preventivo das crianças vinculadas a você.</p>
   </div>
 
-  @if (erro) {
-    <div class="pueria-message pueria-message--erro">{{ erro }}</div>
+  @if (erro()) {
+    <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   }
 
   <form class="pueria-form" [formGroup]="form" (ngSubmit)="entrar()">
@@ -20,14 +20,14 @@
       <div class="auth-password">
         <input
           id="senha"
-          [type]="senhaVisivel ? 'text' : 'password'"
+          [type]="senhaVisivel() ? 'text' : 'password'"
           autocomplete="current-password"
           formControlName="senha"
         />
         <button
           type="button"
           class="auth-password__toggle"
-          [attr.aria-label]="senhaVisivel ? 'Ocultar senha' : 'Mostrar senha'"
+          [attr.aria-label]="senhaVisivel() ? 'Ocultar senha' : 'Mostrar senha'"
           (click)="alternarSenha()"
         >
           <span class="auth-password__eye" aria-hidden="true"></span>
@@ -35,8 +35,8 @@
       </div>
     </div>
 
-    <button class="pueria-button" type="submit" [disabled]="carregando">
-      {{ carregando ? 'Entrando...' : 'Entrar' }}
+    <button class="pueria-button" type="submit" [disabled]="carregando()">
+      {{ carregando() ? 'Entrando...' : 'Entrar' }}
     </button>
   </form>
 

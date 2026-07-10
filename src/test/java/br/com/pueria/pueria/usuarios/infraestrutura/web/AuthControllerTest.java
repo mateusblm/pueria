@@ -102,6 +102,20 @@ class AuthControllerTest {
     }
 
     @Test
+    void naoDeveRevelarQuandoOEmailNaoEstaCadastrado() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "conta.inexistente@email.com",
+                                  "senha": "senha123"
+                                }
+                                """))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.erro").value("Credenciais inválidas"));
+    }
+
+    @Test
     void deveRetornarUsuarioAtualComTokenValido() throws Exception {
         cadastrarUsuario("Mateus", "mateus.me@email.com", "senha123");
         String token = obterToken("mateus.me@email.com", "senha123");
