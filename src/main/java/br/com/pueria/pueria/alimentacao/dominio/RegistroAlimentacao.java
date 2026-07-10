@@ -52,6 +52,7 @@ public class RegistroAlimentacao {
     private final Boolean familiaTranquilaGanhoPesoAtual;
     private final Boolean preocupacaoFamilia;
     private final String observacao;
+    private final TipoOrigemAlimento tipoOrigemAlimento;
     private final List<AlimentoRegistroAlimentacao> alimentosOferecidos;
     private final LocalDateTime criadoEm;
     private final LocalDateTime atualizadoEm;
@@ -95,6 +96,7 @@ public class RegistroAlimentacao {
             Boolean familiaTranquilaGanhoPesoAtual,
             Boolean preocupacaoFamilia,
             String observacao,
+            TipoOrigemAlimento tipoOrigemAlimento,
             List<AlimentoRegistroAlimentacao> alimentosOferecidos,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
@@ -137,7 +139,8 @@ public class RegistroAlimentacao {
         this.familiaTranquilaGanhoPesoAtual = familiaTranquilaGanhoPesoAtual;
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = tratarObservacao(observacao);
-        this.alimentosOferecidos = tratarAlimentos(alimentosOferecidos);
+        this.tipoOrigemAlimento = tipoOrigemAlimento == null ? TipoOrigemAlimento.NAO_INFORMADO : tipoOrigemAlimento;
+        this.alimentosOferecidos = tratarAlimentos(alimentosOferecidos, this.dataRegistro);
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
         this.atualizadoEm = atualizadoEm;
     }
@@ -182,6 +185,7 @@ public class RegistroAlimentacao {
                 dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
+                dados.tipoOrigemAlimento(),
                 dados.alimentosOferecidos(),
                 LocalDateTime.now(),
                 null
@@ -228,6 +232,7 @@ public class RegistroAlimentacao {
                 dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
+                dados.tipoOrigemAlimento(),
                 dados.alimentosOferecidos(),
                 criadoEm,
                 atualizadoEm
@@ -274,6 +279,7 @@ public class RegistroAlimentacao {
                 dados.familiaTranquilaGanhoPesoAtual(),
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
+                dados.tipoOrigemAlimento(),
                 dados.alimentosOferecidos(),
                 criadoEm,
                 LocalDateTime.now()
@@ -311,17 +317,20 @@ public class RegistroAlimentacao {
         return texto;
     }
 
-    private static List<AlimentoRegistroAlimentacao> tratarAlimentos(List<AlimentoRegistroAlimentacao> alimentos) {
+    private static List<AlimentoRegistroAlimentacao> tratarAlimentos(List<AlimentoRegistroAlimentacao> alimentos, LocalDate dataRegistro) {
         if (alimentos == null || alimentos.isEmpty()) {
             return List.of();
         }
-        if (alimentos.size() > 150) {
-            throw new RegraDominioException("Selecione no máximo 150 alimentos por registro.");
+        if (alimentos.size() > 250) {
+            throw new RegraDominioException("Selecione no máximo 250 alimentos por registro.");
         }
 
         Map<String, AlimentoRegistroAlimentacao> unicos = new LinkedHashMap<>();
         for (AlimentoRegistroAlimentacao alimento : alimentos) {
             if (alimento != null) {
+                if (alimento.dataIntroducao() != null && alimento.dataIntroducao().isAfter(dataRegistro)) {
+                    throw new RegraDominioException("A primeira oferta do alimento não pode ser posterior à data do registro.");
+                }
                 unicos.putIfAbsent(alimento.codigo(), alimento);
             }
         }
@@ -369,6 +378,7 @@ public class RegistroAlimentacao {
     public Boolean getFamiliaTranquilaGanhoPesoAtual() { return familiaTranquilaGanhoPesoAtual; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
+    public TipoOrigemAlimento getTipoOrigemAlimento() { return tipoOrigemAlimento; }
     public List<AlimentoRegistroAlimentacao> getAlimentosOferecidos() { return alimentosOferecidos; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }

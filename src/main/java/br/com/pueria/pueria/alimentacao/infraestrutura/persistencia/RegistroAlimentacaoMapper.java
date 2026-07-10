@@ -58,6 +58,7 @@ class RegistroAlimentacaoMapper {
                 registro.getFamiliaTranquilaGanhoPesoAtual(),
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
+                registro.getTipoOrigemAlimento(),
                 alimentosParaEntidade(registro.getAlimentosOferecidos()),
                 registro.getCriadoEm(),
                 registro.getAtualizadoEm()
@@ -102,19 +103,54 @@ class RegistroAlimentacaoMapper {
                 entidade.getFamiliaTranquilaGanhoPesoAtual(),
                 entidade.getPreocupacaoFamilia(),
                 entidade.getObservacao(),
+                entidade.getTipoOrigemAlimento(),
                 alimentosParaDominio(entidade.getAlimentosOferecidos())
         );
     }
 
     private static List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosParaEntidade(List<AlimentoRegistroAlimentacao> alimentos) {
         return alimentos.stream()
-                .map((alimento) -> new AlimentoRegistroAlimentacaoJpaEmbeddable(alimento.codigo(), alimento.nome(), alimento.grupo()))
+                .map((alimento) -> new AlimentoRegistroAlimentacaoJpaEmbeddable(
+                        alimento.codigo(),
+                        alimento.nome(),
+                        alimento.grupo(),
+                        alimento.alergenico(),
+                        alimento.dataIntroducao(),
+                        alimento.formaPreparo(),
+                        alimento.textura(),
+                        alimento.quantidadeAproximada(),
+                        alimento.aceitacao(),
+                        alimento.repetiuOutroDia(),
+                        alimento.sintomasPele(),
+                        alimento.sintomasIntestinais(),
+                        alimento.sintomasRespiratorios(),
+                        alimento.alteracaoSono(),
+                        alimento.alteracaoComportamento(),
+                        alimento.observacao()
+                ))
                 .toList();
     }
 
     private static List<AlimentoRegistroAlimentacao> alimentosParaDominio(List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentos) {
         return alimentos.stream()
-                .map((alimento) -> new AlimentoRegistroAlimentacao(alimento.getCodigo(), alimento.getNome(), alimento.getGrupo()))
+                .map((alimento) -> new AlimentoRegistroAlimentacao(
+                        alimento.getCodigo(),
+                        alimento.getNome(),
+                        alimento.getGrupo(),
+                        alimento.getAlergenico(),
+                        alimento.getDataIntroducao(),
+                        alimento.getFormaPreparo(),
+                        alimento.getTextura(),
+                        alimento.getQuantidadeAproximada(),
+                        alimento.getAceitacao(),
+                        alimento.getRepetiuOutroDia(),
+                        alimento.getSintomasPele(),
+                        alimento.getSintomasIntestinais(),
+                        alimento.getSintomasRespiratorios(),
+                        alimento.getAlteracaoSono(),
+                        alimento.getAlteracaoComportamento(),
+                        alimento.getObservacao()
+                ))
                 .toList();
     }
 }

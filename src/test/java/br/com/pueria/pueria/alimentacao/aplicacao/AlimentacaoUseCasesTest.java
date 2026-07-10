@@ -123,9 +123,10 @@ class AlimentacaoUseCasesTest {
                 true,
                 false,
                 null,
+                TipoOrigemAlimento.MISTO,
                 List.of(
                         new AlimentoRegistroAlimentacao("banana", "Banana", GrupoAlimento.FRUTA),
-                        new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME)
+                        new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME_HORTALICA_FRUTO)
                 )
         );
     }

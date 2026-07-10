@@ -56,6 +56,10 @@
             <span>Alimentos marcados</span>
             <strong>{{ registro.alimentosOferecidos.length }}</strong>
           </article>
+          <article>
+            <span>Origem predominante</span>
+            <strong>{{ labelOrigemAlimento(registro.tipoOrigemAlimento) }}</strong>
+          </article>
         </div>
 
         @if (possuiAlgumaAnalise(registro)) {
@@ -175,36 +179,49 @@
             <button type="button" class="pueria-button pueria-button--secondary" (click)="abrirModalAlimentos()">Editar alimentos</button>
           </div>
 
+          <label class="alimentacao-variedade__origem">
+            <span>De onde vêm, em geral, os alimentos oferecidos?</span>
+            <select formControlName="tipoOrigemAlimento">
+              @for (opcao of origensAlimentos; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+            <small>Essa informação descreve a rotina, sem julgamento sobre a escolha da família.</small>
+          </label>
+
           <div class="alimentacao-variedade__resumo">
             <article>
               <span>Frutas</span>
               <strong>{{ resumoVariedade().FRUTA }}</strong>
             </article>
             <article>
-              <span>Legumes</span>
-              <strong>{{ resumoVariedade().LEGUME }}</strong>
-            </article>
-            <article>
-              <span>Verduras</span>
-              <strong>{{ resumoVariedade().VERDURA }}</strong>
+              <span>Legumes e folhas</span>
+              <strong>{{ resumoVariedade().LEGUME_HORTALICA_FRUTO + resumoVariedade().VERDURA_FOLHA }}</strong>
             </article>
             <article>
               <span>Raízes</span>
-              <strong>{{ resumoVariedade().RAIZ_TUBERCULO }}</strong>
+              <strong>{{ resumoVariedade().RAIZ_TUBERCULO_AMIDO }}</strong>
             </article>
             <article>
-              <span>Feijões</span>
-              <strong>{{ resumoVariedade().FEIJAO_LEGUMINOSA }}</strong>
+              <span>Grãos e leguminosas</span>
+              <strong>{{ resumoVariedade().CEREAL_GRAO_MASSA + resumoVariedade().PSEUDOCEREAL_GRAO_ESPECIAL + resumoVariedade().LEGUMINOSA }}</strong>
+            </article>
+            <article>
+              <span>Fontes animais</span>
+              <strong>{{ resumoVariedade().CARNE_AVE + resumoVariedade().PEIXE_FRUTO_MAR + resumoVariedade().OVO + resumoVariedade().LEITE_DERIVADO }}</strong>
             </article>
           </div>
 
           @if (alimentosSelecionados().length > 0) {
             <div class="alimentacao-variedade__chips" aria-label="Alimentos selecionados">
               @for (alimento of alimentosSelecionados(); track alimento.codigo) {
-                <button type="button" (click)="removerAlimento(alimento.codigo)">
-                  {{ alimento.nome }}
-                  <span aria-hidden="true">×</span>
-                </button>
+                <div class="alimentacao-variedade__chip">
+                  <button type="button" (click)="abrirModalAlimentos(); abrirDetalhesAlimento(alimento.codigo)">
+                    {{ alimento.nome }}
+                    @if (possuiDetalhesAlimento(alimento)) { <small>Detalhado</small> }
+                  </button>
+                  <button type="button" aria-label="Remover {{ alimento.nome }}" (click)="removerAlimento(alimento.codigo)">×</button>
+                </div>
               }
             </div>
           } @else {
@@ -266,7 +283,7 @@
           <div>
             <p class="pueria-eyebrow">Variedade alimentar</p>
             <h2 id="modal-alimentos-titulo">Quais alimentos entraram na rotina?</h2>
-            <p>Use a busca ou filtre por grupo. Marque apenas o que foi oferecido ou aceito neste registro.</p>
+            <p>Use a busca ou filtre por grupo. Marque o que foi oferecido neste registro, mesmo que a criança tenha recusado.</p>
           </div>
           <button type="button" class="alimentacao-modal__fechar" aria-label="Fechar seleção de alimentos" (click)="fecharModalAlimentos()">×</button>
         </div>
@@ -288,19 +305,87 @@
           }
         </div>
 
-        <div class="alimentacao-modal__lista">
-          @for (alimento of alimentosFiltrados(); track alimento.codigo) {
-            <button
-              type="button"
-              class="alimentacao-modal__alimento"
-              [class.alimentacao-modal__alimento--selecionado]="alimentoSelecionado(alimento.codigo)"
-              (click)="alternarAlimento(alimento)"
-            >
-              <strong>{{ alimento.nome }}</strong>
-              <span>{{ labelGrupoAlimento(alimento.grupo) }}</span>
-            </button>
-          }
-        </div>
+        @if (orientacaoGrupoAtivo()) {
+          <p class="alimentacao-modal__orientacao">{{ orientacaoGrupoAtivo() }}</p>
+        }
+
+        @if (alimentoDetalhado(); as alimento) {
+          <section class="alimentacao-modal__detalhes" aria-labelledby="detalhes-alimento-titulo">
+            <div class="alimentacao-modal__detalhes-topo">
+              <div>
+                <span>{{ labelGrupoAlimento(alimento.grupo) }}</span>
+                <h3 id="detalhes-alimento-titulo">{{ alimento.nome }}</h3>
+                <p>Preencha somente o que fizer sentido lembrar depois.</p>
+              </div>
+              <button type="button" class="pueria-button pueria-button--secondary" (click)="fecharDetalhesAlimento()">Voltar à lista</button>
+            </div>
+
+            @if (alimento.alergenico) {
+              <p class="alimentacao-modal__orientacao">Este alimento merece rastreabilidade. O registro não representa diagnóstico nem indicação de restrição.</p>
+            }
+
+            <div class="alimentacao-modal__detalhes-grid">
+              <label>
+                <span>Data da primeira oferta</span>
+                <input type="text" inputmode="numeric" placeholder="dd/mm/aaaa" [value]="dataIntroducaoParaExibicao(alimento)" (blur)="atualizarDataIntroducao($event)" />
+                @if (idadeNaIntroducao(alimento)) { <small>{{ idadeNaIntroducao(alimento) }}</small> }
+              </label>
+              <label>
+                <span>Aceitação</span>
+                <select [value]="alimento.aceitacao ?? 'NAO_INFORMADA'" (change)="atualizarOpcaoAlimento('aceitacao', $event)">
+                  @for (opcao of aceitacoes; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+                </select>
+              </label>
+              <label>
+                <span>Forma de preparo</span>
+                <input type="text" maxlength="160" placeholder="Ex.: cozido, assado, pasta fina" [value]="alimento.formaPreparo ?? ''" (input)="atualizarTextoAlimento('formaPreparo', $event)" />
+              </label>
+              <label>
+                <span>Textura oferecida</span>
+                <select [value]="alimento.textura ?? 'NAO_INFORMADO'" (change)="atualizarOpcaoAlimento('textura', $event)">
+                  @for (opcao of texturas; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+                </select>
+              </label>
+              <label>
+                <span>Quantidade aproximada</span>
+                <input type="text" maxlength="80" placeholder="Ex.: 2 colheres, alguns pedaços" [value]="alimento.quantidadeAproximada ?? ''" (input)="atualizarTextoAlimento('quantidadeAproximada', $event)" />
+              </label>
+            </div>
+
+            <fieldset class="alimentacao-modal__marcacoes">
+              <legend>O que foi observado?</legend>
+              <label><input type="checkbox" [checked]="alimento.repetiuOutroDia" (change)="atualizarMarcacaoAlimento('repetiuOutroDia', $event)" /> Foi oferecido novamente em outro dia</label>
+              <label><input type="checkbox" [checked]="alimento.sintomasPele" (change)="atualizarMarcacaoAlimento('sintomasPele', $event)" /> Sinais na pele</label>
+              <label><input type="checkbox" [checked]="alimento.sintomasIntestinais" (change)="atualizarMarcacaoAlimento('sintomasIntestinais', $event)" /> Sinais intestinais</label>
+              <label><input type="checkbox" [checked]="alimento.sintomasRespiratorios" (change)="atualizarMarcacaoAlimento('sintomasRespiratorios', $event)" /> Sinais respiratórios</label>
+              <label><input type="checkbox" [checked]="alimento.alteracaoSono" (change)="atualizarMarcacaoAlimento('alteracaoSono', $event)" /> Mudança percebida no sono</label>
+              <label><input type="checkbox" [checked]="alimento.alteracaoComportamento" (change)="atualizarMarcacaoAlimento('alteracaoComportamento', $event)" /> Mudança percebida no comportamento</label>
+            </fieldset>
+
+            <label class="alimentacao-modal__observacao">
+              <span>Observações</span>
+              <textarea rows="3" maxlength="500" placeholder="Ex.: horário, duração dos sinais ou contexto da oferta." [value]="alimento.observacao ?? ''" (input)="atualizarTextoAlimento('observacao', $event)"></textarea>
+            </label>
+          </section>
+        } @else {
+          <div class="alimentacao-modal__lista">
+            @for (alimento of alimentosFiltrados(); track alimento.codigo) {
+              <article
+                class="alimentacao-modal__alimento"
+                [class.alimentacao-modal__alimento--selecionado]="alimentoSelecionado(alimento.codigo)"
+              >
+                <button type="button" (click)="alternarAlimento(alimento)">
+                  <strong>{{ alimento.nome }}</strong>
+                  <span>{{ labelGrupoAlimento(alimento.grupo) }}</span>
+                  @if (alimento.alergenico) { <small>Rastrear oferta</small> }
+                </button>
+                @if (alimentoSelecionado(alimento.codigo)) {
+                  <button type="button" class="alimentacao-modal__detalhar" (click)="abrirDetalhesAlimento(alimento.codigo)">Detalhes</button>
+                }
+              </article>
+            }
+          </div>
+        }
 
         <div class="alimentacao-modal__rodape">
           <span>{{ alimentosSelecionados().length }} alimento(s) marcado(s)</span>

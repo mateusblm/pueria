@@ -19,6 +19,7 @@ class RegistroAlimentacaoTest {
         assertEquals(TipoLeiteAlimentacao.NAO_INFORMADO, registro.getTipoLeite());
         assertEquals(EstagioAlimentar.NAO_INFORMADO, registro.getEstagioAlimentar());
         assertEquals(TexturaAlimentar.NAO_INFORMADO, registro.getTexturaPredominante());
+        assertEquals(TipoOrigemAlimento.NAO_INFORMADO, registro.getTipoOrigemAlimento());
     }
 
     @Test
@@ -26,7 +27,7 @@ class RegistroAlimentacaoTest {
         DadosAlimentacao dados = dadosValidos(null, null, null, null, List.of(
                 new AlimentoRegistroAlimentacao("banana", "Banana", GrupoAlimento.FRUTA),
                 new AlimentoRegistroAlimentacao("banana", "Banana prata", GrupoAlimento.FRUTA),
-                new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME)
+                new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME_HORTALICA_FRUTO)
         ));
 
         RegistroAlimentacao registro = RegistroAlimentacao.registrar(UUID.randomUUID(), dados);
@@ -46,6 +47,38 @@ class RegistroAlimentacaoTest {
         assertThrows(RegraDominioException.class, () ->
                 RegistroAlimentacao.registrar(UUID.randomUUID(), dadosValidos(null, 25, null, null))
         );
+    }
+
+    @Test
+    void deveManterDetalhesOpcionaisDoAlimento() {
+        LocalDate primeiraOferta = LocalDate.now().minusDays(2);
+        AlimentoRegistroAlimentacao ovo = new AlimentoRegistroAlimentacao(
+                "ovo", "Ovo", GrupoAlimento.OVO, true, primeiraOferta, " Cozido e amassado ",
+                TexturaAlimentar.AMASSADA, "2 colheres", AceitacaoAlimento.BOA, true,
+                false, false, false, false, false, " Sem sinais observados "
+        );
+
+        RegistroAlimentacao registro = RegistroAlimentacao.registrar(
+                UUID.randomUUID(), dadosValidos(null, null, null, null, List.of(ovo))
+        );
+
+        AlimentoRegistroAlimentacao salvo = registro.getAlimentosOferecidos().getFirst();
+        assertEquals(primeiraOferta, salvo.dataIntroducao());
+        assertEquals("Cozido e amassado", salvo.formaPreparo());
+        assertEquals(AceitacaoAlimento.BOA, salvo.aceitacao());
+        assertEquals(true, salvo.alergenico());
+    }
+
+    @Test
+    void naoDevePermitirPrimeiraOfertaDepoisDaDataDoRegistro() {
+        AlimentoRegistroAlimentacao alimento = new AlimentoRegistroAlimentacao(
+                "ovo", "Ovo", GrupoAlimento.OVO, true, LocalDate.now(), null,
+                null, null, null, false, false, false, false, false, false, null
+        );
+
+        assertThrows(RegraDominioException.class, () -> RegistroAlimentacao.registrar(
+                UUID.randomUUID(), dadosValidos(LocalDate.now().minusDays(1), null, null, null, List.of(alimento))
+        ));
     }
 
     private DadosAlimentacao dadosValidos(LocalDate data, Integer idadeInicio, Integer refeicoes, String observacao) {
@@ -90,6 +123,7 @@ class RegistroAlimentacaoTest {
                 null,
                 null,
                 observacao,
+                TipoOrigemAlimento.NAO_INFORMADO,
                 alimentos
         );
     }

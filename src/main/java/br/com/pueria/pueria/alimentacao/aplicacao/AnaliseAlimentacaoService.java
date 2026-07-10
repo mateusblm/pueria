@@ -86,7 +86,8 @@ public class AnaliseAlimentacaoService {
                 habitosApoio.add("O registro mostra contato com diferentes grupos de alimentos, o que ajuda a acompanhar variedade sem pressa e sem pressão.");
             }
             boolean temFruta = temGrupo(registro, GrupoAlimento.FRUTA);
-            boolean temLegumeOuVerdura = temGrupo(registro, GrupoAlimento.LEGUME) || temGrupo(registro, GrupoAlimento.VERDURA);
+            boolean temLegumeOuVerdura = temGrupo(registro, GrupoAlimento.LEGUME_HORTALICA_FRUTO)
+                    || temGrupo(registro, GrupoAlimento.VERDURA_FOLHA);
             if (!temFruta || !temLegumeOuVerdura) {
                 habitosApoio.add("Registrar frutas, legumes e verduras separadamente ajuda a perceber quais alimentos já entraram na rotina e quais podem ser oferecidos aos poucos.");
             }

@@ -4,12 +4,14 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { AlimentoRegistroAlimentacao, EstagioAlimentar, GrupoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, TexturaAlimentar, TipoLeiteAlimentacao } from '../../../shared/models/alimentacao.model';
+import { AceitacaoAlimento, AlimentoRegistroAlimentacao, EstagioAlimentar, GrupoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, TexturaAlimentar, TipoLeiteAlimentacao, TipoOrigemAlimento } from '../../../shared/models/alimentacao.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { AlimentacaoService } from '../alimentacao.service';
+import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './catalogo-alimentos';
 
 type Opcao<T extends string> = { valor: T; label: string };
-type GrupoCatalogo = { valor: GrupoAlimento | 'TODOS'; label: string };
+type FiltroCatalogo = GrupoAlimento | 'TODOS' | 'ALERGENICOS';
+type GrupoCatalogo = { valor: FiltroCatalogo; label: string };
 
 @Component({
   selector: 'app-alimentacao-crianca',
@@ -32,76 +34,32 @@ export class AlimentacaoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly modalAlimentosAberta = signal(false);
   readonly buscaAlimento = signal('');
-  readonly grupoAlimentoAtivo = signal<GrupoAlimento | 'TODOS'>('TODOS');
+  readonly grupoAlimentoAtivo = signal<FiltroCatalogo>('TODOS');
   readonly alimentosSelecionados = signal<AlimentoRegistroAlimentacao[]>([]);
+  readonly alimentoEmDetalhe = signal<string | null>(null);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly gruposAlimentos: GrupoCatalogo[] = [
     { valor: 'TODOS', label: 'Todos' },
+    { valor: 'ALERGENICOS', label: 'Atenção e rastreabilidade' },
     { valor: 'FRUTA', label: 'Frutas' },
-    { valor: 'LEGUME', label: 'Legumes' },
-    { valor: 'VERDURA', label: 'Verduras' },
-    { valor: 'RAIZ_TUBERCULO', label: 'Raízes' },
-    { valor: 'FEIJAO_LEGUMINOSA', label: 'Feijões' },
-    { valor: 'CEREAL', label: 'Cereais' },
-    { valor: 'PROTEINA', label: 'Proteínas' }
+    { valor: 'LEGUME_HORTALICA_FRUTO', label: 'Legumes' },
+    { valor: 'VERDURA_FOLHA', label: 'Verduras e folhas' },
+    { valor: 'RAIZ_TUBERCULO_AMIDO', label: 'Raízes e tubérculos' },
+    { valor: 'CEREAL_GRAO_MASSA', label: 'Cereais e massas' },
+    { valor: 'PSEUDOCEREAL_GRAO_ESPECIAL', label: 'Grãos especiais' },
+    { valor: 'LEGUMINOSA', label: 'Leguminosas' },
+    { valor: 'CARNE_AVE', label: 'Carnes e aves' },
+    { valor: 'PEIXE_FRUTO_MAR', label: 'Peixes e frutos do mar' },
+    { valor: 'OVO', label: 'Ovos' },
+    { valor: 'LEITE_DERIVADO', label: 'Leite e derivados' },
+    { valor: 'OLEAGINOSA', label: 'Oleaginosas' },
+    { valor: 'SEMENTE', label: 'Sementes' },
+    { valor: 'GORDURA', label: 'Gorduras' },
+    { valor: 'BEBIDA_LIQUIDO', label: 'Bebidas e líquidos' }
   ];
 
-  readonly catalogoAlimentos: AlimentoRegistroAlimentacao[] = [
-    { codigo: 'banana', nome: 'Banana', grupo: 'FRUTA' },
-    { codigo: 'maca', nome: 'Maçã', grupo: 'FRUTA' },
-    { codigo: 'mamao', nome: 'Mamão', grupo: 'FRUTA' },
-    { codigo: 'pera', nome: 'Pera', grupo: 'FRUTA' },
-    { codigo: 'laranja', nome: 'Laranja', grupo: 'FRUTA' },
-    { codigo: 'abacate', nome: 'Abacate', grupo: 'FRUTA' },
-    { codigo: 'manga', nome: 'Manga', grupo: 'FRUTA' },
-    { codigo: 'melancia', nome: 'Melancia', grupo: 'FRUTA' },
-    { codigo: 'melao', nome: 'Melão', grupo: 'FRUTA' },
-    { codigo: 'uva', nome: 'Uva', grupo: 'FRUTA' },
-    { codigo: 'morango', nome: 'Morango', grupo: 'FRUTA' },
-    { codigo: 'goiaba', nome: 'Goiaba', grupo: 'FRUTA' },
-    { codigo: 'abacaxi', nome: 'Abacaxi', grupo: 'FRUTA' },
-    { codigo: 'ameixa', nome: 'Ameixa', grupo: 'FRUTA' },
-    { codigo: 'cenoura', nome: 'Cenoura', grupo: 'LEGUME' },
-    { codigo: 'abobora', nome: 'Abóbora', grupo: 'LEGUME' },
-    { codigo: 'chuchu', nome: 'Chuchu', grupo: 'LEGUME' },
-    { codigo: 'abobrinha', nome: 'Abobrinha', grupo: 'LEGUME' },
-    { codigo: 'beterraba', nome: 'Beterraba', grupo: 'LEGUME' },
-    { codigo: 'brocolis', nome: 'Brócolis', grupo: 'LEGUME' },
-    { codigo: 'couve-flor', nome: 'Couve-flor', grupo: 'LEGUME' },
-    { codigo: 'quiabo', nome: 'Quiabo', grupo: 'LEGUME' },
-    { codigo: 'vagem', nome: 'Vagem', grupo: 'LEGUME' },
-    { codigo: 'tomate', nome: 'Tomate', grupo: 'LEGUME' },
-    { codigo: 'berinjela', nome: 'Berinjela', grupo: 'LEGUME' },
-    { codigo: 'pepino', nome: 'Pepino', grupo: 'LEGUME' },
-    { codigo: 'alface', nome: 'Alface', grupo: 'VERDURA' },
-    { codigo: 'couve', nome: 'Couve', grupo: 'VERDURA' },
-    { codigo: 'espinafre', nome: 'Espinafre', grupo: 'VERDURA' },
-    { codigo: 'agriao', nome: 'Agrião', grupo: 'VERDURA' },
-    { codigo: 'rucula', nome: 'Rúcula', grupo: 'VERDURA' },
-    { codigo: 'repolho', nome: 'Repolho', grupo: 'VERDURA' },
-    { codigo: 'acelga', nome: 'Acelga', grupo: 'VERDURA' },
-    { codigo: 'batata', nome: 'Batata', grupo: 'RAIZ_TUBERCULO' },
-    { codigo: 'batata-doce', nome: 'Batata-doce', grupo: 'RAIZ_TUBERCULO' },
-    { codigo: 'mandioca', nome: 'Mandioca/aipim', grupo: 'RAIZ_TUBERCULO' },
-    { codigo: 'inhame', nome: 'Inhame', grupo: 'RAIZ_TUBERCULO' },
-    { codigo: 'cara', nome: 'Cará', grupo: 'RAIZ_TUBERCULO' },
-    { codigo: 'mandioquinha', nome: 'Mandioquinha', grupo: 'RAIZ_TUBERCULO' },
-    { codigo: 'feijao-carioca', nome: 'Feijão carioca', grupo: 'FEIJAO_LEGUMINOSA' },
-    { codigo: 'feijao-preto', nome: 'Feijão preto', grupo: 'FEIJAO_LEGUMINOSA' },
-    { codigo: 'lentilha', nome: 'Lentilha', grupo: 'FEIJAO_LEGUMINOSA' },
-    { codigo: 'grao-de-bico', nome: 'Grão-de-bico', grupo: 'FEIJAO_LEGUMINOSA' },
-    { codigo: 'ervilha', nome: 'Ervilha', grupo: 'FEIJAO_LEGUMINOSA' },
-    { codigo: 'arroz', nome: 'Arroz', grupo: 'CEREAL' },
-    { codigo: 'aveia', nome: 'Aveia', grupo: 'CEREAL' },
-    { codigo: 'milho', nome: 'Milho', grupo: 'CEREAL' },
-    { codigo: 'macarrao', nome: 'Macarrão', grupo: 'CEREAL' },
-    { codigo: 'cuscuz', nome: 'Cuscuz de milho', grupo: 'CEREAL' },
-    { codigo: 'frango', nome: 'Frango', grupo: 'PROTEINA' },
-    { codigo: 'carne-bovina', nome: 'Carne bovina', grupo: 'PROTEINA' },
-    { codigo: 'peixe', nome: 'Peixe', grupo: 'PROTEINA' },
-    { codigo: 'ovo', nome: 'Ovo', grupo: 'PROTEINA' }
-  ];
+  readonly catalogoAlimentos: CatalogoAlimento[] = CATALOGO_ALIMENTOS;
 
   readonly tiposLeite: Opcao<TipoLeiteAlimentacao>[] = [
     { valor: 'LEITE_MATERNO', label: 'Leite materno' },
@@ -126,6 +84,20 @@ export class AlimentacaoCriancaComponent implements OnInit {
     { valor: 'PEDACOS_MACIOS', label: 'Pedaços macios' },
     { valor: 'COMIDA_DA_FAMILIA', label: 'Comida da família' },
     { valor: 'NAO_INFORMADO', label: 'Não informado' }
+  ];
+
+  readonly origensAlimentos: Opcao<TipoOrigemAlimento>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Prefiro não informar' },
+    { valor: 'ORGANICO', label: 'Predominantemente orgânicos' },
+    { valor: 'CONVENCIONAL', label: 'Predominantemente convencionais' },
+    { valor: 'MISTO', label: 'Uma combinação dos dois' }
+  ];
+
+  readonly aceitacoes: Opcao<AceitacaoAlimento>[] = [
+    { valor: 'NAO_INFORMADA', label: 'Não informado' },
+    { valor: 'BOA', label: 'Aceitou bem' },
+    { valor: 'PARCIAL', label: 'Aceitou um pouco' },
+    { valor: 'RECUSOU', label: 'Recusou' }
   ];
 
   readonly form = this.fb.group({
@@ -164,6 +136,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
     dificuldadeGanhoPesoPercebida: [false],
     familiaTranquilaGanhoPesoAtual: [false],
     preocupacaoFamilia: [false],
+    tipoOrigemAlimento: this.fb.nonNullable.control<TipoOrigemAlimento>('NAO_INFORMADO'),
     observacao: ['', Validators.maxLength(1000)]
   });
 
@@ -175,12 +148,26 @@ export class AlimentacaoCriancaComponent implements OnInit {
     const grupo = this.grupoAlimentoAtivo();
     const busca = this.normalizarTexto(this.buscaAlimento());
     return this.catalogoAlimentos.filter((alimento) => {
-      const combinaGrupo = grupo === 'TODOS' || alimento.grupo === grupo;
+      const combinaGrupo = grupo === 'TODOS'
+        || (grupo === 'ALERGENICOS' && alimento.alergenico)
+        || (grupo !== 'ALERGENICOS'
+          && (alimento.grupo === grupo || alimento.gruposRelacionados?.includes(grupo)));
       const combinaBusca = !busca || this.normalizarTexto(alimento.nome).includes(busca);
       return combinaGrupo && combinaBusca;
     });
   });
   readonly resumoVariedade = computed(() => this.resumirAlimentos(this.alimentosSelecionados()));
+  readonly orientacaoGrupoAtivo = computed(() => {
+    const grupo = this.grupoAlimentoAtivo();
+    if (grupo === 'TODOS') {
+      return '';
+    }
+    return ORIENTACOES_GRUPOS[grupo] ?? '';
+  });
+  readonly alimentoDetalhado = computed(() => {
+    const codigo = this.alimentoEmDetalhe();
+    return codigo ? this.alimentosSelecionados().find((alimento) => alimento.codigo === codigo) ?? null : null;
+  });
 
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });
@@ -291,6 +278,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
       dificuldadeGanhoPesoPercebida: !!registro.dificuldadeGanhoPesoPercebida,
       familiaTranquilaGanhoPesoAtual: !!registro.familiaTranquilaGanhoPesoAtual,
       preocupacaoFamilia: !!registro.preocupacaoFamilia,
+      tipoOrigemAlimento: registro.tipoOrigemAlimento ?? 'NAO_INFORMADO',
       observacao: registro.observacao ?? ''
     });
     this.alimentosSelecionados.set(registro.alimentosOferecidos ?? []);
@@ -336,6 +324,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
       dificuldadeGanhoPesoPercebida: false,
       familiaTranquilaGanhoPesoAtual: false,
       preocupacaoFamilia: false,
+      tipoOrigemAlimento: 'NAO_INFORMADO',
       observacao: ''
     });
   }
@@ -356,12 +345,17 @@ export class AlimentacaoCriancaComponent implements OnInit {
     return this.texturas.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
   }
 
+  labelOrigemAlimento(valor: TipoOrigemAlimento): string {
+    return this.origensAlimentos.find((opcao) => opcao.valor === valor)?.label ?? 'Prefiro não informar';
+  }
+
   abrirModalAlimentos(): void {
     this.modalAlimentosAberta.set(true);
   }
 
   fecharModalAlimentos(): void {
     this.modalAlimentosAberta.set(false);
+    this.alimentoEmDetalhe.set(null);
     this.buscaAlimento.set('');
     this.grupoAlimentoAtivo.set('TODOS');
   }
@@ -370,16 +364,27 @@ export class AlimentacaoCriancaComponent implements OnInit {
     this.buscaAlimento.set((evento.target as HTMLInputElement).value);
   }
 
-  selecionarGrupoAlimento(grupo: GrupoAlimento | 'TODOS'): void {
+  selecionarGrupoAlimento(grupo: FiltroCatalogo): void {
     this.grupoAlimentoAtivo.set(grupo);
   }
 
   alternarAlimento(alimento: AlimentoRegistroAlimentacao): void {
     this.alimentosSelecionados.update((selecionados) => {
       if (selecionados.some((item) => item.codigo === alimento.codigo)) {
+        if (this.alimentoEmDetalhe() === alimento.codigo) {
+          this.fecharDetalhesAlimento();
+        }
         return selecionados.filter((item) => item.codigo !== alimento.codigo);
       }
-      return [...selecionados, alimento].sort((a, b) => a.grupo.localeCompare(b.grupo) || a.nome.localeCompare(b.nome, 'pt-BR'));
+      const selecionado: AlimentoRegistroAlimentacao = {
+        codigo: alimento.codigo,
+        nome: alimento.nome,
+        grupo: alimento.grupo,
+        alergenico: alimento.alergenico ?? false,
+        textura: 'NAO_INFORMADO',
+        aceitacao: 'NAO_INFORMADA'
+      };
+      return [...selecionados, selecionado].sort((a, b) => a.grupo.localeCompare(b.grupo) || a.nome.localeCompare(b.nome, 'pt-BR'));
     });
   }
 
@@ -397,6 +402,76 @@ export class AlimentacaoCriancaComponent implements OnInit {
 
   alimentosPorGrupo(grupo: GrupoAlimento): AlimentoRegistroAlimentacao[] {
     return this.alimentosSelecionados().filter((alimento) => alimento.grupo === grupo);
+  }
+
+  abrirDetalhesAlimento(codigo: string): void {
+    this.alimentoEmDetalhe.set(codigo);
+  }
+
+  fecharDetalhesAlimento(): void {
+    this.alimentoEmDetalhe.set(null);
+  }
+
+  atualizarTextoAlimento(campo: 'formaPreparo' | 'quantidadeAproximada' | 'observacao', evento: Event): void {
+    const valor = (evento.target as HTMLInputElement | HTMLTextAreaElement).value.trim() || null;
+    this.atualizarAlimentoEmDetalhe({ [campo]: valor });
+  }
+
+  atualizarOpcaoAlimento(campo: 'textura' | 'aceitacao', evento: Event): void {
+    this.atualizarAlimentoEmDetalhe({ [campo]: (evento.target as HTMLSelectElement).value });
+  }
+
+  atualizarMarcacaoAlimento(
+    campo: 'repetiuOutroDia' | 'sintomasPele' | 'sintomasIntestinais' | 'sintomasRespiratorios' | 'alteracaoSono' | 'alteracaoComportamento',
+    evento: Event
+  ): void {
+    this.atualizarAlimentoEmDetalhe({ [campo]: (evento.target as HTMLInputElement).checked });
+  }
+
+  atualizarDataIntroducao(evento: Event): void {
+    const valor = (evento.target as HTMLInputElement).value.trim();
+    if (!valor) {
+      this.atualizarAlimentoEmDetalhe({ dataIntroducao: null });
+      return;
+    }
+    try {
+      const dataIntroducao = this.lerData(valor);
+      const dataRegistro = this.lerData(this.form.controls.dataRegistro.value);
+      if (dataIntroducao > dataRegistro) {
+        throw new Error('A primeira oferta não pode ser posterior à data deste registro.');
+      }
+      this.atualizarAlimentoEmDetalhe({ dataIntroducao });
+      this.erro.set('');
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise a data da primeira oferta.');
+    }
+  }
+
+  dataIntroducaoParaExibicao(alimento: AlimentoRegistroAlimentacao): string {
+    return alimento.dataIntroducao ? this.formatarEntradaData(alimento.dataIntroducao) : '';
+  }
+
+  idadeNaIntroducao(alimento: AlimentoRegistroAlimentacao): string {
+    const nascimento = this.crianca()?.dataNascimento;
+    if (!nascimento || !alimento.dataIntroducao || alimento.dataIntroducao < nascimento) {
+      return '';
+    }
+    const inicio = new Date(`${nascimento}T00:00:00Z`);
+    const fim = new Date(`${alimento.dataIntroducao}T00:00:00Z`);
+    const dias = Math.floor((fim.getTime() - inicio.getTime()) / 86_400_000);
+    if (dias < 60) {
+      return `${dias} dia(s) de vida`;
+    }
+    return `${Math.floor(dias / 30.4375)} mes(es) de vida`;
+  }
+
+  possuiDetalhesAlimento(alimento: AlimentoRegistroAlimentacao): boolean {
+    return Boolean(
+      alimento.dataIntroducao || alimento.formaPreparo || alimento.quantidadeAproximada
+      || (alimento.aceitacao && alimento.aceitacao !== 'NAO_INFORMADA') || alimento.repetiuOutroDia
+      || alimento.sintomasPele || alimento.sintomasIntestinais || alimento.sintomasRespiratorios
+      || alimento.alteracaoSono || alimento.alteracaoComportamento || alimento.observacao
+    );
   }
 
   possuiAlgumaAnalise(registro: RegistroAlimentacao | null): boolean {
@@ -423,12 +498,12 @@ export class AlimentacaoCriancaComponent implements OnInit {
       autoalimentacao: valor.autoalimentacao,
       texturaPredominante: valor.texturaPredominante,
       consomeFrutas: this.possuiGrupoSelecionado(alimentos, 'FRUTA'),
-      consomeLegumesVerduras: this.possuiGrupoSelecionado(alimentos, 'LEGUME') || this.possuiGrupoSelecionado(alimentos, 'VERDURA'),
-      consomeLegumes: this.possuiGrupoSelecionado(alimentos, 'LEGUME'),
-      consomeVerduras: this.possuiGrupoSelecionado(alimentos, 'VERDURA'),
-      consomeCereaisTuberculos: this.possuiGrupoSelecionado(alimentos, 'CEREAL') || this.possuiGrupoSelecionado(alimentos, 'RAIZ_TUBERCULO'),
-      consomeFeijoesLeguminosas: this.possuiGrupoSelecionado(alimentos, 'FEIJAO_LEGUMINOSA'),
-      consomeCarnesOvos: this.possuiGrupoSelecionado(alimentos, 'PROTEINA'),
+      consomeLegumesVerduras: this.possuiGrupoSelecionado(alimentos, 'LEGUME_HORTALICA_FRUTO') || this.possuiGrupoSelecionado(alimentos, 'VERDURA_FOLHA'),
+      consomeLegumes: this.possuiGrupoSelecionado(alimentos, 'LEGUME_HORTALICA_FRUTO'),
+      consomeVerduras: this.possuiGrupoSelecionado(alimentos, 'VERDURA_FOLHA'),
+      consomeCereaisTuberculos: this.possuiAlgumGrupoSelecionado(alimentos, ['CEREAL_GRAO_MASSA', 'PSEUDOCEREAL_GRAO_ESPECIAL', 'RAIZ_TUBERCULO_AMIDO']),
+      consomeFeijoesLeguminosas: this.possuiGrupoSelecionado(alimentos, 'LEGUMINOSA'),
+      consomeCarnesOvos: this.possuiAlgumGrupoSelecionado(alimentos, ['CARNE_AVE', 'PEIXE_FRUTO_MAR', 'OVO']),
       ultraprocessadosFrequentes: valor.ultraprocessadosFrequentes,
       bebidasAdocadas: valor.bebidasAdocadas,
       acucarAdicionado: valor.acucarAdicionado,
@@ -445,13 +520,28 @@ export class AlimentacaoCriancaComponent implements OnInit {
       dificuldadeGanhoPesoPercebida: valor.dificuldadeGanhoPesoPercebida,
       familiaTranquilaGanhoPesoAtual: valor.familiaTranquilaGanhoPesoAtual,
       preocupacaoFamilia: valor.preocupacaoFamilia,
+      tipoOrigemAlimento: valor.tipoOrigemAlimento,
       observacao: valor.observacao?.trim() || null,
       alimentosOferecidos: alimentos
     };
   }
 
+  private atualizarAlimentoEmDetalhe(alteracoes: Partial<AlimentoRegistroAlimentacao>): void {
+    const codigo = this.alimentoEmDetalhe();
+    if (!codigo) {
+      return;
+    }
+    this.alimentosSelecionados.update((selecionados) => selecionados.map((alimento) =>
+      alimento.codigo === codigo ? { ...alimento, ...alteracoes } : alimento
+    ));
+  }
+
   private possuiGrupoSelecionado(alimentos: AlimentoRegistroAlimentacao[], grupo: GrupoAlimento): boolean {
     return alimentos.some((alimento) => alimento.grupo === grupo);
+  }
+
+  private possuiAlgumGrupoSelecionado(alimentos: AlimentoRegistroAlimentacao[], grupos: GrupoAlimento[]): boolean {
+    return alimentos.some((alimento) => grupos.includes(alimento.grupo));
   }
 
   private resumirAlimentos(alimentos: AlimentoRegistroAlimentacao[]): Record<GrupoAlimento, number> {
@@ -460,12 +550,20 @@ export class AlimentacaoCriancaComponent implements OnInit {
       return resumo;
     }, {
       FRUTA: 0,
-      LEGUME: 0,
-      VERDURA: 0,
-      RAIZ_TUBERCULO: 0,
-      FEIJAO_LEGUMINOSA: 0,
-      CEREAL: 0,
-      PROTEINA: 0
+      LEGUME_HORTALICA_FRUTO: 0,
+      VERDURA_FOLHA: 0,
+      RAIZ_TUBERCULO_AMIDO: 0,
+      CEREAL_GRAO_MASSA: 0,
+      PSEUDOCEREAL_GRAO_ESPECIAL: 0,
+      LEGUMINOSA: 0,
+      CARNE_AVE: 0,
+      PEIXE_FRUTO_MAR: 0,
+      OVO: 0,
+      LEITE_DERIVADO: 0,
+      OLEAGINOSA: 0,
+      SEMENTE: 0,
+      GORDURA: 0,
+      BEBIDA_LIQUIDO: 0
     } as Record<GrupoAlimento, number>);
   }
 

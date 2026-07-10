@@ -1,13 +1,43 @@
 export type TipoLeiteAlimentacao = 'LEITE_MATERNO' | 'FORMULA_INFANTIL' | 'MISTO' | 'NAO_CONSOME_LEITE' | 'NAO_INFORMADO';
 export type EstagioAlimentar = 'APENAS_LEITE' | 'INICIANDO_ALIMENTACAO_COMPLEMENTAR' | 'ALIMENTACAO_COMPLEMENTAR_ESTABELECIDA' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
 export type TexturaAlimentar = 'LIQUIDA' | 'PASTOSA' | 'AMASSADA' | 'PEDACOS_MACIOS' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
-export type GrupoAlimento = 'FRUTA' | 'LEGUME' | 'VERDURA' | 'RAIZ_TUBERCULO' | 'FEIJAO_LEGUMINOSA' | 'CEREAL' | 'PROTEINA';
+export type TipoOrigemAlimento = 'ORGANICO' | 'CONVENCIONAL' | 'MISTO' | 'NAO_INFORMADO';
+export type AceitacaoAlimento = 'BOA' | 'PARCIAL' | 'RECUSOU' | 'NAO_INFORMADA';
+export type GrupoAlimento =
+  | 'FRUTA'
+  | 'LEGUME_HORTALICA_FRUTO'
+  | 'VERDURA_FOLHA'
+  | 'RAIZ_TUBERCULO_AMIDO'
+  | 'CEREAL_GRAO_MASSA'
+  | 'PSEUDOCEREAL_GRAO_ESPECIAL'
+  | 'LEGUMINOSA'
+  | 'CARNE_AVE'
+  | 'PEIXE_FRUTO_MAR'
+  | 'OVO'
+  | 'LEITE_DERIVADO'
+  | 'OLEAGINOSA'
+  | 'SEMENTE'
+  | 'GORDURA'
+  | 'BEBIDA_LIQUIDO';
 
 
 export interface AlimentoRegistroAlimentacao {
   codigo: string;
   nome: string;
   grupo: GrupoAlimento;
+  alergenico?: boolean;
+  dataIntroducao?: string | null;
+  formaPreparo?: string | null;
+  textura?: TexturaAlimentar | null;
+  quantidadeAproximada?: string | null;
+  aceitacao?: AceitacaoAlimento | null;
+  repetiuOutroDia?: boolean;
+  sintomasPele?: boolean;
+  sintomasIntestinais?: boolean;
+  sintomasRespiratorios?: boolean;
+  alteracaoSono?: boolean;
+  alteracaoComportamento?: boolean;
+  observacao?: string | null;
 }
 
 export interface AnaliseAlimentacao {
@@ -57,6 +87,7 @@ export interface RegistroAlimentacao {
   familiaTranquilaGanhoPesoAtual?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
+  tipoOrigemAlimento: TipoOrigemAlimento;
   alimentosOferecidos: AlimentoRegistroAlimentacao[];
   criadoEm: string;
   atualizadoEm?: string | null;
@@ -100,5 +131,6 @@ export interface SalvarRegistroAlimentacaoRequest {
   familiaTranquilaGanhoPesoAtual?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
+  tipoOrigemAlimento?: TipoOrigemAlimento;
   alimentosOferecidos?: AlimentoRegistroAlimentacao[];
 }

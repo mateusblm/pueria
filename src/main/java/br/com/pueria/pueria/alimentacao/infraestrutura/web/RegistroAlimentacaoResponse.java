@@ -5,6 +5,7 @@ import br.com.pueria.pueria.alimentacao.dominio.EstagioAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.RegistroAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.TexturaAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.TipoLeiteAlimentacao;
+import br.com.pueria.pueria.alimentacao.dominio.TipoOrigemAlimento;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +51,7 @@ public record RegistroAlimentacaoResponse(
         Boolean familiaTranquilaGanhoPesoAtual,
         Boolean preocupacaoFamilia,
         String observacao,
+        TipoOrigemAlimento tipoOrigemAlimento,
         List<AlimentoRegistroAlimentacaoResponse> alimentosOferecidos,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm,
@@ -96,6 +98,7 @@ public record RegistroAlimentacaoResponse(
                 registro.getFamiliaTranquilaGanhoPesoAtual(),
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
+                registro.getTipoOrigemAlimento(),
                 registro.getAlimentosOferecidos().stream()
                         .map(AlimentoRegistroAlimentacaoResponse::de)
                         .toList(),

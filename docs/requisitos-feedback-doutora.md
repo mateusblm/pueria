@@ -44,7 +44,11 @@ Status usados:
 | ALI-05 | Trocar `Usa colher` por `Aprendendo ou usando talheres`. | Implementado | Ajuste aplicado na interface mantendo compatibilidade com campo atual. |
 | ALI-06 | Separar `Legumes e verduras` em dois grupos. | Implementado | Campos separados incluídos na interface, API, domínio e banco. |
 | ALI-07 | Criar quadro de diversidade alimentar por grupos e alimentos. | Implementado | Bloco compacto com modal, busca, filtros por grupo e chips de alimentos oferecidos; seleção é salva no banco por registro alimentar. |
-| ALI-08 | Listar exemplos de proteína animal: ovos, frango, carneiro, vaca, porco e peixe. | Parcial | Incluídos ovo, frango, carne bovina e peixe no catálogo inicial. Carneiro e porco ficaram para validação antes de ampliar o MVP. |
+| ALI-08 | Listar exemplos de proteína animal: ovos, frango, carneiro, vaca, porco e peixe. | Implementado | Catálogo ampliado com ovos, carnes, aves, peixes e frutos do mar. |
+| ALI-09 | Registrar a origem predominante dos alimentos: orgânica, convencional ou mista. | Implementado | Campo descritivo e opcional, com linguagem sem julgamento, salvo por registro. |
+| ALI-10 | Ampliar o catálogo para os grupos alimentares definidos pela revisão clínica. | Implementado | Catálogo pesquisável com frutas, hortaliças, raízes, cereais, pseudocereais, leguminosas, proteínas, derivados, oleaginosas, sementes, gorduras e líquidos. |
+| ALI-11 | Permitir rastreabilidade de alimentos mais alergênicos sem apresentá-los como restrição. | Implementado | Filtro específico e identificação contextual; o app explicita que o registro não representa diagnóstico ou proibição. |
+| ALI-12 | Registrar detalhes opcionais por alimento. | Implementado | Data da primeira oferta, idade calculada, preparo, textura, quantidade, aceitação, repetição, sinais percebidos e observações são persistidos. |
 
 ### Sono
 
@@ -173,6 +177,10 @@ Status usados:
 - WHO, diretrizes para atividade física, comportamento sedentário e sono em menores de 5 anos: https://www.who.int/publications/i/item/9789241550536
 - AAP, `Media and Young Minds`: https://publications.aap.org/pediatrics/article/138/5/e20162591/60503/Media-and-Young-Minds
 - Bristol Stool Form Scale em contexto pediátrico, Stanford Medicine: https://med.stanford.edu/pediatricsurgery/Conditions/BowelManagement/bristol-stool-form-scale.html
+- Ministério da Saúde, `Guia Alimentar para Crianças Brasileiras Menores de 2 Anos`: https://www.gov.br/saude/pt-br/composicao/saps/promocao-da-saude/guias-alimentares/publicacoes/guia_da_crianca_2019.pdf
+- Ministério da Saúde, fundamentos e evidências do guia alimentar: https://bvsms.saude.gov.br/bvs/publicacoes/diretrizes_recomendacoes_guia_alimentar_criancas_revisada.pdf
+- OMS, `Guideline for complementary feeding of infants and young children 6-23 months of age`: https://www.who.int/publications/i/item/9789240081864
+- Sociedade Brasileira de Pediatria, `Alimentação Complementar para o Lactente Saudável`: https://www.sbp.com.br/departamentos/aleitamento-materno/documentos-cientificos/
 
 ## Próximo recorte de implementação recomendado
 
