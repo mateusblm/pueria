@@ -53,9 +53,8 @@ export const CATALOGO_ALIMENTOS: CatalogoAlimento[] = [
     ['arroz', 'Arroz'], ['milho', 'Milho'], ['fuba', 'Fubá'], ['canjica', 'Canjica'],
     ['cuscuz-milho', 'Cuscuz de milho'], ['aveia', 'Aveia'], ['trigo', 'Trigo'], ['cevada', 'Cevada'],
     ['centeio', 'Centeio'], ['bulgur', 'Bulgur/triguilho'], ['cuscuz-marroquino', 'Cuscuz marroquino'],
-    ['semolina', 'Semolina'], ['farinha-trigo', 'Farinha de trigo'], ['massa-com-gluten', 'Massa com glúten'],
-    ['massa-sem-gluten', 'Massa sem glúten'], ['massa-tracos-gluten', 'Massa que pode conter traços de glúten']
-  ], { alergenicos: ['trigo', 'farinha-trigo', 'massa-com-gluten'] }),
+    ['semolina', 'Semolina'], ['farinha-trigo', 'Farinha de trigo'], ['massa', 'Massas']
+  ], { alergenicos: ['trigo', 'farinha-trigo', 'massa'] }),
   ...criar('PSEUDOCEREAL_GRAO_ESPECIAL', [
     ['quinoa', 'Quinoa'], ['amaranto', 'Amaranto'], ['trigo-sarraceno', 'Trigo-sarraceno']
   ]),
@@ -92,7 +91,12 @@ export const CATALOGO_ALIMENTOS: CatalogoAlimento[] = [
     abacate: ['GORDURA'], coco: ['GORDURA'], manteiga: ['GORDURA'],
     'leite-materno': ['BEBIDA_LIQUIDO'], 'formula-infantil': ['BEBIDA_LIQUIDO']
   };
-  return { ...alimento, gruposRelacionados: relacionados[alimento.codigo] };
+  const contemGluten = ['trigo', 'cevada', 'centeio', 'bulgur', 'cuscuz-marroquino', 'semolina', 'farinha-trigo'];
+  const naturalmenteSemGluten = ['arroz', 'milho', 'fuba', 'canjica', 'cuscuz-milho', 'quinoa', 'amaranto', 'trigo-sarraceno'];
+  const classificacaoGluten = contemGluten.includes(alimento.codigo)
+    ? 'CONTEM'
+    : naturalmenteSemGluten.includes(alimento.codigo) ? 'NAO_CONTEM' : ['massa', 'aveia'].includes(alimento.codigo) ? 'NAO_INFORMADO' : 'NAO_SE_APLICA';
+  return { ...alimento, classificacaoGluten, gruposRelacionados: relacionados[alimento.codigo] };
 });
 
 export const ORIENTACOES_GRUPOS: Partial<Record<GrupoAlimento | 'ALERGENICOS', string>> = {

@@ -331,6 +331,14 @@ public class RegistroAlimentacao {
                 if (alimento.dataIntroducao() != null && alimento.dataIntroducao().isAfter(dataRegistro)) {
                     throw new RegraDominioException("A primeira oferta do alimento não pode ser posterior à data do registro.");
                 }
+                for (LocalDate dataReexposicao : alimento.datasReexposicao()) {
+                    if (dataReexposicao.isAfter(dataRegistro)) {
+                        throw new RegraDominioException("A reexposição do alimento não pode ser posterior à data do registro.");
+                    }
+                    if (alimento.dataIntroducao() != null && dataReexposicao.isBefore(alimento.dataIntroducao())) {
+                        throw new RegraDominioException("A reexposição do alimento não pode ser anterior à primeira oferta.");
+                    }
+                }
                 unicos.putIfAbsent(alimento.codigo(), alimento);
             }
         }

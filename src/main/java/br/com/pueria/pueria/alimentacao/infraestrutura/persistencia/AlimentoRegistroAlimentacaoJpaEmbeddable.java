@@ -1,14 +1,18 @@
 package br.com.pueria.pueria.alimentacao.infraestrutura.persistencia;
 
 import br.com.pueria.pueria.alimentacao.dominio.AceitacaoAlimento;
+import br.com.pueria.pueria.alimentacao.dominio.ClassificacaoGluten;
 import br.com.pueria.pueria.alimentacao.dominio.GrupoAlimento;
+import br.com.pueria.pueria.alimentacao.dominio.SituacaoSinaisOferta;
 import br.com.pueria.pueria.alimentacao.dominio.TexturaAlimentar;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Convert;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Embeddable
 public class AlimentoRegistroAlimentacaoJpaEmbeddable {
@@ -40,6 +44,21 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
     @Column(length = 30)
     private AceitacaoAlimento aceitacao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private ClassificacaoGluten classificacaoGluten;
+
+    @Column(length = 120)
+    private String tipoPeixe;
+
+    @Convert(converter = ListaDatasJsonConverter.class)
+    @Column(length = 2000)
+    private List<LocalDate> datasReexposicao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private SituacaoSinaisOferta situacaoSinais;
+
     private Boolean repetiuOutroDia;
     private Boolean sintomasPele;
     private Boolean sintomasIntestinais;
@@ -62,6 +81,10 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
             TexturaAlimentar textura,
             String quantidadeAproximada,
             AceitacaoAlimento aceitacao,
+            ClassificacaoGluten classificacaoGluten,
+            String tipoPeixe,
+            List<LocalDate> datasReexposicao,
+            SituacaoSinaisOferta situacaoSinais,
             Boolean repetiuOutroDia,
             Boolean sintomasPele,
             Boolean sintomasIntestinais,
@@ -79,6 +102,10 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
         this.textura = textura;
         this.quantidadeAproximada = quantidadeAproximada;
         this.aceitacao = aceitacao;
+        this.classificacaoGluten = classificacaoGluten;
+        this.tipoPeixe = tipoPeixe;
+        this.datasReexposicao = datasReexposicao;
+        this.situacaoSinais = situacaoSinais;
         this.repetiuOutroDia = repetiuOutroDia;
         this.sintomasPele = sintomasPele;
         this.sintomasIntestinais = sintomasIntestinais;
@@ -97,6 +124,10 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
     public TexturaAlimentar getTextura() { return textura; }
     public String getQuantidadeAproximada() { return quantidadeAproximada; }
     public AceitacaoAlimento getAceitacao() { return aceitacao; }
+    public ClassificacaoGluten getClassificacaoGluten() { return classificacaoGluten; }
+    public String getTipoPeixe() { return tipoPeixe; }
+    public List<LocalDate> getDatasReexposicao() { return datasReexposicao; }
+    public SituacaoSinaisOferta getSituacaoSinais() { return situacaoSinais; }
     public Boolean getRepetiuOutroDia() { return repetiuOutroDia; }
     public Boolean getSintomasPele() { return sintomasPele; }
     public Boolean getSintomasIntestinais() { return sintomasIntestinais; }

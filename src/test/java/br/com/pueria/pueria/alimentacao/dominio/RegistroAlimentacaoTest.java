@@ -52,9 +52,11 @@ class RegistroAlimentacaoTest {
     @Test
     void deveManterDetalhesOpcionaisDoAlimento() {
         LocalDate primeiraOferta = LocalDate.now().minusDays(2);
+        LocalDate reexposicao = LocalDate.now().minusDays(1);
         AlimentoRegistroAlimentacao ovo = new AlimentoRegistroAlimentacao(
                 "ovo", "Ovo", GrupoAlimento.OVO, true, primeiraOferta, " Cozido e amassado ",
-                TexturaAlimentar.AMASSADA, "2 colheres", AceitacaoAlimento.BOA, true,
+                TexturaAlimentar.AMASSADA, "2 colheres", AceitacaoAlimento.BOA,
+                ClassificacaoGluten.NAO_SE_APLICA, null, List.of(reexposicao), SituacaoSinaisOferta.NENHUM_PERCEBIDO, true,
                 false, false, false, false, false, " Sem sinais observados "
         );
 
@@ -67,17 +69,43 @@ class RegistroAlimentacaoTest {
         assertEquals("Cozido e amassado", salvo.formaPreparo());
         assertEquals(AceitacaoAlimento.BOA, salvo.aceitacao());
         assertEquals(true, salvo.alergenico());
+        assertEquals(List.of(reexposicao), salvo.datasReexposicao());
+        assertEquals(SituacaoSinaisOferta.NENHUM_PERCEBIDO, salvo.situacaoSinais());
     }
 
     @Test
     void naoDevePermitirPrimeiraOfertaDepoisDaDataDoRegistro() {
         AlimentoRegistroAlimentacao alimento = new AlimentoRegistroAlimentacao(
                 "ovo", "Ovo", GrupoAlimento.OVO, true, LocalDate.now(), null,
-                null, null, null, false, false, false, false, false, false, null
+                null, null, null, ClassificacaoGluten.NAO_SE_APLICA, null, List.of(),
+                SituacaoSinaisOferta.NAO_INFORMADO, false, false, false, false, false, false, null
         );
 
         assertThrows(RegraDominioException.class, () -> RegistroAlimentacao.registrar(
                 UUID.randomUUID(), dadosValidos(LocalDate.now().minusDays(1), null, null, null, List.of(alimento))
+        ));
+    }
+
+    @Test
+    void naoDevePermitirReexposicaoAntesDaPrimeiraOferta() {
+        LocalDate primeiraOferta = LocalDate.now().minusDays(2);
+        AlimentoRegistroAlimentacao alimento = new AlimentoRegistroAlimentacao(
+                "ovo", "Ovo", GrupoAlimento.OVO, true, primeiraOferta, null, null, null, null,
+                ClassificacaoGluten.NAO_SE_APLICA, null, List.of(primeiraOferta.minusDays(1)),
+                SituacaoSinaisOferta.NAO_INFORMADO, true, false, false, false, false, false, null
+        );
+
+        assertThrows(RegraDominioException.class, () -> RegistroAlimentacao.registrar(
+                UUID.randomUUID(), dadosValidos(null, null, null, null, List.of(alimento))
+        ));
+    }
+
+    @Test
+    void naoDeveMisturarAusenciaDeSinaisComSinalMarcado() {
+        assertThrows(RegraDominioException.class, () -> new AlimentoRegistroAlimentacao(
+                "ovo", "Ovo", GrupoAlimento.OVO, true, LocalDate.now(), null, null, null, null,
+                ClassificacaoGluten.NAO_SE_APLICA, null, List.of(), SituacaoSinaisOferta.NENHUM_PERCEBIDO,
+                false, true, false, false, false, false, null
         ));
     }
 

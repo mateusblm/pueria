@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { AceitacaoAlimento, AlimentoRegistroAlimentacao, EstagioAlimentar, GrupoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, TexturaAlimentar, TipoLeiteAlimentacao, TipoOrigemAlimento } from '../../../shared/models/alimentacao.model';
+import { AceitacaoAlimento, AlimentoRegistroAlimentacao, ClassificacaoGluten, EstagioAlimentar, GrupoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, SituacaoSinaisOferta, TexturaAlimentar, TipoLeiteAlimentacao, TipoOrigemAlimento } from '../../../shared/models/alimentacao.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { AlimentacaoService } from '../alimentacao.service';
 import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './catalogo-alimentos';
@@ -37,6 +37,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
   readonly grupoAlimentoAtivo = signal<FiltroCatalogo>('TODOS');
   readonly alimentosSelecionados = signal<AlimentoRegistroAlimentacao[]>([]);
   readonly alimentoEmDetalhe = signal<string | null>(null);
+  readonly novaDataReexposicao = signal('');
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly gruposAlimentos: GrupoCatalogo[] = [
@@ -98,6 +99,19 @@ export class AlimentacaoCriancaComponent implements OnInit {
     { valor: 'BOA', label: 'Aceitou bem' },
     { valor: 'PARCIAL', label: 'Aceitou um pouco' },
     { valor: 'RECUSOU', label: 'Recusou' }
+  ];
+
+  readonly classificacoesGluten: Opcao<ClassificacaoGluten>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Verificar no rótulo ou preparo' },
+    { valor: 'CONTEM', label: 'Contém glúten' },
+    { valor: 'NAO_CONTEM', label: 'Não contém glúten' },
+    { valor: 'PODE_CONTER_TRACOS', label: 'Pode conter traços' }
+  ];
+
+  readonly situacoesSinais: Opcao<SituacaoSinaisOferta>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Não informado' },
+    { valor: 'NENHUM_PERCEBIDO', label: 'Nenhum sinal percebido' },
+    { valor: 'SINAIS_PERCEBIDOS', label: 'Percebi um ou mais sinais' }
   ];
 
   readonly form = this.fb.group({
@@ -382,7 +396,10 @@ export class AlimentacaoCriancaComponent implements OnInit {
         grupo: alimento.grupo,
         alergenico: alimento.alergenico ?? false,
         textura: 'NAO_INFORMADO',
-        aceitacao: 'NAO_INFORMADA'
+        aceitacao: 'NAO_INFORMADA',
+        classificacaoGluten: alimento.classificacaoGluten ?? 'NAO_SE_APLICA',
+        datasReexposicao: [],
+        situacaoSinais: 'NAO_INFORMADO'
       };
       return [...selecionados, selecionado].sort((a, b) => a.grupo.localeCompare(b.grupo) || a.nome.localeCompare(b.nome, 'pt-BR'));
     });
@@ -405,27 +422,59 @@ export class AlimentacaoCriancaComponent implements OnInit {
   }
 
   abrirDetalhesAlimento(codigo: string): void {
+    this.erro.set('');
+    this.novaDataReexposicao.set('');
     this.alimentoEmDetalhe.set(codigo);
   }
 
   fecharDetalhesAlimento(): void {
+    this.novaDataReexposicao.set('');
     this.alimentoEmDetalhe.set(null);
   }
 
-  atualizarTextoAlimento(campo: 'formaPreparo' | 'quantidadeAproximada' | 'observacao', evento: Event): void {
+  atualizarTextoAlimento(campo: 'formaPreparo' | 'quantidadeAproximada' | 'tipoPeixe' | 'observacao', evento: Event): void {
     const valor = (evento.target as HTMLInputElement | HTMLTextAreaElement).value.trim() || null;
     this.atualizarAlimentoEmDetalhe({ [campo]: valor });
   }
 
-  atualizarOpcaoAlimento(campo: 'textura' | 'aceitacao', evento: Event): void {
+  atualizarOpcaoAlimento(campo: 'textura' | 'aceitacao' | 'classificacaoGluten', evento: Event): void {
     this.atualizarAlimentoEmDetalhe({ [campo]: (evento.target as HTMLSelectElement).value });
   }
 
+  atualizarSituacaoSinais(evento: Event): void {
+    const situacaoSinais = (evento.target as HTMLSelectElement).value as SituacaoSinaisOferta;
+    const limparSinais = situacaoSinais !== 'SINAIS_PERCEBIDOS';
+    this.atualizarAlimentoEmDetalhe({
+      situacaoSinais,
+      ...(limparSinais ? {
+        sintomasPele: false,
+        sintomasIntestinais: false,
+        sintomasRespiratorios: false,
+        alteracaoSono: false,
+        alteracaoComportamento: false
+      } : {})
+    });
+  }
+
   atualizarMarcacaoAlimento(
-    campo: 'repetiuOutroDia' | 'sintomasPele' | 'sintomasIntestinais' | 'sintomasRespiratorios' | 'alteracaoSono' | 'alteracaoComportamento',
+    campo: 'sintomasPele' | 'sintomasIntestinais' | 'sintomasRespiratorios' | 'alteracaoSono' | 'alteracaoComportamento',
     evento: Event
   ): void {
-    this.atualizarAlimentoEmDetalhe({ [campo]: (evento.target as HTMLInputElement).checked });
+    const codigo = this.alimentoEmDetalhe();
+    const marcado = (evento.target as HTMLInputElement).checked;
+    if (!codigo) {
+      return;
+    }
+    this.alimentosSelecionados.update((selecionados) => selecionados.map((alimento) => {
+      if (alimento.codigo !== codigo) {
+        return alimento;
+      }
+      const atualizado = { ...alimento, [campo]: marcado };
+      return {
+        ...atualizado,
+        situacaoSinais: this.possuiSinalMarcado(atualizado) ? 'SINAIS_PERCEBIDOS' : 'NAO_INFORMADO'
+      };
+    }));
   }
 
   atualizarDataIntroducao(evento: Event): void {
@@ -451,6 +500,53 @@ export class AlimentacaoCriancaComponent implements OnInit {
     return alimento.dataIntroducao ? this.formatarEntradaData(alimento.dataIntroducao) : '';
   }
 
+  alterarNovaDataReexposicao(evento: Event): void {
+    this.novaDataReexposicao.set((evento.target as HTMLInputElement).value);
+  }
+
+  adicionarReexposicao(): void {
+    const alimento = this.alimentoDetalhado();
+    if (!alimento?.dataIntroducao) {
+      this.erro.set('Informe primeiro a data da primeira oferta.');
+      return;
+    }
+    try {
+      const data = this.lerData(this.novaDataReexposicao());
+      const dataRegistro = this.lerData(this.form.controls.dataRegistro.value);
+      if (data <= alimento.dataIntroducao) {
+        throw new Error('A reexposição precisa acontecer depois da primeira oferta.');
+      }
+      if (data > dataRegistro) {
+        throw new Error('A reexposição não pode ser posterior à data deste registro.');
+      }
+      const datas = [...new Set([...(alimento.datasReexposicao ?? []), data])].sort();
+      this.atualizarAlimentoEmDetalhe({ datasReexposicao: datas, repetiuOutroDia: true });
+      this.novaDataReexposicao.set('');
+      this.erro.set('');
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise a data da reexposição.');
+    }
+  }
+
+  removerReexposicao(data: string): void {
+    const alimento = this.alimentoDetalhado();
+    if (!alimento) {
+      return;
+    }
+    const datas = (alimento.datasReexposicao ?? []).filter((item) => item !== data);
+    this.atualizarAlimentoEmDetalhe({ datasReexposicao: datas, repetiuOutroDia: datas.length > 0 });
+  }
+
+  exibeClassificacaoGluten(alimento: AlimentoRegistroAlimentacao): boolean {
+    return alimento.grupo === 'CEREAL_GRAO_MASSA'
+      || alimento.grupo === 'PSEUDOCEREAL_GRAO_ESPECIAL'
+      || alimento.classificacaoGluten !== 'NAO_SE_APLICA';
+  }
+
+  exibeTipoPeixe(alimento: AlimentoRegistroAlimentacao): boolean {
+    return alimento.grupo === 'PEIXE_FRUTO_MAR' && alimento.codigo === 'peixe';
+  }
+
   idadeNaIntroducao(alimento: AlimentoRegistroAlimentacao): string {
     const nascimento = this.crianca()?.dataNascimento;
     if (!nascimento || !alimento.dataIntroducao || alimento.dataIntroducao < nascimento) {
@@ -468,7 +564,10 @@ export class AlimentacaoCriancaComponent implements OnInit {
   possuiDetalhesAlimento(alimento: AlimentoRegistroAlimentacao): boolean {
     return Boolean(
       alimento.dataIntroducao || alimento.formaPreparo || alimento.quantidadeAproximada
-      || (alimento.aceitacao && alimento.aceitacao !== 'NAO_INFORMADA') || alimento.repetiuOutroDia
+      || alimento.tipoPeixe || (alimento.datasReexposicao?.length ?? 0) > 0
+      || (alimento.classificacaoGluten && !['NAO_INFORMADO', 'NAO_SE_APLICA'].includes(alimento.classificacaoGluten))
+      || (alimento.aceitacao && alimento.aceitacao !== 'NAO_INFORMADA')
+      || (alimento.situacaoSinais && alimento.situacaoSinais !== 'NAO_INFORMADO')
       || alimento.sintomasPele || alimento.sintomasIntestinais || alimento.sintomasRespiratorios
       || alimento.alteracaoSono || alimento.alteracaoComportamento || alimento.observacao
     );
@@ -534,6 +633,11 @@ export class AlimentacaoCriancaComponent implements OnInit {
     this.alimentosSelecionados.update((selecionados) => selecionados.map((alimento) =>
       alimento.codigo === codigo ? { ...alimento, ...alteracoes } : alimento
     ));
+  }
+
+  private possuiSinalMarcado(alimento: AlimentoRegistroAlimentacao): boolean {
+    return Boolean(alimento.sintomasPele || alimento.sintomasIntestinais || alimento.sintomasRespiratorios
+      || alimento.alteracaoSono || alimento.alteracaoComportamento);
   }
 
   private possuiGrupoSelecionado(alimentos: AlimentoRegistroAlimentacao[], grupo: GrupoAlimento): boolean {

@@ -3,6 +3,8 @@ export type EstagioAlimentar = 'APENAS_LEITE' | 'INICIANDO_ALIMENTACAO_COMPLEMEN
 export type TexturaAlimentar = 'LIQUIDA' | 'PASTOSA' | 'AMASSADA' | 'PEDACOS_MACIOS' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
 export type TipoOrigemAlimento = 'ORGANICO' | 'CONVENCIONAL' | 'MISTO' | 'NAO_INFORMADO';
 export type AceitacaoAlimento = 'BOA' | 'PARCIAL' | 'RECUSOU' | 'NAO_INFORMADA';
+export type ClassificacaoGluten = 'CONTEM' | 'NAO_CONTEM' | 'PODE_CONTER_TRACOS' | 'NAO_INFORMADO' | 'NAO_SE_APLICA';
+export type SituacaoSinaisOferta = 'NAO_INFORMADO' | 'NENHUM_PERCEBIDO' | 'SINAIS_PERCEBIDOS';
 export type GrupoAlimento =
   | 'FRUTA'
   | 'LEGUME_HORTALICA_FRUTO'
@@ -31,6 +33,10 @@ export interface AlimentoRegistroAlimentacao {
   textura?: TexturaAlimentar | null;
   quantidadeAproximada?: string | null;
   aceitacao?: AceitacaoAlimento | null;
+  classificacaoGluten?: ClassificacaoGluten | null;
+  tipoPeixe?: string | null;
+  datasReexposicao?: string[];
+  situacaoSinais?: SituacaoSinaisOferta | null;
   repetiuOutroDia?: boolean;
   sintomasPele?: boolean;
   sintomasIntestinais?: boolean;

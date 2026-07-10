@@ -324,6 +324,10 @@
               <p class="alimentacao-modal__orientacao">Este alimento merece rastreabilidade. O registro não representa diagnóstico nem indicação de restrição.</p>
             }
 
+            @if (erro()) {
+              <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+            }
+
             <div class="alimentacao-modal__detalhes-grid">
               <label>
                 <span>Data da primeira oferta</span>
@@ -350,17 +354,60 @@
                 <span>Quantidade aproximada</span>
                 <input type="text" maxlength="80" placeholder="Ex.: 2 colheres, alguns pedaços" [value]="alimento.quantidadeAproximada ?? ''" (input)="atualizarTextoAlimento('quantidadeAproximada', $event)" />
               </label>
+              @if (exibeTipoPeixe(alimento)) {
+                <label>
+                  <span>Qual peixe?</span>
+                  <input type="text" maxlength="120" placeholder="Ex.: salmão, tilápia, sardinha" [value]="alimento.tipoPeixe ?? ''" (input)="atualizarTextoAlimento('tipoPeixe', $event)" />
+                </label>
+              }
+              @if (exibeClassificacaoGluten(alimento)) {
+                <label>
+                  <span>Glúten</span>
+                  <select [value]="alimento.classificacaoGluten ?? 'NAO_INFORMADO'" (change)="atualizarOpcaoAlimento('classificacaoGluten', $event)">
+                    @for (opcao of classificacoesGluten; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+                  </select>
+                </label>
+              }
             </div>
 
-            <fieldset class="alimentacao-modal__marcacoes">
-              <legend>O que foi observado?</legend>
-              <label><input type="checkbox" [checked]="alimento.repetiuOutroDia" (change)="atualizarMarcacaoAlimento('repetiuOutroDia', $event)" /> Foi oferecido novamente em outro dia</label>
-              <label><input type="checkbox" [checked]="alimento.sintomasPele" (change)="atualizarMarcacaoAlimento('sintomasPele', $event)" /> Sinais na pele</label>
-              <label><input type="checkbox" [checked]="alimento.sintomasIntestinais" (change)="atualizarMarcacaoAlimento('sintomasIntestinais', $event)" /> Sinais intestinais</label>
-              <label><input type="checkbox" [checked]="alimento.sintomasRespiratorios" (change)="atualizarMarcacaoAlimento('sintomasRespiratorios', $event)" /> Sinais respiratórios</label>
-              <label><input type="checkbox" [checked]="alimento.alteracaoSono" (change)="atualizarMarcacaoAlimento('alteracaoSono', $event)" /> Mudança percebida no sono</label>
-              <label><input type="checkbox" [checked]="alimento.alteracaoComportamento" (change)="atualizarMarcacaoAlimento('alteracaoComportamento', $event)" /> Mudança percebida no comportamento</label>
-            </fieldset>
+            <section class="alimentacao-modal__reexposicoes">
+              <div>
+                <h4>Oferecido novamente</h4>
+                <p>Registre as datas para acompanhar novas ofertas ao longo do tempo.</p>
+              </div>
+              <div class="alimentacao-modal__nova-data">
+                <label>
+                  <span>Data da reexposição</span>
+                  <input type="text" inputmode="numeric" placeholder="dd/mm/aaaa" [value]="novaDataReexposicao()" (input)="alterarNovaDataReexposicao($event)" />
+                </label>
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="adicionarReexposicao()">Adicionar data</button>
+              </div>
+              @if ((alimento.datasReexposicao ?? []).length > 0) {
+                <div class="alimentacao-modal__datas">
+                  @for (data of alimento.datasReexposicao ?? []; track data) {
+                    <span>{{ formatarData(data) }} <button type="button" aria-label="Remover reexposição de {{ formatarData(data) }}" (click)="removerReexposicao(data)">×</button></span>
+                  }
+                </div>
+              }
+            </section>
+
+            <label class="alimentacao-modal__situacao-sinais">
+              <span>Depois da oferta</span>
+              <select [value]="alimento.situacaoSinais ?? 'NAO_INFORMADO'" (change)="atualizarSituacaoSinais($event)">
+                @for (opcao of situacoesSinais; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+              </select>
+            </label>
+
+            @if (alimento.situacaoSinais === 'SINAIS_PERCEBIDOS') {
+              <fieldset class="alimentacao-modal__marcacoes">
+                <legend>O que foi percebido?</legend>
+                <label><input type="checkbox" [checked]="alimento.sintomasPele" (change)="atualizarMarcacaoAlimento('sintomasPele', $event)" /> Sinais na pele</label>
+                <label><input type="checkbox" [checked]="alimento.sintomasIntestinais" (change)="atualizarMarcacaoAlimento('sintomasIntestinais', $event)" /> Sinais intestinais</label>
+                <label><input type="checkbox" [checked]="alimento.sintomasRespiratorios" (change)="atualizarMarcacaoAlimento('sintomasRespiratorios', $event)" /> Sinais respiratórios</label>
+                <label><input type="checkbox" [checked]="alimento.alteracaoSono" (change)="atualizarMarcacaoAlimento('alteracaoSono', $event)" /> Mudança percebida no sono</label>
+                <label><input type="checkbox" [checked]="alimento.alteracaoComportamento" (change)="atualizarMarcacaoAlimento('alteracaoComportamento', $event)" /> Mudança percebida no comportamento</label>
+              </fieldset>
+            }
 
             <label class="alimentacao-modal__observacao">
               <span>Observações</span>

@@ -26,4 +26,14 @@ describe('Catálogo de alimentos', () => {
     expect(trigo?.grupo).toBe('CEREAL_GRAO_MASSA');
     expect(trigo?.alergenico).toBe(true);
   });
+
+  it('mantém a classificação de glúten como dado estruturado', () => {
+    const trigo = CATALOGO_ALIMENTOS.find((alimento) => alimento.codigo === 'trigo');
+    const arroz = CATALOGO_ALIMENTOS.find((alimento) => alimento.codigo === 'arroz');
+    const massa = CATALOGO_ALIMENTOS.find((alimento) => alimento.codigo === 'massa');
+
+    expect(trigo?.classificacaoGluten).toBe('CONTEM');
+    expect(arroz?.classificacaoGluten).toBe('NAO_CONTEM');
+    expect(massa?.classificacaoGluten).toBe('NAO_INFORMADO');
+  });
 });

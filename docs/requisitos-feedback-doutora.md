@@ -49,6 +49,10 @@ Status usados:
 | ALI-10 | Ampliar o catálogo para os grupos alimentares definidos pela revisão clínica. | Implementado | Catálogo pesquisável com frutas, hortaliças, raízes, cereais, pseudocereais, leguminosas, proteínas, derivados, oleaginosas, sementes, gorduras e líquidos. |
 | ALI-11 | Permitir rastreabilidade de alimentos mais alergênicos sem apresentá-los como restrição. | Implementado | Filtro específico e identificação contextual; o app explicita que o registro não representa diagnóstico ou proibição. |
 | ALI-12 | Registrar detalhes opcionais por alimento. | Implementado | Data da primeira oferta, idade calculada, preparo, textura, quantidade, aceitação, repetição, sinais percebidos e observações são persistidos. |
+| ALI-13 | Diferenciar ausência de sinais de informação não preenchida. | Implementado | Cada oferta registra: não informado, nenhum sinal percebido ou sinais percebidos; os sinais específicos aparecem apenas na última opção. |
+| ALI-14 | Manter histórico datado de reexposições. | Implementado | A família pode adicionar e remover datas; o app valida a relação com a primeira oferta e a data do registro. |
+| ALI-15 | Permitir identificar opcionalmente qual peixe foi oferecido. | Implementado | Campo aparece somente nos detalhes do item genérico `Peixe`. |
+| ALI-16 | Registrar classificação de glúten de forma estruturada. | Implementado | Contém, não contém, pode conter traços ou não informado; o catálogo sugere a classificação inicial e permite ajuste. |
 
 ### Sono
 

@@ -518,6 +518,63 @@
   font-weight: 600;
 }
 
+.alimentacao-modal__reexposicoes {
+  display: grid;
+  gap: 0.8rem;
+  border-top: 1px solid rgba(147, 43, 57, 0.12);
+  border-bottom: 1px solid rgba(147, 43, 57, 0.12);
+  padding: 1rem 0;
+}
+
+.alimentacao-modal__reexposicoes h4,
+.alimentacao-modal__reexposicoes p {
+  margin: 0;
+}
+
+.alimentacao-modal__reexposicoes p {
+  color: var(--pueria-texto-suave);
+}
+
+.alimentacao-modal__nova-data {
+  align-items: end;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(12rem, 1fr) auto;
+}
+
+.alimentacao-modal__datas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.alimentacao-modal__datas > span {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+  border: 1px solid rgba(147, 43, 57, 0.14);
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 700;
+  padding: 0.45rem 0.65rem;
+}
+
+.alimentacao-modal__datas button {
+  border: 0;
+  background: transparent;
+  color: var(--pueria-vermelho-profundo);
+  font-size: 1rem;
+  font-weight: 900;
+  padding: 0;
+}
+
+.alimentacao-modal__situacao-sinais {
+  display: grid;
+  gap: 0.4rem;
+  max-width: 28rem;
+  font-weight: 700;
+}
+
 .alimentacao-modal__rodape {
   display: flex;
   flex-wrap: wrap;
@@ -548,5 +605,10 @@
 
   .alimentacao-historico {
     position: static;
+  }
+
+  .alimentacao-modal__nova-data {
+    align-items: stretch;
+    grid-template-columns: 1fr;
   }
 }

@@ -3,6 +3,7 @@ package br.com.pueria.pueria.alimentacao.dominio;
 import br.com.pueria.pueria.comum.excecao.RegraDominioException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record AlimentoRegistroAlimentacao(
         String codigo,
@@ -14,6 +15,10 @@ public record AlimentoRegistroAlimentacao(
         TexturaAlimentar textura,
         String quantidadeAproximada,
         AceitacaoAlimento aceitacao,
+        ClassificacaoGluten classificacaoGluten,
+        String tipoPeixe,
+        List<LocalDate> datasReexposicao,
+        SituacaoSinaisOferta situacaoSinais,
         Boolean repetiuOutroDia,
         Boolean sintomasPele,
         Boolean sintomasIntestinais,
@@ -24,6 +29,7 @@ public record AlimentoRegistroAlimentacao(
 ) {
     public AlimentoRegistroAlimentacao(String codigo, String nome, GrupoAlimento grupo) {
         this(codigo, nome, grupo, false, null, null, null, null, null,
+                ClassificacaoGluten.NAO_SE_APLICA, null, List.of(), SituacaoSinaisOferta.NAO_INFORMADO,
                 false, false, false, false, false, false, null);
     }
 
@@ -45,13 +51,25 @@ public record AlimentoRegistroAlimentacao(
         textura = textura == null ? TexturaAlimentar.NAO_INFORMADO : textura;
         quantidadeAproximada = tratarTexto(quantidadeAproximada, 80, "A quantidade aproximada");
         aceitacao = aceitacao == null ? AceitacaoAlimento.NAO_INFORMADA : aceitacao;
-        repetiuOutroDia = Boolean.TRUE.equals(repetiuOutroDia);
+        classificacaoGluten = classificacaoGluten == null ? ClassificacaoGluten.NAO_SE_APLICA : classificacaoGluten;
+        tipoPeixe = tratarTexto(tipoPeixe, 120, "O tipo de peixe");
+        datasReexposicao = normalizarDatas(datasReexposicao);
+        repetiuOutroDia = Boolean.TRUE.equals(repetiuOutroDia) || !datasReexposicao.isEmpty();
         sintomasPele = Boolean.TRUE.equals(sintomasPele);
         sintomasIntestinais = Boolean.TRUE.equals(sintomasIntestinais);
         sintomasRespiratorios = Boolean.TRUE.equals(sintomasRespiratorios);
         alteracaoSono = Boolean.TRUE.equals(alteracaoSono);
         alteracaoComportamento = Boolean.TRUE.equals(alteracaoComportamento);
         observacao = tratarTexto(observacao, 500, "A observacao do alimento");
+
+        boolean possuiSinalMarcado = sintomasPele || sintomasIntestinais || sintomasRespiratorios
+                || alteracaoSono || alteracaoComportamento;
+        situacaoSinais = situacaoSinais == null
+                ? (possuiSinalMarcado ? SituacaoSinaisOferta.SINAIS_PERCEBIDOS : SituacaoSinaisOferta.NAO_INFORMADO)
+                : situacaoSinais;
+        if (situacaoSinais == SituacaoSinaisOferta.NENHUM_PERCEBIDO && possuiSinalMarcado) {
+            throw new RegraDominioException("Nao e possivel marcar sinais quando nenhum sinal foi percebido.");
+        }
 
         if (codigo.length() > 80) {
             throw new RegraDominioException("O codigo do alimento deve ter no maximo 80 caracteres.");
@@ -70,5 +88,15 @@ public record AlimentoRegistroAlimentacao(
             throw new RegraDominioException(nomeCampo + " deve ter no maximo " + limite + " caracteres.");
         }
         return texto;
+    }
+
+    private static List<LocalDate> normalizarDatas(List<LocalDate> datas) {
+        if (datas == null || datas.isEmpty()) {
+            return List.of();
+        }
+        if (datas.size() > 50) {
+            throw new RegraDominioException("Registre no maximo 50 reexposicoes por alimento.");
+        }
+        return datas.stream().filter(java.util.Objects::nonNull).distinct().sorted().toList();
     }
 }
