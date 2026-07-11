@@ -29,6 +29,7 @@
   letter-spacing: 0;
   line-height: 1;
 }
+.sono-page__hero { background: #fff; border: 1px solid #dce5f0; border-left: 5px solid #55729b; border-radius: 8px; padding: 1.5rem; }.sono-page__identidade { align-items: center; color: #4d688f; display: flex; gap: .55rem; }.sono-page__identidade > span { align-items: center; background: #dce7f5; border-radius: 50%; display: inline-flex; height: 50px; justify-content: center; width: 50px; }
 
 .sono-sintese,
 .sono-form,
@@ -46,6 +47,7 @@
 .sono-sintese {
   display: grid;
   gap: 1.25rem;
+  border-top: 4px solid #55729b;
 }
 
 .sono-sintese__header,
@@ -78,6 +80,7 @@
   color: var(--pueria-texto-suave);
   font-size: 0.9rem;
 }
+.sono-sintese__grid span { align-items: center; display: flex; gap: .35rem; }
 
 .sono-sintese__badge--ok,
 .sono-sintese__badge--atencao {

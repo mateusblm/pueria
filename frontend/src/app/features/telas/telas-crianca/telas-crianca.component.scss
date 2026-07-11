@@ -24,6 +24,7 @@
   letter-spacing: 0;
   line-height: 1;
 }
+.telas-page__hero { background: #fff; border: 1px solid #d7e7e8; border-left: 5px solid #4f7c81; border-radius: 8px; padding: 1.5rem; }.telas-page__identidade { align-items: center; color: #416d72; display: flex; gap: .55rem; }.telas-page__identidade > span { align-items: center; background: #dcebed; border-radius: 50%; display: inline-flex; height: 50px; justify-content: center; width: 50px; }
 
 .telas-page__state {
   max-width: 760px;
@@ -42,6 +43,7 @@
   display: grid;
   gap: 1.25rem;
 }
+.telas-sintese { border-top: 4px solid #4f7c81; }
 
 .telas-sintese__header,
 .telas-form__header {
@@ -68,9 +70,7 @@
   padding: 1rem;
 }
 
-.telas-sintese__metric {
-  background: linear-gradient(135deg, #fff7ec, #eef8ef) !important;
-}
+.telas-sintese__metric { background: #e7f2f1 !important; border-top: 3px solid #4f7c81 !important; }
 
 .telas-sintese__grid span,
 .telas-historico span,
@@ -78,6 +78,7 @@
   color: var(--pueria-texto-suave);
   font-size: 0.9rem;
 }
+.telas-sintese__grid span { align-items: center; display: flex; gap: .35rem; }
 
 .telas-sintese__badge--ok,
 .telas-sintese__badge--atencao {

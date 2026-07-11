@@ -7,12 +7,13 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { ContextoUsoTela, RegistroTelas, SalvarRegistroTelasRequest, TipoConteudoTela, TipoDispositivoTela } from '../../../shared/models/telas.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { TelasService } from '../telas.service';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
 
 @Component({
   selector: 'app-telas-crianca',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
   templateUrl: './telas-crianca.component.html',
   styleUrl: './telas-crianca.component.scss'
 })

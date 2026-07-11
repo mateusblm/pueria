@@ -12,8 +12,8 @@
     <div class="telas-page__hero">
       <div>
         <p class="pueria-eyebrow">Telas</p>
-        <h1 class="pueria-title">{{ crianca.nome }}</h1>
-        <p class="pueria-subtitle">Observe tempo, momentos do dia e contexto de uso para apoiar sono, refeições, brincadeira e interação familiar.</p>
+        <div class="telas-page__identidade"><span><app-icon name="smartphone" [size]="28" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
+        <p class="pueria-subtitle">Observe os momentos de uso e encontre pequenos ajustes possíveis na rotina.</p>
       </div>
     </div>
 
@@ -37,18 +37,18 @@
 
         <div class="telas-sintese__grid">
           <article class="telas-sintese__metric">
-            <span>Tempo médio</span>
+            <span><app-icon name="smartphone" [size]="15" />Tempo médio</span>
             <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
             <small [class]="classeTempo(registro)">
               {{ registro.analise.classificacaoTempo === 'DENTRO_DA_REFERENCIA' ? 'Dentro da referência' : 'Acompanhar' }}
             </small>
           </article>
           <article>
-            <span>Referência por idade</span>
+            <span><app-icon name="sparkles" [size]="15" />Referência por idade</span>
             <strong>{{ textoReferencia(registro) }}</strong>
           </article>
           <article>
-            <span>Conteúdo predominante</span>
+            <span><app-icon name="message" [size]="15" />Conteúdo predominante</span>
             <strong>{{ labelTipoConteudo(registro.tipoConteudoPredominante) }}</strong>
           </article>
           <article>

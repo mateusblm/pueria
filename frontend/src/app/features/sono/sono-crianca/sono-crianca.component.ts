@@ -7,12 +7,13 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { AmbienteSono, RegistroSono, SalvarRegistroSonoRequest, SuperficieSono, TipoDespertarNoturno } from '../../../shared/models/sono.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { SonoService } from '../sono.service';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
 
 @Component({
   selector: 'app-sono-crianca',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
   templateUrl: './sono-crianca.component.html',
   styleUrl: './sono-crianca.component.scss'
 })

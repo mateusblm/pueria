@@ -12,8 +12,8 @@
     <div class="sono-page__hero">
       <div>
         <p class="pueria-eyebrow">Sono</p>
-        <h1 class="pueria-title">{{ crianca.nome }}</h1>
-        <p class="pueria-subtitle">Registre horários, cochilos, despertares e hábitos que podem influenciar descanso, comportamento e rotina familiar.</p>
+        <div class="sono-page__identidade"><span><app-icon name="moon" [size]="29" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
+        <p class="pueria-subtitle">Observe o descanso e os pequenos sinais que ajudam a entender o ritmo da rotina.</p>
       </div>
     </div>
 
@@ -37,16 +37,16 @@
 
         <div class="sono-sintese__grid">
           <article>
-            <span>Sono em 24h</span>
+            <span><app-icon name="moon" [size]="15" />Sono em 24h</span>
             <strong>{{ formatarDuracao(registro.minutosSonoTotal24h) }}</strong>
             <small [class]="classeDuracao(registro)">{{ registro.analise.classificacaoDuracao === 'FAIXA_ESPERADA' ? 'Faixa esperada' : 'Acompanhar' }}</small>
           </article>
           <article>
-            <span>Faixa esperada</span>
+            <span><app-icon name="sparkles" [size]="15" />Faixa esperada</span>
             <strong>{{ formatarDuracao(registro.analise.minutosSonoEsperadoMinimo) }} a {{ formatarDuracao(registro.analise.minutosSonoEsperadoMaximo) }}</strong>
           </article>
           <article>
-            <span>Sono noturno</span>
+            <span><app-icon name="moon" [size]="15" />Sono noturno</span>
             <strong>{{ formatarDuracao(registro.minutosSonoNoturno) }}</strong>
           </article>
           <article>
