@@ -7,6 +7,7 @@ import { CriancasService } from '../../criancas/criancas.service';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResponsavelMedicaoCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
+import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 
 type PontoGraficoCrescimento = {
   label: string;
@@ -19,6 +20,8 @@ type PontoGraficoCrescimento = {
 
 type GraficoCrescimento = {
   indicador: string;
+  icone: AppIconName;
+  tema: string;
   titulo: string;
   resumo: string;
   classe: string;
@@ -46,7 +49,7 @@ type DetalheIndicadorCrescimento = {
 
 @Component({
   selector: 'app-crescimento-crianca',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
   templateUrl: './crescimento-crianca.component.html',
   styleUrl: './crescimento-crianca.component.scss'
 })
@@ -460,6 +463,7 @@ export class CrescimentoCriancaComponent implements OnInit {
 
     return {
       indicador,
+      ...this.apresentacaoIndicador(indicador),
       titulo: this.tituloIndicador(indicador),
       resumo: this.textoFamilia(recente),
       classe: this.classeResultado(recente),
@@ -489,6 +493,17 @@ export class CrescimentoCriancaComponent implements OnInit {
       IMC_IDADE: 'IMC por idade'
     };
     return titulos[indicador] ?? indicador;
+  }
+
+  private apresentacaoIndicador(indicador: string): Pick<GraficoCrescimento, 'icone' | 'tema'> {
+    const apresentacoes: Record<string, Pick<GraficoCrescimento, 'icone' | 'tema'>> = {
+      PESO_IDADE: { icone: 'chart', tema: 'peso' },
+      COMPRIMENTO_IDADE: { icone: 'ruler', tema: 'comprimento' },
+      PERIMETRO_CEFALICO_IDADE: { icone: 'brain', tema: 'perimetro' },
+      PESO_COMPRIMENTO: { icone: 'heartPulse', tema: 'proporcao' },
+      IMC_IDADE: { icone: 'sparkles', tema: 'imc' }
+    };
+    return apresentacoes[indicador] ?? { icone: 'chart', tema: 'peso' };
   }
 
   private recarregarCurvas(): void {
