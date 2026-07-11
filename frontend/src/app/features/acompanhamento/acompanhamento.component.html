@@ -20,10 +20,17 @@
   } @else if (erro()) {
     <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   } @else if (!possuiCriancas()) {
-    <section class="pueria-card acompanhamento-page__state">
-      <h2>Nenhuma criança cadastrada ainda</h2>
-      <p>Vamos cadastrar a criança em poucos passos para começar o acompanhamento.</p>
-      <button type="button" class="pueria-button" (click)="abrirCadastroInicial()">Começar cadastro</button>
+    <section class="pueria-card acompanhamento-page__state acompanhamento-page__state--primeiro-acesso">
+      <span class="primeiro-acesso__icone"><app-icon name="baby" [size]="30" /></span>
+      <div>
+        <p class="pueria-eyebrow">Primeiro acesso</p>
+        <h2>Vamos conhecer a criança</h2>
+        <p>Começamos pelos dados essenciais e, depois, você escolhe o que deseja acompanhar.</p>
+      </div>
+      <div class="primeiro-acesso__etapas" aria-label="Etapas iniciais">
+        <span>1. Perfil</span><span>2. Nascimento</span><span>3. Vínculo</span>
+      </div>
+      <button type="button" class="pueria-button" (click)="abrirCadastroInicial()">Começar</button>
     </section>
   } @else {
     @let foco = criancaEmFoco();

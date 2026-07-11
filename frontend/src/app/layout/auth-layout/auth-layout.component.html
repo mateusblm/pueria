@@ -10,6 +10,12 @@
       </p>
     </div>
 
+    <div class="auth-shell__pilares" aria-label="Áreas de acompanhamento">
+      <span><app-icon name="brain" [size]="18" /> Desenvolvimento</span>
+      <span><app-icon name="chart" [size]="18" /> Crescimento</span>
+      <span><app-icon name="heartPulse" [size]="18" /> Rotina</span>
+    </div>
+
     <svg class="auth-shell__flor-fundo" viewBox="0 0 340 260" fill="none" aria-hidden="true">
       <path d="M162 252C162 205 165 160 174 112" />
       <path d="M174 112C116 64 69 48 18 67" />
@@ -23,7 +29,7 @@
     </svg>
   </section>
 
-  <section class="auth-shell__form pueria-card">
+  <section class="auth-shell__form pueria-card" aria-label="Acesso à sua conta">
     <router-outlet></router-outlet>
   </section>
 </main>

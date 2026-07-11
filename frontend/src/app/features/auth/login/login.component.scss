@@ -7,7 +7,12 @@
   margin: 0;
   color: var(--pueria-texto);
   font-size: 1.7rem;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
+}
+
+.auth-form > :first-child {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0d8d4;
 }
 
 .auth-form p {
@@ -26,6 +31,11 @@
   text-decoration: none;
 }
 
+.auth-form .pueria-button {
+  min-height: 48px;
+  margin-top: 2px;
+}
+
 .auth-password {
   position: relative;
 }
@@ -41,30 +51,17 @@
   width: 2.25rem;
   height: 2.25rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: 6px;
   background: transparent;
   cursor: pointer;
   transform: translateY(-50%);
 }
 
-.auth-password__eye {
-  position: relative;
-  display: block;
-  width: 1.15rem;
-  height: 0.72rem;
-  margin: auto;
-  border: 2px solid var(--pueria-texto-suave);
-  border-radius: 999px / 700px;
+.auth-password__toggle app-icon {
+  color: var(--pueria-texto-suave);
 }
 
-.auth-password__eye::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.32rem;
-  height: 0.32rem;
-  border-radius: 999px;
-  background: var(--pueria-texto-suave);
-  transform: translate(-50%, -50%);
+.auth-password__toggle:hover app-icon,
+.auth-password__toggle:focus-visible app-icon {
+  color: var(--pueria-vermelho-flor);
 }

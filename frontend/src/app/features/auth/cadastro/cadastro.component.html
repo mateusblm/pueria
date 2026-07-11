@@ -2,7 +2,7 @@
   <div>
     <p class="pueria-eyebrow">Cadastro</p>
     <h2>Crie sua conta</h2>
-    <p>Crie seu acesso para acompanhar o desenvolvimento, a rotina e os registros da criança em um só lugar.</p>
+    <p>Crie seu acesso para reunir o desenvolvimento, a rotina e os registros da criança em um só lugar.</p>
   </div>
 
   @if (erro()) {
@@ -35,7 +35,7 @@
           [attr.aria-label]="senhaVisivel() ? 'Ocultar senha' : 'Mostrar senha'"
           (click)="alternarSenha()"
         >
-          <span class="auth-password__eye" aria-hidden="true"></span>
+          <app-icon [name]="senhaVisivel() ? 'eyeOff' : 'eye'" [size]="19" />
         </button>
       </div>
     </div>
@@ -55,7 +55,7 @@
           [attr.aria-label]="confirmarSenhaVisivel() ? 'Ocultar senha' : 'Mostrar senha'"
           (click)="alternarConfirmarSenha()"
         >
-          <span class="auth-password__eye" aria-hidden="true"></span>
+          <app-icon [name]="confirmarSenhaVisivel() ? 'eyeOff' : 'eye'" [size]="19" />
         </button>
       </div>
     </div>

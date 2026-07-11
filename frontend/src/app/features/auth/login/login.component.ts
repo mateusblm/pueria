@@ -5,10 +5,11 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize, TimeoutError } from 'rxjs';
 
 import { AuthService } from '../../../core/auth/auth.service';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

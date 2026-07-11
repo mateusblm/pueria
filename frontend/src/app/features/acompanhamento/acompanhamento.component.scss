@@ -51,6 +51,47 @@
   padding: 22px;
 }
 
+.acompanhamento-page__state--primeiro-acesso {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  max-width: 760px;
+  padding: 28px;
+  border-left: 5px solid var(--pueria-vermelho-flor);
+}
+
+.primeiro-acesso__icone {
+  display: inline-grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  color: var(--pueria-vermelho-flor);
+  background: #ffe9e4;
+  border: 1px solid #f3c9c1;
+  border-radius: 50%;
+}
+
+.primeiro-acesso__etapas {
+  display: flex;
+  grid-column: 2;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.primeiro-acesso__etapas span {
+  padding: 6px 9px;
+  color: #7a4e4a;
+  background: #fff6f3;
+  border: 1px solid #f1d8d2;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.acompanhamento-page__state--primeiro-acesso .pueria-button {
+  grid-column: 2;
+  justify-self: start;
+}
+
 .acompanhamento-home {
   display: grid;
   gap: 18px;

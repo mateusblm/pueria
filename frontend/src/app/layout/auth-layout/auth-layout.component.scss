@@ -2,6 +2,8 @@
   display: grid;
   gap: 24px;
   align-items: center;
+  min-height: 100vh;
+  padding: 16px;
 }
 
 .auth-shell__intro {
@@ -10,6 +12,8 @@
   min-height: 330px;
   border-radius: var(--pueria-raio);
   padding: 24px;
+  background: #eef8f1;
+  border: 1px solid #d6e7dc;
 }
 
 .auth-shell__copy {
@@ -17,6 +21,37 @@
   z-index: 1;
   margin-top: 52px;
   max-width: 620px;
+}
+
+.auth-shell__copy .pueria-title {
+  max-width: 14ch;
+}
+
+.auth-shell__pilares {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.auth-shell__pilares span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 10px;
+  color: #28543d;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #c7ddce;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.auth-shell__pilares app-icon {
+  color: var(--pueria-vermelho-flor);
 }
 
 .auth-shell__flor-fundo {
@@ -44,6 +79,7 @@
 
 .auth-shell__form {
   padding: 22px;
+  border-top: 4px solid var(--pueria-vermelho-flor);
 }
 
 @media (min-width: 980px) {
@@ -70,5 +106,19 @@
 
   .auth-shell__form {
     padding: 32px;
+  }
+}
+
+@media (max-width: 540px) {
+  .auth-shell__intro {
+    min-height: 300px;
+  }
+
+  .auth-shell__copy {
+    margin-top: 36px;
+  }
+
+  .auth-shell__pilares span {
+    font-size: 0.78rem;
   }
 }

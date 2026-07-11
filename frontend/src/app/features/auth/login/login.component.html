@@ -2,7 +2,7 @@
   <div>
     <p class="pueria-eyebrow">Acesso</p>
     <h2>Entre na sua conta</h2>
-    <p>Continue o acompanhamento preventivo das crianças vinculadas a você.</p>
+    <p>Continue os registros e observações que ajudam a acompanhar cada fase da criança.</p>
   </div>
 
   @if (erro()) {
@@ -30,7 +30,7 @@
           [attr.aria-label]="senhaVisivel() ? 'Ocultar senha' : 'Mostrar senha'"
           (click)="alternarSenha()"
         >
-          <span class="auth-password__eye" aria-hidden="true"></span>
+          <app-icon [name]="senhaVisivel() ? 'eyeOff' : 'eye'" [size]="19" />
         </button>
       </div>
     </div>
