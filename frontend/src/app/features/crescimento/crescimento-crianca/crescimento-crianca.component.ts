@@ -303,7 +303,7 @@ export class CrescimentoCriancaComponent implements OnInit {
       return '';
     }
     if (avaliacao.criterioIdade.startsWith('INTERGROWTH')) {
-      return `Nesta fase, a curva considera a idade pós-menstrual: ${this.formatarIdade(avaliacao.idadeDias)}.`;
+      return `Idade corrigida nesta avaliação: ${this.formatarIdade(Math.max(0, avaliacao.idadeDias - 40 * 7))}.`;
     }
     if (avaliacao.idadeCorrigida) {
       return `Idade corrigida usada nesta avaliação: ${this.formatarIdade(avaliacao.idadeDias)}.`;
