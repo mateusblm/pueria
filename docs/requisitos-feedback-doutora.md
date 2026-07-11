@@ -110,7 +110,7 @@ Status usados:
 | CRE-05 | Permitir extensão da idade corrigida até 36 meses para prematuros extremos apenas em modo profissional. | Pendente | Futuro, depende de perfil profissional/configuração. |
 | CRE-06 | Se T21/Down confirmado, ativar curva CDC/Zemel 2015 após fase de prematuridade. | Pendente | Precisa campo clínico e dataset. |
 | CRE-07 | Se Turner confirmado em menina, ativar curva específica para crescimento linear e velocidade de crescimento. | Pesquisa/validação | Precisa definir fonte/dataset mais adequado antes de implementar. |
-| CRE-08 | Família não escolhe curva manualmente. | Pendente | O app deve explicar a curva usada, não pedir escolha. |
+| CRE-08 | Família não escolhe curva manualmente. | Implementado | A referência é definida pelo sistema; a tela informa a referência e a idade corrigida usadas na avaliação. |
 
 ### Dados de cadastro necessários
 
@@ -124,7 +124,7 @@ Status usados:
 | CAD-06 | Comprimento ao nascimento. | Implementado | Já existe. |
 | CAD-07 | Perímetro cefálico ao nascimento. | Implementado | Já existe. |
 | CAD-08 | Tipo de gestação: única ou múltipla. | Pendente | Não identificado no cadastro atual. |
-| CAD-09 | Internação em UTI neonatal. | Pendente | Existe bloco neonatal, mas validar se há campo específico de UTI neonatal. |
+| CAD-09 | Internação em UTI neonatal. | Implementado | Campo específico disponível no cadastro, edição e perfil da criança. |
 | CAD-10 | Diagnóstico conhecido de Down/T21. | Pendente | Opções: não; sim; em investigação; prefiro informar depois. |
 | CAD-11 | Diagnóstico conhecido de Turner. | Pendente | Ocultar para sexo masculino no fluxo familiar ou deixar em modo profissional. |
 | CAD-12 | Outra condição genética ou neurológica relevante. | Pendente | Campo sensível, usar linguagem não alarmista. |
@@ -134,7 +134,7 @@ Status usados:
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
 | MED-01 | Data da medida. | Implementado | Já existe. |
-| MED-02 | Peso em gramas ou kg. | Parcial | Entrada já aceita kg no front, banco usa gramas. Validar tolerância a vírgula. |
+| MED-02 | Peso em gramas ou kg. | Implementado | Registro de crescimento usa kg, com aceitação de vírgula ou ponto decimal na interface. |
 | MED-03 | Comprimento em cm. | Implementado | Já existe. |
 | MED-04 | Perímetro cefálico em cm. | Implementado | Já existe. |
 | MED-05 | Local da medida: casa, consultório, posto de saúde, hospital. | Implementado | Campo de local ampliado no registro da medida. |
