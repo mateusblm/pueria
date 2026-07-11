@@ -179,7 +179,7 @@ class CrescimentoUseCasesTest {
         assertEquals(56, avaliacao.idadeCronologicaDias());
         assertEquals(0, avaliacao.idadeDias());
         assertTrue(avaliacao.idadeCorrigida());
-        assertEquals("Idade corrigida para prematuridade", avaliacao.criterioIdade());
+        assertEquals("OMS com idade corrigida para prematuridade", avaliacao.criterioIdade());
     }
 
     private static class Ambiente {
