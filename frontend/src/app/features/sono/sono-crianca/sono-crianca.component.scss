@@ -166,6 +166,12 @@
   resize: vertical;
 }
 
+.sono-form__erro {
+  color: var(--pueria-vermelho-profundo);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .sono-form fieldset {
   border: 1px solid rgba(147, 43, 57, 0.14);
   border-radius: 8px;

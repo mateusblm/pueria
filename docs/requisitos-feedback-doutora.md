@@ -59,13 +59,13 @@ Status usados:
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
 | SON-01 | Trocar linguagem de evento passado para rotina: `dormiu` -> `dorme`, `acordou` -> `acorda`. | Implementado | A tela registra uma rotina observada, mesmo com data. |
-| SON-02 | Ajustar local do sono para diferenciar cama/berço e quarto. | Parcial | Opção `Quarto da própria criança` incluída. Ainda falta redesenhar completamente a separação cama/quarto. |
-| SON-03 | Detalhar despertares noturnos. | Pendente | Opções: acorda e mama; acorda e não se alimenta; acorda e dorme rápido; acorda e demora para dormir novamente. |
-| SON-04 | Adicionar sinais observados: `Ranger de dentes durante o sono` e `Acorda bem disposto/alegre`. | Pendente | Entram em sinais observados. |
+| SON-02 | Ajustar local do sono para diferenciar cama/berço e quarto. | Implementado | O registro separa onde dorme (berço/cama) de em qual quarto dorme. |
+| SON-03 | Detalhar despertares noturnos. | Implementado | Permite registrar se se alimenta, se volta a dormir rápido ou se demora a voltar a dormir. |
+| SON-04 | Adicionar sinais observados: `Ranger de dentes durante o sono` e `Acorda bem disposto/alegre`. | Implementado | Os dois sinais foram incluídos no registro de observações. |
 | SON-05 | Mover `Sono agitado` de hábitos antes/durante o sono para sinais observados. | Implementado | Feedback direto da doutora. |
 | SON-06 | Máscara automática para horários. | Implementado | Digitar `2000` ou `20h00` é normalizado para `20:00` ao sair do campo. |
 | SON-07 | Deixar claro que `Tempo total de cochilos` é em minutos. | Implementado | Label usado: `Tempo total de cochilos (minutos)`. |
-| SON-08 | Melhorar validação visual de horário antes de salvar. | Parcial | Mensagem de erro ficou mais clara e o campo normaliza antes de salvar. Ainda podemos evoluir para erro inline. |
+| SON-08 | Melhorar validação visual de horário antes de salvar. | Implementado | O campo normaliza o horário e mostra uma orientação junto ao campo quando o formato não é válido. |
 
 ### Telas
 

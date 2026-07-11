@@ -50,8 +50,12 @@
             <strong>{{ formatarDuracao(registro.minutosSonoNoturno) }}</strong>
           </article>
           <article>
-            <span>Local</span>
-            <strong>{{ labelLocalSono(registro.localSono) }}</strong>
+            <span>Dorme em</span>
+            <strong>{{ labelSuperficieSono(registro.superficieSono) }}</strong>
+          </article>
+          <article>
+            <span>No quarto</span>
+            <strong>{{ labelAmbienteSono(registro.ambienteSono) }}</strong>
           </article>
         </div>
 
@@ -117,15 +121,25 @@
           <label>
             <span>Dorme</span>
             <input type="text" formControlName="horarioDormiu" placeholder="ex.: 20:00" inputmode="numeric" (blur)="normalizarCampoHorario('horarioDormiu')" />
+            @if (form.controls.horarioDormiu.touched && form.controls.horarioDormiu.hasError('horarioInvalido')) { <small class="sono-form__erro">Use hh:mm, por exemplo 20:00.</small> }
           </label>
           <label>
             <span>Acorda</span>
             <input type="text" formControlName="horarioAcordou" placeholder="ex.: 07:00" inputmode="numeric" (blur)="normalizarCampoHorario('horarioAcordou')" />
+            @if (form.controls.horarioAcordou.touched && form.controls.horarioAcordou.hasError('horarioInvalido')) { <small class="sono-form__erro">Use hh:mm, por exemplo 07:00.</small> }
           </label>
           <label>
-            <span>Local do sono</span>
-            <select formControlName="localSono">
-              @for (opcao of locaisSono; track opcao.valor) {
+            <span>Dorme em</span>
+            <select formControlName="superficieSono">
+              @for (opcao of superficiesSono; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>No quarto</span>
+            <select formControlName="ambienteSono">
+              @for (opcao of ambientesSono; track opcao.valor) {
                 <option [value]="opcao.valor">{{ opcao.label }}</option>
               }
             </select>
@@ -145,6 +159,15 @@
         </div>
 
         <fieldset>
+          <legend>Quando acorda à noite</legend>
+          <div class="sono-checks">
+            @for (opcao of tiposDespertar; track opcao.valor) {
+              <label><input type="checkbox" [checked]="tipoDespertarSelecionado(opcao.valor)" (change)="alternarTipoDespertar(opcao.valor)" /> {{ opcao.label }}</label>
+            }
+          </div>
+        </fieldset>
+
+        <fieldset>
           <legend>Hábitos antes e durante o sono</legend>
           <div class="sono-checks">
             <label><input type="checkbox" formControlName="rotinaSonoConsistente" /> Tem rotina previsível antes de dormir</label>
@@ -159,6 +182,8 @@
             <label><input type="checkbox" formControlName="roncosFrequentes" /> Roncos frequentes</label>
             <label><input type="checkbox" formControlName="pausasRespiratoriasPercebidas" /> Pausas respiratórias percebidas</label>
             <label><input type="checkbox" formControlName="sonoAgitado" /> Sono agitado</label>
+            <label><input type="checkbox" formControlName="rangerDentesDuranteSono" /> Range os dentes durante o sono</label>
+            <label><input type="checkbox" formControlName="acordaBemDisposto" /> Acorda bem-disposto ou alegre</label>
             <label><input type="checkbox" formControlName="sonolenciaDiurna" /> Sonolência durante o dia</label>
             <label><input type="checkbox" formControlName="irritabilidadeCansaco" /> Irritabilidade ou cansaço</label>
             <label><input type="checkbox" formControlName="preocupacaoFamilia" /> Há preocupação da família</label>

@@ -1,12 +1,13 @@
 package br.com.pueria.pueria.sono.infraestrutura.persistencia;
 
-import br.com.pueria.pueria.sono.dominio.LocalSono;
+import br.com.pueria.pueria.sono.dominio.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "registros_sono")
@@ -31,12 +32,24 @@ public class RegistroSonoJpaEntidade {
     private Boolean telasAntesDormir;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "local_sono", nullable = false, length = 35)
-    private LocalSono localSono;
+    @Column(name = "superficie_sono", nullable = false, length = 30)
+    private SuperficieSono superficieSono;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ambiente_sono", nullable = false, length = 35)
+    private AmbienteSono ambienteSono;
+
+    @ElementCollection(targetClass = TipoDespertarNoturno.class)
+    @CollectionTable(name = "registros_sono_tipos_despertar", joinColumns = @JoinColumn(name = "registro_sono_id"))
+    @Column(name = "tipo_despertar", nullable = false, length = 45)
+    @Enumerated(EnumType.STRING)
+    private List<TipoDespertarNoturno> tiposDespertarNoturno;
 
     private Boolean roncosFrequentes;
     private Boolean pausasRespiratoriasPercebidas;
     private Boolean sonoAgitado;
+    private Boolean rangerDentesDuranteSono;
+    private Boolean acordaBemDisposto;
     private Boolean sonolenciaDiurna;
     private Boolean irritabilidadeCansaco;
     private Boolean preocupacaoFamilia;
@@ -52,7 +65,7 @@ public class RegistroSonoJpaEntidade {
 
     protected RegistroSonoJpaEntidade() {}
 
-    public RegistroSonoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, LocalTime horarioDormiu, LocalTime horarioAcordou, Integer quantidadeCochilos, Integer minutosCochilos, Integer despertaresNoturnos, Boolean dificuldadeIniciarSono, Boolean rotinaSonoConsistente, Boolean telasAntesDormir, LocalSono localSono, Boolean roncosFrequentes, Boolean pausasRespiratoriasPercebidas, Boolean sonoAgitado, Boolean sonolenciaDiurna, Boolean irritabilidadeCansaco, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroSonoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, LocalTime horarioDormiu, LocalTime horarioAcordou, Integer quantidadeCochilos, Integer minutosCochilos, Integer despertaresNoturnos, Boolean dificuldadeIniciarSono, Boolean rotinaSonoConsistente, Boolean telasAntesDormir, SuperficieSono superficieSono, AmbienteSono ambienteSono, List<TipoDespertarNoturno> tiposDespertarNoturno, Boolean roncosFrequentes, Boolean pausasRespiratoriasPercebidas, Boolean sonoAgitado, Boolean rangerDentesDuranteSono, Boolean acordaBemDisposto, Boolean sonolenciaDiurna, Boolean irritabilidadeCansaco, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
@@ -64,10 +77,14 @@ public class RegistroSonoJpaEntidade {
         this.dificuldadeIniciarSono = dificuldadeIniciarSono;
         this.rotinaSonoConsistente = rotinaSonoConsistente;
         this.telasAntesDormir = telasAntesDormir;
-        this.localSono = localSono;
+        this.superficieSono = superficieSono;
+        this.ambienteSono = ambienteSono;
+        this.tiposDespertarNoturno = tiposDespertarNoturno;
         this.roncosFrequentes = roncosFrequentes;
         this.pausasRespiratoriasPercebidas = pausasRespiratoriasPercebidas;
         this.sonoAgitado = sonoAgitado;
+        this.rangerDentesDuranteSono = rangerDentesDuranteSono;
+        this.acordaBemDisposto = acordaBemDisposto;
         this.sonolenciaDiurna = sonolenciaDiurna;
         this.irritabilidadeCansaco = irritabilidadeCansaco;
         this.preocupacaoFamilia = preocupacaoFamilia;
@@ -87,10 +104,14 @@ public class RegistroSonoJpaEntidade {
     public Boolean getDificuldadeIniciarSono() { return dificuldadeIniciarSono; }
     public Boolean getRotinaSonoConsistente() { return rotinaSonoConsistente; }
     public Boolean getTelasAntesDormir() { return telasAntesDormir; }
-    public LocalSono getLocalSono() { return localSono; }
+    public SuperficieSono getSuperficieSono() { return superficieSono; }
+    public AmbienteSono getAmbienteSono() { return ambienteSono; }
+    public List<TipoDespertarNoturno> getTiposDespertarNoturno() { return tiposDespertarNoturno; }
     public Boolean getRoncosFrequentes() { return roncosFrequentes; }
     public Boolean getPausasRespiratoriasPercebidas() { return pausasRespiratoriasPercebidas; }
     public Boolean getSonoAgitado() { return sonoAgitado; }
+    public Boolean getRangerDentesDuranteSono() { return rangerDentesDuranteSono; }
+    public Boolean getAcordaBemDisposto() { return acordaBemDisposto; }
     public Boolean getSonolenciaDiurna() { return sonolenciaDiurna; }
     public Boolean getIrritabilidadeCansaco() { return irritabilidadeCansaco; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }

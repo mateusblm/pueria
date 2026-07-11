@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RegistroSonoTest {
 
@@ -46,6 +48,10 @@ class RegistroSonoTest {
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                null,
                 null
         );
 
@@ -63,7 +69,11 @@ class RegistroSonoTest {
                 false,
                 true,
                 false,
-                LocalSono.BERCO,
+                SuperficieSono.BERCO,
+                AmbienteSono.QUARTO_DOS_RESPONSAVEIS,
+                List.of(TipoDespertarNoturno.ACORDA_E_MAMA),
+                false,
+                false,
                 false,
                 false,
                 false,
@@ -72,5 +82,21 @@ class RegistroSonoTest {
                 false,
                 null
         );
+    }
+
+    @Test
+    void deveRegistrarDetalhesDaRotinaNoturnaSemDuplicarDespertares() {
+        DadosSono dados = new DadosSono(LocalDate.now(), null, null, null, null, 2, false, true, false,
+                SuperficieSono.BERCO, AmbienteSono.QUARTO_DOS_RESPONSAVEIS,
+                List.of(TipoDespertarNoturno.ACORDA_E_MAMA, TipoDespertarNoturno.ACORDA_E_MAMA), false, false,
+                false, true, true, false, false, false, null);
+
+        RegistroSono registro = RegistroSono.registrar(UUID.randomUUID(), dados);
+
+        assertEquals(SuperficieSono.BERCO, registro.getSuperficieSono());
+        assertEquals(AmbienteSono.QUARTO_DOS_RESPONSAVEIS, registro.getAmbienteSono());
+        assertEquals(List.of(TipoDespertarNoturno.ACORDA_E_MAMA), registro.getTiposDespertarNoturno());
+        assertTrue(registro.getRangerDentesDuranteSono());
+        assertTrue(registro.getAcordaBemDisposto());
     }
 }

@@ -2,6 +2,7 @@ package br.com.pueria.pueria.sono.dominio;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record DadosSono(
         LocalDate dataRegistro,
@@ -13,10 +14,14 @@ public record DadosSono(
         Boolean dificuldadeIniciarSono,
         Boolean rotinaSonoConsistente,
         Boolean telasAntesDormir,
-        LocalSono localSono,
+        SuperficieSono superficieSono,
+        AmbienteSono ambienteSono,
+        List<TipoDespertarNoturno> tiposDespertarNoturno,
         Boolean roncosFrequentes,
         Boolean pausasRespiratoriasPercebidas,
         Boolean sonoAgitado,
+        Boolean rangerDentesDuranteSono,
+        Boolean acordaBemDisposto,
         Boolean sonolenciaDiurna,
         Boolean irritabilidadeCansaco,
         Boolean preocupacaoFamilia,

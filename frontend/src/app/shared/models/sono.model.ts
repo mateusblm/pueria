@@ -1,4 +1,6 @@
-export type LocalSono = 'BERCO' | 'CAMA_PROPRIA' | 'CAMA_COMPARTILHADA' | 'QUARTO_DOS_RESPONSAVEIS' | 'QUARTO_DA_PROPRIA_CRIANCA' | 'OUTRO' | 'NAO_INFORMADO';
+export type SuperficieSono = 'BERCO' | 'CAMA_PROPRIA' | 'CAMA_COMPARTILHADA' | 'OUTRA' | 'NAO_INFORMADA';
+export type AmbienteSono = 'QUARTO_DOS_RESPONSAVEIS' | 'QUARTO_DA_PROPRIA_CRIANCA' | 'OUTRO' | 'NAO_INFORMADO';
+export type TipoDespertarNoturno = 'ACORDA_E_MAMA' | 'ACORDA_SEM_SE_ALIMENTAR' | 'VOLTA_A_DORMIR_RAPIDO' | 'DEMORA_PARA_VOLTAR_A_DORMIR';
 export type ClassificacaoDuracaoSono = 'SEM_DADOS' | 'ABAIXO_DA_FAIXA' | 'FAIXA_ESPERADA' | 'ACIMA_DA_FAIXA';
 
 export interface AnaliseSono {
@@ -25,10 +27,14 @@ export interface RegistroSono {
   dificuldadeIniciarSono?: boolean | null;
   rotinaSonoConsistente?: boolean | null;
   telasAntesDormir?: boolean | null;
-  localSono: LocalSono;
+  superficieSono: SuperficieSono;
+  ambienteSono: AmbienteSono;
+  tiposDespertarNoturno: TipoDespertarNoturno[];
   roncosFrequentes?: boolean | null;
   pausasRespiratoriasPercebidas?: boolean | null;
   sonoAgitado?: boolean | null;
+  rangerDentesDuranteSono?: boolean | null;
+  acordaBemDisposto?: boolean | null;
   sonolenciaDiurna?: boolean | null;
   irritabilidadeCansaco?: boolean | null;
   preocupacaoFamilia?: boolean | null;
@@ -50,10 +56,14 @@ export interface SalvarRegistroSonoRequest {
   dificuldadeIniciarSono?: boolean | null;
   rotinaSonoConsistente?: boolean | null;
   telasAntesDormir?: boolean | null;
-  localSono: LocalSono;
+  superficieSono: SuperficieSono;
+  ambienteSono: AmbienteSono;
+  tiposDespertarNoturno: TipoDespertarNoturno[];
   roncosFrequentes?: boolean | null;
   pausasRespiratoriasPercebidas?: boolean | null;
   sonoAgitado?: boolean | null;
+  rangerDentesDuranteSono?: boolean | null;
+  acordaBemDisposto?: boolean | null;
   sonolenciaDiurna?: boolean | null;
   irritabilidadeCansaco?: boolean | null;
   preocupacaoFamilia?: boolean | null;

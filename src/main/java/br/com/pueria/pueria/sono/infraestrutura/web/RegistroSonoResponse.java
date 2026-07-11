@@ -1,13 +1,16 @@
 package br.com.pueria.pueria.sono.infraestrutura.web;
 
 import br.com.pueria.pueria.sono.aplicacao.RegistroSonoDetalhado;
-import br.com.pueria.pueria.sono.dominio.LocalSono;
+import br.com.pueria.pueria.sono.dominio.AmbienteSono;
+import br.com.pueria.pueria.sono.dominio.SuperficieSono;
+import br.com.pueria.pueria.sono.dominio.TipoDespertarNoturno;
 import br.com.pueria.pueria.sono.dominio.RegistroSono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
+import java.util.List;
 
 public record RegistroSonoResponse(
         UUID id,
@@ -21,10 +24,14 @@ public record RegistroSonoResponse(
         Boolean dificuldadeIniciarSono,
         Boolean rotinaSonoConsistente,
         Boolean telasAntesDormir,
-        LocalSono localSono,
+        SuperficieSono superficieSono,
+        AmbienteSono ambienteSono,
+        List<TipoDespertarNoturno> tiposDespertarNoturno,
         Boolean roncosFrequentes,
         Boolean pausasRespiratoriasPercebidas,
         Boolean sonoAgitado,
+        Boolean rangerDentesDuranteSono,
+        Boolean acordaBemDisposto,
         Boolean sonolenciaDiurna,
         Boolean irritabilidadeCansaco,
         Boolean preocupacaoFamilia,
@@ -49,10 +56,14 @@ public record RegistroSonoResponse(
                 registro.getDificuldadeIniciarSono(),
                 registro.getRotinaSonoConsistente(),
                 registro.getTelasAntesDormir(),
-                registro.getLocalSono(),
+                registro.getSuperficieSono(),
+                registro.getAmbienteSono(),
+                registro.getTiposDespertarNoturno(),
                 registro.getRoncosFrequentes(),
                 registro.getPausasRespiratoriasPercebidas(),
                 registro.getSonoAgitado(),
+                registro.getRangerDentesDuranteSono(),
+                registro.getAcordaBemDisposto(),
                 registro.getSonolenciaDiurna(),
                 registro.getIrritabilidadeCansaco(),
                 registro.getPreocupacaoFamilia(),

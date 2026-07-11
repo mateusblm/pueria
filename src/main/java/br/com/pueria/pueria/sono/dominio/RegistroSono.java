@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 public class RegistroSono {
@@ -22,10 +23,14 @@ public class RegistroSono {
     private final Boolean dificuldadeIniciarSono;
     private final Boolean rotinaSonoConsistente;
     private final Boolean telasAntesDormir;
-    private final LocalSono localSono;
+    private final SuperficieSono superficieSono;
+    private final AmbienteSono ambienteSono;
+    private final List<TipoDespertarNoturno> tiposDespertarNoturno;
     private final Boolean roncosFrequentes;
     private final Boolean pausasRespiratoriasPercebidas;
     private final Boolean sonoAgitado;
+    private final Boolean rangerDentesDuranteSono;
+    private final Boolean acordaBemDisposto;
     private final Boolean sonolenciaDiurna;
     private final Boolean irritabilidadeCansaco;
     private final Boolean preocupacaoFamilia;
@@ -52,10 +57,14 @@ public class RegistroSono {
         this.dificuldadeIniciarSono = dados.dificuldadeIniciarSono();
         this.rotinaSonoConsistente = dados.rotinaSonoConsistente();
         this.telasAntesDormir = dados.telasAntesDormir();
-        this.localSono = dados.localSono() == null ? LocalSono.NAO_INFORMADO : dados.localSono();
+        this.superficieSono = dados.superficieSono() == null ? SuperficieSono.NAO_INFORMADA : dados.superficieSono();
+        this.ambienteSono = dados.ambienteSono() == null ? AmbienteSono.NAO_INFORMADO : dados.ambienteSono();
+        this.tiposDespertarNoturno = dados.tiposDespertarNoturno() == null ? List.of() : dados.tiposDespertarNoturno().stream().filter(Objects::nonNull).distinct().toList();
         this.roncosFrequentes = dados.roncosFrequentes();
         this.pausasRespiratoriasPercebidas = dados.pausasRespiratoriasPercebidas();
         this.sonoAgitado = dados.sonoAgitado();
+        this.rangerDentesDuranteSono = dados.rangerDentesDuranteSono();
+        this.acordaBemDisposto = dados.acordaBemDisposto();
         this.sonolenciaDiurna = dados.sonolenciaDiurna();
         this.irritabilidadeCansaco = dados.irritabilidadeCansaco();
         this.preocupacaoFamilia = dados.preocupacaoFamilia();
@@ -147,10 +156,14 @@ public class RegistroSono {
     public Boolean getDificuldadeIniciarSono() { return dificuldadeIniciarSono; }
     public Boolean getRotinaSonoConsistente() { return rotinaSonoConsistente; }
     public Boolean getTelasAntesDormir() { return telasAntesDormir; }
-    public LocalSono getLocalSono() { return localSono; }
+    public SuperficieSono getSuperficieSono() { return superficieSono; }
+    public AmbienteSono getAmbienteSono() { return ambienteSono; }
+    public List<TipoDespertarNoturno> getTiposDespertarNoturno() { return tiposDespertarNoturno; }
     public Boolean getRoncosFrequentes() { return roncosFrequentes; }
     public Boolean getPausasRespiratoriasPercebidas() { return pausasRespiratoriasPercebidas; }
     public Boolean getSonoAgitado() { return sonoAgitado; }
+    public Boolean getRangerDentesDuranteSono() { return rangerDentesDuranteSono; }
+    public Boolean getAcordaBemDisposto() { return acordaBemDisposto; }
     public Boolean getSonolenciaDiurna() { return sonolenciaDiurna; }
     public Boolean getIrritabilidadeCansaco() { return irritabilidadeCansaco; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }

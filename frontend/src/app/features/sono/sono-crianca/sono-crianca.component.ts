@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { LocalSono, RegistroSono, SalvarRegistroSonoRequest } from '../../../shared/models/sono.model';
+import { AmbienteSono, RegistroSono, SalvarRegistroSonoRequest, SuperficieSono, TipoDespertarNoturno } from '../../../shared/models/sono.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { SonoService } from '../sono.service';
 
@@ -31,14 +31,26 @@ export class SonoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
-  readonly locaisSono: Opcao<LocalSono>[] = [
+  readonly superficiesSono: Opcao<SuperficieSono>[] = [
     { valor: 'BERCO', label: 'Berço' },
     { valor: 'CAMA_PROPRIA', label: 'Cama própria' },
     { valor: 'CAMA_COMPARTILHADA', label: 'Cama compartilhada' },
+    { valor: 'OUTRA', label: 'Outra' },
+    { valor: 'NAO_INFORMADA', label: 'Não informado' }
+  ];
+
+  readonly ambientesSono: Opcao<AmbienteSono>[] = [
     { valor: 'QUARTO_DOS_RESPONSAVEIS', label: 'Quarto dos responsáveis' },
     { valor: 'QUARTO_DA_PROPRIA_CRIANCA', label: 'Quarto da própria criança' },
     { valor: 'OUTRO', label: 'Outro' },
     { valor: 'NAO_INFORMADO', label: 'Não informado' }
+  ];
+
+  readonly tiposDespertar: Opcao<TipoDespertarNoturno>[] = [
+    { valor: 'ACORDA_E_MAMA', label: 'Acorda e mama/se alimenta' },
+    { valor: 'ACORDA_SEM_SE_ALIMENTAR', label: 'Acorda sem se alimentar' },
+    { valor: 'VOLTA_A_DORMIR_RAPIDO', label: 'Volta a dormir rápido' },
+    { valor: 'DEMORA_PARA_VOLTAR_A_DORMIR', label: 'Demora para voltar a dormir' }
   ];
 
   readonly form = this.fb.group({
@@ -51,10 +63,14 @@ export class SonoCriancaComponent implements OnInit {
     dificuldadeIniciarSono: [false],
     rotinaSonoConsistente: [false],
     telasAntesDormir: [false],
-    localSono: this.fb.nonNullable.control<LocalSono>('NAO_INFORMADO', Validators.required),
+    superficieSono: this.fb.nonNullable.control<SuperficieSono>('NAO_INFORMADA', Validators.required),
+    ambienteSono: this.fb.nonNullable.control<AmbienteSono>('NAO_INFORMADO', Validators.required),
+    tiposDespertarNoturno: this.fb.nonNullable.control<TipoDespertarNoturno[]>([]),
     roncosFrequentes: [false],
     pausasRespiratoriasPercebidas: [false],
     sonoAgitado: [false],
+    rangerDentesDuranteSono: [false],
+    acordaBemDisposto: [false],
     sonolenciaDiurna: [false],
     irritabilidadeCansaco: [false],
     preocupacaoFamilia: [false],
@@ -149,10 +165,14 @@ export class SonoCriancaComponent implements OnInit {
       dificuldadeIniciarSono: !!registro.dificuldadeIniciarSono,
       rotinaSonoConsistente: !!registro.rotinaSonoConsistente,
       telasAntesDormir: !!registro.telasAntesDormir,
-      localSono: registro.localSono,
+      superficieSono: registro.superficieSono,
+      ambienteSono: registro.ambienteSono,
+      tiposDespertarNoturno: registro.tiposDespertarNoturno ?? [],
       roncosFrequentes: !!registro.roncosFrequentes,
       pausasRespiratoriasPercebidas: !!registro.pausasRespiratoriasPercebidas,
       sonoAgitado: !!registro.sonoAgitado,
+      rangerDentesDuranteSono: !!registro.rangerDentesDuranteSono,
+      acordaBemDisposto: !!registro.acordaBemDisposto,
       sonolenciaDiurna: !!registro.sonolenciaDiurna,
       irritabilidadeCansaco: !!registro.irritabilidadeCansaco,
       preocupacaoFamilia: !!registro.preocupacaoFamilia,
@@ -172,10 +192,14 @@ export class SonoCriancaComponent implements OnInit {
       dificuldadeIniciarSono: false,
       rotinaSonoConsistente: false,
       telasAntesDormir: false,
-      localSono: 'NAO_INFORMADO',
+      superficieSono: 'NAO_INFORMADA',
+      ambienteSono: 'NAO_INFORMADO',
+      tiposDespertarNoturno: [],
       roncosFrequentes: false,
       pausasRespiratoriasPercebidas: false,
       sonoAgitado: false,
+      rangerDentesDuranteSono: false,
+      acordaBemDisposto: false,
       sonolenciaDiurna: false,
       irritabilidadeCansaco: false,
       preocupacaoFamilia: false,
@@ -187,8 +211,21 @@ export class SonoCriancaComponent implements OnInit {
     return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`));
   }
 
-  labelLocalSono(valor: LocalSono): string {
-    return this.locaisSono.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
+  labelSuperficieSono(valor: SuperficieSono): string {
+    return this.superficiesSono.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
+  }
+
+  labelAmbienteSono(valor: AmbienteSono): string {
+    return this.ambientesSono.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
+  }
+
+  alternarTipoDespertar(tipo: TipoDespertarNoturno): void {
+    const atual = this.form.controls.tiposDespertarNoturno.value;
+    this.form.controls.tiposDespertarNoturno.setValue(atual.includes(tipo) ? atual.filter((item) => item !== tipo) : [...atual, tipo]);
+  }
+
+  tipoDespertarSelecionado(tipo: TipoDespertarNoturno): boolean {
+    return this.form.controls.tiposDespertarNoturno.value.includes(tipo);
   }
 
   normalizarCampoHorario(campo: 'horarioDormiu' | 'horarioAcordou'): void {
@@ -197,6 +234,8 @@ export class SonoCriancaComponent implements OnInit {
     if (horario) {
       controle.setValue(horario);
     }
+    controle.setErrors(horario && !/^([01]\d|2[0-3]):([0-5]\d)$/.test(horario) ? { horarioInvalido: true } : null);
+    controle.markAsTouched();
   }
 
   formatarDuracao(minutos?: number | null): string {
@@ -243,10 +282,14 @@ export class SonoCriancaComponent implements OnInit {
       dificuldadeIniciarSono: valor.dificuldadeIniciarSono,
       rotinaSonoConsistente: valor.rotinaSonoConsistente,
       telasAntesDormir: valor.telasAntesDormir,
-      localSono: valor.localSono,
+      superficieSono: valor.superficieSono,
+      ambienteSono: valor.ambienteSono,
+      tiposDespertarNoturno: valor.tiposDespertarNoturno,
       roncosFrequentes: valor.roncosFrequentes,
       pausasRespiratoriasPercebidas: valor.pausasRespiratoriasPercebidas,
       sonoAgitado: valor.sonoAgitado,
+      rangerDentesDuranteSono: valor.rangerDentesDuranteSono,
+      acordaBemDisposto: valor.acordaBemDisposto,
       sonolenciaDiurna: valor.sonolenciaDiurna,
       irritabilidadeCansaco: valor.irritabilidadeCansaco,
       preocupacaoFamilia: valor.preocupacaoFamilia,

@@ -3,7 +3,9 @@ package br.com.pueria.pueria.sono.infraestrutura.web;
 import br.com.pueria.pueria.sono.aplicacao.AtualizarRegistroSonoComando;
 import br.com.pueria.pueria.sono.aplicacao.RegistroSonoComando;
 import br.com.pueria.pueria.sono.dominio.DadosSono;
-import br.com.pueria.pueria.sono.dominio.LocalSono;
+import br.com.pueria.pueria.sono.dominio.AmbienteSono;
+import br.com.pueria.pueria.sono.dominio.SuperficieSono;
+import br.com.pueria.pueria.sono.dominio.TipoDespertarNoturno;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +14,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
+import java.util.List;
 
 public record SonoRequest(
         @NotNull LocalDate dataRegistro,
@@ -23,10 +26,14 @@ public record SonoRequest(
         Boolean dificuldadeIniciarSono,
         Boolean rotinaSonoConsistente,
         Boolean telasAntesDormir,
-        LocalSono localSono,
+        SuperficieSono superficieSono,
+        AmbienteSono ambienteSono,
+        List<TipoDespertarNoturno> tiposDespertarNoturno,
         Boolean roncosFrequentes,
         Boolean pausasRespiratoriasPercebidas,
         Boolean sonoAgitado,
+        Boolean rangerDentesDuranteSono,
+        Boolean acordaBemDisposto,
         Boolean sonolenciaDiurna,
         Boolean irritabilidadeCansaco,
         Boolean preocupacaoFamilia,
@@ -51,10 +58,14 @@ public record SonoRequest(
                 dificuldadeIniciarSono,
                 rotinaSonoConsistente,
                 telasAntesDormir,
-                localSono,
+                superficieSono,
+                ambienteSono,
+                tiposDespertarNoturno,
                 roncosFrequentes,
                 pausasRespiratoriasPercebidas,
                 sonoAgitado,
+                rangerDentesDuranteSono,
+                acordaBemDisposto,
                 sonolenciaDiurna,
                 irritabilidadeCansaco,
                 preocupacaoFamilia,
