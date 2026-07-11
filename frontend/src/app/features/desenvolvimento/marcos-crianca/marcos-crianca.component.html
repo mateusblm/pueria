@@ -4,10 +4,15 @@
   <div class="marcos-page__hero">
     <div>
       <p class="pueria-eyebrow">Desenvolvimento</p>
-      <h1 class="pueria-title">Etapas da idade atual</h1>
+      <h1 class="pueria-title">Descobertas de cada fase</h1>
       <p class="pueria-subtitle">
-        Responda um marco por vez. A experiência fica focada na faixa de referência da criança, sem misturar etapas futuras.
+        Observe a rotina com calma. Cada etapa mostra uma habilidade por vez, sem misturar idades futuras.
       </p>
+    </div>
+    <div class="marcos-page__hero-visual" aria-hidden="true">
+      <span class="marcos-orbita marcos-orbita--um"><app-icon name="heart" [size]="25" /></span>
+      <span class="marcos-orbita marcos-orbita--dois"><app-icon name="message" [size]="24" /></span>
+      <span class="marcos-orbita marcos-orbita--tres"><app-icon name="footprints" [size]="25" /></span>
     </div>
   </div>
 
@@ -34,6 +39,15 @@
       <p>{{ progresso().percentual }}% dos marcos desta idade já foram respondidos.</p>
     </section>
 
+    <section class="areas-resumo" aria-label="Áreas do desenvolvimento">
+      @for (area of areasResumo(); track area.area) {
+        <article class="area-resumo" [attr.data-tema]="temaArea(area.area)">
+          <span class="area-resumo__icone"><app-icon [name]="iconeArea(area.area)" [size]="21" /></span>
+          <div><strong>{{ area.label }}</strong><span>{{ labelPendencias(area.pendentes) }}</span></div>
+        </article>
+      }
+    </section>
+
     <div class="modo-tabs" role="tablist" aria-label="Modo de acompanhamento">
       <button type="button" [class.modo-tabs__active]="modo() === 'responder'" (click)="abrirResponder()">Responder etapas</button>
       <button type="button" [class.modo-tabs__active]="modo() === 'resultados'" (click)="abrirResultados()">Ver resultados</button>
@@ -48,7 +62,7 @@
 
           <div class="etapa-card__body">
             <div class="etapa-card__meta">
-              <span class="marco-area">{{ labelArea(marco.area) }}</span>
+              <span class="marco-area" [attr.data-tema]="temaArea(marco.area)"><app-icon [name]="iconeArea(marco.area)" [size]="15" />{{ labelArea(marco.area) }}</span>
               <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
             </div>
 
@@ -134,8 +148,8 @@
 
         <section class="resultado-areas" aria-label="Resultado por área">
           @for (area of resultadoPorArea(); track area.area) {
-            <article class="pueria-card resultado-area">
-              <p class="pueria-eyebrow">{{ area.label }}</p>
+            <article class="pueria-card resultado-area" [attr.data-tema]="temaArea(area.area)">
+              <div class="resultado-area__header"><span class="resultado-area__icone"><app-icon [name]="iconeArea(area.area)" [size]="21" /></span><p class="pueria-eyebrow">{{ area.label }}</p></div>
               <div class="resultado-area__grade">
                 <span><strong>{{ area.observados }}</strong> Sim</span>
                 <span><strong>{{ area.duvidas }}</strong> Dúvidas</span>
@@ -202,7 +216,7 @@
           @for (marco of marcosDaIdade(); track marco.id) {
             <article class="marco-card">
               <div>
-                <span class="marco-area">{{ labelArea(marco.area) }}</span>
+                <span class="marco-area" [attr.data-tema]="temaArea(marco.area)"><app-icon [name]="iconeArea(marco.area)" [size]="15" />{{ labelArea(marco.area) }}</span>
                 <h3>{{ marco.descricao }}</h3>
                 @if (marco.observacao) {
                   <p>{{ marco.observacao }}</p>

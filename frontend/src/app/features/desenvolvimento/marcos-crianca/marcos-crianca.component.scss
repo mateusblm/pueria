@@ -5,19 +5,21 @@
 }
 
 .marcos-page__hero {
-  border: 1px solid rgba(202, 45, 65, 0.10); border-radius: 22px; padding: 26px; background: #fff7f1;
+  align-items: center; background: #fff; border: 1px solid rgba(118, 80, 125, .16); border-left: 5px solid #76507d; border-radius: 8px; display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) 170px; min-height: 190px; overflow: hidden; padding: 26px;
 }
+.marcos-page__hero-visual { background: #eee3f4; border-radius: 49% 51% 44% 56%; height: 138px; justify-self: end; position: relative; width: 150px; }
+.marcos-orbita { align-items: center; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 7px 18px rgba(69, 45, 76, .12); display: flex; height: 54px; justify-content: center; position: absolute; width: 54px; }.marcos-orbita--um { background: #f5dce0; color: #8e4050; left: 15px; top: 26px; }.marcos-orbita--dois { background: #dce9f6; color: #405f86; right: 7px; top: 11px; }.marcos-orbita--tres { background: #dcebdc; bottom: 10px; color: #396246; right: 27px; }
 
 .marcos-page__hero h1, .marcos-page__hero p, .painel-idade h2, .painel-idade p,
 .etapa-card h2, .apoio-card h2, .apoio-card p, .marco-card h3, .marco-card p,
 .resumo-consulta h2, .resumo-consulta p, .resultado-area p, .historico-card p { margin: 0; }
 
 .marcos-page__state, .painel-idade, .apoio-card { padding: 22px; }
-.painel-idade { display: grid; gap: 14px; }
+.painel-idade { border-top: 4px solid #76507d; display: grid; gap: 14px; }
 .painel-idade__header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .painel-idade__header strong { color: var(--pueria-vermelho-profundo); font-size: 1.55rem; }
 
-.progresso { height: 10px; overflow: hidden; border-radius: 999px; background: var(--pueria-rosa-bruma); }
+.progresso { height: 10px; overflow: hidden; border-radius: 4px; background: #ece5ee; }
 .progresso span { display: block; height: 100%; border-radius: inherit; background: var(--pueria-sucesso); transition: width 180ms ease; }
 
 .modo-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -25,23 +27,25 @@
   border: 1px solid var(--pueria-borda); background: #fff; color: var(--pueria-texto);
   cursor: pointer; font: inherit; font-weight: 820;
 }
-.modo-tabs button { min-height: 48px; border-radius: 999px; }
-.modo-tabs__active { border-color: rgba(202, 45, 65, 0.24) !important; background: var(--pueria-rosa-nevoa) !important; color: var(--pueria-vermelho-profundo) !important; }
+.modo-tabs button { min-height: 48px; border-radius: 6px; }
+.modo-tabs__active { border-color: rgba(118, 80, 125, .38) !important; background: #eee3f4 !important; color: #61426c !important; }
 
-.etapa-card { overflow: hidden; padding: 0; }
+.areas-resumo { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }.area-resumo { align-items: center; background: #fff; border: 1px solid #e9dfda; border-top: 3px solid var(--area-cor, #76507d); display: flex; gap: 10px; min-height: 78px; padding: 11px; }.area-resumo__icone { align-items: center; background: var(--area-fundo, #eee3f4); border-radius: 50%; color: var(--area-cor, #76507d); display: inline-flex; height: 38px; justify-content: center; width: 38px; }.area-resumo div { display: grid; gap: 3px; }.area-resumo span:not(.area-resumo__icone) { color: var(--pueria-texto-suave); font-size: .8rem; }.area-resumo[data-tema='social'], .resultado-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.area-resumo[data-tema='linguagem'], .resultado-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.area-resumo[data-tema='cognicao'], .resultado-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.area-resumo[data-tema='movimento'], .resultado-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
+
+.etapa-card { border-top: 4px solid #76507d; overflow: hidden; padding: 0; }
 .etapa-card__media img { display: block; width: 100%; max-height: 310px; object-fit: cover; }
 .etapa-card__body { display: grid; gap: 18px; padding: 22px; }
 .etapa-card__meta, .etapa-nav, .marco-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .etapa-card h2 { color: var(--pueria-texto); font-size: clamp(1.35rem, 2vw, 1.85rem); line-height: 1.25; }
 
 .marco-area, .marco-status {
-  display: inline-flex; width: fit-content; border-radius: 999px; font-size: 0.78rem; font-weight: 850; padding: 7px 10px;
+  align-items: center; display: inline-flex; gap: 5px; width: fit-content; border-radius: 4px; font-size: 0.78rem; font-weight: 850; padding: 7px 10px;
 }
-.marco-area { background: var(--pueria-folha-clara); color: var(--pueria-folha-escura); }
+.marco-area { background: var(--area-fundo, var(--pueria-folha-clara)); color: var(--area-cor, var(--pueria-folha-escura)); }.marco-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.marco-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.marco-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.marco-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
 .marco-status { background: var(--pueria-rosa-bruma); color: var(--pueria-texto-suave); }
 
 .marco-card__actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
-.resposta { min-height: 52px; border-radius: 14px; padding: 10px; }
+.resposta { min-height: 52px; border-radius: 6px; padding: 10px; }
 .resposta--active.resposta--sim { background: var(--pueria-folha-clara); border-color: rgba(55, 107, 75, 0.28); color: var(--pueria-folha-escura); }
 .resposta--active.resposta--duvida { background: #fff4c2; border-color: rgba(214, 168, 79, 0.34); color: #6f5012; }
 .resposta--active.resposta--ainda-nao { background: #ffe7e8; border-color: rgba(202, 45, 65, 0.24); color: var(--pueria-vermelho-profundo); }
@@ -49,7 +53,7 @@
 
 .nota-marco { display: grid; gap: 8px; color: var(--pueria-texto-suave); font-size: 0.86rem; }
 .nota-marco textarea {
-  width: 100%; resize: vertical; border: 1px solid var(--pueria-borda); border-radius: 14px;
+  width: 100%; resize: vertical; border: 1px solid var(--pueria-borda); border-radius: 6px;
   color: var(--pueria-texto); font: inherit; line-height: 1.45; padding: 12px;
 }
 
@@ -59,39 +63,40 @@
 .apoio-card--alerta { background: #fff8ee; }
 .apoio-card ul { display: grid; gap: 8px; margin: 0; padding-left: 18px; }
 
-.resumo-consulta { display: grid; gap: 18px; padding: 22px; }
+.resumo-consulta { border-top: 4px solid #47688f; display: grid; gap: 18px; padding: 22px; }
 .resumo-consulta__numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .resumo-consulta__numeros article {
-  display: grid; gap: 4px; border: 1px solid var(--pueria-borda); border-radius: 16px; background: #fff; padding: 14px;
+  display: grid; gap: 4px; border: 1px solid var(--pueria-borda); border-radius: 6px; background: #fff; padding: 14px;
 }
 .resumo-consulta__numeros strong { color: var(--pueria-vermelho-profundo); font-size: 1.35rem; }
 .resumo-consulta__numeros span, .resumo-consulta__acao p { color: var(--pueria-texto-suave); font-size: 0.9rem; }
 .resumo-consulta__acao { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
 
 .resultado-areas { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-.resultado-area { display: grid; gap: 12px; padding: 18px; }
+.resultado-area { border-top: 4px solid var(--area-cor, #76507d); display: grid; gap: 12px; padding: 18px; }.resultado-area__header { align-items: center; display: flex; gap: 8px; }.resultado-area__header .pueria-eyebrow { margin: 0; }.resultado-area__icone { align-items: center; background: var(--area-fundo, #eee3f4); border-radius: 50%; color: var(--area-cor, #76507d); display: inline-flex; height: 38px; justify-content: center; width: 38px; }
 .resultado-area__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .resultado-area__grade span {
-  border-radius: 12px; background: #fffaf4; color: var(--pueria-texto-suave); font-size: 0.86rem; padding: 10px;
+  border-radius: 4px; background: #fffaf4; color: var(--pueria-texto-suave); font-size: 0.86rem; padding: 10px;
 }
 .resultado-area__grade strong { color: var(--pueria-texto); }
 
 .historico-card { display: grid; gap: 12px; padding: 22px; }
 .historico-lista article {
   display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center;
-  border: 1px solid var(--pueria-borda); border-radius: 14px; padding: 12px;
+  border: 1px solid var(--pueria-borda); border-radius: 6px; padding: 12px;
 }
 .historico-lista span, .historico-lista small { color: var(--pueria-texto-suave); }
 .historico-lista__atual { background: var(--pueria-rosa-nevoa); border-color: rgba(202, 45, 65, 0.18) !important; }
 
 .marco-card {
-  border: 1px solid var(--pueria-borda); border-radius: 18px; background: #fff; padding: 16px;
+  border: 1px solid var(--pueria-borda); border-left: 4px solid #76507d; border-radius: 6px; background: #fff; padding: 16px;
 }
 .marco-card div { display: grid; gap: 8px; }
 .marco-card h3 { color: var(--pueria-texto); font-size: 1rem; line-height: 1.35; }
 .marco-card p { color: var(--pueria-texto-suave); font-size: 0.9rem; }
 
 @media (max-width: 620px) {
+  .marcos-page__hero { grid-template-columns: 1fr 98px; min-height: 164px; padding: 18px; }.marcos-page__hero-visual { height: 96px; width: 98px; }.marcos-orbita { border-width: 3px; height: 38px; width: 38px; }.marcos-orbita--um { left: 2px; top: 21px; }.marcos-orbita--dois { right: 1px; top: 2px; }.marcos-orbita--tres { bottom: 1px; right: 13px; }
   .marcos-page__hero, .painel-idade, .etapa-card__body, .apoio-card { padding: 18px; }
   .marco-card__actions, .modo-tabs, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
   .etapa-nav { align-items: stretch; flex-direction: column; }

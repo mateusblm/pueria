@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AreaDesenvolvimento, MarcoDesenvolvimento, StatusMarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
 import { DesenvolvimentoService } from '../desenvolvimento.service';
+import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 
 type AreaResumo = {
   area: AreaDesenvolvimento;
@@ -30,7 +31,7 @@ type ModoTela = 'responder' | 'resultados';
 
 @Component({
   selector: 'app-marcos-crianca',
-  imports: [RouterLink],
+  imports: [RouterLink, AppIconComponent],
   templateUrl: './marcos-crianca.component.html',
   styleUrl: './marcos-crianca.component.scss'
 })
@@ -211,6 +212,26 @@ export class MarcosCriancaComponent implements OnInit {
       MOTOR: 'Movimento'
     };
     return labels[area] ?? area;
+  }
+
+  iconeArea(area: AreaDesenvolvimento): AppIconName {
+    const icones: Record<AreaDesenvolvimento, AppIconName> = {
+      SOCIAL_EMOCIONAL: 'heart',
+      LINGUAGEM_COMUNICACAO: 'message',
+      COGNITIVO: 'brain',
+      MOTOR: 'footprints'
+    };
+    return icones[area];
+  }
+
+  temaArea(area: AreaDesenvolvimento): string {
+    const temas: Record<AreaDesenvolvimento, string> = {
+      SOCIAL_EMOCIONAL: 'social',
+      LINGUAGEM_COMUNICACAO: 'linguagem',
+      COGNITIVO: 'cognicao',
+      MOTOR: 'movimento'
+    };
+    return temas[area];
   }
 
   labelStatus(status: StatusMarcoDesenvolvimento): string {
