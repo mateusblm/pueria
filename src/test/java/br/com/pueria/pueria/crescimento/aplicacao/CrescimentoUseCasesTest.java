@@ -5,6 +5,7 @@ import br.com.pueria.pueria.crescimento.dominio.MedidaCrescimento;
 import br.com.pueria.pueria.crescimento.dominio.MedidaCrescimentoRepositorio;
 import br.com.pueria.pueria.crescimento.dominio.OrigemMedidaCrescimento;
 import br.com.pueria.pueria.crescimento.dominio.CurvaOmsCrescimentoService;
+import br.com.pueria.pueria.crescimento.dominio.IndicadorCurvaCrescimento;
 import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.CriancaRepositorio;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
@@ -155,7 +156,11 @@ class CrescimentoUseCasesTest {
         List<AvaliacaoCurvaCrescimento> avaliacoes = ambiente.listarAvaliacoesCurvaUseCase.executar(crianca.getId(), "mateus@email.com");
 
         assertEquals(1, avaliacoes.size());
-        assertEquals(3, avaliacoes.getFirst().resultados().size());
+        assertEquals(5, avaliacoes.getFirst().resultados().size());
+        assertTrue(avaliacoes.getFirst().resultados().stream()
+                .anyMatch(resultado -> resultado.indicador() == IndicadorCurvaCrescimento.PESO_COMPRIMENTO));
+        assertTrue(avaliacoes.getFirst().resultados().stream()
+                .anyMatch(resultado -> resultado.indicador() == IndicadorCurvaCrescimento.IMC_IDADE));
         assertEquals(0.0, avaliacoes.getFirst().resultados().getFirst().zScore(), 0.001);
     }
 

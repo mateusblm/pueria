@@ -20,6 +20,7 @@ public class CurvaOmsCrescimentoService {
     private static final String BASE = "oms/child-growth-standards/";
 
     private final Map<IndicadorCurvaCrescimento, Map<Sexo, ParametroLmsOms[]>> tabelas = new EnumMap<>(IndicadorCurvaCrescimento.class);
+    private final Map<Sexo, ParametroLmsOms[]> pesoPorComprimento = new EnumMap<>(Sexo.class);
 
     public CurvaOmsCrescimentoService() {
         carregar(IndicadorCurvaCrescimento.PESO_IDADE, Sexo.MASCULINO, "peso_idade_meninos_0_5.csv");
@@ -28,6 +29,33 @@ public class CurvaOmsCrescimentoService {
         carregar(IndicadorCurvaCrescimento.COMPRIMENTO_IDADE, Sexo.FEMININO, "comprimento_idade_meninas_0_5.csv");
         carregar(IndicadorCurvaCrescimento.PERIMETRO_CEFALICO_IDADE, Sexo.MASCULINO, "perimetro_cefalico_idade_meninos_0_5.csv");
         carregar(IndicadorCurvaCrescimento.PERIMETRO_CEFALICO_IDADE, Sexo.FEMININO, "perimetro_cefalico_idade_meninas_0_5.csv");
+        carregar(IndicadorCurvaCrescimento.IMC_IDADE, Sexo.MASCULINO, "imc_idade_meninos_0_5.csv");
+        carregar(IndicadorCurvaCrescimento.IMC_IDADE, Sexo.FEMININO, "imc_idade_meninas_0_5.csv");
+        pesoPorComprimento.put(Sexo.MASCULINO, lerArquivo("peso_comprimento_meninos_0_2.csv"));
+        pesoPorComprimento.put(Sexo.FEMININO, lerArquivo("peso_comprimento_meninas_0_2.csv"));
+    }
+
+    public Optional<ResultadoCurvaCrescimento> avaliarPesoPorComprimento(
+            Sexo sexo,
+            BigDecimal comprimentoCm,
+            BigDecimal pesoKg,
+            int idadeDias
+    ) {
+        if (pesoKg == null || comprimentoCm == null || sexo == null || sexo == Sexo.NAO_INFORMADO) {
+            return Optional.empty();
+        }
+
+        int chaveMeioCentimetro = (int) Math.round(comprimentoCm.doubleValue() * 2.0);
+        ParametroLmsOms[] linhas = pesoPorComprimento.get(sexo);
+        ParametroLmsOms parametro = linhas == null || chaveMeioCentimetro < 0 || chaveMeioCentimetro >= linhas.length
+                ? null
+                : linhas[chaveMeioCentimetro];
+        return avaliarComParametro(
+                IndicadorCurvaCrescimento.PESO_COMPRIMENTO,
+                pesoKg,
+                idadeDias,
+                parametro
+        );
     }
 
     public Optional<ResultadoCurvaCrescimento> avaliar(IndicadorCurvaCrescimento indicador, Sexo sexo, int idadeDias, BigDecimal valor) {
@@ -45,13 +73,25 @@ public class CurvaOmsCrescimentoService {
             return Optional.empty();
         }
 
+        return avaliarComParametro(indicador, valor, idadeDias, parametro);
+    }
+
+    private Optional<ResultadoCurvaCrescimento> avaliarComParametro(
+            IndicadorCurvaCrescimento indicador,
+            BigDecimal valor,
+            int referencia,
+            ParametroLmsOms parametro
+    ) {
+        if (parametro == null) {
+            return Optional.empty();
+        }
         double zScore = calcularZScore(valor.doubleValue(), parametro);
         double percentil = normalAcumulada(zScore) * 100.0;
         return Optional.of(new ResultadoCurvaCrescimento(
                 indicador,
                 valor,
                 indicador.getUnidade(),
-                idadeDias,
+                referencia,
                 arredondar(zScore, 3),
                 arredondar(percentil, 2),
                 ClassificacaoCurvaCrescimento.porZScore(zScore),
@@ -67,11 +107,17 @@ public class CurvaOmsCrescimentoService {
     private ParametroLmsOms[] lerArquivo(String arquivo) {
         ClassPathResource resource = new ClassPathResource(BASE + arquivo);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
-            return reader.lines()
+            ParametroLmsOms[] valores = reader.lines()
                     .skip(1)
                     .filter(linha -> !linha.isBlank())
                     .map(this::parsearLinha)
                     .toArray(ParametroLmsOms[]::new);
+            int maiorChave = java.util.Arrays.stream(valores).mapToInt(ParametroLmsOms::dia).max().orElse(-1);
+            ParametroLmsOms[] indexados = new ParametroLmsOms[maiorChave + 1];
+            for (ParametroLmsOms valor : valores) {
+                indexados[valor.dia()] = valor;
+            }
+            return indexados;
         } catch (IOException exception) {
             throw new IllegalStateException("Não foi possível carregar a tabela OMS " + arquivo, exception);
         }

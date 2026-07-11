@@ -279,6 +279,16 @@ export class CrescimentoCriancaComponent implements OnInit {
         acompanha: 'Acompanha o crescimento da cabeça, especialmente relevante nos primeiros anos de vida.',
         interpretacao: 'A leitura depende muito de medidas bem feitas e da evolução ao longo das consultas. Um ponto isolado não define diagnóstico.',
         consulta: 'Converse com o pediatra se houver mudança rápida de faixa, medida muito diferente da anterior ou preocupação associada ao desenvolvimento.'
+      },
+      PESO_COMPRIMENTO: {
+        acompanha: 'Relaciona o peso ao comprimento da criança, sem depender diretamente da idade. A OMS usa este indicador do nascimento aos 2 anos.',
+        interpretacao: 'Ajuda a observar se peso e comprimento estão proporcionais. A trajetória e a qualidade da medida são mais úteis do que um ponto isolado.',
+        consulta: 'Converse com o pediatra se a proporção mudar de forma persistente ou se houver preocupação com alimentação, perda de peso ou ganho acelerado.'
+      },
+      IMC_IDADE: {
+        acompanha: 'Relaciona peso e comprimento e compara o resultado com crianças da mesma idade e sexo nas curvas da OMS.',
+        interpretacao: 'Na primeira infância, o IMC muda naturalmente com a idade. Por isso, o valor deve ser interpretado na curva, nunca como um número adulto.',
+        consulta: 'Leve para a consulta mudanças persistentes de faixa. Este indicador não deve orientar restrição alimentar sem avaliação profissional.'
       }
     };
     return detalhes[indicador] ?? {
@@ -289,13 +299,16 @@ export class CrescimentoCriancaComponent implements OnInit {
   }
 
   textoFamilia(resultado: ResultadoCurvaCrescimento): string {
+    const referencia = resultado.indicador === 'PESO_COMPRIMENTO'
+      ? 'para o comprimento'
+      : 'para a idade';
     if (resultado.classificacao === 'FAIXA_ESPERADA') {
-      return 'Está dentro da faixa esperada para a idade.';
+      return `Está dentro da faixa esperada ${referencia}.`;
     }
     if (resultado.classificacao === 'ABAIXO' || resultado.classificacao === 'MUITO_ABAIXO') {
-      return 'Ficou abaixo da faixa esperada para a idade.';
+      return `Ficou abaixo da faixa esperada ${referencia}.`;
     }
-    return 'Ficou acima da faixa esperada para a idade.';
+    return `Ficou acima da faixa esperada ${referencia}.`;
   }
 
   textoContextoIdade(avaliacao: AvaliacaoCurvaCrescimento | null): string {
@@ -387,7 +400,9 @@ export class CrescimentoCriancaComponent implements OnInit {
     const indicadores = [
       'PESO_IDADE',
       'COMPRIMENTO_IDADE',
-      'PERIMETRO_CEFALICO_IDADE'
+      'PERIMETRO_CEFALICO_IDADE',
+      'PESO_COMPRIMENTO',
+      'IMC_IDADE'
     ];
 
     return indicadores
@@ -469,7 +484,9 @@ export class CrescimentoCriancaComponent implements OnInit {
     const titulos: Record<string, string> = {
       PESO_IDADE: 'Peso',
       COMPRIMENTO_IDADE: 'Comprimento/estatura',
-      PERIMETRO_CEFALICO_IDADE: 'Perímetro cefálico'
+      PERIMETRO_CEFALICO_IDADE: 'Perímetro cefálico',
+      PESO_COMPRIMENTO: 'Peso por comprimento',
+      IMC_IDADE: 'IMC por idade'
     };
     return titulos[indicador] ?? indicador;
   }

@@ -25,7 +25,12 @@ export interface SalvarMedidaCrescimentoRequest {
   observacao?: string | null;
 }
 
-export type IndicadorCurvaCrescimento = 'PESO_IDADE' | 'COMPRIMENTO_IDADE' | 'PERIMETRO_CEFALICO_IDADE';
+export type IndicadorCurvaCrescimento =
+  | 'PESO_IDADE'
+  | 'COMPRIMENTO_IDADE'
+  | 'PERIMETRO_CEFALICO_IDADE'
+  | 'PESO_COMPRIMENTO'
+  | 'IMC_IDADE';
 export type ClassificacaoCurvaCrescimento = 'MUITO_ABAIXO' | 'ABAIXO' | 'FAIXA_ESPERADA' | 'ACIMA' | 'MUITO_ACIMA';
 
 export interface ResultadoCurvaCrescimento {

@@ -48,4 +48,42 @@ class CurvaOmsCrescimentoServiceTest {
                 new BigDecimal("3.3")
         ).isEmpty());
     }
+
+    @Test
+    void deveCalcularPesoPorComprimentoComTabelaOficialOms() {
+        ResultadoCurvaCrescimento resultado = service.avaliarPesoPorComprimento(
+                Sexo.MASCULINO,
+                new BigDecimal("68.0"),
+                new BigDecimal("7.9674"),
+                100
+        ).orElseThrow();
+
+        assertEquals(IndicadorCurvaCrescimento.PESO_COMPRIMENTO, resultado.indicador());
+        assertEquals(0.0, resultado.zScore(), 0.001);
+        assertEquals(50.0, resultado.percentil(), 0.01);
+        assertEquals(100, resultado.idadeDias());
+    }
+
+    @Test
+    void deveCalcularImcPorIdadeComTabelaOficialOms() {
+        ResultadoCurvaCrescimento resultado = service.avaliar(
+                IndicadorCurvaCrescimento.IMC_IDADE,
+                Sexo.FEMININO,
+                100,
+                new BigDecimal("16.4673")
+        ).orElseThrow();
+
+        assertEquals(0.0, resultado.zScore(), 0.001);
+        assertEquals(50.0, resultado.percentil(), 0.01);
+    }
+
+    @Test
+    void naoDeveCalcularPesoPorComprimentoForaDaFaixaOficial() {
+        assertTrue(service.avaliarPesoPorComprimento(
+                Sexo.FEMININO,
+                new BigDecimal("44.5"),
+                new BigDecimal("2.5"),
+                10
+        ).isEmpty());
+    }
 }

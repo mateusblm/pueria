@@ -54,6 +54,30 @@ public class ListarAvaliacoesCurvaCrescimentoUseCase {
                 .ifPresent(resultados::add);
         curvaPara(idade, IndicadorCurvaCrescimento.PERIMETRO_CEFALICO_IDADE, crianca.getSexo(), medida.getPerimetroCefalicoCm())
                 .ifPresent(resultados::add);
+        if (!usaIntergrowth(idade)) {
+            if (idade.idadeCronologicaDias() <= 2 * 365) {
+                curvaOmsService.avaliarPesoPorComprimento(
+                        crianca.getSexo(),
+                        medida.getComprimentoCm(),
+                        medida.getPesoKg(),
+                        idade.idadeUsadaDias()
+                ).ifPresent(resultados::add);
+            }
+            if (medida.getPesoKg() != null && medida.getComprimentoCm() != null) {
+                java.math.BigDecimal alturaMetros = medida.getComprimentoCm().movePointLeft(2);
+                java.math.BigDecimal imc = medida.getPesoKg().divide(
+                        alturaMetros.multiply(alturaMetros),
+                        4,
+                        java.math.RoundingMode.HALF_UP
+                );
+                curvaOmsService.avaliar(
+                        IndicadorCurvaCrescimento.IMC_IDADE,
+                        crianca.getSexo(),
+                        idade.idadeUsadaDias(),
+                        imc
+                ).ifPresent(resultados::add);
+            }
+        }
 
         return new AvaliacaoCurvaCrescimento(
                 medida.getId(),
@@ -88,10 +112,15 @@ public class ListarAvaliacoesCurvaCrescimentoUseCase {
 
     private java.util.Optional<ResultadoCurvaCrescimento> curvaPara(IdadeParaCurva idade, IndicadorCurvaCrescimento indicador, br.com.pueria.pueria.criancas.dominio.Sexo sexo, java.math.BigDecimal valor) {
         int idadePosMenstrualDias = idade.idadeCronologicaDias() + idade.semanasGestacionais() * 7;
-        if (idade.prematura() && idadePosMenstrualDias >= 27 * 7 && idadePosMenstrualDias < 64 * 7) {
+        if (usaIntergrowth(idade)) {
             return curvaIntergrowthService.avaliar(indicador, sexo, idadePosMenstrualDias, valor);
         }
         return curvaOmsService.avaliar(indicador, sexo, idade.idadeUsadaDias(), valor);
+    }
+
+    private boolean usaIntergrowth(IdadeParaCurva idade) {
+        int idadePosMenstrualDias = idade.idadeCronologicaDias() + idade.semanasGestacionais() * 7;
+        return idade.prematura() && idadePosMenstrualDias >= 27 * 7 && idadePosMenstrualDias < 64 * 7;
     }
 
     private boolean deveEstenderCorrecaoAteTresAnos(Crianca crianca) {

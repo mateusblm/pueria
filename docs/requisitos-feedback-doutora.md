@@ -106,7 +106,7 @@ Status usados:
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| CRE-01 | Usar OMS 2006 como curva principal para crianças nascidas a termo. | Parcial | Peso/idade, comprimento/idade e perímetro cefálico/idade usam OMS; peso/comprimento e IMC/idade continuam pendentes. |
+| CRE-01 | Usar OMS 2006 como curva principal para crianças nascidas a termo. | Implementado | Peso/idade, comprimento/idade, perímetro cefálico/idade, peso/comprimento até 2 anos e IMC/idade usam os parâmetros LMS oficiais da OMS. |
 | CRE-02 | Para prematuros com IG atual calculada menor que 64 semanas, usar INTERGROWTH-21st Preterm. | Implementado | As seis tabelas oficiais foram versionadas e o cálculo usa idade pós-menstrual entre 27 e menos de 64 semanas. |
 | CRE-03 | Para prematuros após 64 semanas de IG atual calculada, usar OMS 2006 com idade corrigida. | Implementado | A transição ocorre a partir de 64 semanas pós-menstruais. |
 | CRE-04 | Usar idade corrigida até 24 meses cronológicos. | Implementado | Regra aplicada no backend; a extensão para 36 meses permanece separada para prematuros extremos. |

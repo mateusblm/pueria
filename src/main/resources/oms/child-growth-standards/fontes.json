@@ -52,5 +52,41 @@
     "url": "https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/head-circumference-for-age/expanded-tables/hcfa-girls-zscore-expanded-tables.xlsx?sfvrsn=3a34b8b0_8",
     "rows": 1857,
     "downloadedAt": "2026-07-05T15:06:38.109Z"
+  },
+  {
+    "source": "WHO Child Growth Standards z-score table",
+    "indicator": "PESO_COMPRIMENTO",
+    "sex": "MASCULINO",
+    "file": "peso_comprimento_meninos_0_2.csv",
+    "url": "https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/weight-for-length-height/wfl_boys_0-to-2-years_zscores.xlsx?sfvrsn=e27a9da3_7",
+    "rows": 131,
+    "downloadedAt": "2026-07-11"
+  },
+  {
+    "source": "WHO Child Growth Standards z-score table",
+    "indicator": "PESO_COMPRIMENTO",
+    "sex": "FEMININO",
+    "file": "peso_comprimento_meninas_0_2.csv",
+    "url": "https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/weight-for-length-height/wfl_girls_0-to-2-years_zscores.xlsx?sfvrsn=288bc4e4_7",
+    "rows": 131,
+    "downloadedAt": "2026-07-11"
+  },
+  {
+    "source": "WHO Child Growth Standards expanded z-score table",
+    "indicator": "IMC_IDADE",
+    "sex": "MASCULINO",
+    "file": "imc_idade_meninos_0_5.csv",
+    "url": "https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/body-mass-index-for-age/expanded-tables/bfa-boys-zscore-expanded-tables.xlsx?sfvrsn=f8e1fbe2_10",
+    "rows": 1857,
+    "downloadedAt": "2026-07-11"
+  },
+  {
+    "source": "WHO Child Growth Standards expanded z-score table",
+    "indicator": "IMC_IDADE",
+    "sex": "FEMININO",
+    "file": "imc_idade_meninas_0_5.csv",
+    "url": "https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/body-mass-index-for-age/expanded-tables/bfa-girls-zscore-expanded-tables.xlsx?sfvrsn=ae4cb8d1_12",
+    "rows": 1857,
+    "downloadedAt": "2026-07-11"
   }
 ]
