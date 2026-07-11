@@ -10,9 +10,11 @@
 }
 
 .criancas-page__hero {
+  border-left: 5px solid var(--pueria-vermelho-flor);
   display: grid;
   gap: 18px;
 }
+.criancas-page__hero-icon { align-items: center; background: #f8dce0; border-radius: 50%; color: var(--pueria-vermelho-profundo); display: inline-flex; height: 54px; justify-content: center; width: 54px; }
 
 .criancas-page__hero .pueria-button,
 .criancas-page__empty .pueria-button {
@@ -53,11 +55,13 @@
 }
 
 .crianca-card {
+  border-top: 4px solid #6b9274;
   display: grid;
   gap: 18px;
   padding: 22px;
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
+.crianca-card__identidade { align-items: center; display: flex; gap: .7rem; }.crianca-card__identidade > span { align-items: center; background: #dcebdd; border-radius: 50%; color: #3c654b; display: inline-flex; height: 42px; justify-content: center; width: 42px; }.crianca-card__identidade .pueria-eyebrow { margin-bottom: 3px; }
 
 .crianca-card:hover {
   transform: translateY(-2px);

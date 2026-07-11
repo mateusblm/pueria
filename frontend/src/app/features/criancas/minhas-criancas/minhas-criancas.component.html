@@ -1,5 +1,6 @@
 <section class="criancas-page">
   <div class="criancas-page__hero pueria-card">
+    <span class="criancas-page__hero-icon"><app-icon name="users" [size]="31" /></span>
     <p class="pueria-eyebrow">Família</p>
     <h1 class="pueria-title">Minhas crianças</h1>
     <p class="pueria-subtitle">
@@ -29,8 +30,7 @@
       @for (crianca of criancas(); track crianca.id) {
         <article class="crianca-card pueria-card">
           <div>
-            <p class="pueria-eyebrow">Perfil</p>
-            <h2>{{ crianca.nome }}</h2>
+            <div class="crianca-card__identidade"><span><app-icon name="baby" [size]="23" /></span><div><p class="pueria-eyebrow">Perfil</p><h2>{{ crianca.nome }}</h2></div></div>
             <p>{{ calcularIdade(crianca.dataNascimento) }}</p>
           </div>
           <dl>

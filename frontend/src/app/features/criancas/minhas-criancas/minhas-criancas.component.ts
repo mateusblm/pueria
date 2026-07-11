@@ -4,10 +4,11 @@ import { RouterLink } from '@angular/router';
 import { finalize, TimeoutError } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 @Component({
   selector: 'app-minhas-criancas',
-  imports: [RouterLink],
+  imports: [RouterLink, AppIconComponent],
   templateUrl: './minhas-criancas.component.html',
   styleUrl: './minhas-criancas.component.scss'
 })

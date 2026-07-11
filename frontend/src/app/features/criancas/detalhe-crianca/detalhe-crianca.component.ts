@@ -14,6 +14,7 @@ import { CrescimentoService } from '../../crescimento/crescimento.service';
 import { DesenvolvimentoService } from '../../desenvolvimento/desenvolvimento.service';
 import { SonoService } from '../../sono/sono.service';
 import { TelasService } from '../../telas/telas.service';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { TransitoIntestinalService } from '../../transito-intestinal/transito-intestinal.service';
 import { CriancasService } from '../criancas.service';
 
@@ -47,7 +48,7 @@ type PainelAcompanhamento = {
 
 @Component({
   selector: 'app-detalhe-crianca',
-  imports: [RouterLink],
+  imports: [RouterLink, AppIconComponent],
   templateUrl: './detalhe-crianca.component.html',
   styleUrl: './detalhe-crianca.component.scss'
 })

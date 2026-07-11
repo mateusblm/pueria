@@ -19,10 +19,12 @@
 }
 
 .detalhe-page__hero {
+  border-left: 5px solid var(--pueria-vermelho-flor);
   align-items: center;
   display: grid;
   gap: 20px;
 }
+.detalhe-page__identidade { align-items: center; display: flex; gap: .75rem; }.detalhe-page__identidade > span { align-items: center; background: #f8dce0; border-radius: 50%; color: var(--pueria-vermelho-profundo); display: inline-flex; height: 54px; justify-content: center; width: 54px; }
 
 .detalhe-page__actions {
   display: grid;
