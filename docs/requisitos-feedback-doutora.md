@@ -103,10 +103,10 @@ Status usados:
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| CRE-01 | Usar OMS 2006 como curva principal para crianças nascidas a termo. | Parcial | Já há parte da OMS, mas faltam peso/comprimento e IMC/idade. |
-| CRE-02 | Para prematuros com IG atual calculada menor que 64 semanas, usar INTERGROWTH-21st Preterm. | Pendente | Exige importar dataset INTERGROWTH e calcular IG atual. |
-| CRE-03 | Para prematuros após 64 semanas de IG atual calculada, usar OMS 2006 com idade corrigida. | Parcial | Idade corrigida já existe, mas regra de transição por 64 semanas ainda precisa ser explícita. |
-| CRE-04 | Usar idade corrigida até 24 meses cronológicos. | Parcial | Validar regra atual no backend e exibir texto simples. |
+| CRE-01 | Usar OMS 2006 como curva principal para crianças nascidas a termo. | Parcial | Peso/idade, comprimento/idade e perímetro cefálico/idade usam OMS; peso/comprimento e IMC/idade continuam pendentes. |
+| CRE-02 | Para prematuros com IG atual calculada menor que 64 semanas, usar INTERGROWTH-21st Preterm. | Implementado | As seis tabelas oficiais foram versionadas e o cálculo usa idade pós-menstrual entre 27 e menos de 64 semanas. |
+| CRE-03 | Para prematuros após 64 semanas de IG atual calculada, usar OMS 2006 com idade corrigida. | Implementado | A transição ocorre a partir de 64 semanas pós-menstruais. |
+| CRE-04 | Usar idade corrigida até 24 meses cronológicos. | Implementado | Regra aplicada no backend; a extensão para 36 meses permanece separada para prematuros extremos. |
 | CRE-05 | Permitir extensão da idade corrigida até 36 meses para prematuros extremos apenas em modo profissional. | Pendente | Futuro, depende de perfil profissional/configuração. |
 | CRE-06 | Se T21/Down confirmado, ativar curva CDC/Zemel 2015 após fase de prematuridade. | Pendente | Precisa campo clínico e dataset. |
 | CRE-07 | Se Turner confirmado em menina, ativar curva específica para crescimento linear e velocidade de crescimento. | Pesquisa/validação | Precisa definir fonte/dataset mais adequado antes de implementar. |
@@ -137,10 +137,10 @@ Status usados:
 | MED-02 | Peso em gramas ou kg. | Parcial | Entrada já aceita kg no front, banco usa gramas. Validar tolerância a vírgula. |
 | MED-03 | Comprimento em cm. | Implementado | Já existe. |
 | MED-04 | Perímetro cefálico em cm. | Implementado | Já existe. |
-| MED-05 | Local da medida: casa, consultório, posto de saúde, hospital. | Pendente | Exige novo campo. |
-| MED-06 | Quem mediu: mãe/pai, pediatra, enfermagem, outro. | Pendente | Exige novo campo. |
-| MED-07 | Observação opcional. | Pendente | Exige novo campo. |
-| MED-08 | Avisar que medida em casa pode ter maior variação. | Pendente | Mensagem de apoio, não bloqueio. |
+| MED-05 | Local da medida: casa, consultório, posto de saúde, hospital. | Implementado | Campo de local ampliado no registro da medida. |
+| MED-06 | Quem mediu: mãe/pai, pediatra, enfermagem, outro. | Implementado | Campo opcional incluído no registro da medida. |
+| MED-07 | Observação opcional. | Implementado | Já disponível no formulário e no histórico. |
+| MED-08 | Avisar que medida em casa pode ter maior variação. | Implementado | Mensagem de apoio aparece quando o local selecionado é casa. |
 
 ### Saídas e análises
 
@@ -159,7 +159,7 @@ Status usados:
 
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
-| VAL-01 | Medida em data anterior ao nascimento. | Pendente | Deve bloquear. |
+| VAL-01 | Medida em data anterior ao nascimento. | Implementado | O backend bloqueia o registro e a atualização. |
 | VAL-02 | IG ao nascimento menor que 22 ou maior que 42 semanas. | Implementado | Já há validação no cadastro. |
 | VAL-03 | Peso incompatível com idade. | Pesquisa/validação | Definir limites com fonte/dataset antes de bloquear. |
 | VAL-04 | Comprimento incompatível com idade. | Pesquisa/validação | Definir limites com fonte/dataset antes de bloquear. |
