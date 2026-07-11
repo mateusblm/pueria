@@ -92,6 +92,8 @@ export class CrescimentoCriancaComponent implements OnInit {
     const ultima = this.ultimaMedida();
     return ultima ? this.avaliacoesPorMedida().get(ultima.id) ?? null : null;
   });
+  readonly referenciaAtual = computed(() => this.ultimaAvaliacaoCurva()?.resultados[0]?.fonte ?? 'Referência de crescimento');
+  readonly contextoIdadeAtual = computed(() => this.textoContextoIdade(this.ultimaAvaliacaoCurva()));
   readonly graficosCurva = computed(() => this.montarGraficosCurva());
   readonly graficoDetalhado = computed(() =>
     this.graficosCurva().find((grafico) => grafico.indicador === this.detalheAbertoIndicador()) ?? null
@@ -294,6 +296,26 @@ export class CrescimentoCriancaComponent implements OnInit {
       return 'Ficou abaixo da faixa esperada para a idade.';
     }
     return 'Ficou acima da faixa esperada para a idade.';
+  }
+
+  textoContextoIdade(avaliacao: AvaliacaoCurvaCrescimento | null): string {
+    if (!avaliacao) {
+      return '';
+    }
+    if (avaliacao.criterioIdade.startsWith('INTERGROWTH')) {
+      return `Nesta fase, a curva considera a idade pós-menstrual: ${this.formatarIdade(avaliacao.idadeDias)}.`;
+    }
+    if (avaliacao.idadeCorrigida) {
+      return `Idade corrigida usada nesta avaliação: ${this.formatarIdade(avaliacao.idadeDias)}.`;
+    }
+    return '';
+  }
+
+  private formatarIdade(dias: number): string {
+    const meses = Math.floor(dias / 30);
+    const diasRestantes = dias % 30;
+    if (meses === 0) return `${diasRestantes} dias`;
+    return `${meses} ${meses === 1 ? 'mês' : 'meses'}${diasRestantes > 0 ? ` e ${diasRestantes} dias` : ''}`;
   }
 
   formatarData(data: string): string {

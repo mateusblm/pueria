@@ -216,6 +216,14 @@
   margin-top: 1rem;
 }
 
+.crescimento-graficos__contexto {
+  background: #fffaf7;
+  border-left: 3px solid var(--pueria-vermelho-profundo);
+  color: var(--pueria-texto-suave);
+  margin: 0;
+  padding: 0.8rem 1rem;
+}
+
 .crescimento-grafico {
   border: 1px solid #f0e3de;
   border-radius: 1rem;

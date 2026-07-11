@@ -34,8 +34,12 @@
             <p class="pueria-eyebrow">Análise do crescimento</p>
             <h2 id="crescimento-graficos-titulo">Como está a evolução</h2>
           </div>
-          <span>Referência OMS</span>
+          <span>{{ referenciaAtual() }}</span>
         </div>
+
+        @if (contextoIdadeAtual()) {
+          <p class="crescimento-graficos__contexto">{{ contextoIdadeAtual() }}</p>
+        }
 
         @if (graficosCurva().length === 0) {
           <p class="crescimento-historico__empty">As curvas aparecem quando há sexo informado no perfil e medidas dentro da faixa de 0 a 5 anos da OMS.</p>
