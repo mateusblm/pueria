@@ -23,6 +23,7 @@ public class ListarAvaliacoesCurvaCrescimentoUseCase {
     private final CurvaOmsCrescimentoService curvaOmsService;
     private final CurvaIntergrowthPrematuroService curvaIntergrowthService;
 
+    @org.springframework.beans.factory.annotation.Autowired
     public ListarAvaliacoesCurvaCrescimentoUseCase(CrescimentoAcesso acesso, MedidaCrescimentoRepositorio medidaRepositorio, CurvaOmsCrescimentoService curvaOmsService, CurvaIntergrowthPrematuroService curvaIntergrowthService) {
         this.acesso = acesso;
         this.medidaRepositorio = medidaRepositorio;
@@ -71,6 +72,10 @@ public class ListarAvaliacoesCurvaCrescimentoUseCase {
             return new IdadeParaCurva(idadeCronologicaDias, idadeCronologicaDias, false, "Idade cronológica", false, 0);
         }
 
+        int idadePosMenstrualDias = crianca.getSemanasGestacionais() * 7 + idadeCronologicaDias;
+        if (idadePosMenstrualDias >= 27 * 7 && idadePosMenstrualDias < 64 * 7) {
+            return new IdadeParaCurva(idadePosMenstrualDias, idadeCronologicaDias, false, "INTERGROWTH-21st para prematuridade", true, crianca.getSemanasGestacionais());
+        }
         int diasAntesDoTermo = Math.max(0, (40 - crianca.getSemanasGestacionais()) * 7);
         int limiteCorrecaoDias = deveEstenderCorrecaoAteTresAnos(crianca) ? 3 * 365 : 2 * 365;
         if (idadeCronologicaDias > limiteCorrecaoDias) {

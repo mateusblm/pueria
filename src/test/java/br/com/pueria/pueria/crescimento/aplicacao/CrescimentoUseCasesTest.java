@@ -177,9 +177,9 @@ class CrescimentoUseCasesTest {
         AvaliacaoCurvaCrescimento avaliacao = ambiente.listarAvaliacoesCurvaUseCase.executar(crianca.getId(), "mateus@email.com").getFirst();
 
         assertEquals(56, avaliacao.idadeCronologicaDias());
-        assertEquals(0, avaliacao.idadeDias());
-        assertTrue(avaliacao.idadeCorrigida());
-        assertEquals("OMS com idade corrigida para prematuridade", avaliacao.criterioIdade());
+        assertEquals(280, avaliacao.idadeDias());
+        assertFalse(avaliacao.idadeCorrigida());
+        assertEquals("INTERGROWTH-21st para prematuridade", avaliacao.criterioIdade());
     }
 
     private static class Ambiente {
