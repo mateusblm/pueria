@@ -17,8 +17,6 @@ export class EditarCriancaComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly criancasService = inject(CriancasService);
-  readonly dataMaximaNascimento = this.formatarDataInput(new Date());
-  readonly dataMinimaNascimento = this.calcularDataMinimaNascimento();
 
   readonly sexos: { label: string; value: Sexo }[] = [
     { label: 'Feminino', value: 'FEMININO' },
@@ -115,7 +113,7 @@ export class EditarCriancaComponent implements OnInit {
           this.crianca.set(crianca);
           this.form.patchValue({
             nome: crianca.nome,
-            dataNascimento: crianca.dataNascimento,
+            dataNascimento: this.formatarDataBrasileira(crianca.dataNascimento),
             sexo: crianca.sexo ?? 'NAO_INFORMADO',
             prematura: crianca.prematura,
             semanasGestacionais: crianca.semanasGestacionais,
@@ -198,7 +196,7 @@ export class EditarCriancaComponent implements OnInit {
 
     this.criancasService.atualizar(crianca.id, {
       nome: valor.nome,
-      dataNascimento: valor.dataNascimento,
+      dataNascimento: this.dataParaIso(valor.dataNascimento) as string,
       sexo: valor.sexo,
       prematura: valor.prematura,
       semanasGestacionais: valor.semanasGestacionais as number,
@@ -264,6 +262,16 @@ export class EditarCriancaComponent implements OnInit {
     return crianca ? ['/criancas', crianca.id] : ['/criancas'];
   }
 
+  formatarDataNascimento(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digitos = input.value.replace(/\D/g, '').slice(0, 8);
+    const dataFormatada = digitos
+      .replace(/^(\d{2})(\d)/, '$1/$2')
+      .replace(/^(\d{2}\/\d{2})(\d)/, '$1/$2');
+
+    this.form.controls.dataNascimento.setValue(dataFormatada, { emitEvent: false });
+  }
+
   private validarRegraPrematuridade(): string {
     const semanas = this.form.controls.semanasGestacionais.value;
     const prematura = this.form.controls.prematura.value;
@@ -284,27 +292,45 @@ export class EditarCriancaComponent implements OnInit {
   }
 
   private validarRegraIdade(): string {
-    const dataNascimento = this.form.controls.dataNascimento.value;
+    const dataNascimento = this.dataParaIso(this.form.controls.dataNascimento.value);
     if (!dataNascimento) {
-      return '';
+      return 'Informe a data de nascimento no formato dd/mm/aaaa.';
     }
 
-    const nascimento = new Date(`${dataNascimento}T00:00:00`);
+    const [ano, mes, dia] = dataNascimento.split('-').map(Number);
+    const nascimento = new Date(ano, mes - 1, dia);
+    if (nascimento.getFullYear() !== ano || nascimento.getMonth() !== mes - 1 || nascimento.getDate() !== dia) {
+      return 'Informe uma data de nascimento válida.';
+    }
+
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
-
     if (nascimento > hoje) {
       return 'A data de nascimento não pode estar no futuro.';
     }
 
     const limiteMvp = new Date(hoje);
     limiteMvp.setFullYear(limiteMvp.getFullYear() - 7);
-
     if (nascimento <= limiteMvp) {
       return 'No momento, o Pueria acompanha crianças de até 6 anos neste cadastro.';
     }
 
     return '';
+  }
+
+  private dataParaIso(valor: string): string | null {
+    const correspondencia = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (!correspondencia) {
+      return null;
+    }
+
+    const [, dia, mes, ano] = correspondencia;
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  private formatarDataBrasileira(dataIso: string): string {
+    const [ano, mes, dia] = dataIso.split('-');
+    return `${dia}/${mes}/${ano}`;
   }
 
   private lerDecimal(valor: string, campo: string, minimo: number, maximo: number): number | string {
@@ -321,20 +347,6 @@ export class EditarCriancaComponent implements OnInit {
 
   private formatarDecimalInput(valor: number): string {
     return valor.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
-  }
-
-  private calcularDataMinimaNascimento(): string {
-    const data = new Date();
-    data.setFullYear(data.getFullYear() - 7);
-    data.setDate(data.getDate() + 1);
-    return this.formatarDataInput(data);
-  }
-
-  private formatarDataInput(data: Date): string {
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const dia = String(data.getDate()).padStart(2, '0');
-    return `${ano}-${mes}-${dia}`;
   }
 
   private extrairMensagemErro(erro: HttpErrorResponse, fallback: string): string {

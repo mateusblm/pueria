@@ -20,7 +20,15 @@
         <div class="pueria-grid-2">
           <label class="pueria-field">
             <span>Data de nascimento</span>
-            <input type="date" formControlName="dataNascimento" [min]="dataMinimaNascimento" [max]="dataMaximaNascimento" />
+            <input
+              type="text"
+              formControlName="dataNascimento"
+              inputmode="numeric"
+              maxlength="10"
+              autocomplete="bday"
+              placeholder="dd/mm/aaaa"
+              (input)="formatarDataNascimento($event)"
+            />
             <small>O cadastro atual contempla crianças de 0 a 6 anos.</small>
           </label>
 
