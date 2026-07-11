@@ -5,6 +5,9 @@ import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
+import br.com.pueria.pueria.criancas.dominio.TipoGestacao;
+import br.com.pueria.pueria.criancas.dominio.StatusCondicaoClinica;
+import br.com.pueria.pueria.criancas.dominio.ContextoClinicoCrianca;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
@@ -102,7 +105,12 @@ public record AtualizarCriancaRequest(
         StatusTriagemNeonatal testeOlhinho,
         StatusTriagemNeonatal testeCoracaozinho,
         boolean amamentacaoPrimeiraHora,
-        AlimentacaoInicial alimentacaoInicial
+        AlimentacaoInicial alimentacaoInicial,
+        TipoGestacao tipoGestacao,
+        StatusCondicaoClinica statusT21,
+        StatusCondicaoClinica statusTurner,
+        Boolean outraCondicaoRelevante,
+        @Size(max = 1000) String observacoesCondicaoRelevante
 ) {
 
     public AtualizarCriancaComando paraComando(UUID id, String emailResponsavel) {
@@ -115,7 +123,9 @@ public record AtualizarCriancaRequest(
                 hipertensaoGestacional, infeccaoGestacional, sangramentoGestacional, usoAlcoolGestacao,
                 usoTabacoGestacao, outrasExposicoesGestacao, observacoesGestacao, diasAltaHospitalar,
                 retornoHospitalarPrimeiraSemana, testePezinho, testeOrelhinha, testeOlhinho,
-                testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial
+                testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial,
+                new ContextoClinicoCrianca(tipoGestacao, statusT21, statusTurner,
+                        Boolean.TRUE.equals(outraCondicaoRelevante), observacoesCondicaoRelevante)
         );
     }
 }

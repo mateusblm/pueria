@@ -5,6 +5,8 @@ import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
+import br.com.pueria.pueria.criancas.dominio.TipoGestacao;
+import br.com.pueria.pueria.criancas.dominio.StatusCondicaoClinica;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -49,6 +51,11 @@ public record CriancaResponse(
         StatusTriagemNeonatal testeCoracaozinho,
         boolean amamentacaoPrimeiraHora,
         AlimentacaoInicial alimentacaoInicial,
+        TipoGestacao tipoGestacao,
+        StatusCondicaoClinica statusT21,
+        StatusCondicaoClinica statusTurner,
+        boolean outraCondicaoRelevante,
+        String observacoesCondicaoRelevante,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm
 ) {
@@ -92,6 +99,11 @@ public record CriancaResponse(
                 crianca.getTesteCoracaozinho(),
                 crianca.isAmamentacaoPrimeiraHora(),
                 crianca.getAlimentacaoInicial(),
+                crianca.getContextoClinico().tipoGestacao(),
+                crianca.getContextoClinico().statusT21(),
+                crianca.getContextoClinico().statusTurner(),
+                crianca.getContextoClinico().outraCondicaoRelevante(),
+                crianca.getContextoClinico().observacoesCondicaoRelevante(),
                 crianca.getCriadoEm(),
                 crianca.getAtualizadoEm()
         );

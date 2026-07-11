@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AlimentacaoInicial, Crianca, Sexo, StatusTriagemNeonatal, TipoParto } from '../../../shared/models/crianca.model';
+import { AlimentacaoInicial, Crianca, Sexo, StatusCondicaoClinica, StatusTriagemNeonatal, TipoGestacao, TipoParto } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
 
 @Component({
@@ -45,6 +45,11 @@ export class EditarCriancaComponent implements OnInit {
     { label: 'Fórmula infantil', value: 'FORMULA_INFANTIL' },
     { label: 'Não informado', value: 'NAO_INFORMADO' }
   ];
+  readonly statusCondicoes: { label: string; value: StatusCondicaoClinica }[] = [
+    { label: 'Não', value: 'NAO' }, { label: 'Sim', value: 'SIM' },
+    { label: 'Em investigação', value: 'EM_INVESTIGACAO' },
+    { label: 'Prefiro informar depois', value: 'PREFIRO_INFORMAR_DEPOIS' }
+  ];
 
   readonly form = this.formBuilder.group({
     nome: this.formBuilder.nonNullable.control('', [Validators.required, Validators.maxLength(150)]),
@@ -82,7 +87,12 @@ export class EditarCriancaComponent implements OnInit {
     testeOlhinho: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
     testeCoracaozinho: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
     amamentacaoPrimeiraHora: this.formBuilder.nonNullable.control(false),
-    alimentacaoInicial: this.formBuilder.nonNullable.control<AlimentacaoInicial>('NAO_INFORMADO')
+    alimentacaoInicial: this.formBuilder.nonNullable.control<AlimentacaoInicial>('NAO_INFORMADO'),
+    tipoGestacao: this.formBuilder.nonNullable.control<TipoGestacao>('NAO_INFORMADO'),
+    statusT21: this.formBuilder.nonNullable.control<StatusCondicaoClinica>('PREFIRO_INFORMAR_DEPOIS'),
+    statusTurner: this.formBuilder.nonNullable.control<StatusCondicaoClinica>('PREFIRO_INFORMAR_DEPOIS'),
+    outraCondicaoRelevante: this.formBuilder.nonNullable.control(false),
+    observacoesCondicaoRelevante: this.formBuilder.nonNullable.control('', Validators.maxLength(1000))
   });
 
   readonly crianca = signal<Crianca | null>(null);
@@ -139,7 +149,12 @@ export class EditarCriancaComponent implements OnInit {
             testeOlhinho: crianca.testeOlhinho,
             testeCoracaozinho: crianca.testeCoracaozinho,
             amamentacaoPrimeiraHora: crianca.amamentacaoPrimeiraHora,
-            alimentacaoInicial: crianca.alimentacaoInicial
+            alimentacaoInicial: crianca.alimentacaoInicial,
+            tipoGestacao: crianca.tipoGestacao,
+            statusT21: crianca.statusT21,
+            statusTurner: crianca.statusTurner,
+            outraCondicaoRelevante: crianca.outraCondicaoRelevante,
+            observacoesCondicaoRelevante: crianca.observacoesCondicaoRelevante ?? ''
           });
         },
         error: (erro: HttpErrorResponse) => {
@@ -217,7 +232,12 @@ export class EditarCriancaComponent implements OnInit {
       testeOlhinho: valor.testeOlhinho,
       testeCoracaozinho: valor.testeCoracaozinho,
       amamentacaoPrimeiraHora: valor.amamentacaoPrimeiraHora,
-      alimentacaoInicial: valor.alimentacaoInicial
+      alimentacaoInicial: valor.alimentacaoInicial,
+      tipoGestacao: valor.tipoGestacao,
+      statusT21: valor.statusT21,
+      statusTurner: valor.sexo === 'FEMININO' ? valor.statusTurner : 'PREFIRO_INFORMAR_DEPOIS',
+      outraCondicaoRelevante: valor.outraCondicaoRelevante,
+      observacoesCondicaoRelevante: valor.observacoesCondicaoRelevante.trim() || null
     })
       .pipe(finalize(() => this.salvando.set(false)))
       .subscribe({

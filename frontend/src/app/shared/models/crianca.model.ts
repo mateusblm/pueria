@@ -5,6 +5,8 @@ export type TipoParto = 'VAGINAL' | 'CESAREA' | 'VAGINAL_INSTRUMENTADO' | 'NAO_I
 export type StatusTriagemNeonatal = 'REALIZADO' | 'PENDENTE' | 'NAO_INFORMADO';
 
 export type AlimentacaoInicial = 'ALEITAMENTO_MATERNO_EXCLUSIVO' | 'ALEITAMENTO_MISTO' | 'FORMULA_INFANTIL' | 'NAO_INFORMADO';
+export type TipoGestacao = 'UNICA' | 'MULTIPLA' | 'NAO_INFORMADO';
+export type StatusCondicaoClinica = 'NAO' | 'SIM' | 'EM_INVESTIGACAO' | 'PREFIRO_INFORMAR_DEPOIS';
 
 export type Parentesco = 'MAE' | 'PAI' | 'RESPONSAVEL_LEGAL' | 'AVO' | 'OUTRO';
 
@@ -46,6 +48,11 @@ export interface Crianca {
   testeCoracaozinho: StatusTriagemNeonatal;
   amamentacaoPrimeiraHora: boolean;
   alimentacaoInicial: AlimentacaoInicial;
+  tipoGestacao: TipoGestacao;
+  statusT21: StatusCondicaoClinica;
+  statusTurner: StatusCondicaoClinica;
+  outraCondicaoRelevante: boolean;
+  observacoesCondicaoRelevante?: string | null;
   criadoEm: string;
   atualizadoEm?: string | null;
 }
@@ -87,6 +94,11 @@ interface DadosIniciaisRequest {
   testeCoracaozinho: StatusTriagemNeonatal;
   amamentacaoPrimeiraHora: boolean;
   alimentacaoInicial: AlimentacaoInicial;
+  tipoGestacao?: TipoGestacao;
+  statusT21?: StatusCondicaoClinica;
+  statusTurner?: StatusCondicaoClinica;
+  outraCondicaoRelevante?: boolean;
+  observacoesCondicaoRelevante?: string | null;
 }
 
 export interface CriarCriancaRequest extends DadosIniciaisRequest {

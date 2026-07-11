@@ -68,6 +68,7 @@ public class Crianca {
     private final StatusTriagemNeonatal testeCoracaozinho;
     private final boolean amamentacaoPrimeiraHora;
     private final AlimentacaoInicial alimentacaoInicial;
+    private final ContextoClinicoCrianca contextoClinico;
     private final LocalDateTime criadoEm;
     private final LocalDateTime atualizadoEm;
 
@@ -109,6 +110,7 @@ public class Crianca {
             StatusTriagemNeonatal testeCoracaozinho,
             boolean amamentacaoPrimeiraHora,
             AlimentacaoInicial alimentacaoInicial,
+            ContextoClinicoCrianca contextoClinico,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm,
             boolean validarEscopoEtarioMvp
@@ -151,6 +153,7 @@ public class Crianca {
         this.testeCoracaozinho = testeCoracaozinho == null ? StatusTriagemNeonatal.NAO_INFORMADO : testeCoracaozinho;
         this.amamentacaoPrimeiraHora = amamentacaoPrimeiraHora;
         this.alimentacaoInicial = alimentacaoInicial == null ? AlimentacaoInicial.NAO_INFORMADO : alimentacaoInicial;
+        this.contextoClinico = contextoClinico == null ? ContextoClinicoCrianca.naoInformado() : contextoClinico;
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
         this.atualizadoEm = atualizadoEm;
     }
@@ -163,7 +166,7 @@ public class Crianca {
                 false, null, false, false, false, false, false, false, false, null,
                 null, false, StatusTriagemNeonatal.NAO_INFORMADO, StatusTriagemNeonatal.NAO_INFORMADO,
                 StatusTriagemNeonatal.NAO_INFORMADO, StatusTriagemNeonatal.NAO_INFORMADO, false,
-                AlimentacaoInicial.NAO_INFORMADO
+                AlimentacaoInicial.NAO_INFORMADO, ContextoClinicoCrianca.naoInformado()
         );
     }
 
@@ -205,6 +208,31 @@ public class Crianca {
             boolean amamentacaoPrimeiraHora,
             AlimentacaoInicial alimentacaoInicial
     ) {
+        return cadastrar(nome, dataNascimento, sexo, prematura, semanasGestacionais, diasGestacionais, tipoParto,
+                pesoNascimentoGramas, comprimentoNascimentoCm, perimetroCefalicoNascimentoCm, apgarUmMinuto,
+                apgarCincoMinutos, utiNeonatal, reanimacaoNeonatal, ictericiaNeonatal, dificuldadeRespiratoria,
+                dificuldadeAmamentacao, observacoesNascimento, preNatalRealizado, consultasPreNatal,
+                diabetesGestacional, hipertensaoGestacional, infeccaoGestacional, sangramentoGestacional,
+                usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao, observacoesGestacao,
+                diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho, testeOrelhinha, testeOlhinho,
+                testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial, ContextoClinicoCrianca.naoInformado());
+    }
+
+    public static Crianca cadastrar(
+            String nome, LocalDate dataNascimento, Sexo sexo, boolean prematura, Integer semanasGestacionais,
+            Integer diasGestacionais, TipoParto tipoParto, Integer pesoNascimentoGramas,
+            BigDecimal comprimentoNascimentoCm, BigDecimal perimetroCefalicoNascimentoCm,
+            Integer apgarUmMinuto, Integer apgarCincoMinutos, boolean utiNeonatal, boolean reanimacaoNeonatal,
+            boolean ictericiaNeonatal, boolean dificuldadeRespiratoria, boolean dificuldadeAmamentacao,
+            String observacoesNascimento, boolean preNatalRealizado, Integer consultasPreNatal,
+            boolean diabetesGestacional, boolean hipertensaoGestacional, boolean infeccaoGestacional,
+            boolean sangramentoGestacional, boolean usoAlcoolGestacao, boolean usoTabacoGestacao,
+            boolean outrasExposicoesGestacao, String observacoesGestacao, Integer diasAltaHospitalar,
+            boolean retornoHospitalarPrimeiraSemana, StatusTriagemNeonatal testePezinho,
+            StatusTriagemNeonatal testeOrelhinha, StatusTriagemNeonatal testeOlhinho,
+            StatusTriagemNeonatal testeCoracaozinho, boolean amamentacaoPrimeiraHora,
+            AlimentacaoInicial alimentacaoInicial, ContextoClinicoCrianca contextoClinico
+    ) {
         return new Crianca(
                 UUID.randomUUID(), nome, dataNascimento, sexo, prematura, semanasGestacionais, diasGestacionais,
                 tipoParto, pesoNascimentoGramas, comprimentoNascimentoCm, perimetroCefalicoNascimentoCm,
@@ -214,7 +242,7 @@ public class Crianca {
                 sangramentoGestacional, usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao,
                 observacoesGestacao, diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho,
                 testeOrelhinha, testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial,
-                LocalDateTime.now(), null, true
+                contextoClinico, LocalDateTime.now(), null, true
         );
     }
 
@@ -256,6 +284,7 @@ public class Crianca {
             StatusTriagemNeonatal testeCoracaozinho,
             boolean amamentacaoPrimeiraHora,
             AlimentacaoInicial alimentacaoInicial,
+            ContextoClinicoCrianca contextoClinico,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
     ) {
@@ -267,8 +296,8 @@ public class Crianca {
                 diabetesGestacional, hipertensaoGestacional, infeccaoGestacional, sangramentoGestacional,
                 usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao, observacoesGestacao,
                 diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho, testeOrelhinha,
-                testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial, criadoEm,
-                atualizadoEm, false
+                testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial,
+                contextoClinico, criadoEm, atualizadoEm, false
         );
     }
 
@@ -284,7 +313,7 @@ public class Crianca {
                 this.outrasExposicoesGestacao, this.observacoesGestacao, this.diasAltaHospitalar,
                 this.retornoHospitalarPrimeiraSemana, this.testePezinho, this.testeOrelhinha,
                 this.testeOlhinho, this.testeCoracaozinho, this.amamentacaoPrimeiraHora,
-                this.alimentacaoInicial
+                this.alimentacaoInicial, this.contextoClinico
         );
     }
 
@@ -326,6 +355,31 @@ public class Crianca {
             boolean amamentacaoPrimeiraHora,
             AlimentacaoInicial alimentacaoInicial
     ) {
+        return atualizar(nome, dataNascimento, sexo, prematura, semanasGestacionais, diasGestacionais, tipoParto,
+                pesoNascimentoGramas, comprimentoNascimentoCm, perimetroCefalicoNascimentoCm, apgarUmMinuto,
+                apgarCincoMinutos, utiNeonatal, reanimacaoNeonatal, ictericiaNeonatal, dificuldadeRespiratoria,
+                dificuldadeAmamentacao, observacoesNascimento, preNatalRealizado, consultasPreNatal,
+                diabetesGestacional, hipertensaoGestacional, infeccaoGestacional, sangramentoGestacional,
+                usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao, observacoesGestacao,
+                diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho, testeOrelhinha, testeOlhinho,
+                testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial, this.contextoClinico);
+    }
+
+    public Crianca atualizar(
+            String nome, LocalDate dataNascimento, Sexo sexo, boolean prematura, Integer semanasGestacionais,
+            Integer diasGestacionais, TipoParto tipoParto, Integer pesoNascimentoGramas,
+            BigDecimal comprimentoNascimentoCm, BigDecimal perimetroCefalicoNascimentoCm,
+            Integer apgarUmMinuto, Integer apgarCincoMinutos, boolean utiNeonatal, boolean reanimacaoNeonatal,
+            boolean ictericiaNeonatal, boolean dificuldadeRespiratoria, boolean dificuldadeAmamentacao,
+            String observacoesNascimento, boolean preNatalRealizado, Integer consultasPreNatal,
+            boolean diabetesGestacional, boolean hipertensaoGestacional, boolean infeccaoGestacional,
+            boolean sangramentoGestacional, boolean usoAlcoolGestacao, boolean usoTabacoGestacao,
+            boolean outrasExposicoesGestacao, String observacoesGestacao, Integer diasAltaHospitalar,
+            boolean retornoHospitalarPrimeiraSemana, StatusTriagemNeonatal testePezinho,
+            StatusTriagemNeonatal testeOrelhinha, StatusTriagemNeonatal testeOlhinho,
+            StatusTriagemNeonatal testeCoracaozinho, boolean amamentacaoPrimeiraHora,
+            AlimentacaoInicial alimentacaoInicial, ContextoClinicoCrianca contextoClinico
+    ) {
         return new Crianca(
                 id, nome, dataNascimento, sexo, prematura, semanasGestacionais, diasGestacionais, tipoParto,
                 pesoNascimentoGramas, comprimentoNascimentoCm, perimetroCefalicoNascimentoCm, apgarUmMinuto,
@@ -334,8 +388,8 @@ public class Crianca {
                 diabetesGestacional, hipertensaoGestacional, infeccaoGestacional, sangramentoGestacional,
                 usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao, observacoesGestacao,
                 diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho, testeOrelhinha,
-                testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial, criadoEm,
-                LocalDateTime.now(), true
+                testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial,
+                contextoClinico, criadoEm, LocalDateTime.now(), true
         );
     }
 
@@ -381,6 +435,7 @@ public class Crianca {
     public StatusTriagemNeonatal getTesteCoracaozinho() { return testeCoracaozinho; }
     public boolean isAmamentacaoPrimeiraHora() { return amamentacaoPrimeiraHora; }
     public AlimentacaoInicial getAlimentacaoInicial() { return alimentacaoInicial; }
+    public ContextoClinicoCrianca getContextoClinico() { return contextoClinico; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
 

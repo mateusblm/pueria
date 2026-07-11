@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AlimentacaoInicial, Parentesco, Sexo, StatusTriagemNeonatal, TipoParto } from '../../../shared/models/crianca.model';
+import { AlimentacaoInicial, Parentesco, Sexo, StatusCondicaoClinica, StatusTriagemNeonatal, TipoGestacao, TipoParto } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
 
 @Component({
@@ -52,6 +52,11 @@ export class NovaCriancaComponent {
     { label: 'Fórmula infantil', value: 'FORMULA_INFANTIL' },
     { label: 'Não informado', value: 'NAO_INFORMADO' }
   ];
+  readonly statusCondicoes: { label: string; value: StatusCondicaoClinica }[] = [
+    { label: 'Não', value: 'NAO' }, { label: 'Sim', value: 'SIM' },
+    { label: 'Em investigação', value: 'EM_INVESTIGACAO' },
+    { label: 'Prefiro informar depois', value: 'PREFIRO_INFORMAR_DEPOIS' }
+  ];
 
   readonly form = this.formBuilder.group({
     nome: this.formBuilder.nonNullable.control('', [Validators.required, Validators.maxLength(150)]),
@@ -90,6 +95,11 @@ export class NovaCriancaComponent {
     testeCoracaozinho: this.formBuilder.nonNullable.control<StatusTriagemNeonatal>('NAO_INFORMADO'),
     amamentacaoPrimeiraHora: this.formBuilder.nonNullable.control(false),
     alimentacaoInicial: this.formBuilder.nonNullable.control<AlimentacaoInicial>('NAO_INFORMADO'),
+    tipoGestacao: this.formBuilder.nonNullable.control<TipoGestacao>('NAO_INFORMADO'),
+    statusT21: this.formBuilder.nonNullable.control<StatusCondicaoClinica>('PREFIRO_INFORMAR_DEPOIS'),
+    statusTurner: this.formBuilder.nonNullable.control<StatusCondicaoClinica>('PREFIRO_INFORMAR_DEPOIS'),
+    outraCondicaoRelevante: this.formBuilder.nonNullable.control(false),
+    observacoesCondicaoRelevante: this.formBuilder.nonNullable.control('', Validators.maxLength(1000)),
     parentesco: this.formBuilder.nonNullable.control<Parentesco>('PAI', [Validators.required]),
     aceiteConsentimento: this.formBuilder.nonNullable.control(false, [Validators.requiredTrue])
   });
@@ -162,6 +172,11 @@ export class NovaCriancaComponent {
       testeCoracaozinho: valor.testeCoracaozinho,
       amamentacaoPrimeiraHora: valor.amamentacaoPrimeiraHora,
       alimentacaoInicial: valor.alimentacaoInicial,
+      tipoGestacao: valor.tipoGestacao,
+      statusT21: valor.statusT21,
+      statusTurner: valor.sexo === 'FEMININO' ? valor.statusTurner : 'PREFIRO_INFORMAR_DEPOIS',
+      outraCondicaoRelevante: valor.outraCondicaoRelevante,
+      observacoesCondicaoRelevante: valor.observacoesCondicaoRelevante.trim() || null,
       parentesco: valor.parentesco,
       aceiteConsentimento: valor.aceiteConsentimento,
       versaoTermoConsentimento: '2026.07'

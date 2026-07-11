@@ -5,6 +5,9 @@ import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
+import br.com.pueria.pueria.criancas.dominio.TipoGestacao;
+import br.com.pueria.pueria.criancas.dominio.StatusCondicaoClinica;
+import br.com.pueria.pueria.criancas.dominio.ContextoClinicoCrianca;
 import br.com.pueria.pueria.responsaveis.dominio.Parentesco;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
@@ -104,6 +107,11 @@ public record CriarCriancaRequest(
         StatusTriagemNeonatal testeCoracaozinho,
         boolean amamentacaoPrimeiraHora,
         AlimentacaoInicial alimentacaoInicial,
+        TipoGestacao tipoGestacao,
+        StatusCondicaoClinica statusT21,
+        StatusCondicaoClinica statusTurner,
+        Boolean outraCondicaoRelevante,
+        @Size(max = 1000) String observacoesCondicaoRelevante,
 
         @NotNull(message = "O parentesco é obrigatório.")
         Parentesco parentesco,
@@ -126,6 +134,8 @@ public record CriarCriancaRequest(
                 sangramentoGestacional, usoAlcoolGestacao, usoTabacoGestacao, outrasExposicoesGestacao,
                 observacoesGestacao, diasAltaHospitalar, retornoHospitalarPrimeiraSemana, testePezinho,
                 testeOrelhinha, testeOlhinho, testeCoracaozinho, amamentacaoPrimeiraHora, alimentacaoInicial,
+                new ContextoClinicoCrianca(tipoGestacao, statusT21, statusTurner,
+                        Boolean.TRUE.equals(outraCondicaoRelevante), observacoesCondicaoRelevante),
                 parentesco, aceiteConsentimento, versaoTermoConsentimento
         );
     }

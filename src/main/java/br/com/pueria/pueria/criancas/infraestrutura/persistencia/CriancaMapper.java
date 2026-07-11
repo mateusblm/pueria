@@ -15,6 +15,11 @@ final class CriancaMapper {
         entidade.setDataNascimento(crianca.getDataNascimento());
         entidade.setSexo(crianca.getSexo());
         entidade.setPrematura(crianca.isPrematura());
+        entidade.setTipoGestacao(crianca.getContextoClinico().tipoGestacao());
+        entidade.setStatusT21(crianca.getContextoClinico().statusT21());
+        entidade.setStatusTurner(crianca.getContextoClinico().statusTurner());
+        entidade.setOutraCondicaoRelevante(crianca.getContextoClinico().outraCondicaoRelevante());
+        entidade.setObservacoesCondicaoRelevante(crianca.getContextoClinico().observacoesCondicaoRelevante());
         entidade.setSemanasGestacionais(crianca.getSemanasGestacionais());
         entidade.setDiasGestacionais(crianca.getDiasGestacionais());
         entidade.setTipoParto(crianca.getTipoParto());
@@ -91,6 +96,9 @@ final class CriancaMapper {
                 entidade.getTesteCoracaozinho(),
                 entidade.isAmamentacaoPrimeiraHora(),
                 entidade.getAlimentacaoInicial(),
+                new br.com.pueria.pueria.criancas.dominio.ContextoClinicoCrianca(
+                        entidade.getTipoGestacao(), entidade.getStatusT21(), entidade.getStatusTurner(),
+                        entidade.isOutraCondicaoRelevante(), entidade.getObservacoesCondicaoRelevante()),
                 entidade.getCriadoEm(),
                 entidade.getAtualizadoEm()
         );

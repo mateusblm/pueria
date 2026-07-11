@@ -67,7 +67,8 @@ public class AtualizarCriancaUseCase {
                 comando.testeOlhinho(),
                 comando.testeCoracaozinho(),
                 comando.amamentacaoPrimeiraHora(),
-                comando.alimentacaoInicial()
+                comando.alimentacaoInicial(),
+                comando.contextoClinico()
         );
 
         return criancaRepositorio.salvar(atualizada);

@@ -4,6 +4,8 @@ import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
+import br.com.pueria.pueria.criancas.dominio.TipoGestacao;
+import br.com.pueria.pueria.criancas.dominio.StatusCondicaoClinica;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,6 +40,24 @@ public class CriancaJpaEntidade {
 
     @Column(nullable = false)
     private boolean prematura;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_gestacao", nullable = false, length = 20)
+    private TipoGestacao tipoGestacao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_t21", nullable = false, length = 30)
+    private StatusCondicaoClinica statusT21;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_turner", nullable = false, length = 30)
+    private StatusCondicaoClinica statusTurner;
+
+    @Column(name = "outra_condicao_relevante", nullable = false)
+    private boolean outraCondicaoRelevante;
+
+    @Column(name = "observacoes_condicao_relevante", length = 1000)
+    private String observacoesCondicaoRelevante;
 
     @Column(name = "semanas_gestacionais", nullable = false)
     private Integer semanasGestacionais;
@@ -197,6 +217,17 @@ public class CriancaJpaEntidade {
     public void setPrematura(boolean prematura) {
         this.prematura = prematura;
     }
+
+    public TipoGestacao getTipoGestacao() { return tipoGestacao; }
+    public void setTipoGestacao(TipoGestacao tipoGestacao) { this.tipoGestacao = tipoGestacao; }
+    public StatusCondicaoClinica getStatusT21() { return statusT21; }
+    public void setStatusT21(StatusCondicaoClinica statusT21) { this.statusT21 = statusT21; }
+    public StatusCondicaoClinica getStatusTurner() { return statusTurner; }
+    public void setStatusTurner(StatusCondicaoClinica statusTurner) { this.statusTurner = statusTurner; }
+    public boolean isOutraCondicaoRelevante() { return outraCondicaoRelevante; }
+    public void setOutraCondicaoRelevante(boolean outraCondicaoRelevante) { this.outraCondicaoRelevante = outraCondicaoRelevante; }
+    public String getObservacoesCondicaoRelevante() { return observacoesCondicaoRelevante; }
+    public void setObservacoesCondicaoRelevante(String observacoesCondicaoRelevante) { this.observacoesCondicaoRelevante = observacoesCondicaoRelevante; }
 
     public Integer getSemanasGestacionais() {
         return semanasGestacionais;

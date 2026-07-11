@@ -166,6 +166,10 @@
             <dd>{{ formatarIdadeGestacional(crianca.semanasGestacionais, crianca.diasGestacionais) }}</dd>
           </div>
           <div>
+            <dt>Tipo de gestação</dt>
+            <dd>{{ labelTipoGestacao(crianca.tipoGestacao) }}</dd>
+          </div>
+          <div>
             <dt>Tipo de parto</dt>
             <dd>{{ labelTipoParto(crianca.tipoParto) }}</dd>
           </div>
@@ -244,6 +248,32 @@
             <dt>Primeira hora</dt>
             <dd>{{ crianca.amamentacaoPrimeiraHora ? 'Mamou na primeira hora de vida' : 'Não informado' }}</dd>
           </div>
+        </dl>
+      </article>
+
+      <article class="pueria-card detalhe-card">
+        <p class="pueria-eyebrow">Informações de saúde conhecidas</p>
+        <dl>
+          <div>
+            <dt>Trissomia 21 (síndrome de Down)</dt>
+            <dd>{{ labelStatusCondicao(crianca.statusT21) }}</dd>
+          </div>
+          @if (crianca.sexo === 'FEMININO') {
+            <div>
+              <dt>Síndrome de Turner</dt>
+              <dd>{{ labelStatusCondicao(crianca.statusTurner) }}</dd>
+            </div>
+          }
+          <div>
+            <dt>Outra condição genética ou neurológica relevante</dt>
+            <dd>{{ crianca.outraCondicaoRelevante ? 'Informada' : 'Não informada' }}</dd>
+          </div>
+          @if (crianca.observacoesCondicaoRelevante) {
+            <div>
+              <dt>Observações da família</dt>
+              <dd>{{ crianca.observacoesCondicaoRelevante }}</dd>
+            </div>
+          }
         </dl>
       </article>
 

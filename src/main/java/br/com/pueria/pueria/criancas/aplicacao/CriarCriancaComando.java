@@ -4,6 +4,7 @@ import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
+import br.com.pueria.pueria.criancas.dominio.ContextoClinicoCrianca;
 import br.com.pueria.pueria.responsaveis.dominio.Parentesco;
 
 import java.math.BigDecimal;
@@ -47,6 +48,7 @@ public record CriarCriancaComando(
         StatusTriagemNeonatal testeCoracaozinho,
         boolean amamentacaoPrimeiraHora,
         AlimentacaoInicial alimentacaoInicial,
+        ContextoClinicoCrianca contextoClinico,
         Parentesco parentesco,
         boolean aceiteConsentimento,
         String versaoTermoConsentimento
@@ -101,6 +103,7 @@ public record CriarCriancaComando(
                 StatusTriagemNeonatal.NAO_INFORMADO,
                 false,
                 AlimentacaoInicial.NAO_INFORMADO,
+                ContextoClinicoCrianca.naoInformado(),
                 parentesco,
                 aceiteConsentimento,
                 versaoTermoConsentimento

@@ -81,6 +81,29 @@
         <input type="checkbox" formControlName="prematura" />
         <span>Nasceu antes de 37 semanas de gestação.</span>
       </label>
+      <label class="pueria-field">
+        <span>Tipo de gestação</span>
+        <select formControlName="tipoGestacao">
+          <option value="NAO_INFORMADO">Não informado</option>
+          <option value="UNICA">Gestação única</option>
+          <option value="MULTIPLA">Gestação múltipla</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="crianca-form__section">
+      <p class="pueria-eyebrow">Informações de saúde conhecidas</p>
+      <p>Você pode informar agora ou deixar para depois. Estes dados ajudam a organizar o acompanhamento e não representam diagnóstico.</p>
+      <div class="pueria-grid-2">
+        <label class="pueria-field"><span>T21/Síndrome de Down</span><select formControlName="statusT21">@for (status of statusCondicoes; track status.value) { <option [value]="status.value">{{ status.label }}</option> }</select></label>
+        @if (form.controls.sexo.value === 'FEMININO') {
+          <label class="pueria-field"><span>Síndrome de Turner</span><select formControlName="statusTurner">@for (status of statusCondicoes; track status.value) { <option [value]="status.value">{{ status.label }}</option> }</select></label>
+        }
+      </div>
+      <label class="pueria-check"><input type="checkbox" formControlName="outraCondicaoRelevante" /><span>Há outra condição genética ou neurológica que a família deseja registrar.</span></label>
+      @if (form.controls.outraCondicaoRelevante.value) {
+        <label class="pueria-field"><span>Qual informação você gostaria de registrar?</span><textarea rows="3" formControlName="observacoesCondicaoRelevante"></textarea></label>
+      }
     </div>
 
     <div class="crianca-form__section">

@@ -81,7 +81,8 @@ public class CriarCriancaUseCase {
                 comando.testeOlhinho(),
                 comando.testeCoracaozinho(),
                 comando.amamentacaoPrimeiraHora(),
-                comando.alimentacaoInicial()
+                comando.alimentacaoInicial(),
+                comando.contextoClinico()
         );
 
         Crianca criancaSalva = criancaRepositorio.salvar(crianca);

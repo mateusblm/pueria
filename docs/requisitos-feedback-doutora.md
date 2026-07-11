@@ -123,11 +123,11 @@ Status usados:
 | CAD-05 | Peso ao nascimento. | Implementado | Já existe. |
 | CAD-06 | Comprimento ao nascimento. | Implementado | Já existe. |
 | CAD-07 | Perímetro cefálico ao nascimento. | Implementado | Já existe. |
-| CAD-08 | Tipo de gestação: única ou múltipla. | Pendente | Não identificado no cadastro atual. |
+| CAD-08 | Tipo de gestação: única ou múltipla. | Implementado | Disponível no cadastro, edição e perfil da criança, com opção de não informar. |
 | CAD-09 | Internação em UTI neonatal. | Implementado | Campo específico disponível no cadastro, edição e perfil da criança. |
-| CAD-10 | Diagnóstico conhecido de Down/T21. | Pendente | Opções: não; sim; em investigação; prefiro informar depois. |
-| CAD-11 | Diagnóstico conhecido de Turner. | Pendente | Ocultar para sexo masculino no fluxo familiar ou deixar em modo profissional. |
-| CAD-12 | Outra condição genética ou neurológica relevante. | Pendente | Campo sensível, usar linguagem não alarmista. |
+| CAD-10 | Diagnóstico conhecido de Down/T21. | Implementado | Opções: não; sim; em investigação; prefiro informar depois. O dado não ativa curva específica automaticamente. |
+| CAD-11 | Diagnóstico conhecido de Turner. | Implementado | Exibido no fluxo familiar apenas quando o sexo cadastrado é feminino. O dado não ativa curva específica automaticamente. |
+| CAD-12 | Outra condição genética ou neurológica relevante. | Implementado | Registro opcional com observação livre e linguagem não diagnóstica. |
 
 ### Medidas de acompanhamento
 

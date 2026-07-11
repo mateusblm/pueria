@@ -855,6 +855,25 @@ export class DetalheCriancaComponent implements OnInit {
     return labels[tipoParto] ?? tipoParto;
   }
 
+  labelTipoGestacao(tipoGestacao: string): string {
+    const labels: Record<string, string> = {
+      UNICA: 'Única',
+      MULTIPLA: 'Múltipla',
+      NAO_INFORMADO: 'Não informado'
+    };
+    return labels[tipoGestacao] ?? tipoGestacao;
+  }
+
+  labelStatusCondicao(status: string): string {
+    const labels: Record<string, string> = {
+      NAO: 'Não',
+      SIM: 'Sim',
+      EM_INVESTIGACAO: 'Em investigação',
+      PREFIRO_INFORMAR_DEPOIS: 'Prefiro informar depois'
+    };
+    return labels[status] ?? status;
+  }
+
   labelTriagem(status: string): string {
     const labels: Record<string, string> = {
       REALIZADO: 'Realizado',

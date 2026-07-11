@@ -4,6 +4,7 @@ import br.com.pueria.pueria.criancas.dominio.AlimentacaoInicial;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.criancas.dominio.StatusTriagemNeonatal;
 import br.com.pueria.pueria.criancas.dominio.TipoParto;
+import br.com.pueria.pueria.criancas.dominio.ContextoClinicoCrianca;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -47,7 +48,8 @@ public record AtualizarCriancaComando(
         StatusTriagemNeonatal testeOlhinho,
         StatusTriagemNeonatal testeCoracaozinho,
         boolean amamentacaoPrimeiraHora,
-        AlimentacaoInicial alimentacaoInicial
+        AlimentacaoInicial alimentacaoInicial,
+        ContextoClinicoCrianca contextoClinico
 ) {
     public AtualizarCriancaComando(
             UUID id,
@@ -97,7 +99,8 @@ public record AtualizarCriancaComando(
                 StatusTriagemNeonatal.NAO_INFORMADO,
                 StatusTriagemNeonatal.NAO_INFORMADO,
                 false,
-                AlimentacaoInicial.NAO_INFORMADO
+                AlimentacaoInicial.NAO_INFORMADO,
+                ContextoClinicoCrianca.naoInformado()
         );
     }
 }
