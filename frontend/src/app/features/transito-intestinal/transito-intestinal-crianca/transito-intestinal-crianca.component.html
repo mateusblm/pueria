@@ -12,8 +12,8 @@
     <div class="intestinal-page__hero">
       <div>
         <p class="pueria-eyebrow">Trânsito intestinal</p>
-        <h1 class="pueria-title">{{ crianca.nome }}</h1>
-        <p class="pueria-subtitle">Registre o aspecto das fezes, frequência e sinais associados para observar padrões ao longo dos dias.</p>
+        <div class="intestinal-page__identidade"><span><app-icon name="toilet" [size]="28" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
+        <p class="pueria-subtitle">Observe a rotina ao longo dos dias, sem tirar conclusões a partir de um registro isolado.</p>
       </div>
     </div>
 
@@ -37,15 +37,15 @@
 
         <div class="intestinal-sintese__grid">
           <article>
-            <span>Aspecto</span>
+            <span><app-icon name="toilet" [size]="15" />Aspecto</span>
             <strong>{{ labelTipoFezes(registro.tipoFezes) }}</strong>
           </article>
           <article>
-            <span>Classificação</span>
+            <span><app-icon name="sparkles" [size]="15" />Classificação</span>
             <strong>{{ registro.analise.classificacaoFezes }}</strong>
           </article>
           <article>
-            <span>Evacuações</span>
+            <span><app-icon name="chart" [size]="15" />Evacuações</span>
             <strong>{{ registro.evacuacoesPorDia ?? 'Não informado' }}</strong>
           </article>
           <article>

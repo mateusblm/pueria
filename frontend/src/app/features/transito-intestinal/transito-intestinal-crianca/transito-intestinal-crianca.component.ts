@@ -7,6 +7,7 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { FacilidadeLimpezaFezes, RegistroTransitoIntestinal, SalvarRegistroTransitoIntestinalRequest, TipoFezesBristol } from '../../../shared/models/transito-intestinal.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { TransitoIntestinalService } from '../transito-intestinal.service';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
 type BristolOpcao = {
@@ -19,7 +20,7 @@ type BristolOpcao = {
 
 @Component({
   selector: 'app-transito-intestinal-crianca',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
   templateUrl: './transito-intestinal-crianca.component.html',
   styleUrl: './transito-intestinal-crianca.component.scss'
 })

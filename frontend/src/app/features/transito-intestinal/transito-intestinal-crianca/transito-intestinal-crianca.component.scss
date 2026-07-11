@@ -15,10 +15,16 @@
 
 .intestinal-page__hero {
   align-items: center;
+  background: #fff;
+  border: 1px solid #eeded5;
+  border-left: 5px solid #a7654e;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
+  padding: 1.5rem;
   width: 100%;
 }
+.intestinal-page__identidade { align-items: center; color: #89533f; display: flex; gap: .55rem; }.intestinal-page__identidade > span { align-items: center; background: #f4dfd5; border-radius: 50%; display: inline-flex; height: 50px; justify-content: center; width: 50px; }
 
 .intestinal-page__state {
   display: grid;
@@ -42,6 +48,7 @@
   min-width: 0;
   padding: 1.5rem;
 }
+.intestinal-sintese { border-top: 4px solid #a7654e; }
 
 .intestinal-form__header,
 .intestinal-sintese__header {
