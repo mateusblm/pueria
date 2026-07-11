@@ -14,7 +14,7 @@ import { CrescimentoService } from '../../crescimento/crescimento.service';
 import { DesenvolvimentoService } from '../../desenvolvimento/desenvolvimento.service';
 import { SonoService } from '../../sono/sono.service';
 import { TelasService } from '../../telas/telas.service';
-import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
+import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 import { TransitoIntestinalService } from '../../transito-intestinal/transito-intestinal.service';
 import { CriancasService } from '../criancas.service';
 
@@ -731,6 +731,30 @@ export class DetalheCriancaComponent implements OnInit {
       indisponivel: 'painel-modulo--indisponivel'
     };
     return classes[estado];
+  }
+
+  iconeModulo(titulo: string): AppIconName {
+    const icones: Record<string, AppIconName> = {
+      Desenvolvimento: 'brain',
+      Crescimento: 'chart',
+      Alimentação: 'salad',
+      'Trânsito intestinal': 'toilet',
+      Sono: 'moon',
+      Telas: 'smartphone'
+    };
+    return icones[titulo] ?? 'heartPulse';
+  }
+
+  temaModulo(titulo: string): string {
+    const temas: Record<string, string> = {
+      Desenvolvimento: 'desenvolvimento',
+      Crescimento: 'crescimento',
+      Alimentação: 'alimentacao',
+      'Trânsito intestinal': 'intestinal',
+      Sono: 'sono',
+      Telas: 'telas'
+    };
+    return temas[titulo] ?? 'geral';
   }
 
   labelEstado(estado: EstadoModulo): string {

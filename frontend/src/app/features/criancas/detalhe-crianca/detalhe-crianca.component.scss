@@ -99,13 +99,39 @@
   padding: 18px;
 }
 
+.painel-modulo__cabecalho {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.painel-modulo__icone {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--modulo-fundo, #f5e7e2);
+  color: var(--modulo-cor, #8b3d48);
+}
+
 .painel-modulo__topo {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   justify-content: space-between;
+  flex: 1;
+  min-width: 0;
 }
+
+.painel-modulo[data-tema='desenvolvimento'] { --modulo-fundo: #efe4f5; --modulo-cor: #704582; }
+.painel-modulo[data-tema='crescimento'] { --modulo-fundo: #dceee3; --modulo-cor: #356348; }
+.painel-modulo[data-tema='alimentacao'] { --modulo-fundo: #fff0c8; --modulo-cor: #7b5a18; }
+.painel-modulo[data-tema='intestinal'] { --modulo-fundo: #f4dfd5; --modulo-cor: #88513d; }
+.painel-modulo[data-tema='sono'] { --modulo-fundo: #dce7f5; --modulo-cor: #3e5879; }
+.painel-modulo[data-tema='telas'] { --modulo-fundo: #dcebed; --modulo-cor: #356069; }
 
 .painel-modulo__topo span {
   border-radius: 999px;

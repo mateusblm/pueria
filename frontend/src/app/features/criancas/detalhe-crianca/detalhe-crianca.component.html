@@ -62,10 +62,13 @@
 
         <div class="painel-integrado__modulos">
           @for (modulo of painel.modulos; track modulo.titulo) {
-            <article class="painel-modulo" [class]="classeEstado(modulo.estado)">
-              <div class="painel-modulo__topo">
-                <span>{{ labelEstado(modulo.estado) }}</span>
-                <small>{{ modulo.subtitulo }}</small>
+            <article class="painel-modulo" [class]="classeEstado(modulo.estado)" [attr.data-tema]="temaModulo(modulo.titulo)">
+              <div class="painel-modulo__cabecalho">
+                <span class="painel-modulo__icone"><app-icon [name]="iconeModulo(modulo.titulo)" [size]="22" /></span>
+                <div class="painel-modulo__topo">
+                  <span>{{ labelEstado(modulo.estado) }}</span>
+                  <small>{{ modulo.subtitulo }}</small>
+                </div>
               </div>
               <h3>{{ modulo.titulo }}</h3>
               <strong>{{ modulo.valor }}</strong>
