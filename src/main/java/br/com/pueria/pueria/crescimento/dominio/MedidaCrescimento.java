@@ -24,6 +24,7 @@ public class MedidaCrescimento {
     private final BigDecimal comprimentoCm;
     private final BigDecimal perimetroCefalicoCm;
     private final OrigemMedidaCrescimento origem;
+    private final ResponsavelMedicaoCrescimento responsavelMedicao;
     private final String observacao;
     private final LocalDateTime criadoEm;
     private final LocalDateTime atualizadoEm;
@@ -36,6 +37,7 @@ public class MedidaCrescimento {
             BigDecimal comprimentoCm,
             BigDecimal perimetroCefalicoCm,
             OrigemMedidaCrescimento origem,
+            ResponsavelMedicaoCrescimento responsavelMedicao,
             String observacao,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
@@ -48,6 +50,7 @@ public class MedidaCrescimento {
         this.perimetroCefalicoCm = validarMedida(perimetroCefalicoCm, PERIMETRO_MINIMO_CM, PERIMETRO_MAXIMO_CM, "perímetro cefálico");
         validarAoMenosUmaMedida(this.pesoKg, this.comprimentoCm, this.perimetroCefalicoCm);
         this.origem = origem == null ? OrigemMedidaCrescimento.CONSULTA : origem;
+        this.responsavelMedicao = responsavelMedicao == null ? ResponsavelMedicaoCrescimento.NAO_INFORMADO : responsavelMedicao;
         this.observacao = tratarObservacao(observacao);
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
         this.atualizadoEm = atualizadoEm;
@@ -60,6 +63,7 @@ public class MedidaCrescimento {
             BigDecimal comprimentoCm,
             BigDecimal perimetroCefalicoCm,
             OrigemMedidaCrescimento origem,
+            ResponsavelMedicaoCrescimento responsavelMedicao,
             String observacao
     ) {
         return new MedidaCrescimento(
@@ -70,10 +74,23 @@ public class MedidaCrescimento {
                 comprimentoCm,
                 perimetroCefalicoCm,
                 origem,
+                responsavelMedicao,
                 observacao,
                 LocalDateTime.now(),
                 null
         );
+    }
+
+    public static MedidaCrescimento registrar(
+            UUID criancaId,
+            LocalDate dataMedicao,
+            BigDecimal pesoKg,
+            BigDecimal comprimentoCm,
+            BigDecimal perimetroCefalicoCm,
+            OrigemMedidaCrescimento origem,
+            String observacao
+    ) {
+        return registrar(criancaId, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, ResponsavelMedicaoCrescimento.NAO_INFORMADO, observacao);
     }
 
     public static MedidaCrescimento restaurar(
@@ -84,11 +101,24 @@ public class MedidaCrescimento {
             BigDecimal comprimentoCm,
             BigDecimal perimetroCefalicoCm,
             OrigemMedidaCrescimento origem,
+            ResponsavelMedicaoCrescimento responsavelMedicao,
             String observacao,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
     ) {
-        return new MedidaCrescimento(id, criancaId, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, observacao, criadoEm, atualizadoEm);
+        return new MedidaCrescimento(id, criancaId, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, responsavelMedicao, observacao, criadoEm, atualizadoEm);
+    }
+
+    public MedidaCrescimento atualizar(
+            LocalDate dataMedicao,
+            BigDecimal pesoKg,
+            BigDecimal comprimentoCm,
+            BigDecimal perimetroCefalicoCm,
+            OrigemMedidaCrescimento origem,
+            ResponsavelMedicaoCrescimento responsavelMedicao,
+            String observacao
+    ) {
+        return new MedidaCrescimento(id, criancaId, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, responsavelMedicao, observacao, criadoEm, LocalDateTime.now());
     }
 
     public MedidaCrescimento atualizar(
@@ -99,7 +129,7 @@ public class MedidaCrescimento {
             OrigemMedidaCrescimento origem,
             String observacao
     ) {
-        return new MedidaCrescimento(id, criancaId, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, observacao, criadoEm, LocalDateTime.now());
+        return atualizar(dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, ResponsavelMedicaoCrescimento.NAO_INFORMADO, observacao);
     }
 
     private static LocalDate validarData(LocalDate dataMedicao) {
@@ -146,6 +176,7 @@ public class MedidaCrescimento {
     public BigDecimal getComprimentoCm() { return comprimentoCm; }
     public BigDecimal getPerimetroCefalicoCm() { return perimetroCefalicoCm; }
     public OrigemMedidaCrescimento getOrigem() { return origem; }
+    public ResponsavelMedicaoCrescimento getResponsavelMedicao() { return responsavelMedicao; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }

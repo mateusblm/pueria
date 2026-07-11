@@ -1,4 +1,5 @@
-export type OrigemMedidaCrescimento = 'CASA' | 'CONSULTA' | 'ESCOLA_CRECHE' | 'OUTRO';
+export type OrigemMedidaCrescimento = 'CASA' | 'CONSULTA' | 'CONSULTORIO' | 'POSTO_SAUDE' | 'HOSPITAL' | 'OUTRO';
+export type ResponsavelMedicaoCrescimento = 'FAMILIA' | 'PEDIATRA' | 'ENFERMAGEM' | 'OUTRO' | 'NAO_INFORMADO';
 
 export interface MedidaCrescimento {
   id: string;
@@ -8,6 +9,7 @@ export interface MedidaCrescimento {
   comprimentoCm?: number | null;
   perimetroCefalicoCm?: number | null;
   origem: OrigemMedidaCrescimento;
+  responsavelMedicao: ResponsavelMedicaoCrescimento;
   observacao?: string | null;
   criadoEm: string;
   atualizadoEm?: string | null;
@@ -19,6 +21,7 @@ export interface SalvarMedidaCrescimentoRequest {
   comprimentoCm?: number | null;
   perimetroCefalicoCm?: number | null;
   origem: OrigemMedidaCrescimento;
+  responsavelMedicao: ResponsavelMedicaoCrescimento;
   observacao?: string | null;
 }
 

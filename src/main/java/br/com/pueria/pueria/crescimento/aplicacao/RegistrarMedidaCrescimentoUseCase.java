@@ -18,7 +18,10 @@ public class RegistrarMedidaCrescimentoUseCase {
 
     @Transactional
     public MedidaCrescimento executar(RegistrarMedidaCrescimentoComando comando) {
-        acesso.validar(comando.criancaId(), comando.emailResponsavel());
+        var crianca = acesso.validar(comando.criancaId(), comando.emailResponsavel());
+        if (comando.dataMedicao().isBefore(crianca.getDataNascimento())) {
+            throw new br.com.pueria.pueria.comum.excecao.RegraDominioException("A data da medição não pode ser anterior ao nascimento.");
+        }
         MedidaCrescimento medida = MedidaCrescimento.registrar(
                 comando.criancaId(),
                 comando.dataMedicao(),
@@ -26,6 +29,7 @@ public class RegistrarMedidaCrescimentoUseCase {
                 comando.comprimentoCm(),
                 comando.perimetroCefalicoCm(),
                 comando.origem(),
+                comando.responsavelMedicao(),
                 comando.observacao()
         );
         return medidaRepositorio.salvar(medida);

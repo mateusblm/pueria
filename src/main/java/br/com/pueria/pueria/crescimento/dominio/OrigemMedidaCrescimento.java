@@ -3,6 +3,8 @@ package br.com.pueria.pueria.crescimento.dominio;
 public enum OrigemMedidaCrescimento {
     CASA,
     CONSULTA,
-    ESCOLA_CRECHE,
+    CONSULTORIO,
+    POSTO_SAUDE,
+    HOSPITAL,
     OUTRO
 }

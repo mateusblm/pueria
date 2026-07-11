@@ -3,6 +3,7 @@ package br.com.pueria.pueria.crescimento.infraestrutura.web;
 import br.com.pueria.pueria.crescimento.aplicacao.AtualizarMedidaCrescimentoComando;
 import br.com.pueria.pueria.crescimento.aplicacao.RegistrarMedidaCrescimentoComando;
 import br.com.pueria.pueria.crescimento.dominio.OrigemMedidaCrescimento;
+import br.com.pueria.pueria.crescimento.dominio.ResponsavelMedicaoCrescimento;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.PastOrPresent;
@@ -29,15 +30,16 @@ public record MedidaCrescimentoRequest(
         BigDecimal perimetroCefalicoCm,
 
         OrigemMedidaCrescimento origem,
+        ResponsavelMedicaoCrescimento responsavelMedicao,
 
         @Size(max = 500, message = "A observação deve ter no máximo 500 caracteres.")
         String observacao
 ) {
     RegistrarMedidaCrescimentoComando paraRegistrar(UUID criancaId, String emailResponsavel) {
-        return new RegistrarMedidaCrescimentoComando(criancaId, emailResponsavel, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, observacao);
+        return new RegistrarMedidaCrescimentoComando(criancaId, emailResponsavel, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, responsavelMedicao, observacao);
     }
 
     AtualizarMedidaCrescimentoComando paraAtualizar(UUID criancaId, UUID medidaId, String emailResponsavel) {
-        return new AtualizarMedidaCrescimentoComando(criancaId, medidaId, emailResponsavel, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, observacao);
+        return new AtualizarMedidaCrescimentoComando(criancaId, medidaId, emailResponsavel, dataMedicao, pesoKg, comprimentoCm, perimetroCefalicoCm, origem, responsavelMedicao, observacao);
     }
 }

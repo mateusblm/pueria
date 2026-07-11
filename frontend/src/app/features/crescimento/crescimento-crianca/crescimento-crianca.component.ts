@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { CriancasService } from '../../criancas/criancas.service';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
+import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResponsavelMedicaoCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
 
 type PontoGraficoCrescimento = {
@@ -74,7 +74,8 @@ export class CrescimentoCriancaComponent implements OnInit {
     pesoKg: [''],
     comprimentoCm: [''],
     perimetroCefalicoCm: [''],
-    origem: this.fb.nonNullable.control<OrigemMedidaCrescimento>('CONSULTA', Validators.required),
+    origem: this.fb.nonNullable.control<OrigemMedidaCrescimento>('CONSULTORIO', Validators.required),
+    responsavelMedicao: this.fb.nonNullable.control<ResponsavelMedicaoCrescimento>('NAO_INFORMADO', Validators.required),
     observacao: ['', Validators.maxLength(500)]
   });
 
@@ -184,6 +185,7 @@ export class CrescimentoCriancaComponent implements OnInit {
       comprimentoCm: this.formatarEntradaDecimal(medida.comprimentoCm),
       perimetroCefalicoCm: this.formatarEntradaDecimal(medida.perimetroCefalicoCm),
       origem: medida.origem,
+      responsavelMedicao: medida.responsavelMedicao,
       observacao: medida.observacao ?? ''
     });
   }
@@ -195,7 +197,8 @@ export class CrescimentoCriancaComponent implements OnInit {
       pesoKg: '',
       comprimentoCm: '',
       perimetroCefalicoCm: '',
-      origem: 'CONSULTA',
+      origem: 'CONSULTORIO',
+      responsavelMedicao: 'NAO_INFORMADO',
       observacao: ''
     });
   }
@@ -317,12 +320,14 @@ export class CrescimentoCriancaComponent implements OnInit {
   }
 
   labelOrigem(origem: OrigemMedidaCrescimento): string {
-    const labels: Record<OrigemMedidaCrescimento, string> = {
-      CASA: 'Casa',
-      CONSULTA: 'Consulta',
-      ESCOLA_CRECHE: 'Escola ou creche',
-      OUTRO: 'Outro'
-    };
+      const labels: Record<OrigemMedidaCrescimento, string> = {
+        CASA: 'Casa',
+        CONSULTA: 'Consulta',
+        CONSULTORIO: 'Consultório',
+        POSTO_SAUDE: 'Posto de saúde',
+        HOSPITAL: 'Hospital',
+        OUTRO: 'Outro'
+      };
     return labels[origem];
   }
 
@@ -468,6 +473,7 @@ export class CrescimentoCriancaComponent implements OnInit {
       comprimentoCm: this.lerMedida(valor.comprimentoCm, 'comprimento ou estatura', 20, 140),
       perimetroCefalicoCm: this.lerMedida(valor.perimetroCefalicoCm, 'perímetro cefálico', 20, 65),
       origem: valor.origem,
+      responsavelMedicao: valor.responsavelMedicao,
       observacao: valor.observacao?.trim() || null
     };
 

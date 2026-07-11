@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.crescimento.infraestrutura.persistencia;
 
 import br.com.pueria.pueria.crescimento.dominio.OrigemMedidaCrescimento;
+import br.com.pueria.pueria.crescimento.dominio.ResponsavelMedicaoCrescimento;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -34,6 +35,10 @@ public class MedidaCrescimentoJpaEntidade {
     @Column(nullable = false, length = 30)
     private OrigemMedidaCrescimento origem;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "responsavel_medicao", nullable = false, length = 20)
+    private ResponsavelMedicaoCrescimento responsavelMedicao;
+
     @Column(length = 500)
     private String observacao;
 
@@ -45,7 +50,7 @@ public class MedidaCrescimentoJpaEntidade {
 
     protected MedidaCrescimentoJpaEntidade() {}
 
-    public MedidaCrescimentoJpaEntidade(UUID id, UUID criancaId, LocalDate dataMedicao, BigDecimal pesoKg, BigDecimal comprimentoCm, BigDecimal perimetroCefalicoCm, OrigemMedidaCrescimento origem, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public MedidaCrescimentoJpaEntidade(UUID id, UUID criancaId, LocalDate dataMedicao, BigDecimal pesoKg, BigDecimal comprimentoCm, BigDecimal perimetroCefalicoCm, OrigemMedidaCrescimento origem, ResponsavelMedicaoCrescimento responsavelMedicao, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataMedicao = dataMedicao;
@@ -53,6 +58,7 @@ public class MedidaCrescimentoJpaEntidade {
         this.comprimentoCm = comprimentoCm;
         this.perimetroCefalicoCm = perimetroCefalicoCm;
         this.origem = origem;
+        this.responsavelMedicao = responsavelMedicao;
         this.observacao = observacao;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
@@ -65,6 +71,7 @@ public class MedidaCrescimentoJpaEntidade {
     public BigDecimal getComprimentoCm() { return comprimentoCm; }
     public BigDecimal getPerimetroCefalicoCm() { return perimetroCefalicoCm; }
     public OrigemMedidaCrescimento getOrigem() { return origem; }
+    public ResponsavelMedicaoCrescimento getResponsavelMedicao() { return responsavelMedicao; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }

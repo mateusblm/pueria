@@ -13,6 +13,7 @@ class MedidaCrescimentoMapper {
                 entidade.getComprimentoCm(),
                 entidade.getPerimetroCefalicoCm(),
                 entidade.getOrigem(),
+                entidade.getResponsavelMedicao(),
                 entidade.getObservacao(),
                 entidade.getCriadoEm(),
                 entidade.getAtualizadoEm()
@@ -28,6 +29,7 @@ class MedidaCrescimentoMapper {
                 medida.getComprimentoCm(),
                 medida.getPerimetroCefalicoCm(),
                 medida.getOrigem(),
+                medida.getResponsavelMedicao(),
                 medida.getObservacao(),
                 medida.getCriadoEm(),
                 medida.getAtualizadoEm()

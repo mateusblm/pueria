@@ -19,7 +19,10 @@ public class AtualizarMedidaCrescimentoUseCase {
 
     @Transactional
     public MedidaCrescimento executar(AtualizarMedidaCrescimentoComando comando) {
-        acesso.validar(comando.criancaId(), comando.emailResponsavel());
+        var crianca = acesso.validar(comando.criancaId(), comando.emailResponsavel());
+        if (comando.dataMedicao().isBefore(crianca.getDataNascimento())) {
+            throw new br.com.pueria.pueria.comum.excecao.RegraDominioException("A data da medição não pode ser anterior ao nascimento.");
+        }
         MedidaCrescimento medida = medidaRepositorio.buscarPorId(comando.medidaId())
                 .filter(item -> item.getCriancaId().equals(comando.criancaId()))
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Medida de crescimento não encontrada."));
@@ -30,6 +33,7 @@ public class AtualizarMedidaCrescimentoUseCase {
                 comando.comprimentoCm(),
                 comando.perimetroCefalicoCm(),
                 comando.origem(),
+                comando.responsavelMedicao(),
                 comando.observacao()
         ));
     }

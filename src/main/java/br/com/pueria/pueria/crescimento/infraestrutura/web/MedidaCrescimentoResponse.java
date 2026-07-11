@@ -2,6 +2,7 @@ package br.com.pueria.pueria.crescimento.infraestrutura.web;
 
 import br.com.pueria.pueria.crescimento.dominio.MedidaCrescimento;
 import br.com.pueria.pueria.crescimento.dominio.OrigemMedidaCrescimento;
+import br.com.pueria.pueria.crescimento.dominio.ResponsavelMedicaoCrescimento;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public record MedidaCrescimentoResponse(
         BigDecimal comprimentoCm,
         BigDecimal perimetroCefalicoCm,
         OrigemMedidaCrescimento origem,
+        ResponsavelMedicaoCrescimento responsavelMedicao,
         String observacao,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm
@@ -29,6 +31,7 @@ public record MedidaCrescimentoResponse(
                 medida.getComprimentoCm(),
                 medida.getPerimetroCefalicoCm(),
                 medida.getOrigem(),
+                medida.getResponsavelMedicao(),
                 medida.getObservacao(),
                 medida.getCriadoEm(),
                 medida.getAtualizadoEm()

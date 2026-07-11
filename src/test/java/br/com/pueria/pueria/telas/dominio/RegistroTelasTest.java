@@ -69,7 +69,7 @@ class RegistroTelasTest {
         RegistroTelas registro = RegistroTelas.registrar(UUID.randomUUID(), dados);
 
         assertEquals(2, registro.getContextosUso().size());
-        assertEquals(TipoConteudoTela.VIDEOCHAMADA, registro.getContextosUso().get(1).conteudo());
+        assertTrue(registro.getContextosUso().stream().anyMatch(contexto -> contexto.dispositivo() == TipoDispositivoTela.CELULAR && contexto.conteudo() == TipoConteudoTela.VIDEOCHAMADA));
     }
 
     private static DadosTelas dados(Integer semana, Integer fimSemana) {

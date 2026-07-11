@@ -194,13 +194,28 @@
             <label>
               Onde foi medido
               <select formControlName="origem">
-                <option value="CONSULTA">Consulta</option>
                 <option value="CASA">Casa</option>
-                <option value="ESCOLA_CRECHE">Escola ou creche</option>
+                <option value="CONSULTORIO">Consultório</option>
+                <option value="POSTO_SAUDE">Posto de saúde</option>
+                <option value="HOSPITAL">Hospital</option>
+                <option value="OUTRO">Outro</option>
+              </select>
+            </label>
+            <label>
+              Quem mediu
+              <select formControlName="responsavelMedicao">
+                <option value="NAO_INFORMADO">Não informado</option>
+                <option value="FAMILIA">Mãe, pai ou outro familiar</option>
+                <option value="PEDIATRA">Pediatra</option>
+                <option value="ENFERMAGEM">Enfermagem</option>
                 <option value="OUTRO">Outro</option>
               </select>
             </label>
           </div>
+
+          @if (form.controls.origem.value === 'CASA') {
+            <p class="crescimento-form__aviso">Medidas feitas em casa podem variar mais. Registrar a forma como foi medida ajuda a comparar a evolução com mais cuidado.</p>
+          }
 
           <label>
             Observações
