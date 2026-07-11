@@ -12,8 +12,8 @@
     <div class="alimentacao-page__hero">
       <div>
         <p class="pueria-eyebrow">Alimentação</p>
-        <h1 class="pueria-title">{{ crianca.nome }}</h1>
-        <p class="pueria-subtitle">Registre a rotina alimentar para observar hábitos, variedade e pontos que merecem conversa na consulta.</p>
+        <div class="alimentacao-page__identidade"><span><app-icon name="salad" [size]="29" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
+        <p class="pueria-subtitle">Uma visão gentil da rotina, da variedade e das descobertas à mesa.</p>
       </div>
     </div>
 
@@ -37,23 +37,23 @@
 
         <div class="alimentacao-sintese__grid">
           <article>
-            <span>Leite</span>
+            <span><app-icon name="heartPulse" [size]="15" />Leite</span>
             <strong>{{ labelTipoLeite(registro.tipoLeite) }}</strong>
           </article>
           <article>
-            <span>Fase alimentar</span>
+            <span><app-icon name="salad" [size]="15" />Fase alimentar</span>
             <strong>{{ labelEstagio(registro.estagioAlimentar) }}</strong>
           </article>
           <article>
-            <span>Textura</span>
+            <span><app-icon name="sparkles" [size]="15" />Textura</span>
             <strong>{{ labelTextura(registro.texturaPredominante) }}</strong>
           </article>
           <article>
-            <span>Data</span>
+            <span><app-icon name="chart" [size]="15" />Data</span>
             <strong>{{ formatarData(registro.dataRegistro) }}</strong>
           </article>
           <article>
-            <span>Alimentos marcados</span>
+            <span><app-icon name="apple" [size]="15" />Alimentos marcados</span>
             <strong>{{ registro.alimentosOferecidos.length }}</strong>
           </article>
           <article>

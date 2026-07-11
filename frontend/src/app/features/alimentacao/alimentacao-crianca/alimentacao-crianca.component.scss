@@ -19,6 +19,8 @@
   max-width: 1180px;
 }
 
+.alimentacao-page__hero { border-left: 5px solid #d6a84f; padding-left: 1rem; }.alimentacao-page__identidade { align-items: center; display: flex; gap: .5rem; color: #7d5b14; }
+
 .alimentacao-page__state {
   max-width: 760px;
   padding: 1.5rem;
@@ -42,6 +44,7 @@
 .alimentacao-sintese {
   display: grid;
   gap: 1.25rem;
+  border-top: 4px solid #d6a84f;
   padding: 1.5rem;
 }
 
@@ -66,6 +69,7 @@
   color: var(--pueria-texto-suave);
   font-size: 0.9rem;
 }
+.alimentacao-sintese__grid span { align-items: center; display: flex; gap: .35rem; }
 
 .alimentacao-analise {
   display: grid;
@@ -101,6 +105,7 @@
 }
 
 .alimentacao-form {
+  border-top: 4px solid #6b9274;
   display: grid;
   gap: 1.25rem;
   min-width: 0;
@@ -166,6 +171,7 @@
 .alimentacao-variedade {
   display: grid;
   gap: 1rem;
+  border-left: 4px solid #d6a84f;
   border: 1px solid rgba(147, 43, 57, 0.14);
   border-radius: 8px;
   background: #fffaf7;
@@ -211,6 +217,7 @@
   display: grid;
   gap: 0.25rem;
   border: 1px solid rgba(147, 43, 57, 0.12);
+  border-top: 3px solid #d6a84f;
   border-radius: 8px;
   background: #fff;
   padding: 0.8rem;
@@ -611,4 +618,5 @@
     align-items: stretch;
     grid-template-columns: 1fr;
   }
+
 }

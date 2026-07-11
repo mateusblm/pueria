@@ -8,6 +8,7 @@ import { AceitacaoAlimento, AlimentoRegistroAlimentacao, ClassificacaoGluten, Es
 import { CriancasService } from '../../criancas/criancas.service';
 import { AlimentacaoService } from '../alimentacao.service';
 import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './catalogo-alimentos';
+import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
 type FiltroCatalogo = GrupoAlimento | 'TODOS' | 'ALERGENICOS';
@@ -15,7 +16,7 @@ type GrupoCatalogo = { valor: FiltroCatalogo; label: string };
 
 @Component({
   selector: 'app-alimentacao-crianca',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
   templateUrl: './alimentacao-crianca.component.html',
   styleUrl: './alimentacao-crianca.component.scss'
 })
