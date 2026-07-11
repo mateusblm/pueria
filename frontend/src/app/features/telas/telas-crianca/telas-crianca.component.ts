@@ -24,6 +24,16 @@ export class TelasCriancaComponent implements OnInit {
   private readonly telasService = inject(TelasService);
 
   readonly crianca = signal<Crianca | null>(null);
+
+  rotaRetorno(): string[] {
+    return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento'
+      ? ['/acompanhamento']
+      : ['/criancas', this.route.snapshot.paramMap.get('id') ?? ''];
+  }
+
+  textoRetorno(): string {
+    return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento' ? 'Acompanhamento' : 'Perfil';
+  }
   readonly registros = signal<RegistroTelas[]>([]);
   readonly carregando = signal(true);
   readonly salvando = signal(false);

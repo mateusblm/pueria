@@ -70,7 +70,7 @@
               <h3>{{ modulo.titulo }}</h3>
               <strong>{{ modulo.valor }}</strong>
               <p>{{ modulo.detalhe }}</p>
-              <a [routerLink]="modulo.rota" class="pueria-button pueria-button--secondary">{{ modulo.acao }}</a>
+              <a [routerLink]="modulo.rota" [queryParams]="{ origem: 'perfil' }" class="pueria-button pueria-button--secondary">{{ modulo.acao }}</a>
             </article>
           }
         </div>

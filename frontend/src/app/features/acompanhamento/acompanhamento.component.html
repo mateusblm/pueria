@@ -51,7 +51,7 @@
             <span [style.width.%]="progressoAtual.percentual"></span>
           </div>
           <small>{{ progressoAtual.percentual }}% da idade atual</small>
-          <a [routerLink]="rotaAcaoPrincipal(foco)" class="pueria-button">{{ textoAcaoPrincipal(foco) }}</a>
+          <a [routerLink]="rotaAcaoPrincipal(foco)" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">{{ textoAcaoPrincipal(foco) }}</a>
         </div>
       </article>
 
@@ -63,7 +63,7 @@
 
         <div class="acompanhamento-prioridades__lista">
           @for (passo of proximosPassos(foco); track passo.titulo) {
-            <a [routerLink]="passo.rota" class="prioridade" [class.prioridade--destaque]="passo.destaque">
+            <a [routerLink]="passo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="prioridade" [class.prioridade--destaque]="passo.destaque">
               <span class="prioridade__icone"><app-icon [name]="passo.icone" [size]="20" /></span>
               <span class="prioridade__conteudo"><strong>{{ passo.titulo }}</strong><span>{{ passo.detalhe }}</span></span>
               <app-icon class="prioridade__seta" name="chevronRight" [size]="18" />
@@ -82,7 +82,7 @@
             Use as respostas dos marcos junto com crescimento, alimentação, trânsito intestinal, sono e telas para levar uma visão mais completa à consulta.
           </p>
         </div>
-        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" class="pueria-button pueria-button--secondary">
+        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button pueria-button--secondary">
           Revisar desenvolvimento
         </a>
       </section>
@@ -90,7 +90,7 @@
 
     <section class="acompanhamento-modulos" aria-label="Módulos de acompanhamento">
       @for (modulo of modulosCuidado(foco); track modulo.titulo) {
-        <a [routerLink]="modulo.rota" class="pueria-card modulo-cuidado" [class.modulo-cuidado--destaque]="modulo.destaque" [attr.data-tema]="modulo.tema">
+        <a [routerLink]="modulo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-card modulo-cuidado" [class.modulo-cuidado--destaque]="modulo.destaque" [attr.data-tema]="modulo.tema">
           <span class="modulo-cuidado__icone"><app-icon [name]="modulo.icone" [size]="25" /></span>
           <span class="modulo-cuidado__texto"><span>{{ modulo.titulo }}</span><strong>{{ modulo.detalhe }}</strong></span>
           <app-icon class="modulo-cuidado__seta" name="chevronRight" [size]="20" />

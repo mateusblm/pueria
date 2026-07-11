@@ -1,5 +1,5 @@
 <section class="crescimento-page">
-  <a routerLink="/acompanhamento" class="crescimento-page__back">Voltar para acompanhamento</a>
+  <a [routerLink]="rotaRetorno()" class="crescimento-page__back">Voltar para {{ textoRetorno() }}</a>
 
   @if (carregando()) {
     <div class="pueria-card crescimento-page__state">Carregando crescimento...</div>

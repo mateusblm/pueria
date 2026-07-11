@@ -1,5 +1,5 @@
 <section class="intestinal-page">
-  <a [routerLink]="['/criancas', crianca()?.id]" class="intestinal-page__back">← Perfil</a>
+  <a [routerLink]="rotaRetorno()" class="intestinal-page__back">← {{ textoRetorno() }}</a>
 
   @if (carregando()) {
     <div class="pueria-card intestinal-page__state">Carregando trânsito intestinal...</div>

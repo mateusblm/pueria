@@ -24,6 +24,16 @@ export class SonoCriancaComponent implements OnInit {
   private readonly sonoService = inject(SonoService);
 
   readonly crianca = signal<Crianca | null>(null);
+
+  rotaRetorno(): string[] {
+    return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento'
+      ? ['/acompanhamento']
+      : ['/criancas', this.route.snapshot.paramMap.get('id') ?? ''];
+  }
+
+  textoRetorno(): string {
+    return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento' ? 'Acompanhamento' : 'Perfil';
+  }
   readonly registros = signal<RegistroSono[]>([]);
   readonly carregando = signal(true);
   readonly salvando = signal(false);

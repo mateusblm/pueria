@@ -27,6 +27,16 @@ export class AlimentacaoCriancaComponent implements OnInit {
   private readonly alimentacaoService = inject(AlimentacaoService);
 
   readonly crianca = signal<Crianca | null>(null);
+
+  rotaRetorno(): string[] {
+    return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento'
+      ? ['/acompanhamento']
+      : ['/criancas', this.route.snapshot.paramMap.get('id') ?? ''];
+  }
+
+  textoRetorno(): string {
+    return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento' ? 'Acompanhamento' : 'Perfil';
+  }
   readonly registros = signal<RegistroAlimentacao[]>([]);
   readonly carregando = signal(true);
   readonly salvando = signal(false);

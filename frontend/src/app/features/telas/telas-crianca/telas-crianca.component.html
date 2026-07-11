@@ -1,5 +1,5 @@
 <section class="telas-page">
-  <a [routerLink]="['/criancas', crianca()?.id]" class="telas-page__back">← Perfil</a>
+  <a [routerLink]="rotaRetorno()" class="telas-page__back">← {{ textoRetorno() }}</a>
 
   @if (carregando()) {
     <div class="pueria-card telas-page__state">Carregando telas...</div>

@@ -55,6 +55,16 @@ type DetalheIndicadorCrescimento = {
 })
 export class CrescimentoCriancaComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+
+  rotaRetorno(): string[] {
+    return this.route.snapshot.queryParamMap.get('origem') === 'perfil'
+      ? ['/criancas', this.route.snapshot.paramMap.get('id') ?? '']
+      : ['/acompanhamento'];
+  }
+
+  textoRetorno(): string {
+    return this.route.snapshot.queryParamMap.get('origem') === 'perfil' ? 'Perfil' : 'Acompanhamento';
+  }
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly crescimentoService = inject(CrescimentoService);
