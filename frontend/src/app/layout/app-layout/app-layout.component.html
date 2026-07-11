@@ -2,7 +2,7 @@
   <header class="app-shell__topbar">
     <app-brand-mark></app-brand-mark>
     <button type="button" class="app-shell__menu-button" (click)="abrirMenu()" aria-label="Abrir menu">
-      ☰
+      <app-icon name="menu" [size]="22" />
     </button>
   </header>
 
@@ -13,21 +13,22 @@
   <aside class="app-shell__sidebar" [class.app-shell__sidebar--open]="menuAberto">
     <div class="app-shell__sidebar-head">
       <app-brand-mark></app-brand-mark>
-      <button type="button" class="app-shell__close" (click)="fecharMenu()" aria-label="Fechar menu">×</button>
+      <button type="button" class="app-shell__close" (click)="fecharMenu()" aria-label="Fechar menu"><app-icon name="close" [size]="21" /></button>
     </div>
 
     <nav class="app-shell__nav" aria-label="Navegação principal">
       <a routerLink="/acompanhamento" routerLinkActive="ativo" (click)="fecharMenu()">
-        <span>◷</span>
+        <app-icon name="chart" [size]="20" />
         Acompanhamento
       </a>
       <a routerLink="/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">
-        <span>⌂</span>
+        <app-icon name="baby" [size]="20" />
         Minha criança
       </a>
     </nav>
 
     <button type="button" class="app-shell__logout" (click)="sair()">
+      <app-icon name="logout" [size]="19" />
       Sair da conta
     </button>
   </aside>

@@ -19,7 +19,7 @@
 .app-shell__menu-button,
 .app-shell__close {
   border: 1px solid var(--pueria-borda);
-  border-radius: 999px;
+  border-radius: 6px;
   background: #fffaf4;
   color: var(--pueria-texto);
   font-weight: 850;
@@ -82,7 +82,7 @@
 .app-shell__logout {
   min-height: 48px;
   border: 1px solid var(--pueria-borda);
-  border-radius: 18px;
+  border-radius: 6px;
   background: #fffaf4;
   color: var(--pueria-texto);
   display: flex;
@@ -95,6 +95,7 @@
 }
 
 .app-shell__nav a.ativo {
+  border-left: 4px solid var(--pueria-vermelho-flor);
   border-color: rgba(217, 45, 74, 0.22);
   background: var(--pueria-rosa-nevoa);
   color: var(--pueria-vermelho-profundo);

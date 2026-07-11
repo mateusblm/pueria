@@ -1,10 +1,18 @@
 <section class="acompanhamento-page">
   <div class="acompanhamento-page__hero">
-    <p class="pueria-eyebrow">Acompanhamento</p>
-    <h1 class="pueria-title">Cuidado contínuo da criança</h1>
-    <p class="pueria-subtitle">
-      Veja o que merece atenção agora e mantenha desenvolvimento, crescimento, alimentação, trânsito intestinal, sono e telas em uma mesma linha de cuidado.
-    </p>
+    <div>
+      <p class="pueria-eyebrow">Acompanhamento</p>
+      <h1 class="pueria-title">Cuidado que cresce junto</h1>
+      <p class="pueria-subtitle">
+        Uma visão clara do desenvolvimento, da saúde e da rotina da criança.
+      </p>
+    </div>
+    <div class="acompanhamento-page__visual" aria-hidden="true">
+      <span class="familia-figura familia-figura--principal"><app-icon name="baby" [size]="42" [strokeWidth]="1.7" /></span>
+      <span class="familia-figura familia-figura--apoio"><app-icon name="users" [size]="30" [strokeWidth]="1.7" /></span>
+      <span class="familia-figura familia-figura--cuidado"><app-icon name="heartPulse" [size]="27" [strokeWidth]="1.8" /></span>
+      <app-icon class="familia-flor" name="sparkles" [size]="24" />
+    </div>
   </div>
 
   @if (carregando()) {
@@ -25,7 +33,10 @@
     <section class="acompanhamento-home">
       <article class="pueria-card acompanhamento-destaque">
         <div class="acompanhamento-destaque__conteudo">
-          <p class="pueria-eyebrow">Hoje no acompanhamento</p>
+          <div class="acompanhamento-destaque__identidade">
+            <span class="acompanhamento-avatar"><app-icon name="baby" [size]="28" /></span>
+            <p class="pueria-eyebrow">Hoje no acompanhamento</p>
+          </div>
           <h2>{{ foco.crianca.nome }}</h2>
           <p>{{ calcularIdade(foco.crianca.dataNascimento) }} · Faixa de referência: {{ idadeReferencia(foco.marcos) }}</p>
           <strong>{{ mensagemDoDia(foco) }}</strong>
@@ -53,8 +64,9 @@
         <div class="acompanhamento-prioridades__lista">
           @for (passo of proximosPassos(foco); track passo.titulo) {
             <a [routerLink]="passo.rota" class="prioridade" [class.prioridade--destaque]="passo.destaque">
-              <strong>{{ passo.titulo }}</strong>
-              <span>{{ passo.detalhe }}</span>
+              <span class="prioridade__icone"><app-icon [name]="passo.icone" [size]="20" /></span>
+              <span class="prioridade__conteudo"><strong>{{ passo.titulo }}</strong><span>{{ passo.detalhe }}</span></span>
+              <app-icon class="prioridade__seta" name="chevronRight" [size]="18" />
             </a>
           }
         </div>
@@ -78,9 +90,10 @@
 
     <section class="acompanhamento-modulos" aria-label="Módulos de acompanhamento">
       @for (modulo of modulosCuidado(foco); track modulo.titulo) {
-        <a [routerLink]="modulo.rota" class="pueria-card modulo-cuidado" [class.modulo-cuidado--destaque]="modulo.destaque">
-          <span>{{ modulo.titulo }}</span>
-          <strong>{{ modulo.detalhe }}</strong>
+        <a [routerLink]="modulo.rota" class="pueria-card modulo-cuidado" [class.modulo-cuidado--destaque]="modulo.destaque" [attr.data-tema]="modulo.tema">
+          <span class="modulo-cuidado__icone"><app-icon [name]="modulo.icone" [size]="25" /></span>
+          <span class="modulo-cuidado__texto"><span>{{ modulo.titulo }}</span><strong>{{ modulo.detalhe }}</strong></span>
+          <app-icon class="modulo-cuidado__seta" name="chevronRight" [size]="20" />
         </a>
       }
     </section>

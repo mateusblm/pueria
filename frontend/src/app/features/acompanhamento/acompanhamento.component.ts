@@ -7,6 +7,7 @@ import { Crianca, Parentesco, Sexo, TipoParto } from '../../shared/models/crianc
 import { MarcoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
 import { CriancasService } from '../criancas/criancas.service';
 import { DesenvolvimentoService } from '../desenvolvimento/desenvolvimento.service';
+import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
 
 type ResumoCrianca = {
   crianca: Crianca;
@@ -19,11 +20,13 @@ type AtalhoCuidado = {
   detalhe: string;
   rota: string[];
   destaque?: boolean;
+  icone: AppIconName;
+  tema?: string;
 };
 
 @Component({
   selector: 'app-acompanhamento',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, AppIconComponent],
   templateUrl: './acompanhamento.component.html',
   styleUrl: './acompanhamento.component.scss'
 })
@@ -308,7 +311,8 @@ export class AcompanhamentoComponent implements OnInit {
         titulo: 'Abrir perfil',
         detalhe: 'Confira os dados da criança enquanto o desenvolvimento não carrega.',
         rota: ['/criancas', resumo.crianca.id],
-        destaque: true
+        destaque: true,
+        icone: 'user'
       }];
     }
 
@@ -317,7 +321,8 @@ export class AcompanhamentoComponent implements OnInit {
         titulo: 'Responder marcos da idade',
         detalhe: `${progresso.respondidos}/${progresso.total} respostas preenchidas na idade atual.`,
         rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
-        destaque: true
+        destaque: true,
+        icone: 'brain'
       });
     }
 
@@ -326,7 +331,8 @@ export class AcompanhamentoComponent implements OnInit {
         titulo: 'Preparar conversa com o pediatra',
         detalhe: this.labelPontosAtencao(pontos),
         rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
-        destaque: true
+        destaque: true,
+        icone: 'stethoscope'
       });
     }
 
@@ -334,12 +340,14 @@ export class AcompanhamentoComponent implements OnInit {
       {
         titulo: 'Atualizar crescimento',
         detalhe: 'Peso, altura e medida da cabeça ajudam a acompanhar o crescimento.',
-        rota: ['/criancas', resumo.crianca.id, 'crescimento']
+        rota: ['/criancas', resumo.crianca.id, 'crescimento'],
+        icone: 'chart'
       },
       {
         titulo: 'Registrar sono e rotina',
         detalhe: 'Sono, alimentação e telas ajudam a entender melhor a rotina da criança.',
-        rota: ['/criancas', resumo.crianca.id, 'sono']
+        rota: ['/criancas', resumo.crianca.id, 'sono'],
+        icone: 'moon'
       }
     );
 
@@ -356,32 +364,44 @@ export class AcompanhamentoComponent implements OnInit {
           ? 'Inicie os marcos da idade atual.'
           : `${progresso.percentual}% dos marcos da idade atual preenchidos.`,
         rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
-        destaque: progresso.percentual < 100
+        destaque: progresso.percentual < 100,
+        icone: 'brain',
+        tema: 'desenvolvimento'
       },
       {
         titulo: 'Crescimento',
         detalhe: 'Veja se peso, altura e medida da cabeça seguem o esperado para a idade.',
-        rota: ['/criancas', resumo.crianca.id, 'crescimento']
+        rota: ['/criancas', resumo.crianca.id, 'crescimento'],
+        icone: 'chart',
+        tema: 'crescimento'
       },
       {
         titulo: 'Alimentação',
         detalhe: 'Observe rotina, variedade alimentar e pontos úteis para a consulta.',
-        rota: ['/criancas', resumo.crianca.id, 'alimentacao']
+        rota: ['/criancas', resumo.crianca.id, 'alimentacao'],
+        icone: 'salad',
+        tema: 'alimentacao'
       },
       {
         titulo: 'Trânsito intestinal',
         detalhe: 'Registre aspecto das fezes, frequência, assaduras e sinais que merecem observação.',
-        rota: ['/criancas', resumo.crianca.id, 'transito-intestinal']
+        rota: ['/criancas', resumo.crianca.id, 'transito-intestinal'],
+        icone: 'toilet',
+        tema: 'intestinal'
       },
       {
         titulo: 'Sono',
         detalhe: 'Registre duração, qualidade e padrão de descanso em 24 horas.',
-        rota: ['/criancas', resumo.crianca.id, 'sono']
+        rota: ['/criancas', resumo.crianca.id, 'sono'],
+        icone: 'moon',
+        tema: 'sono'
       },
       {
         titulo: 'Telas',
         detalhe: 'Acompanhe tempo, contexto de uso e oportunidades de ajuste.',
-        rota: ['/criancas', resumo.crianca.id, 'telas']
+        rota: ['/criancas', resumo.crianca.id, 'telas'],
+        icone: 'smartphone',
+        tema: 'telas'
       }
     ];
   }

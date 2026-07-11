@@ -4,11 +4,39 @@
 }
 
 .acompanhamento-page__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  align-items: center;
+  min-height: 190px;
+  overflow: hidden;
   border: 1px solid rgba(202, 45, 65, 0.10);
-  border-radius: 22px;
-  background: #fff7f1;
-  padding: 26px;
+  border-radius: 8px;
+  background: #fff;
+  padding: 30px;
 }
+
+.acompanhamento-page__visual {
+  position: relative;
+  width: 180px;
+  height: 150px;
+  justify-self: end;
+  background: #f2e4dd;
+  border-radius: 50% 44% 48% 42%;
+}
+
+.familia-figura {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 5px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(70, 49, 46, .12);
+}
+
+.familia-figura--principal { inset: 28px auto auto 28px; width: 78px; height: 78px; background: #f7b9a8; color: #812c38; }
+.familia-figura--apoio { inset: 18px 14px auto auto; width: 64px; height: 64px; background: #cde2d2; color: #315b40; }
+.familia-figura--cuidado { inset: auto 24px 12px auto; width: 58px; height: 58px; background: #f7df9e; color: #78571c; }
+.familia-flor { position: absolute; inset: auto auto 13px 26px; color: var(--pueria-vermelho-flor); }
 
 .acompanhamento-page__hero h1,
 .acompanhamento-page__hero p,
@@ -32,8 +60,13 @@
   display: grid;
   gap: 20px;
   padding: 24px;
-  background: #fff7f1;
+  border-top: 4px solid var(--pueria-vermelho-flor);
+  background: #fff;
 }
+
+.acompanhamento-destaque__identidade { display: flex; align-items: center; gap: 10px; }
+.acompanhamento-destaque__identidade .pueria-eyebrow { margin: 0; }
+.acompanhamento-avatar { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #f8d8d4; color: #9f1f35; }
 
 .acompanhamento-destaque__conteudo,
 .acompanhamento-destaque__painel,
@@ -102,7 +135,9 @@
 
 .prioridade {
   display: grid;
-  gap: 6px;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
   min-height: 88px;
   border: 1px solid rgba(202, 45, 65, 0.12);
   border-radius: 12px;
@@ -111,6 +146,10 @@
   padding: 14px;
   text-decoration: none;
 }
+
+.prioridade__icone { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #edf4ee; color: var(--pueria-folha-escura); }
+.prioridade__conteudo { display: grid; gap: 4px; }
+.prioridade__seta { color: #9b8d88; }
 
 .prioridade--destaque {
   border-color: rgba(202, 45, 65, 0.26);
@@ -136,14 +175,27 @@
 
 .modulo-cuidado {
   display: grid;
-  align-content: start;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  min-height: 132px;
   color: inherit;
   padding: 18px;
   text-decoration: none;
 }
 
+.modulo-cuidado__icone { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--modulo-fundo, #f5e7e2); color: var(--modulo-cor, #8b3d48); }
+.modulo-cuidado__texto { display: grid; gap: 6px; }
+.modulo-cuidado__seta { color: var(--modulo-cor, #8b3d48); }
+.modulo-cuidado[data-tema='desenvolvimento'] { --modulo-fundo: #efe4f5; --modulo-cor: #704582; }
+.modulo-cuidado[data-tema='crescimento'] { --modulo-fundo: #dceee3; --modulo-cor: #356348; }
+.modulo-cuidado[data-tema='alimentacao'] { --modulo-fundo: #fff0c8; --modulo-cor: #7b5a18; }
+.modulo-cuidado[data-tema='intestinal'] { --modulo-fundo: #f4dfd5; --modulo-cor: #88513d; }
+.modulo-cuidado[data-tema='sono'] { --modulo-fundo: #dce7f5; --modulo-cor: #3e5879; }
+.modulo-cuidado[data-tema='telas'] { --modulo-fundo: #dcebed; --modulo-cor: #356069; }
+
 .modulo-cuidado span {
-  color: var(--pueria-vermelho-profundo);
+  color: var(--modulo-cor, var(--pueria-vermelho-profundo));
   font-size: 0.86rem;
   font-weight: 860;
   text-transform: uppercase;
@@ -358,6 +410,12 @@
 }
 
 @media (max-width: 640px) {
+  .acompanhamento-page__hero { grid-template-columns: 1fr 112px; min-height: 160px; }
+  .acompanhamento-page__visual { width: 108px; height: 108px; }
+  .familia-figura--principal { inset: 20px auto auto 7px; width: 58px; height: 58px; }
+  .familia-figura--apoio { inset: 7px 2px auto auto; width: 48px; height: 48px; }
+  .familia-figura--cuidado { inset: auto 8px 2px auto; width: 44px; height: 44px; }
+  .familia-flor { display: none; }
   .acompanhamento-page__hero,
   .acompanhamento-destaque,
   .acompanhamento-prioridades,
@@ -366,7 +424,7 @@
   .outra-crianca,
   .acompanhamento-page__state,
   .cadastro-modal__panel {
-    border-radius: 16px;
+    border-radius: 8px;
     padding: 18px;
   }
 

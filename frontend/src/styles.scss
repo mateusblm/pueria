@@ -24,8 +24,8 @@
 
   --pueria-sombra: 0 24px 70px rgba(101, 55, 48, 0.13);
   --pueria-sombra-suave: 0 16px 42px rgba(101, 55, 48, 0.08);
-  --pueria-raio: 30px;
-  --pueria-raio-menor: 18px;
+  --pueria-raio: 8px;
+  --pueria-raio-menor: 6px;
   --pueria-fonte: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -41,22 +41,8 @@ body {
 body {
   margin: 0;
   color: var(--pueria-texto);
-  background:
-    radial-gradient(circle at 8% 5%, rgba(217, 45, 74, 0.15), transparent 30rem),
-    radial-gradient(circle at 90% 10%, rgba(107, 146, 116, 0.16), transparent 28rem),
-    linear-gradient(180deg, #fffaf6 0%, var(--pueria-fundo) 46%, #f5eadf 100%);
+  background: #f8f2ec;
   font-family: var(--pueria-fonte);
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: auto -12rem -18rem auto;
-  width: 34rem;
-  height: 34rem;
-  border: 1px solid rgba(217, 45, 74, 0.10);
-  border-radius: 999px;
-  pointer-events: none;
 }
 
 a {
@@ -82,9 +68,8 @@ button {
   width: 100%;
   border: 1px solid rgba(234, 219, 212, 0.88);
   border-radius: var(--pueria-raio);
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: var(--pueria-sombra);
-  backdrop-filter: blur(16px);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(77, 54, 50, 0.08);
 }
 
 .pueria-eyebrow {
@@ -92,7 +77,7 @@ button {
   color: var(--pueria-vermelho-profundo);
   font-size: 0.76rem;
   font-weight: 850;
-  letter-spacing: 0.09em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -101,7 +86,7 @@ button {
   color: var(--pueria-texto);
   font-size: clamp(2.15rem, 8vw, 4rem);
   line-height: 0.95;
-  letter-spacing: -0.06em;
+  letter-spacing: 0;
 }
 
 .pueria-subtitle {
@@ -133,7 +118,7 @@ button {
   width: 100%;
   min-height: 50px;
   border: 1px solid var(--pueria-borda);
-  border-radius: 16px;
+  border-radius: 6px;
   background: #fffdf9;
   color: var(--pueria-texto);
   outline: none;
@@ -171,8 +156,8 @@ button {
   justify-content: center;
   gap: 8px;
   border: 0;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--pueria-vermelho-flor), var(--pueria-coral-vivo));
+  border-radius: 6px;
+  background: var(--pueria-vermelho-flor);
   color: #fffaf6;
   font-weight: 850;
   padding: 0 22px;

@@ -328,7 +328,7 @@ export class CrescimentoCriancaComponent implements OnInit {
     const meses = Math.floor(dias / 30);
     const diasRestantes = dias % 30;
     if (meses === 0) return `${diasRestantes} dias`;
-    return `${meses} ${meses === 1 ? 'mês' : 'meses'}${diasRestantes > 0 ? ` e ${diasRestantes} dias` : ''}`;
+    return `${meses} ${meses === 1 ? 'mês' : 'meses'}${diasRestantes > 0 ? ` e ${diasRestantes} ${diasRestantes === 1 ? 'dia' : 'dias'}` : ''}`;
   }
 
   formatarData(data: string): string {
