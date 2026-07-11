@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { RegistroTelas, SalvarRegistroTelasRequest, TipoConteudoTela } from '../../../shared/models/telas.model';
+import { ContextoUsoTela, RegistroTelas, SalvarRegistroTelasRequest, TipoConteudoTela, TipoDispositivoTela } from '../../../shared/models/telas.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { TelasService } from '../telas.service';
 
@@ -41,11 +41,23 @@ export class TelasCriancaComponent implements OnInit {
     { valor: 'OUTRO', label: 'Outro' }
   ];
 
+  readonly dispositivos: Opcao<TipoDispositivoTela>[] = [
+    { valor: 'CELULAR', label: 'Celular' },
+    { valor: 'TABLET', label: 'Tablet/iPad' },
+    { valor: 'TV', label: 'TV' }
+  ];
+
   readonly form = this.fb.group({
     dataRegistro: ['', Validators.required],
     minutosDiaSemana: [''],
     minutosFimSemana: [''],
     tipoConteudoPredominante: this.fb.nonNullable.control<TipoConteudoTela>('NAO_INFORMADO', Validators.required),
+    usaCelular: [false],
+    conteudoCelular: this.fb.nonNullable.control<TipoConteudoTela>('NAO_INFORMADO'),
+    usaTablet: [false],
+    conteudoTablet: this.fb.nonNullable.control<TipoConteudoTela>('NAO_INFORMADO'),
+    usaTv: [false],
+    conteudoTv: this.fb.nonNullable.control<TipoConteudoTela>('NAO_INFORMADO'),
     telaAoAcordar: [false],
     telaDuranteRefeicoes: [false],
     telaAntesDormir: [false],
@@ -53,6 +65,7 @@ export class TelasCriancaComponent implements OnInit {
     telaEmSegundoPlano: [false],
     usoAcompanhadoAdulto: [false],
     conteudoAdultoSupervisionado: [false],
+    criancaEscolheConteudoLivremente: [false],
     videochamadaFamilia: [false],
     autoplayAtivo: [false],
     notificacoesAtivas: [false],
@@ -146,6 +159,12 @@ export class TelasCriancaComponent implements OnInit {
       minutosDiaSemana: this.formatarHorasEntrada(registro.minutosDiaSemana),
       minutosFimSemana: this.formatarHorasEntrada(registro.minutosFimSemana),
       tipoConteudoPredominante: registro.tipoConteudoPredominante,
+      usaCelular: this.possuiDispositivo(registro.contextosUso, 'CELULAR'),
+      conteudoCelular: this.conteudoDoDispositivo(registro.contextosUso, 'CELULAR'),
+      usaTablet: this.possuiDispositivo(registro.contextosUso, 'TABLET'),
+      conteudoTablet: this.conteudoDoDispositivo(registro.contextosUso, 'TABLET'),
+      usaTv: this.possuiDispositivo(registro.contextosUso, 'TV'),
+      conteudoTv: this.conteudoDoDispositivo(registro.contextosUso, 'TV'),
       telaAoAcordar: !!registro.telaAoAcordar,
       telaDuranteRefeicoes: !!registro.telaDuranteRefeicoes,
       telaAntesDormir: !!registro.telaAntesDormir,
@@ -153,6 +172,7 @@ export class TelasCriancaComponent implements OnInit {
       telaEmSegundoPlano: !!registro.telaEmSegundoPlano,
       usoAcompanhadoAdulto: !!registro.usoAcompanhadoAdulto,
       conteudoAdultoSupervisionado: !!registro.conteudoAdultoSupervisionado,
+      criancaEscolheConteudoLivremente: !!registro.criancaEscolheConteudoLivremente,
       videochamadaFamilia: !!registro.videochamadaFamilia,
       autoplayAtivo: !!registro.autoplayAtivo,
       notificacoesAtivas: !!registro.notificacoesAtivas,
@@ -171,6 +191,12 @@ export class TelasCriancaComponent implements OnInit {
       minutosDiaSemana: '',
       minutosFimSemana: '',
       tipoConteudoPredominante: 'NAO_INFORMADO',
+      usaCelular: false,
+      conteudoCelular: 'NAO_INFORMADO',
+      usaTablet: false,
+      conteudoTablet: 'NAO_INFORMADO',
+      usaTv: false,
+      conteudoTv: 'NAO_INFORMADO',
       telaAoAcordar: false,
       telaDuranteRefeicoes: false,
       telaAntesDormir: false,
@@ -178,6 +204,7 @@ export class TelasCriancaComponent implements OnInit {
       telaEmSegundoPlano: false,
       usoAcompanhadoAdulto: false,
       conteudoAdultoSupervisionado: false,
+      criancaEscolheConteudoLivremente: false,
       videochamadaFamilia: false,
       autoplayAtivo: false,
       notificacoesAtivas: false,
@@ -230,6 +257,14 @@ export class TelasCriancaComponent implements OnInit {
     return registro.analise.rotina.length > 0 || registro.analise.conversaConsulta.length > 0 || registro.analise.habitosApoio.length > 0;
   }
 
+  private possuiDispositivo(contextos: ContextoUsoTela[] | undefined, dispositivo: TipoDispositivoTela): boolean {
+    return (contextos ?? []).some((contexto) => contexto.dispositivo === dispositivo);
+  }
+
+  private conteudoDoDispositivo(contextos: ContextoUsoTela[] | undefined, dispositivo: TipoDispositivoTela): TipoConteudoTela {
+    return (contextos ?? []).find((contexto) => contexto.dispositivo === dispositivo)?.conteudo ?? 'NAO_INFORMADO';
+  }
+
   private criarRequest(): SalvarRegistroTelasRequest {
     const valor = this.form.getRawValue();
     return {
@@ -237,6 +272,11 @@ export class TelasCriancaComponent implements OnInit {
       minutosDiaSemana: this.lerHorasParaMinutos(valor.minutosDiaSemana, 'tempo em dias de semana'),
       minutosFimSemana: this.lerHorasParaMinutos(valor.minutosFimSemana, 'tempo em fim de semana'),
       tipoConteudoPredominante: valor.tipoConteudoPredominante,
+      contextosUso: [
+        valor.usaCelular ? { dispositivo: 'CELULAR', conteudo: valor.conteudoCelular } : null,
+        valor.usaTablet ? { dispositivo: 'TABLET', conteudo: valor.conteudoTablet } : null,
+        valor.usaTv ? { dispositivo: 'TV', conteudo: valor.conteudoTv } : null
+      ].filter((contexto): contexto is ContextoUsoTela => contexto !== null),
       telaAoAcordar: valor.telaAoAcordar,
       telaDuranteRefeicoes: valor.telaDuranteRefeicoes,
       telaAntesDormir: valor.telaAntesDormir,
@@ -244,6 +284,7 @@ export class TelasCriancaComponent implements OnInit {
       telaEmSegundoPlano: valor.telaEmSegundoPlano,
       usoAcompanhadoAdulto: valor.usoAcompanhadoAdulto,
       conteudoAdultoSupervisionado: valor.conteudoAdultoSupervisionado,
+      criancaEscolheConteudoLivremente: valor.criancaEscolheConteudoLivremente,
       videochamadaFamilia: valor.videochamadaFamilia,
       autoplayAtivo: valor.autoplayAtivo,
       notificacoesAtivas: valor.notificacoesAtivas,

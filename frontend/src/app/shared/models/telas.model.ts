@@ -8,6 +8,12 @@ export type TipoConteudoTela =
   | 'NAO_INFORMADO';
 
 export type ClassificacaoTempoTela = 'SEM_DADOS' | 'DENTRO_DA_REFERENCIA' | 'ACIMA_DA_REFERENCIA';
+export type TipoDispositivoTela = 'CELULAR' | 'TABLET' | 'TV';
+
+export interface ContextoUsoTela {
+  dispositivo: TipoDispositivoTela;
+  conteudo: TipoConteudoTela;
+}
 
 export interface AnaliseTelas {
   titulo: string;
@@ -27,6 +33,7 @@ export interface RegistroTelas {
   minutosDiaSemana?: number | null;
   minutosFimSemana?: number | null;
   tipoConteudoPredominante: TipoConteudoTela;
+  contextosUso: ContextoUsoTela[];
   telaAoAcordar?: boolean | null;
   telaDuranteRefeicoes?: boolean | null;
   telaAntesDormir?: boolean | null;
@@ -34,6 +41,7 @@ export interface RegistroTelas {
   telaEmSegundoPlano?: boolean | null;
   usoAcompanhadoAdulto?: boolean | null;
   conteudoAdultoSupervisionado?: boolean | null;
+  criancaEscolheConteudoLivremente?: boolean | null;
   videochamadaFamilia?: boolean | null;
   autoplayAtivo?: boolean | null;
   notificacoesAtivas?: boolean | null;
@@ -53,6 +61,7 @@ export interface SalvarRegistroTelasRequest {
   minutosDiaSemana?: number | null;
   minutosFimSemana?: number | null;
   tipoConteudoPredominante: TipoConteudoTela;
+  contextosUso: ContextoUsoTela[];
   telaAoAcordar?: boolean | null;
   telaDuranteRefeicoes?: boolean | null;
   telaAntesDormir?: boolean | null;
@@ -60,6 +69,7 @@ export interface SalvarRegistroTelasRequest {
   telaEmSegundoPlano?: boolean | null;
   usoAcompanhadoAdulto?: boolean | null;
   conteudoAdultoSupervisionado?: boolean | null;
+  criancaEscolheConteudoLivremente?: boolean | null;
   videochamadaFamilia?: boolean | null;
   autoplayAtivo?: boolean | null;
   notificacoesAtivas?: boolean | null;

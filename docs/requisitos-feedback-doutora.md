@@ -72,11 +72,11 @@ Status usados:
 | ID | Requisito | Status | Observações |
 |---|---|---|---|
 | TEL-01 | Explicitar unidade nos campos: `Dia de semana (horas por dia)` e `Fim de semana (horas por dia)`. | Implementado | Front aceita horas por dia e converte para minutos na API. |
-| TEL-02 | Separar tipo de tela: celular, tablet/iPad e TV. | Pendente | A doutora precisa saber onde o conteúdo acontece. |
-| TEL-03 | Relacionar conteúdo ao tipo de tela. | Pendente | Conteúdos: jogos, vídeos/desenhos, videochamada com família, conteúdo interativo, música etc. |
+| TEL-02 | Separar tipo de tela: celular, tablet/iPad e TV. | Implementado | A família pode registrar cada aparelho usado na rotina. |
+| TEL-03 | Relacionar conteúdo ao tipo de tela. | Implementado | Cada aparelho selecionado recebe seu conteúdo mais comum e o vínculo é salvo no banco. |
 | TEL-04 | Revisar `ligada ao fundo`. | Implementado | Texto usado: `TV ou tela ligada enquanto a criança faz outra atividade`. |
 | TEL-05 | Adicionar uso para distrair/acalmar a criança. | Implementado | Texto usado: `Para acalmar ou distrair`. |
-| TEL-06 | Adicionar se a criança tem liberdade de escolher. | Pendente | Informação relevante sobre condução familiar. |
+| TEL-06 | Adicionar se a criança tem liberdade de escolher. | Implementado | Campo opcional incluído como contexto da condução familiar. |
 
 ### Novo módulo: trânsito intestinal
 

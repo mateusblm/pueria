@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.List;
 
 public class RegistroTelas {
 
@@ -15,6 +16,7 @@ public class RegistroTelas {
     private final Integer minutosDiaSemana;
     private final Integer minutosFimSemana;
     private final TipoConteudoTela tipoConteudoPredominante;
+    private final List<ContextoUsoTela> contextosUso;
     private final Boolean telaAoAcordar;
     private final Boolean telaDuranteRefeicoes;
     private final Boolean telaAntesDormir;
@@ -22,6 +24,7 @@ public class RegistroTelas {
     private final Boolean telaEmSegundoPlano;
     private final Boolean usoAcompanhadoAdulto;
     private final Boolean conteudoAdultoSupervisionado;
+    private final Boolean criancaEscolheConteudoLivremente;
     private final Boolean videochamadaFamilia;
     private final Boolean autoplayAtivo;
     private final Boolean notificacoesAtivas;
@@ -42,6 +45,10 @@ public class RegistroTelas {
         this.tipoConteudoPredominante = dados.tipoConteudoPredominante() == null
                 ? TipoConteudoTela.NAO_INFORMADO
                 : dados.tipoConteudoPredominante();
+        this.contextosUso = dados.contextosUso() == null ? List.of() : dados.contextosUso().stream()
+                .filter(Objects::nonNull)
+                .collect(java.util.stream.Collectors.toMap(ContextoUsoTela::dispositivo, contexto -> contexto, (primeiro, ignorado) -> primeiro))
+                .values().stream().toList();
         this.telaAoAcordar = dados.telaAoAcordar();
         this.telaDuranteRefeicoes = dados.telaDuranteRefeicoes();
         this.telaAntesDormir = dados.telaAntesDormir();
@@ -49,6 +56,7 @@ public class RegistroTelas {
         this.telaEmSegundoPlano = dados.telaEmSegundoPlano();
         this.usoAcompanhadoAdulto = dados.usoAcompanhadoAdulto();
         this.conteudoAdultoSupervisionado = dados.conteudoAdultoSupervisionado();
+        this.criancaEscolheConteudoLivremente = dados.criancaEscolheConteudoLivremente();
         this.videochamadaFamilia = dados.videochamadaFamilia();
         this.autoplayAtivo = dados.autoplayAtivo();
         this.notificacoesAtivas = dados.notificacoesAtivas();
@@ -123,6 +131,7 @@ public class RegistroTelas {
     public Integer getMinutosDiaSemana() { return minutosDiaSemana; }
     public Integer getMinutosFimSemana() { return minutosFimSemana; }
     public TipoConteudoTela getTipoConteudoPredominante() { return tipoConteudoPredominante; }
+    public List<ContextoUsoTela> getContextosUso() { return contextosUso; }
     public Boolean getTelaAoAcordar() { return telaAoAcordar; }
     public Boolean getTelaDuranteRefeicoes() { return telaDuranteRefeicoes; }
     public Boolean getTelaAntesDormir() { return telaAntesDormir; }
@@ -130,6 +139,7 @@ public class RegistroTelas {
     public Boolean getTelaEmSegundoPlano() { return telaEmSegundoPlano; }
     public Boolean getUsoAcompanhadoAdulto() { return usoAcompanhadoAdulto; }
     public Boolean getConteudoAdultoSupervisionado() { return conteudoAdultoSupervisionado; }
+    public Boolean getCriancaEscolheConteudoLivremente() { return criancaEscolheConteudoLivremente; }
     public Boolean getVideochamadaFamilia() { return videochamadaFamilia; }
     public Boolean getAutoplayAtivo() { return autoplayAtivo; }
     public Boolean getNotificacoesAtivas() { return notificacoesAtivas; }

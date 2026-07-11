@@ -2,6 +2,7 @@ package br.com.pueria.pueria.telas.infraestrutura.persistencia;
 
 import br.com.pueria.pueria.telas.dominio.DadosTelas;
 import br.com.pueria.pueria.telas.dominio.RegistroTelas;
+import br.com.pueria.pueria.telas.dominio.ContextoUsoTela;
 
 class RegistroTelasMapper {
 
@@ -23,6 +24,7 @@ class RegistroTelasMapper {
                 registro.getMinutosDiaSemana(),
                 registro.getMinutosFimSemana(),
                 registro.getTipoConteudoPredominante(),
+                registro.getContextosUso().stream().map(contexto -> new ContextoUsoTelaJpa(contexto.dispositivo(), contexto.conteudo())).toList(),
                 registro.getTelaAoAcordar(),
                 registro.getTelaDuranteRefeicoes(),
                 registro.getTelaAntesDormir(),
@@ -30,6 +32,7 @@ class RegistroTelasMapper {
                 registro.getTelaEmSegundoPlano(),
                 registro.getUsoAcompanhadoAdulto(),
                 registro.getConteudoAdultoSupervisionado(),
+                registro.getCriancaEscolheConteudoLivremente(),
                 registro.getVideochamadaFamilia(),
                 registro.getAutoplayAtivo(),
                 registro.getNotificacoesAtivas(),
@@ -49,6 +52,7 @@ class RegistroTelasMapper {
                 entidade.getMinutosDiaSemana(),
                 entidade.getMinutosFimSemana(),
                 entidade.getTipoConteudoPredominante(),
+                entidade.getContextosUso() == null ? java.util.List.of() : entidade.getContextosUso().stream().map(contexto -> new ContextoUsoTela(contexto.getDispositivo(), contexto.getConteudo())).toList(),
                 entidade.getTelaAoAcordar(),
                 entidade.getTelaDuranteRefeicoes(),
                 entidade.getTelaAntesDormir(),
@@ -56,6 +60,7 @@ class RegistroTelasMapper {
                 entidade.getTelaEmSegundoPlano(),
                 entidade.getUsoAcompanhadoAdulto(),
                 entidade.getConteudoAdultoSupervisionado(),
+                entidade.getCriancaEscolheConteudoLivremente(),
                 entidade.getVideochamadaFamilia(),
                 entidade.getAutoplayAtivo(),
                 entidade.getNotificacoesAtivas(),

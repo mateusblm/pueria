@@ -148,6 +148,37 @@
           <div class="telas-form__bloco-titulo">
             <span>2</span>
             <div>
+              <h3>Em qual aparelho</h3>
+              <p>Marque apenas os que fizeram parte da rotina e associe o conteúdo mais comum.</p>
+            </div>
+          </div>
+
+          <div class="telas-dispositivos">
+            <label><input type="checkbox" formControlName="usaCelular" /> Celular</label>
+            @if (form.controls.usaCelular.value) {
+              <select formControlName="conteudoCelular" aria-label="Conteúdo mais comum no celular">
+                @for (opcao of tiposConteudo; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+              </select>
+            }
+            <label><input type="checkbox" formControlName="usaTablet" /> Tablet/iPad</label>
+            @if (form.controls.usaTablet.value) {
+              <select formControlName="conteudoTablet" aria-label="Conteúdo mais comum no tablet">
+                @for (opcao of tiposConteudo; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+              </select>
+            }
+            <label><input type="checkbox" formControlName="usaTv" /> TV</label>
+            @if (form.controls.usaTv.value) {
+              <select formControlName="conteudoTv" aria-label="Conteúdo mais comum na TV">
+                @for (opcao of tiposConteudo; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }
+              </select>
+            }
+          </div>
+        </section>
+
+        <section class="telas-form__bloco">
+          <div class="telas-form__bloco-titulo">
+            <span>3</span>
+            <div>
               <h3>Onde aparece na rotina</h3>
               <p>Marque os momentos em que a tela costuma entrar.</p>
             </div>
@@ -165,7 +196,7 @@
 
         <section class="telas-form__bloco">
           <div class="telas-form__bloco-titulo">
-            <span>3</span>
+            <span>4</span>
             <div>
               <h3>Como a família conduz</h3>
               <p>Esses detalhes mudam bastante a orientação.</p>
@@ -175,6 +206,7 @@
           <div class="telas-pills telas-pills--apoio">
             <label><input type="checkbox" formControlName="usoAcompanhadoAdulto" /> Adulto assiste junto</label>
             <label><input type="checkbox" formControlName="conteudoAdultoSupervisionado" /> Conteúdo escolhido pela família</label>
+            <label><input type="checkbox" formControlName="criancaEscolheConteudoLivremente" /> A criança costuma escolher livremente</label>
             <label><input type="checkbox" formControlName="videochamadaFamilia" /> Videochamada com familiares</label>
             <label><input type="checkbox" formControlName="autoplayAtivo" /> Autoplay ativo</label>
             <label><input type="checkbox" formControlName="notificacoesAtivas" /> Notificações ativas</label>

@@ -212,6 +212,24 @@
   grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
 }
 
+.telas-dispositivos {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(10rem, 0.8fr) minmax(14rem, 1.2fr);
+}
+
+.telas-dispositivos label {
+  align-items: center;
+  display: flex;
+  font-weight: 700;
+  gap: 0.6rem;
+}
+
+.telas-dispositivos input {
+  min-height: auto;
+  width: auto;
+}
+
 .telas-pills label {
   align-items: center;
   background: #fff;
@@ -284,6 +302,7 @@
   }
 
   .telas-pills,
+  .telas-dispositivos,
   .telas-form__grid,
   .telas-analise {
     grid-template-columns: 1fr;

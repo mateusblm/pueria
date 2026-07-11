@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "registros_telas")
@@ -27,6 +28,10 @@ public class RegistroTelasJpaEntidade {
     @Column(name = "tipo_conteudo_predominante", nullable = false, length = 40)
     private TipoConteudoTela tipoConteudoPredominante;
 
+    @ElementCollection
+    @CollectionTable(name = "registros_telas_contextos_uso", joinColumns = @JoinColumn(name = "registro_telas_id"))
+    private List<ContextoUsoTelaJpa> contextosUso;
+
     private Boolean telaAoAcordar;
     private Boolean telaDuranteRefeicoes;
     private Boolean telaAntesDormir;
@@ -34,6 +39,7 @@ public class RegistroTelasJpaEntidade {
     private Boolean telaEmSegundoPlano;
     private Boolean usoAcompanhadoAdulto;
     private Boolean conteudoAdultoSupervisionado;
+    private Boolean criancaEscolheConteudoLivremente;
     private Boolean videochamadaFamilia;
     private Boolean autoplayAtivo;
     private Boolean notificacoesAtivas;
@@ -53,13 +59,14 @@ public class RegistroTelasJpaEntidade {
 
     protected RegistroTelasJpaEntidade() {}
 
-    public RegistroTelasJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, Integer minutosDiaSemana, Integer minutosFimSemana, TipoConteudoTela tipoConteudoPredominante, Boolean telaAoAcordar, Boolean telaDuranteRefeicoes, Boolean telaAntesDormir, Boolean telaParaAcalmar, Boolean telaEmSegundoPlano, Boolean usoAcompanhadoAdulto, Boolean conteudoAdultoSupervisionado, Boolean videochamadaFamilia, Boolean autoplayAtivo, Boolean notificacoesAtivas, Boolean dispositivoNoQuarto, Boolean brincaAoArLivre, Boolean leituraBrincadeiraSemTela, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroTelasJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, Integer minutosDiaSemana, Integer minutosFimSemana, TipoConteudoTela tipoConteudoPredominante, List<ContextoUsoTelaJpa> contextosUso, Boolean telaAoAcordar, Boolean telaDuranteRefeicoes, Boolean telaAntesDormir, Boolean telaParaAcalmar, Boolean telaEmSegundoPlano, Boolean usoAcompanhadoAdulto, Boolean conteudoAdultoSupervisionado, Boolean criancaEscolheConteudoLivremente, Boolean videochamadaFamilia, Boolean autoplayAtivo, Boolean notificacoesAtivas, Boolean dispositivoNoQuarto, Boolean brincaAoArLivre, Boolean leituraBrincadeiraSemTela, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
         this.minutosDiaSemana = minutosDiaSemana;
         this.minutosFimSemana = minutosFimSemana;
         this.tipoConteudoPredominante = tipoConteudoPredominante;
+        this.contextosUso = contextosUso;
         this.telaAoAcordar = telaAoAcordar;
         this.telaDuranteRefeicoes = telaDuranteRefeicoes;
         this.telaAntesDormir = telaAntesDormir;
@@ -67,6 +74,7 @@ public class RegistroTelasJpaEntidade {
         this.telaEmSegundoPlano = telaEmSegundoPlano;
         this.usoAcompanhadoAdulto = usoAcompanhadoAdulto;
         this.conteudoAdultoSupervisionado = conteudoAdultoSupervisionado;
+        this.criancaEscolheConteudoLivremente = criancaEscolheConteudoLivremente;
         this.videochamadaFamilia = videochamadaFamilia;
         this.autoplayAtivo = autoplayAtivo;
         this.notificacoesAtivas = notificacoesAtivas;
@@ -85,6 +93,7 @@ public class RegistroTelasJpaEntidade {
     public Integer getMinutosDiaSemana() { return minutosDiaSemana; }
     public Integer getMinutosFimSemana() { return minutosFimSemana; }
     public TipoConteudoTela getTipoConteudoPredominante() { return tipoConteudoPredominante; }
+    public List<ContextoUsoTelaJpa> getContextosUso() { return contextosUso; }
     public Boolean getTelaAoAcordar() { return telaAoAcordar; }
     public Boolean getTelaDuranteRefeicoes() { return telaDuranteRefeicoes; }
     public Boolean getTelaAntesDormir() { return telaAntesDormir; }
@@ -92,6 +101,7 @@ public class RegistroTelasJpaEntidade {
     public Boolean getTelaEmSegundoPlano() { return telaEmSegundoPlano; }
     public Boolean getUsoAcompanhadoAdulto() { return usoAcompanhadoAdulto; }
     public Boolean getConteudoAdultoSupervisionado() { return conteudoAdultoSupervisionado; }
+    public Boolean getCriancaEscolheConteudoLivremente() { return criancaEscolheConteudoLivremente; }
     public Boolean getVideochamadaFamilia() { return videochamadaFamilia; }
     public Boolean getAutoplayAtivo() { return autoplayAtivo; }
     public Boolean getNotificacoesAtivas() { return notificacoesAtivas; }

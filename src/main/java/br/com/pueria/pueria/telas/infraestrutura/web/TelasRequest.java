@@ -4,6 +4,7 @@ import br.com.pueria.pueria.telas.aplicacao.AtualizarRegistroTelasComando;
 import br.com.pueria.pueria.telas.aplicacao.RegistroTelasComando;
 import br.com.pueria.pueria.telas.dominio.DadosTelas;
 import br.com.pueria.pueria.telas.dominio.TipoConteudoTela;
+import br.com.pueria.pueria.telas.dominio.ContextoUsoTela;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -11,12 +12,14 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.List;
 
 public record TelasRequest(
         @NotNull LocalDate dataRegistro,
         @Min(0) @Max(1440) Integer minutosDiaSemana,
         @Min(0) @Max(1440) Integer minutosFimSemana,
         TipoConteudoTela tipoConteudoPredominante,
+        List<ContextoUsoTela> contextosUso,
         Boolean telaAoAcordar,
         Boolean telaDuranteRefeicoes,
         Boolean telaAntesDormir,
@@ -24,6 +27,7 @@ public record TelasRequest(
         Boolean telaEmSegundoPlano,
         Boolean usoAcompanhadoAdulto,
         Boolean conteudoAdultoSupervisionado,
+        Boolean criancaEscolheConteudoLivremente,
         Boolean videochamadaFamilia,
         Boolean autoplayAtivo,
         Boolean notificacoesAtivas,
@@ -47,6 +51,7 @@ public record TelasRequest(
                 minutosDiaSemana,
                 minutosFimSemana,
                 tipoConteudoPredominante,
+                contextosUso,
                 telaAoAcordar,
                 telaDuranteRefeicoes,
                 telaAntesDormir,
@@ -54,6 +59,7 @@ public record TelasRequest(
                 telaEmSegundoPlano,
                 usoAcompanhadoAdulto,
                 conteudoAdultoSupervisionado,
+                criancaEscolheConteudoLivremente,
                 videochamadaFamilia,
                 autoplayAtivo,
                 notificacoesAtivas,

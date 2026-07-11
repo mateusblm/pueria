@@ -48,6 +48,12 @@ public class AnaliseTelasService {
         if (Boolean.TRUE.equals(registro.getConteudoAdultoSupervisionado())) {
             rotina.add("O conteudo foi registrado como selecionado ou supervisionado por adulto.");
         }
+        if (!registro.getContextosUso().isEmpty()) {
+            rotina.add("Os aparelhos e os conteúdos mais comuns foram registrados para acompanhar a rotina.");
+        }
+        if (Boolean.TRUE.equals(registro.getCriancaEscolheConteudoLivremente())) {
+            habitosApoio.add("Combinar previamente o que será visto pode deixar o uso mais previsível para a criança e a família.");
+        }
         if (Boolean.TRUE.equals(registro.getLeituraBrincadeiraSemTela())) {
             rotina.add("A rotina inclui leitura, conversa ou brincadeira sem tela.");
         }

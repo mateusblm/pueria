@@ -108,6 +108,7 @@ class TelasUseCasesTest {
                 semana,
                 fimSemana,
                 tipo,
+                List.of(),
                 false,
                 false,
                 false,
@@ -121,6 +122,7 @@ class TelasUseCasesTest {
                 false,
                 true,
                 true,
+                false,
                 false,
                 null
         );
@@ -132,6 +134,7 @@ class TelasUseCasesTest {
                 semana,
                 fimSemana,
                 TipoConteudoTela.VIDEO_PASSIVO,
+                List.of(),
                 true,
                 true,
                 true,
@@ -146,6 +149,7 @@ class TelasUseCasesTest {
                 false,
                 false,
                 true,
+                false,
                 "Familia preocupada com uso recente."
         );
     }
