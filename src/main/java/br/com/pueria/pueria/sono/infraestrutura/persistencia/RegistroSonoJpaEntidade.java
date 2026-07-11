@@ -39,7 +39,7 @@ public class RegistroSonoJpaEntidade {
     @Column(name = "ambiente_sono", nullable = false, length = 35)
     private AmbienteSono ambienteSono;
 
-    @ElementCollection(targetClass = TipoDespertarNoturno.class)
+    @ElementCollection(targetClass = TipoDespertarNoturno.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "registros_sono_tipos_despertar", joinColumns = @JoinColumn(name = "registro_sono_id"))
     @Column(name = "tipo_despertar", nullable = false, length = 45)
     @Enumerated(EnumType.STRING)

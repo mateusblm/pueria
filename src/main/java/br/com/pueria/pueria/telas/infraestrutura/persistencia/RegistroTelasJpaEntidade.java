@@ -28,7 +28,7 @@ public class RegistroTelasJpaEntidade {
     @Column(name = "tipo_conteudo_predominante", nullable = false, length = 40)
     private TipoConteudoTela tipoConteudoPredominante;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "registros_telas_contextos_uso", joinColumns = @JoinColumn(name = "registro_telas_id"))
     private List<ContextoUsoTelaJpa> contextosUso;
 
