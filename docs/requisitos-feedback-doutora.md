@@ -7,6 +7,7 @@ Status usados:
 - `Pendente`: ainda não implementado.
 - `Parcial`: existe algo no app, mas precisa ajuste.
 - `Implementado`: já existe e está adequado.
+- `Validado`: implementado e conferido no fluxo real pela família solicitante.
 - `Pesquisa/validação`: precisa confirmação clínica, fonte oficial ou decisão de produto antes de codar.
 
 ## Princípios para implementação
@@ -39,7 +40,7 @@ Status usados:
 |---|---|---|---|
 | ALI-01 | Adicionar `BLW misto - toca alimentos enquanto é alimentado` em "Como acontece nas refeições". | Implementado | Campo incluído na interface, API, domínio e banco. |
 | ALI-02 | Trocar `Tem rotina alimentar previsível` por linguagem que inclua `local e horário`. | Implementado | Texto usado: `Tem local e horário previsíveis para as refeições`. |
-| ALI-03 | Remover `Constipação` e `Diarreia recorrente` de alimentação. | Parcial | Removido da interface. Dados antigos permanecem no domínio até criação do módulo `Trânsito intestinal`. |
+| ALI-03 | Remover `Constipação` e `Diarreia recorrente` de alimentação. | Implementado | Removidos do fluxo de alimentação; novos registros são feitos no módulo `Trânsito intestinal`. |
 | ALI-04 | Trocar `Preocupação com ganho de peso` por `Família está tranquila quanto ao ganho de peso atual`. | Implementado | Campo positivo incluído sem gerar alerta automático quando não marcado. |
 | ALI-05 | Trocar `Usa colher` por `Aprendendo ou usando talheres`. | Implementado | Ajuste aplicado na interface mantendo compatibilidade com campo atual. |
 | ALI-06 | Separar `Legumes e verduras` em dois grupos. | Implementado | Campos separados incluídos na interface, API, domínio e banco. |
@@ -97,7 +98,9 @@ Status usados:
 - O backend já calcula percentil e z-score com LMS da OMS.
 - O app já possui idade gestacional em semanas e dias adicionais no cadastro da criança.
 - O app já possui idade corrigida para prematuridade no módulo de crescimento.
-- Ainda não há INTERGROWTH-21st, curvas T21/Down, curvas Turner, peso por comprimento, IMC por idade, seleção de curva por condição clínica, nem modo profissional completo.
+- O INTERGROWTH-21st para prematuros já está implementado com as tabelas oficiais versionadas no projeto.
+- Os contextos de T21/Down, Turner e outras condições relevantes já podem ser registrados, mas ainda não selecionam curvas específicas.
+- Ainda não há curvas T21/Down, curvas Turner, peso por comprimento, IMC por idade, seleção de curva por condição clínica nem modo profissional completo.
 
 ### Curvas e seleção automática
 
@@ -123,11 +126,11 @@ Status usados:
 | CAD-05 | Peso ao nascimento. | Implementado | Já existe. |
 | CAD-06 | Comprimento ao nascimento. | Implementado | Já existe. |
 | CAD-07 | Perímetro cefálico ao nascimento. | Implementado | Já existe. |
-| CAD-08 | Tipo de gestação: única ou múltipla. | Implementado | Disponível no cadastro, edição e perfil da criança, com opção de não informar. |
+| CAD-08 | Tipo de gestação: única ou múltipla. | Validado | Disponível no cadastro, edição e perfil da criança, com opção de não informar. Fluxo conferido pela família solicitante. |
 | CAD-09 | Internação em UTI neonatal. | Implementado | Campo específico disponível no cadastro, edição e perfil da criança. |
-| CAD-10 | Diagnóstico conhecido de Down/T21. | Implementado | Opções: não; sim; em investigação; prefiro informar depois. O dado não ativa curva específica automaticamente. |
-| CAD-11 | Diagnóstico conhecido de Turner. | Implementado | Exibido no fluxo familiar apenas quando o sexo cadastrado é feminino. O dado não ativa curva específica automaticamente. |
-| CAD-12 | Outra condição genética ou neurológica relevante. | Implementado | Registro opcional com observação livre e linguagem não diagnóstica. |
+| CAD-10 | Diagnóstico conhecido de Down/T21. | Validado | Opções: não; sim; em investigação; prefiro informar depois. O dado não ativa curva específica automaticamente. |
+| CAD-11 | Diagnóstico conhecido de Turner. | Validado | Exibido no fluxo familiar apenas quando o sexo cadastrado é feminino. O dado não ativa curva específica automaticamente. |
+| CAD-12 | Outra condição genética ou neurológica relevante. | Validado | Registro opcional com observação livre e linguagem não diagnóstica. |
 
 ### Medidas de acompanhamento
 
