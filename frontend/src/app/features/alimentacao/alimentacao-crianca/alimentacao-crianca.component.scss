@@ -197,6 +197,15 @@
   line-height: 1.5;
 }
 
+.alimentacao-variedade__editar {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+  justify-content: center;
+  min-height: 2.75rem;
+}
+
 .alimentacao-variedade__origem {
   max-width: 34rem;
 }
@@ -213,14 +222,27 @@
   gap: 0.75rem;
 }
 
-.alimentacao-variedade__resumo article {
+.alimentacao-variedade__resumo button {
+  appearance: none;
+  color: var(--pueria-texto);
+  cursor: pointer;
   display: grid;
   gap: 0.25rem;
   border: 1px solid rgba(147, 43, 57, 0.12);
   border-top: 3px solid #d6a84f;
   border-radius: 8px;
   background: #fff;
+  font: inherit;
+  text-align: left;
   padding: 0.8rem;
+}
+
+.alimentacao-variedade__resumo button:hover,
+.alimentacao-variedade__resumo button:focus-visible {
+  border-color: rgba(147, 43, 57, 0.42);
+  box-shadow: 0 4px 12px rgba(147, 43, 57, 0.12);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .alimentacao-variedade__resumo span {

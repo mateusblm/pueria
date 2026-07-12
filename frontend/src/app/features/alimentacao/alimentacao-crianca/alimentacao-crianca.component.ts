@@ -11,7 +11,7 @@ import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './cata
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
-type FiltroCatalogo = GrupoAlimento | 'TODOS' | 'ALERGENICOS';
+type FiltroCatalogo = GrupoAlimento | 'TODOS' | 'ALERGENICOS' | 'LEGUMES_E_FOLHAS' | 'GRAOS_E_LEGUMINOSAS' | 'FONTES_ANIMAIS';
 type GrupoCatalogo = { valor: FiltroCatalogo; label: string };
 
 @Component({
@@ -185,7 +185,13 @@ export class AlimentacaoCriancaComponent implements OnInit {
     return this.catalogoAlimentos.filter((alimento) => {
       const combinaGrupo = grupo === 'TODOS'
         || (grupo === 'ALERGENICOS' && alimento.alergenico)
+        || (grupo === 'LEGUMES_E_FOLHAS' && ['LEGUME_HORTALICA_FRUTO', 'VERDURA_FOLHA'].includes(alimento.grupo))
+        || (grupo === 'GRAOS_E_LEGUMINOSAS' && ['CEREAL_GRAO_MASSA', 'PSEUDOCEREAL_GRAO_ESPECIAL', 'LEGUMINOSA'].includes(alimento.grupo))
+        || (grupo === 'FONTES_ANIMAIS' && ['CARNE_AVE', 'PEIXE_FRUTO_MAR', 'OVO', 'LEITE_DERIVADO'].includes(alimento.grupo))
         || (grupo !== 'ALERGENICOS'
+          && grupo !== 'LEGUMES_E_FOLHAS'
+          && grupo !== 'GRAOS_E_LEGUMINOSAS'
+          && grupo !== 'FONTES_ANIMAIS'
           && (alimento.grupo === grupo || alimento.gruposRelacionados?.includes(grupo)));
       const combinaBusca = !busca || this.normalizarTexto(alimento.nome).includes(busca);
       return combinaGrupo && combinaBusca;
@@ -194,7 +200,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
   readonly resumoVariedade = computed(() => this.resumirAlimentos(this.alimentosSelecionados()));
   readonly orientacaoGrupoAtivo = computed(() => {
     const grupo = this.grupoAlimentoAtivo();
-    if (grupo === 'TODOS') {
+    if (grupo === 'TODOS' || grupo === 'LEGUMES_E_FOLHAS' || grupo === 'GRAOS_E_LEGUMINOSAS' || grupo === 'FONTES_ANIMAIS') {
       return '';
     }
     return ORIENTACOES_GRUPOS[grupo] ?? '';
@@ -390,7 +396,8 @@ export class AlimentacaoCriancaComponent implements OnInit {
     return this.origensPreparo.find((opcao) => opcao.valor === valor)?.label ?? 'Prefiro não informar';
   }
 
-  abrirModalAlimentos(): void {
+  abrirModalAlimentos(grupo: FiltroCatalogo = 'TODOS'): void {
+    this.grupoAlimentoAtivo.set(grupo);
     this.modalAlimentosAberta.set(true);
   }
 

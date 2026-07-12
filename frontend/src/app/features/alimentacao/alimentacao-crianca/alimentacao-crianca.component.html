@@ -180,7 +180,10 @@
               <h3>Alimentos oferecidos</h3>
               <p>Marque os alimentos que fizeram parte da rotina. Isso ajuda a observar variedade ao longo do tempo, sem transformar a refeição em prova.</p>
             </div>
-            <button type="button" class="pueria-button pueria-button--secondary" (click)="abrirModalAlimentos()">Editar alimentos</button>
+            <button type="button" class="pueria-button alimentacao-variedade__editar" (click)="abrirModalAlimentos()">
+              <app-icon name="apple" [size]="18" />
+              Selecionar alimentos
+            </button>
           </div>
 
           <label class="alimentacao-variedade__origem">
@@ -203,26 +206,26 @@
           </label>
 
           <div class="alimentacao-variedade__resumo">
-            <article>
+            <button type="button" (click)="abrirModalAlimentos('FRUTA')">
               <span>Frutas</span>
               <strong>{{ resumoVariedade().FRUTA }}</strong>
-            </article>
-            <article>
+            </button>
+            <button type="button" (click)="abrirModalAlimentos('LEGUMES_E_FOLHAS')">
               <span>Legumes e folhas</span>
               <strong>{{ resumoVariedade().LEGUME_HORTALICA_FRUTO + resumoVariedade().VERDURA_FOLHA }}</strong>
-            </article>
-            <article>
+            </button>
+            <button type="button" (click)="abrirModalAlimentos('RAIZ_TUBERCULO_AMIDO')">
               <span>Raízes</span>
               <strong>{{ resumoVariedade().RAIZ_TUBERCULO_AMIDO }}</strong>
-            </article>
-            <article>
+            </button>
+            <button type="button" (click)="abrirModalAlimentos('GRAOS_E_LEGUMINOSAS')">
               <span>Grãos e leguminosas</span>
               <strong>{{ resumoVariedade().CEREAL_GRAO_MASSA + resumoVariedade().PSEUDOCEREAL_GRAO_ESPECIAL + resumoVariedade().LEGUMINOSA }}</strong>
-            </article>
-            <article>
+            </button>
+            <button type="button" (click)="abrirModalAlimentos('FONTES_ANIMAIS')">
               <span>Fontes animais</span>
               <strong>{{ resumoVariedade().CARNE_AVE + resumoVariedade().PEIXE_FRUTO_MAR + resumoVariedade().OVO + resumoVariedade().LEITE_DERIVADO }}</strong>
-            </article>
+            </button>
           </div>
 
           @if (alimentosSelecionados().length > 0) {
