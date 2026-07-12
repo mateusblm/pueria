@@ -18,6 +18,7 @@
 .painel-idade { border-top: 4px solid #76507d; display: grid; gap: 14px; }
 .painel-idade__header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .painel-idade__header strong { color: var(--pueria-vermelho-profundo); font-size: 1.55rem; }
+.painel-idade__referencia { border-left: 3px solid #76507d; color: var(--pueria-texto-suave); font-size: .9rem; padding-left: 10px; }
 
 .progresso { height: 10px; overflow: hidden; border-radius: 4px; background: #ece5ee; }
 .progresso span { display: block; height: 100%; border-radius: inherit; background: var(--pueria-sucesso); transition: width 180ms ease; }
@@ -55,6 +56,21 @@
 .marco-card__actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
 .etapa-card__contexto { margin: 0; color: var(--pueria-texto-suave); }
 .resposta--nao-lembro { background: #f4f2ef; color: #5f5651; }
+
+.relato-desenvolvimento { display: grid; gap: 14px; border-left: 4px solid #d6a84f; }
+.relato-desenvolvimento h2, .relato-desenvolvimento p { margin: 0; }
+.relato-desenvolvimento > div > p:not(.pueria-eyebrow) { color: var(--pueria-texto-suave); margin-top: 6px; }
+.relato-desenvolvimento__tipos { display: flex; flex-wrap: wrap; gap: 8px; }
+.relato-desenvolvimento__tipos button { border: 1px solid #e8d8d0; border-radius: 6px; background: #fff; color: var(--pueria-texto); cursor: pointer; padding: 9px 11px; }
+.relato-desenvolvimento__tipos .relato-desenvolvimento__tipo--ativo { border-color: #a77728; background: #fff3d7; color: #6e4c16; font-weight: 700; }
+.relato-desenvolvimento label { display: grid; gap: 7px; font-weight: 700; }
+.relato-desenvolvimento textarea { width: 100%; resize: vertical; border: 1px solid var(--pueria-borda); border-radius: 6px; font: inherit; padding: 10px; }
+.relato-desenvolvimento .pueria-button { justify-self: start; }
+.relato-desenvolvimento__lista { display: grid; gap: 9px; }
+.relato-desenvolvimento__lista article { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; border: 1px solid #eadfd8; border-radius: 6px; background: #fffaf7; padding: 12px; }
+.relato-desenvolvimento__lista article > div { display: grid; gap: 4px; }
+.relato-desenvolvimento__lista span, .relato-desenvolvimento__lista p { color: var(--pueria-texto-suave); }
+.relato-desenvolvimento__item--prioritario { border-left: 4px solid #d6a84f !important; }
 .resposta { min-height: 52px; border-radius: 6px; padding: 10px; }
 .resposta--active.resposta--sim { background: var(--pueria-folha-clara); border-color: rgba(55, 107, 75, 0.28); color: var(--pueria-folha-escura); }
 .resposta--active.resposta--duvida { background: #fff4c2; border-color: rgba(214, 168, 79, 0.34); color: #6f5012; }

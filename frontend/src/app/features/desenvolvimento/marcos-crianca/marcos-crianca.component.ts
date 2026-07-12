@@ -1,10 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AreaDesenvolvimento, MarcoDesenvolvimento, ModalidadeRegistroMarcoDesenvolvimento, StatusMarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
+import { AreaDesenvolvimento, MarcoDesenvolvimento, ModalidadeRegistroMarcoDesenvolvimento, RelatoDesenvolvimento, StatusMarcoDesenvolvimento, TipoRelatoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
 import { DesenvolvimentoService } from '../desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
+import { CriancasService } from '../../criancas/criancas.service';
+import { Crianca } from '../../../shared/models/crianca.model';
 
 type AreaResumo = {
   area: AreaDesenvolvimento;
@@ -31,7 +35,7 @@ type ModoTela = 'responder' | 'resultados';
 
 @Component({
   selector: 'app-marcos-crianca',
-  imports: [RouterLink, AppIconComponent],
+  imports: [RouterLink, FormsModule, DatePipe, AppIconComponent],
   templateUrl: './marcos-crianca.component.html',
   styleUrl: './marcos-crianca.component.scss'
 })
@@ -48,15 +52,21 @@ export class MarcosCriancaComponent implements OnInit {
     return this.route.snapshot.queryParamMap.get('origem') === 'perfil' ? 'Perfil' : 'Acompanhamento';
   }
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
+  private readonly criancasService = inject(CriancasService);
 
   readonly criancaId = signal('');
+  readonly crianca = signal<Crianca | null>(null);
   readonly marcos = signal<MarcoDesenvolvimento[]>([]);
+  readonly relatos = signal<RelatoDesenvolvimento[]>([]);
   readonly carregando = signal(true);
   readonly salvandoId = signal<string | null>(null);
   readonly erro = signal('');
   readonly idadeSelecionada = signal<number | null>(null);
   readonly indiceEtapa = signal(0);
   readonly modo = signal<ModoTela>('responder');
+  readonly tipoRelato = signal<TipoRelatoDesenvolvimento>('PREOCUPACAO_FAMILIA');
+  readonly descricaoRelato = signal('');
+  readonly salvandoRelato = signal(false);
 
   readonly areas: AreaDesenvolvimento[] = ['SOCIAL_EMOCIONAL', 'LINGUAGEM_COMUNICACAO', 'COGNITIVO', 'MOTOR'];
 
@@ -66,6 +76,22 @@ export class MarcosCriancaComponent implements OnInit {
   });
 
   readonly idadeAtualDisponivel = computed(() => this.historicoPorIdade().at(-1)?.idadeMeses ?? null);
+
+  readonly textoIdadeReferencia = computed(() => {
+    const crianca = this.crianca();
+    if (!crianca?.prematura || !crianca.semanasGestacionais) {
+      return '';
+    }
+
+    const dataReferencia = this.adicionarDias(crianca.dataNascimento, Math.max(0,
+      40 * 7 - (crianca.semanasGestacionais * 7 + (crianca.diasGestacionais ?? 0))));
+    const mesesCorrigidos = this.mesesCompletos(dataReferencia, new Date());
+
+    if (mesesCorrigidos >= 24) {
+      return '';
+    }
+    return `Idade corrigida nesta avaliação: ${this.tituloIdade(mesesCorrigidos)}.`;
+  });
 
   readonly etapaRetrospectiva = computed(() => {
     const idadeSelecionada = this.idadeSelecionada();
@@ -157,6 +183,15 @@ export class MarcosCriancaComponent implements OnInit {
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
+
+    this.desenvolvimentoService.listarRelatos(this.criancaId()).subscribe({
+      next: (relatos) => this.relatos.set(relatos),
+      error: () => this.erro.set('Não foi possível carregar os relatos de desenvolvimento agora.')
+    });
+
+    this.criancasService.buscarPorId(this.criancaId()).subscribe({
+      next: (crianca) => this.crianca.set(crianca)
+    });
   }
 
   registrar(marco: MarcoDesenvolvimento, status: StatusMarcoDesenvolvimento): void {
@@ -231,6 +266,39 @@ export class MarcosCriancaComponent implements OnInit {
     window.print();
   }
 
+  registrarRelato(): void {
+    const descricao = this.descricaoRelato().trim();
+    if (!descricao) {
+      this.erro.set('Conte um pouco do que você percebeu antes de registrar.');
+      return;
+    }
+    this.salvandoRelato.set(true);
+    this.erro.set('');
+    this.desenvolvimentoService.registrarRelato(this.criancaId(), { tipo: this.tipoRelato(), descricao })
+      .pipe(finalize(() => this.salvandoRelato.set(false)))
+      .subscribe({
+        next: (relato) => {
+          this.relatos.update((itens) => [relato, ...itens]);
+          this.descricaoRelato.set('');
+        },
+        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      });
+  }
+
+  removerRelato(relato: RelatoDesenvolvimento): void {
+    this.salvandoRelato.set(true);
+    this.desenvolvimentoService.removerRelato(this.criancaId(), relato.id)
+      .pipe(finalize(() => this.salvandoRelato.set(false)))
+      .subscribe({
+        next: () => this.relatos.update((itens) => itens.filter((item) => item.id !== relato.id)),
+        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      });
+  }
+
+  labelTipoRelato(tipo: TipoRelatoDesenvolvimento): string {
+    return tipo === 'PERDA_HABILIDADE' ? 'Perda de habilidade' : 'Preocupação da família';
+  }
+
   labelArea(area: string): string {
     const labels: Record<string, string> = {
       SOCIAL_EMOCIONAL: 'Social',
@@ -291,6 +359,12 @@ export class MarcosCriancaComponent implements OnInit {
   }
 
   textoConduta(): string {
+    if (this.relatos().some((relato) => relato.tipo === 'PERDA_HABILIDADE')) {
+      return 'Uma perda de habilidade foi registrada. Vale conversar com o pediatra o quanto antes e levar este relato para contextualizar a consulta.';
+    }
+    if (this.relatos().some((relato) => relato.tipo === 'PREOCUPACAO_FAMILIA')) {
+      return 'Há uma preocupação registrada pela família. Leve esse contexto para conversar com o pediatra na próxima oportunidade.';
+    }
     if (this.pontosDeAtencao().length === 0) {
       return 'Manter acompanhamento de rotina, brincadeiras responsivas e novas observações conforme a criança cresce.';
     }
@@ -321,6 +395,24 @@ export class MarcosCriancaComponent implements OnInit {
       return `${anos} ${anos === 1 ? 'ano' : 'anos'}`;
     }
     return `${anos} ${anos === 1 ? 'ano' : 'anos'} e ${meses} meses`;
+  }
+
+  private adicionarDias(dataIso: string, dias: number): Date {
+    const [ano, mes, dia] = dataIso.split('-').map(Number);
+    const data = new Date(ano, mes - 1, dia);
+    data.setDate(data.getDate() + dias);
+    return data;
+  }
+
+  private mesesCompletos(inicio: Date, fim: Date): number {
+    if (fim < inicio) {
+      return 0;
+    }
+    let meses = (fim.getFullYear() - inicio.getFullYear()) * 12 + fim.getMonth() - inicio.getMonth();
+    if (fim.getDate() < inicio.getDate()) {
+      meses--;
+    }
+    return Math.max(0, meses);
   }
 
   private posicionarPrimeiraPendente(): void {

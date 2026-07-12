@@ -4,6 +4,19 @@ export type StatusMarcoDesenvolvimento = 'OBSERVADO' | 'NAO_TENHO_CERTEZA' | 'AI
 export type TipoFonteMarcoDesenvolvimento = 'OMS' | 'CDC_CLASSICO' | 'CDC_2022';
 export type PapelClinicoMarcoDesenvolvimento = 'ACOMPANHAMENTO' | 'ATENCAO_PERSISTENTE' | 'ALTA_RELEVANCIA';
 export type ModalidadeRegistroMarcoDesenvolvimento = 'RETROSPECTIVO' | 'ACOMPANHAMENTO_ATUAL';
+export type TipoRelatoDesenvolvimento = 'PERDA_HABILIDADE' | 'PREOCUPACAO_FAMILIA';
+
+export interface RelatoDesenvolvimento {
+  id: string;
+  tipo: TipoRelatoDesenvolvimento;
+  descricao: string;
+  registradoEm: string;
+}
+
+export interface RegistrarRelatoDesenvolvimentoRequest {
+  tipo: TipoRelatoDesenvolvimento;
+  descricao: string;
+}
 
 export interface MarcoDesenvolvimento {
   id: string;

@@ -20,10 +20,10 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 
 | Frente | Status | Situação no Pueria |
 |---|---|---|
-| Checkpoints | Parcial | Há marcos entre 2 e 60 meses, mas o conjunto atual é reduzido e segue fontes genéricas CDC/SBP. |
-| Respostas | Parcial | Existem três estados próximos à proposta, porém sem o significado de consistência `sim, sempre`. |
-| Fontes por marco | Parcial | O texto da fonte é genérico; faltam método, versão e relevância clínica por item. |
-| Idade corrigida | Pendente | O módulo de desenvolvimento usa idade cronológica; crescimento já possui cálculo próprio. |
+| Checkpoints | Implementado | Catálogo `NEURO_V2_2026_07` cobre 2 a 24 meses, com checkpoints aplicáveis e preenchimento guiado. |
+| Respostas | Implementado | A família responde `Sim, sempre`, `Às vezes`, `Ainda não` e, apenas no registro retrospectivo, `Não lembro com segurança`. |
+| Fontes por marco | Implementado | Cada item persiste fonte, versão e papel clínico; a exposição familiar do detalhe técnico continua pendente. |
+| Idade corrigida | Implementado | O desenvolvimento seleciona etapas por idade corrigida em prematuros até 24 meses corrigidos e torna a idade usada visível no fluxo. |
 | Histórico longitudinal | Pendente | O registro atual mantém o estado mais recente do marco, sem eventos históricos por checkpoint. |
 | Regras de atenção | Parcial | Há orientação de conversa, mas não há motor versionado de trajetória, regressão e prioridade. |
 | Estímulos | Pendente | Não há banco de atividades mensais conectado a domínio, idade e resposta. |
@@ -46,9 +46,9 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 
 | ID | Entrega | Status | Critério de aceite |
 |---|---|---|---|
-| NEU-10 | Substituir o dataset atual pelo conjunto 2, 4, 6, 9, 12, 15, 18 e 24 meses aprovado. | Pendente | Itens, domínios e fontes correspondem à matriz clínica aprovada. |
-| NEU-11 | Formalizar respostas `SIM_SEMPRE`, `AS_VEZES`, `AINDA_NAO`. | Pendente | A tela explica a resposta sem linguagem de aprovação ou reprovação. |
-| NEU-12 | Aplicar idade corrigida nos checkpoints de prematuros até 24 meses corrigidos. | Parcial | Backend já seleciona as etapas pela idade corrigida e possui teste; falta explicitar a idade usada na interface. |
+| NEU-10 | Substituir o dataset atual pelo conjunto 2, 4, 6, 9, 12, 15, 18 e 24 meses aprovado. | Implementado | Itens, domínios e fontes correspondem ao catálogo `NEURO_V2_2026_07`; a matriz clínica de divergências segue aguardando aprovação formal. |
+| NEU-11 | Formalizar respostas `SIM_SEMPRE`, `AS_VEZES`, `AINDA_NAO`. | Implementado | A tela usa linguagem familiar e reserva `Não lembro com segurança` para o retrospectivo. |
+| NEU-12 | Aplicar idade corrigida nos checkpoints de prematuros até 24 meses corrigidos. | Implementado | Backend e interface usam a idade corrigida até 24 meses corrigidos. |
 | NEU-13 | Mostrar a fonte e a explicação do marco sob demanda. | Pendente | Detalhe técnico não sobrecarrega a tela da família. |
 | NEU-14 | Exibir disclaimer persistente no fluxo de desenvolvimento e de resultados. | Pendente | Declara que o app acompanha e não diagnostica; orienta conversa com pediatra. |
 | NEU-15 | Preservar o fluxo guiado, um marco por vez, apenas na faixa aplicável à idade. | Implementado | Linha do tempo permite escolher apenas etapas já aplicáveis e mantém o preenchimento guiado. |
@@ -58,8 +58,8 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | ID | Entrega | Status | Critério de aceite |
 |---|---|---|---|
 | NEU-20 | Persistir eventos de resposta por criança, marco, checkpoint e data. | Parcial | Cada marco já fica associado ao checkpoint e à modalidade retrospectiva/atual; a trilha de revisões de uma mesma resposta continua pendente. |
-| NEU-21 | Registrar relato opcional de perda de habilidade. | Pendente | A família pode informar regressão com contexto e data, sem o app nomear diagnóstico. |
-| NEU-22 | Implementar orientação de atenção gradual. | Pendente | Antes da janela: reforço e conversa planejada; após regra clínica validada: orientação de procurar pediatra. |
+| NEU-21 | Registrar relato opcional de perda de habilidade. | Implementado | A família pode informar perda de habilidade ou preocupação, com contexto e data, sem o app nomear diagnóstico. |
+| NEU-22 | Implementar orientação de atenção gradual. | Parcial | A perda de habilidade orienta conversa com o pediatra o quanto antes; as regras graduais por janela clínica ainda dependem da validação da dra. |
 | NEU-23 | Agregar respostas persistentes e múltiplos domínios em uma única orientação. | Pendente | Não há avalanche de alertas nem repetição de mensagens. |
 | NEU-24 | Criar tela de acompanhamento longitudinal. | Parcial | Linha do tempo e resumo por etapa foram implementados; leitura longitudinal de trajetória ainda depende do motor de orientação. |
 

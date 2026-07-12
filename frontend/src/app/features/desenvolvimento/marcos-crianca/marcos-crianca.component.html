@@ -37,6 +37,9 @@
         <span [style.width.%]="progresso().percentual"></span>
       </div>
       <p>{{ progresso().percentual }}% dos marcos desta idade já foram respondidos.</p>
+      @if (textoIdadeReferencia()) {
+        <p class="painel-idade__referencia">{{ textoIdadeReferencia() }}</p>
+      }
     </section>
 
     <section class="linha-tempo-marcos" aria-label="História do desenvolvimento">
@@ -189,6 +192,36 @@
                 <span><strong>{{ area.pendentes }}</strong> Sem resposta</span>
               </div>
             </article>
+          }
+        </section>
+
+        <section class="pueria-card relato-desenvolvimento">
+          <div>
+            <p class="pueria-eyebrow">Contexto da família</p>
+            <h2>Há algo importante para registrar?</h2>
+            <p>Este espaço ajuda a organizar o que foi percebido para conversar com o pediatra. Não representa diagnóstico.</p>
+          </div>
+
+          <div class="relato-desenvolvimento__tipos" role="group" aria-label="Tipo de relato">
+            <button type="button" [class.relato-desenvolvimento__tipo--ativo]="tipoRelato() === 'PREOCUPACAO_FAMILIA'" (click)="tipoRelato.set('PREOCUPACAO_FAMILIA')">Preocupação da família</button>
+            <button type="button" [class.relato-desenvolvimento__tipo--ativo]="tipoRelato() === 'PERDA_HABILIDADE'" (click)="tipoRelato.set('PERDA_HABILIDADE')">Perda de habilidade</button>
+          </div>
+
+          <label>
+            <span>O que você percebeu?</span>
+            <textarea rows="3" maxlength="500" [ngModel]="descricaoRelato()" (ngModelChange)="descricaoRelato.set($event)" placeholder="Ex.: fazia um gesto e parou de fazer nas últimas semanas."></textarea>
+          </label>
+          <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoRelato()" (click)="registrarRelato()">Registrar contexto</button>
+
+          @if (relatos().length > 0) {
+            <div class="relato-desenvolvimento__lista">
+              @for (relato of relatos(); track relato.id) {
+                <article [class.relato-desenvolvimento__item--prioritario]="relato.tipo === 'PERDA_HABILIDADE'">
+                  <div><strong>{{ labelTipoRelato(relato.tipo) }}</strong><span>{{ relato.registradoEm | date:'dd/MM/yyyy' }}</span><p>{{ relato.descricao }}</p></div>
+                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoRelato()" (click)="removerRelato(relato)">Remover</button>
+                </article>
+              }
+            </div>
           }
         </section>
 
