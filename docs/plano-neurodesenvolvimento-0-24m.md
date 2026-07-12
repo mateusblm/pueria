@@ -28,7 +28,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | Regras de atenção | Parcial | Há orientação de conversa, mas não há motor versionado de trajetória, regressão e prioridade. |
 | Estímulos | Parcial | Há catálogo versionado de 2 a 24 meses, sugestões leves por faixa, prioridade por área e registro opcional de atividade experimentada. |
 | M-CHAT-R/F | Bloqueado | Exige fluxo independente e licença comercial antes da incorporação. |
-| Relatório para consulta | Pendente | Deve consolidar marcos, trajetória, atividades e pontos a conversar. |
+| Relatório para consulta | Parcial | PDF Jasper inicial reúne identificação, prematuridade, desenvolvimento, contexto familiar, atividades e última referência de crescimento. |
 
 ## Lista de entregas
 
@@ -79,7 +79,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | NEU-40 | Confirmar licença comercial do M-CHAT-R/F. | Bloqueado | Termo de licença documentado antes de qualquer item do instrumento entrar no produto. |
 | NEU-41 | Implementar M-CHAT-R/F como módulo separado aos 18 e 24 meses. | Bloqueado | Itens, ordem, instruções, follow-up, copyright e algoritmo seguem a licença e a fonte oficial. |
 | NEU-42 | Avaliar licenças e formato de ASQ-3/SWYC antes de uso. | Pesquisa/validação | Nenhum instrumento protegido é reproduzido ou pontuado sem permissão. |
-| NEU-43 | Gerar PDF para consulta pediátrica. | Pendente | Inclui contexto de prematuridade, respostas por etapa, trajetória, estímulos e pontos a conversar; não contém diagnóstico automatizado. |
+| NEU-43 | Gerar PDF para consulta pediátrica. | Parcial | PDF Jasper inicial inclui contexto de prematuridade, respostas relevantes, relatos, atividades e referência de crescimento; a evolução visual e dados profissionais detalhados seguem pendentes. |
 
 ## Ordem de execução
 

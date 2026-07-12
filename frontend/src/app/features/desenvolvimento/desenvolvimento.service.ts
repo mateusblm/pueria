@@ -48,4 +48,6 @@ export class DesenvolvimentoService {
     return this.http.get<EstimuloDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/estimulos/historico`)
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
+
+  gerarResumoConsulta(criancaId: string): Observable<Blob> { return this.http.get(`/api/criancas/${criancaId}/relatorio-consulta`, { responseType: 'blob' }).pipe(timeout({ first: this.tempoLimiteRequisicaoMs })); }
 }

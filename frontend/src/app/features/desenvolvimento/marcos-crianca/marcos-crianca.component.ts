@@ -293,7 +293,7 @@ export class MarcosCriancaComponent implements OnInit {
   }
 
   imprimirResumo(): void {
-    window.print();
+    this.desenvolvimentoService.gerarResumoConsulta(this.criancaId()).subscribe({ next: (pdf) => window.open(URL.createObjectURL(pdf), '_blank'), error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro)) });
   }
 
   registrarRelato(): void {

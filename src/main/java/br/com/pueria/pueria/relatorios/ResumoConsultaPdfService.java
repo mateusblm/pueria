@@ -1,0 +1,24 @@
+package br.com.pueria.pueria.relatorios;
+
+import br.com.pueria.pueria.crescimento.aplicacao.ListarAvaliacoesCurvaCrescimentoUseCase;
+import br.com.pueria.pueria.criancas.dominio.Crianca;
+import br.com.pueria.pueria.criancas.dominio.CriancaRepositorio;
+import br.com.pueria.pueria.desenvolvimento.aplicacao.GerenciarEstimulosDesenvolvimentoUseCase;
+import br.com.pueria.pueria.desenvolvimento.aplicacao.ListarMarcosDesenvolvimentoUseCase;
+import br.com.pueria.pueria.desenvolvimento.aplicacao.GerenciarRelatosDesenvolvimentoUseCase;
+import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
+import br.com.pueria.pueria.usuarios.dominio.UsuarioRepositorio;
+import net.sf.jasperreports.engine.*;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+@Service public class ResumoConsultaPdfService {
+ private final CriancaRepositorio criancas; private final UsuarioRepositorio usuarios; private final VinculoResponsavelCriancaRepositorio vinculos; private final ListarMarcosDesenvolvimentoUseCase marcos; private final GerenciarRelatosDesenvolvimentoUseCase relatos; private final GerenciarEstimulosDesenvolvimentoUseCase estimulos; private final ListarAvaliacoesCurvaCrescimentoUseCase crescimento;
+ public ResumoConsultaPdfService(CriancaRepositorio criancas,UsuarioRepositorio usuarios,VinculoResponsavelCriancaRepositorio vinculos,ListarMarcosDesenvolvimentoUseCase marcos,GerenciarRelatosDesenvolvimentoUseCase relatos,GerenciarEstimulosDesenvolvimentoUseCase estimulos,ListarAvaliacoesCurvaCrescimentoUseCase crescimento){this.criancas=criancas;this.usuarios=usuarios;this.vinculos=vinculos;this.marcos=marcos;this.relatos=relatos;this.estimulos=estimulos;this.crescimento=crescimento;}
+ public byte[] gerar(UUID criancaId,String email){ Crianca c=validar(criancaId,email); StringBuilder t=new StringBuilder(); t.append("GERADO EM ").append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append("\n\n"); t.append("IDENTIFICAÇÃO\n").append(c.getNome()).append(" | Nascimento: ").append(c.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append(" | Sexo: ").append(c.getSexo()).append("\n"); if(c.isPrematura())t.append("Prematuridade: ").append(c.getSemanasGestacionais()).append(" semanas e ").append(c.getDiasGestacionais()).append(" dias.\n"); t.append("\nDESENVOLVIMENTO\n"); marcos.executar(criancaId,email).stream().filter(m->m.status().name().equals("AINDA_NAO_OBSERVADO")||m.status().name().equals("NAO_TENHO_CERTEZA")).forEach(m->t.append("• ").append(m.idadeMeses()).append(" meses | ").append(m.area()).append(": ").append(m.descricao()).append(" — ").append(m.status()).append("\n")); if(t.toString().endsWith("DESENVOLVIMENTO\n"))t.append("Sem respostas com dúvida ou ainda não observadas registradas.\n"); t.append("\nCONTEXTO DA FAMÍLIA\n"); relatos.listar(criancaId,email).forEach(r->t.append("• ").append(r.getTipo()).append(": ").append(r.getDescricao()).append("\n")); t.append("\nATIVIDADES EXPERIMENTADAS\n"); estimulos.listarHistorico(criancaId,email).forEach(e->t.append("• ").append(e.titulo()).append(e.observacao()==null?"":" — "+e.observacao()).append("\n")); t.append("\nCRESCIMENTO\n"); crescimento.executar(criancaId,email).stream().reduce((a,b)->b).ifPresent(a->t.append("Última medida: ").append(a.dataMedicao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append(" | Referência: ").append(a.criterioIdade()).append("\n")); t.append("\nEste relatório organiza informações registradas pela família e pelo acompanhamento. Não estabelece diagnóstico e não substitui avaliação pediátrica."); try(InputStream in=new ClassPathResource("relatorios/resumo-consulta.jrxml").getInputStream()){JasperReport r=JasperCompileManager.compileReport(in); return JasperExportManager.exportReportToPdf(JasperFillManager.fillReport(r,Map.of("CONTEUDO",t.toString()),new JREmptyDataSource()));}catch(Exception e){throw new IllegalStateException("Não foi possível gerar o relatório para consulta.",e);} }
+ private Crianca validar(UUID id,String email){var u=usuarios.buscarPorEmail(email).orElseThrow();if(!vinculos.usuarioPodeAcessarCrianca(u.getId(),id))throw new IllegalArgumentException("Criança não encontrada.");return criancas.buscarPorId(id).orElseThrow();}
+}
