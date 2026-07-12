@@ -85,6 +85,10 @@ public class ListarMarcosDesenvolvimentoUseCase {
                 marco.getArea(),
                 marco.getDescricao(),
                 marco.getFonte(),
+                marco.getTipoFonte(),
+                marco.getVersaoCatalogo(),
+                marco.getPapelClinico(),
+                marco.isAltaRelevanciaVigilancia(),
                 registro == null ? StatusMarcoDesenvolvimento.NAO_AVALIADO : registro.getStatus(),
                 registro == null ? null : registro.getObservacao(),
                 registro == null ? null : registro.getRegistradoEm()

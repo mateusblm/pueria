@@ -13,6 +13,10 @@ public final class MarcoDesenvolvimentoMapper {
                 entidade.getArea(),
                 entidade.getDescricao(),
                 entidade.getFonte(),
+                entidade.getTipoFonte(),
+                entidade.getVersaoCatalogo(),
+                entidade.getPapelClinico(),
+                entidade.isAltaRelevanciaVigilancia(),
                 entidade.isAtivo()
         );
     }

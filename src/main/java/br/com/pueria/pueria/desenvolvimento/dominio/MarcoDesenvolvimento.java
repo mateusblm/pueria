@@ -11,9 +11,16 @@ public class MarcoDesenvolvimento {
     private final AreaDesenvolvimento area;
     private final String descricao;
     private final String fonte;
+    private final TipoFonteMarcoDesenvolvimento tipoFonte;
+    private final String versaoCatalogo;
+    private final PapelClinicoMarcoDesenvolvimento papelClinico;
+    private final boolean altaRelevanciaVigilancia;
     private final boolean ativo;
 
-    private MarcoDesenvolvimento(UUID id, int idadeMeses, AreaDesenvolvimento area, String descricao, String fonte, boolean ativo) {
+    private MarcoDesenvolvimento(UUID id, int idadeMeses, AreaDesenvolvimento area, String descricao, String fonte,
+                                 TipoFonteMarcoDesenvolvimento tipoFonte, String versaoCatalogo,
+                                 PapelClinicoMarcoDesenvolvimento papelClinico, boolean altaRelevanciaVigilancia,
+                                 boolean ativo) {
         if (id == null) {
             throw new RegraDominioException("O marco deve possuir identificador.");
         }
@@ -29,17 +36,33 @@ public class MarcoDesenvolvimento {
         if (fonte == null || fonte.isBlank()) {
             throw new RegraDominioException("A fonte do marco é obrigatória.");
         }
+        if (tipoFonte == null) {
+            throw new RegraDominioException("O tipo de fonte do marco é obrigatório.");
+        }
+        if (versaoCatalogo == null || versaoCatalogo.isBlank()) {
+            throw new RegraDominioException("A versão do catálogo de marcos é obrigatória.");
+        }
+        if (papelClinico == null) {
+            throw new RegraDominioException("O papel clínico do marco é obrigatório.");
+        }
 
         this.id = id;
         this.idadeMeses = idadeMeses;
         this.area = area;
         this.descricao = descricao.trim();
         this.fonte = fonte.trim();
+        this.tipoFonte = tipoFonte;
+        this.versaoCatalogo = versaoCatalogo.trim();
+        this.papelClinico = papelClinico;
+        this.altaRelevanciaVigilancia = altaRelevanciaVigilancia;
         this.ativo = ativo;
     }
 
-    public static MarcoDesenvolvimento restaurar(UUID id, int idadeMeses, AreaDesenvolvimento area, String descricao, String fonte, boolean ativo) {
-        return new MarcoDesenvolvimento(id, idadeMeses, area, descricao, fonte, ativo);
+    public static MarcoDesenvolvimento restaurar(UUID id, int idadeMeses, AreaDesenvolvimento area, String descricao, String fonte,
+                                                  TipoFonteMarcoDesenvolvimento tipoFonte, String versaoCatalogo,
+                                                  PapelClinicoMarcoDesenvolvimento papelClinico, boolean altaRelevanciaVigilancia,
+                                                  boolean ativo) {
+        return new MarcoDesenvolvimento(id, idadeMeses, area, descricao, fonte, tipoFonte, versaoCatalogo, papelClinico, altaRelevanciaVigilancia, ativo);
     }
 
     public UUID getId() {
@@ -61,6 +84,11 @@ public class MarcoDesenvolvimento {
     public String getFonte() {
         return fonte;
     }
+
+    public TipoFonteMarcoDesenvolvimento getTipoFonte() { return tipoFonte; }
+    public String getVersaoCatalogo() { return versaoCatalogo; }
+    public PapelClinicoMarcoDesenvolvimento getPapelClinico() { return papelClinico; }
+    public boolean isAltaRelevanciaVigilancia() { return altaRelevanciaVigilancia; }
 
     public boolean isAtivo() {
         return ativo;

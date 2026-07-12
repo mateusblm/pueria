@@ -37,10 +37,10 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | ID | Entrega | Status | Critério de aceite |
 |---|---|---|---|
 | NEU-00 | Registrar esta decisão clínica e o inventário de fontes no repositório. | Implementado | Documento versionado e revisável pelo time clínico. |
-| NEU-01 | Criar catálogo versionado de marcos de 0 a 24 meses. | Pendente | Cada item possui checkpoint, domínio, texto familiar, fonte, versão e status ativo. |
-| NEU-02 | Registrar papel clínico do marco: observação, atenção persistente ou alta relevância. | Pendente | Nenhum papel clínico fica implícito em texto de interface. |
+| NEU-01 | Criar catálogo versionado de marcos de 0 a 24 meses. | Implementado | Base `NEURO_V2_2026_07` com checkpoint, domínio, texto familiar, fonte, versão e status ativo. |
+| NEU-02 | Registrar papel clínico do marco: observação, atenção persistente ou alta relevância. | Implementado | O papel clínico e a marca de vigilância alta são persistidos por item. |
 | NEU-03 | Criar matriz de decisão da dra. para os itens divergentes do CDC 2022. | Pendente | A dra. aprova, item a item, checkpoint, fonte e tipo de alerta. |
-| NEU-04 | Migrar sem apagar respostas existentes. | Pendente | Marcos antigos permanecem auditáveis e novos marcos iniciam sem resposta. |
+| NEU-04 | Reinicializar marcos e respostas de teste na troca para o catálogo v2. | Implementado | O ambiente ainda é de desenvolvimento; não há camada de compatibilidade ou migração de respostas legadas. |
 
 ### Fase 1 - Checklist de acompanhamento
 
