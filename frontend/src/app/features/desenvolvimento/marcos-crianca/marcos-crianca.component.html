@@ -16,6 +16,11 @@
     </div>
   </div>
 
+  <aside class="aviso-acompanhamento" aria-label="Como usar este acompanhamento">
+    <app-icon name="heart" [size]="18" />
+    <span>Este acompanhamento organiza observações da família e apoia a conversa com o pediatra. Ele não substitui uma avaliação profissional.</span>
+  </aside>
+
   @if (carregando()) {
     <div class="pueria-card marcos-page__state">Preparando os marcos da criança...</div>
   } @else if (erro()) {
@@ -140,6 +145,12 @@
                 (blur)="salvarObservacao(marco, $any($event.target).value)"></textarea>
             </label>
 
+            <details class="marco-fonte">
+              <summary>Sobre este marco</summary>
+              <p><strong>Fonte:</strong> {{ textoFonteMarco(marco) }}</p>
+              <p>{{ textoOrientacaoMarco(marco) }}</p>
+            </details>
+
             <div class="etapa-nav">
               <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() === 0" (click)="etapaAnterior()">Anterior</button>
               <span>Etapa {{ indiceEtapa() + 1 }} de {{ marcosDaIdade().length }}</span>
@@ -194,6 +205,27 @@
             </article>
           }
         </section>
+
+        @if (trajetoriaPorArea().length > 0) {
+          <section class="pueria-card trajetoria-card">
+            <div>
+              <p class="pueria-eyebrow">Visão ao longo do tempo</p>
+              <h2>Observações para olhar em conjunto</h2>
+              <p>Estas respostas aparecem em mais de uma fase. Elas ajudam a contar a história da criança na consulta, mas não representam um diagnóstico.</p>
+            </div>
+            <div class="trajetoria-card__lista">
+              @for (trajetoria of trajetoriaPorArea(); track trajetoria.area) {
+                <article [attr.data-tema]="temaArea(trajetoria.area)">
+                  <span class="trajetoria-card__icone"><app-icon [name]="iconeArea(trajetoria.area)" [size]="19" /></span>
+                  <div>
+                    <strong>{{ trajetoria.label }}</strong>
+                    <span>{{ trajetoria.total }} respostas em {{ trajetoria.idades.join(', ') }}</span>
+                  </div>
+                </article>
+              }
+            </div>
+          </section>
+        }
 
         <section class="pueria-card relato-desenvolvimento">
           <div>
@@ -286,6 +318,11 @@
                 @if (marco.observacao) {
                   <p>{{ marco.observacao }}</p>
                 }
+                <details class="marco-fonte">
+                  <summary>Fonte e contexto</summary>
+                  <p><strong>Fonte:</strong> {{ textoFonteMarco(marco) }}</p>
+                  <p>{{ textoOrientacaoMarco(marco) }}</p>
+                </details>
               </div>
               <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
             </article>

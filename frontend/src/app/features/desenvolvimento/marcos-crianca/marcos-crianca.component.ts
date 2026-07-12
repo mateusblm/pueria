@@ -31,6 +31,13 @@ type HistoricoIdade = {
   pontosAtencao: number;
 };
 
+type TrajetoriaArea = {
+  area: AreaDesenvolvimento;
+  label: string;
+  idades: string[];
+  total: number;
+};
+
 type ModoTela = 'responder' | 'resultados';
 
 @Component({
@@ -153,6 +160,18 @@ export class MarcosCriancaComponent implements OnInit {
         pontosAtencao: marcos.filter((marco) => marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA').length
       };
     }));
+
+  readonly trajetoriaPorArea = computed<TrajetoriaArea[]>(() => this.areas.map((area) => {
+    const pontos = this.marcos().filter((marco) => marco.area === area &&
+      (marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'));
+    const idades = [...new Set(pontos.map((marco) => marco.idadeMeses))];
+    return {
+      area,
+      label: this.labelArea(area),
+      idades: idades.map((idade) => this.tituloIdade(idade)),
+      total: pontos.length
+    };
+  }).filter((trajetoria) => trajetoria.idades.length >= 2));
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -297,6 +316,21 @@ export class MarcosCriancaComponent implements OnInit {
 
   labelTipoRelato(tipo: TipoRelatoDesenvolvimento): string {
     return tipo === 'PERDA_HABILIDADE' ? 'Perda de habilidade' : 'Preocupação da família';
+  }
+
+  textoOrientacaoMarco(marco: MarcoDesenvolvimento): string {
+    if (marco.papelClinico === 'ALTA_RELEVANCIA') {
+      return 'Este marco tem relevância especial para a vigilância do desenvolvimento. Quando houver dúvida persistente, leve exemplos da rotina para conversar com o pediatra.';
+    }
+    if (marco.papelClinico === 'ATENCAO_PERSISTENTE') {
+      return 'Acompanhe este marco nas atividades do dia a dia e leve suas observações à consulta se a dúvida continuar.';
+    }
+    return 'Esta pergunta ajuda a organizar as observações da rotina. Uma resposta isolada não confirma nem exclui uma condição.';
+  }
+
+  textoFonteMarco(marco: MarcoDesenvolvimento): string {
+    const fonte = marco.tipoFonte === 'OMS' ? 'Organização Mundial da Saúde' : 'Centers for Disease Control and Prevention';
+    return `${fonte} · ${marco.versaoCatalogo}`;
   }
 
   labelArea(area: string): string {
