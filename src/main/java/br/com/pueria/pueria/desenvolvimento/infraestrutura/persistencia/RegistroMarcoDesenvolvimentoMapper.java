@@ -12,6 +12,7 @@ public final class RegistroMarcoDesenvolvimentoMapper {
                 entidade.getCriancaId(),
                 entidade.getMarcoId(),
                 entidade.getStatus(),
+                entidade.getModalidade(),
                 entidade.getObservacao(),
                 entidade.getRegistradoEm(),
                 entidade.getAtualizadoEm()
@@ -24,6 +25,7 @@ public final class RegistroMarcoDesenvolvimentoMapper {
                 registro.getCriancaId(),
                 registro.getMarcoId(),
                 registro.getStatus(),
+                registro.getModalidade(),
                 registro.getObservacao(),
                 registro.getRegistradoEm(),
                 registro.getAtualizadoEm()

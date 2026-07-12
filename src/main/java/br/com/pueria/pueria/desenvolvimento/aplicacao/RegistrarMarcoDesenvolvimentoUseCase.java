@@ -6,6 +6,8 @@ import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.CriancaRepositorio;
 import br.com.pueria.pueria.desenvolvimento.dominio.MarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.MarcoDesenvolvimentoRepositorio;
+import br.com.pueria.pueria.desenvolvimento.dominio.IdadeReferenciaDesenvolvimento;
+import br.com.pueria.pueria.desenvolvimento.dominio.ModalidadeRegistroMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroMarcoDesenvolvimentoRepositorio;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.LocalDate;
 
 @Service
 public class RegistrarMarcoDesenvolvimentoUseCase {
@@ -59,7 +61,7 @@ public class RegistrarMarcoDesenvolvimentoUseCase {
                 .filter(MarcoDesenvolvimento::isAtivo)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Marco de desenvolvimento não encontrado."));
 
-        int idadeMeses = Math.min(calcularIdadeMeses(crianca), IDADE_MAXIMA_MARCOS_MESES);
+        int idadeMeses = Math.min(IdadeReferenciaDesenvolvimento.mesesParaCheckpoints(crianca, LocalDate.now()), IDADE_MAXIMA_MARCOS_MESES);
         if (marco.getIdadeMeses() > idadeMeses) {
             throw new RegraDominioException("Este marco ainda não pertence à faixa etária atual da criança.");
         }
@@ -70,14 +72,13 @@ public class RegistrarMarcoDesenvolvimentoUseCase {
                         comando.criancaId(),
                         comando.marcoId(),
                         comando.status(),
+                        marco.getIdadeMeses() < idadeMeses
+                                ? ModalidadeRegistroMarcoDesenvolvimento.RETROSPECTIVO
+                                : ModalidadeRegistroMarcoDesenvolvimento.ACOMPANHAMENTO_ATUAL,
                         comando.observacao()
                 ));
 
         return registroRepositorio.salvar(registro);
     }
 
-    private static int calcularIdadeMeses(Crianca crianca) {
-        Period periodo = Period.between(crianca.getDataNascimento(), LocalDate.now());
-        return Math.max(0, periodo.getYears() * 12 + periodo.getMonths());
-    }
 }

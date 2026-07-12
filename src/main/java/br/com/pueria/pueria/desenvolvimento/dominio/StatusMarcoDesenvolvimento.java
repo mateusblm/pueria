@@ -4,5 +4,6 @@ public enum StatusMarcoDesenvolvimento {
     OBSERVADO,
     NAO_TENHO_CERTEZA,
     AINDA_NAO_OBSERVADO,
+    NAO_LEMBRO,
     NAO_AVALIADO
 }

@@ -39,6 +39,24 @@
       <p>{{ progresso().percentual }}% dos marcos desta idade já foram respondidos.</p>
     </section>
 
+    <section class="linha-tempo-marcos" aria-label="História do desenvolvimento">
+      <div>
+        <p class="pueria-eyebrow">História do desenvolvimento</p>
+        <h2>Escolha uma etapa para registrar</h2>
+      </div>
+      <div class="linha-tempo-marcos__etapas">
+        @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
+          <button
+            type="button"
+            [class.linha-tempo-marcos__etapa--ativa]="grupo.idadeMeses === idadeSelecionada()"
+            (click)="selecionarIdade(grupo.idadeMeses)">
+            <strong>{{ grupo.titulo }}</strong>
+            <span>{{ grupo.respondidos }}/{{ grupo.total }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
     <section class="areas-resumo" aria-label="Áreas do desenvolvimento">
       @for (area of areasResumo(); track area.area) {
         <article class="area-resumo" [attr.data-tema]="temaArea(area.area)">
@@ -68,6 +86,10 @@
 
             <h2>{{ marco.descricao }}</h2>
 
+            @if (etapaRetrospectiva()) {
+              <p class="etapa-card__contexto">Ao lembrar desta fase, como isso costumava acontecer?</p>
+            }
+
             <div class="marco-card__actions" role="group" aria-label="Responder marco">
               <button
                 type="button"
@@ -93,6 +115,16 @@
                 (click)="registrar(marco, 'AINDA_NAO_OBSERVADO')">
                 Ainda não
               </button>
+              @if (etapaRetrospectiva()) {
+                <button
+                  type="button"
+                  class="resposta resposta--nao-lembro"
+                  [class.resposta--active]="marco.status === 'NAO_LEMBRO'"
+                  [disabled]="salvandoId() === marco.id"
+                  (click)="registrar(marco, 'NAO_LEMBRO')">
+                  Não lembro com segurança
+                </button>
+              }
             </div>
 
             <label class="nota-marco">

@@ -2,6 +2,7 @@ package br.com.pueria.pueria.desenvolvimento.aplicacao;
 
 import br.com.pueria.pueria.desenvolvimento.dominio.AreaDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.PapelClinicoMarcoDesenvolvimento;
+import br.com.pueria.pueria.desenvolvimento.dominio.ModalidadeRegistroMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.StatusMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.TipoFonteMarcoDesenvolvimento;
 
@@ -19,6 +20,7 @@ public record MarcoDesenvolvimentoResumo(
         PapelClinicoMarcoDesenvolvimento papelClinico,
         boolean altaRelevanciaVigilancia,
         StatusMarcoDesenvolvimento status,
+        ModalidadeRegistroMarcoDesenvolvimento modalidade,
         String observacao,
         LocalDateTime registradoEm
 ) {

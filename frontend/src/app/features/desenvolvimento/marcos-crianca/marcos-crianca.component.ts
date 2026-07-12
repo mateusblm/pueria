@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AreaDesenvolvimento, MarcoDesenvolvimento, StatusMarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
+import { AreaDesenvolvimento, MarcoDesenvolvimento, ModalidadeRegistroMarcoDesenvolvimento, StatusMarcoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
 import { DesenvolvimentoService } from '../desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 
@@ -63,6 +63,14 @@ export class MarcosCriancaComponent implements OnInit {
   readonly tituloIdadeSelecionada = computed(() => {
     const idade = this.idadeSelecionada();
     return idade === null ? '' : this.tituloIdade(idade);
+  });
+
+  readonly idadeAtualDisponivel = computed(() => this.historicoPorIdade().at(-1)?.idadeMeses ?? null);
+
+  readonly etapaRetrospectiva = computed(() => {
+    const idadeSelecionada = this.idadeSelecionada();
+    const idadeAtual = this.idadeAtualDisponivel();
+    return idadeSelecionada !== null && idadeAtual !== null && idadeSelecionada < idadeAtual;
   });
 
   readonly marcosDaIdade = computed(() => {
@@ -162,7 +170,10 @@ export class MarcosCriancaComponent implements OnInit {
       .pipe(finalize(() => this.salvandoId.set(null)))
       .subscribe({
         next: () => {
-          this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, status } : item));
+          const modalidade: ModalidadeRegistroMarcoDesenvolvimento = this.etapaRetrospectiva()
+            ? 'RETROSPECTIVO'
+            : 'ACOMPANHAMENTO_ATUAL';
+          this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, status, modalidade } : item));
           this.avancarDepoisDeResponder();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -200,6 +211,12 @@ export class MarcosCriancaComponent implements OnInit {
 
   abrirResultados(): void {
     this.modo.set('resultados');
+  }
+
+  selecionarIdade(idadeMeses: number): void {
+    this.idadeSelecionada.set(idadeMeses);
+    this.modo.set('responder');
+    this.posicionarPrimeiraPendente();
   }
 
   etapaAnterior(): void {
@@ -249,6 +266,7 @@ export class MarcosCriancaComponent implements OnInit {
       OBSERVADO: 'Sim',
       NAO_TENHO_CERTEZA: 'Não tenho certeza',
       AINDA_NAO_OBSERVADO: 'Ainda não',
+      NAO_LEMBRO: 'Não lembro',
       NAO_AVALIADO: 'Não respondido'
     };
     return labels[status];
@@ -326,6 +344,11 @@ export class MarcosCriancaComponent implements OnInit {
     }
 
     if (this.progresso().respondidos === this.progresso().total) {
+      const proximaIdade = this.historicoPorIdade().find((grupo) => grupo.idadeMeses > (this.idadeSelecionada() ?? 0));
+      if (proximaIdade) {
+        this.selecionarIdade(proximaIdade.idadeMeses);
+        return;
+      }
       this.modo.set('resultados');
       return;
     }

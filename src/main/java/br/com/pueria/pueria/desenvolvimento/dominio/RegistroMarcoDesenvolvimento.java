@@ -13,6 +13,7 @@ public class RegistroMarcoDesenvolvimento {
     private final UUID criancaId;
     private final UUID marcoId;
     private final StatusMarcoDesenvolvimento status;
+    private final ModalidadeRegistroMarcoDesenvolvimento modalidade;
     private final String observacao;
     private final LocalDateTime registradoEm;
     private final LocalDateTime atualizadoEm;
@@ -22,6 +23,7 @@ public class RegistroMarcoDesenvolvimento {
             UUID criancaId,
             UUID marcoId,
             StatusMarcoDesenvolvimento status,
+            ModalidadeRegistroMarcoDesenvolvimento modalidade,
             String observacao,
             LocalDateTime registradoEm,
             LocalDateTime atualizadoEm
@@ -32,7 +34,11 @@ public class RegistroMarcoDesenvolvimento {
         if (status == null) {
             throw new RegraDominioException("O status do marco é obrigatório.");
         }
+        if (modalidade == null) {
+            throw new RegraDominioException("A modalidade do registro é obrigatória.");
+        }
         this.status = status;
+        this.modalidade = modalidade;
         this.observacao = validarObservacao(observacao);
         if (registradoEm == null) {
             throw new RegraDominioException("A data do registro é obrigatória.");
@@ -41,8 +47,9 @@ public class RegistroMarcoDesenvolvimento {
         this.atualizadoEm = atualizadoEm;
     }
 
-    public static RegistroMarcoDesenvolvimento registrar(UUID criancaId, UUID marcoId, StatusMarcoDesenvolvimento status, String observacao) {
-        return new RegistroMarcoDesenvolvimento(UUID.randomUUID(), criancaId, marcoId, status, observacao, LocalDateTime.now(), null);
+    public static RegistroMarcoDesenvolvimento registrar(UUID criancaId, UUID marcoId, StatusMarcoDesenvolvimento status,
+                                                         ModalidadeRegistroMarcoDesenvolvimento modalidade, String observacao) {
+        return new RegistroMarcoDesenvolvimento(UUID.randomUUID(), criancaId, marcoId, status, modalidade, observacao, LocalDateTime.now(), null);
     }
 
     public static RegistroMarcoDesenvolvimento restaurar(
@@ -50,15 +57,16 @@ public class RegistroMarcoDesenvolvimento {
             UUID criancaId,
             UUID marcoId,
             StatusMarcoDesenvolvimento status,
+            ModalidadeRegistroMarcoDesenvolvimento modalidade,
             String observacao,
             LocalDateTime registradoEm,
             LocalDateTime atualizadoEm
     ) {
-        return new RegistroMarcoDesenvolvimento(id, criancaId, marcoId, status, observacao, registradoEm, atualizadoEm);
+        return new RegistroMarcoDesenvolvimento(id, criancaId, marcoId, status, modalidade, observacao, registradoEm, atualizadoEm);
     }
 
     public RegistroMarcoDesenvolvimento atualizar(StatusMarcoDesenvolvimento status, String observacao) {
-        return new RegistroMarcoDesenvolvimento(id, criancaId, marcoId, status, observacao, registradoEm, LocalDateTime.now());
+        return new RegistroMarcoDesenvolvimento(id, criancaId, marcoId, status, modalidade, observacao, registradoEm, LocalDateTime.now());
     }
 
     private static UUID validarId(UUID id, String mensagem) {
@@ -83,6 +91,7 @@ public class RegistroMarcoDesenvolvimento {
     public UUID getCriancaId() { return criancaId; }
     public UUID getMarcoId() { return marcoId; }
     public StatusMarcoDesenvolvimento getStatus() { return status; }
+    public ModalidadeRegistroMarcoDesenvolvimento getModalidade() { return modalidade; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getRegistradoEm() { return registradoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }

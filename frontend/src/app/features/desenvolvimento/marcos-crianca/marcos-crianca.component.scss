@@ -23,6 +23,14 @@
 .progresso span { display: block; height: 100%; border-radius: inherit; background: var(--pueria-sucesso); transition: width 180ms ease; }
 
 .modo-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+.linha-tempo-marcos { display: grid; gap: 12px; }
+.linha-tempo-marcos h2, .linha-tempo-marcos p { margin: 0; }
+.linha-tempo-marcos h2 { font-size: 1.2rem; }
+.linha-tempo-marcos__etapas { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.linha-tempo-marcos__etapas button { display: grid; flex: 0 0 auto; gap: 4px; min-width: 104px; border: 1px solid #e9dfda; border-radius: 6px; background: #fff; color: var(--pueria-texto); cursor: pointer; padding: 10px; text-align: left; }
+.linha-tempo-marcos__etapas button span { color: var(--pueria-texto-suave); font-size: .8rem; }
+.linha-tempo-marcos__etapas .linha-tempo-marcos__etapa--ativa { border-color: #76507d; background: #f5eff8; box-shadow: inset 0 3px 0 #76507d; }
 .modo-tabs button, .resposta {
   border: 1px solid var(--pueria-borda); background: #fff; color: var(--pueria-texto);
   cursor: pointer; font: inherit; font-weight: 820;
@@ -45,6 +53,8 @@
 .marco-status { background: var(--pueria-rosa-bruma); color: var(--pueria-texto-suave); }
 
 .marco-card__actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.etapa-card__contexto { margin: 0; color: var(--pueria-texto-suave); }
+.resposta--nao-lembro { background: #f4f2ef; color: #5f5651; }
 .resposta { min-height: 52px; border-radius: 6px; padding: 10px; }
 .resposta--active.resposta--sim { background: var(--pueria-folha-clara); border-color: rgba(55, 107, 75, 0.28); color: var(--pueria-folha-escura); }
 .resposta--active.resposta--duvida { background: #fff4c2; border-color: rgba(214, 168, 79, 0.34); color: #6f5012; }

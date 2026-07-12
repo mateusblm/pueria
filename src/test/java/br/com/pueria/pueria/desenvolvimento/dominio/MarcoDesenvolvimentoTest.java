@@ -47,4 +47,18 @@ class MarcoDesenvolvimentoTest {
                 true
         ));
     }
+
+    @Test
+    void registraRespostaRetrospectivaSemTransformarEmPontoDeAtencao() {
+        RegistroMarcoDesenvolvimento registro = RegistroMarcoDesenvolvimento.registrar(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                StatusMarcoDesenvolvimento.NAO_LEMBRO,
+                ModalidadeRegistroMarcoDesenvolvimento.RETROSPECTIVO,
+                null
+        );
+
+        assertEquals(StatusMarcoDesenvolvimento.NAO_LEMBRO, registro.getStatus());
+        assertEquals(ModalidadeRegistroMarcoDesenvolvimento.RETROSPECTIVO, registro.getModalidade());
+    }
 }
