@@ -28,6 +28,7 @@ export const routes: Routes = [
       { path: 'criancas/:id/transito-intestinal', loadComponent: () => import('./features/transito-intestinal/transito-intestinal-crianca/transito-intestinal-crianca.component').then((m) => m.TransitoIntestinalCriancaComponent) },
       { path: 'criancas/:id/sono', loadComponent: () => import('./features/sono/sono-crianca/sono-crianca.component').then((m) => m.SonoCriancaComponent) },
       { path: 'criancas/:id/telas', loadComponent: () => import('./features/telas/telas-crianca/telas-crianca.component').then((m) => m.TelasCriancaComponent) },
+      { path: 'criancas/:id/para-a-consulta', loadComponent: () => import('./features/relatorios/relatorios-crianca/relatorios-crianca.component').then((m) => m.RelatoriosCriancaComponent) },
       { path: 'criancas/:id', loadComponent: () => import('./features/criancas/detalhe-crianca/detalhe-crianca.component').then((m) => m.DetalheCriancaComponent) },
       { path: 'app/criancas', pathMatch: 'full', redirectTo: 'criancas' },
       { path: 'app/criancas/nova', pathMatch: 'full', redirectTo: 'criancas/nova' },

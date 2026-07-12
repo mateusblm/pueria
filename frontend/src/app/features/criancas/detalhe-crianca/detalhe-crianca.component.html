@@ -17,6 +17,7 @@
       </div>
       <div class="detalhe-page__actions">
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
+        <a [routerLink]="['/criancas', crianca.id, 'para-a-consulta']" class="pueria-button pueria-button--secondary">Para a consulta</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
         </button>

@@ -1,0 +1,4 @@
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DesenvolvimentoService } from '../../desenvolvimento/desenvolvimento.service';
+@Component({selector:'app-relatorios-crianca',imports:[RouterLink],templateUrl:'./relatorios-crianca.component.html',styleUrl:'./relatorios-crianca.component.scss'}) export class RelatoriosCriancaComponent { private route=inject(ActivatedRoute); private desenvolvimento=inject(DesenvolvimentoService); criancaId=this.route.snapshot.paramMap.get('id')??''; gerando=signal(false); erro=signal(''); gerar(){this.gerando.set(true);this.desenvolvimento.gerarResumoConsulta(this.criancaId).subscribe({next:p=>{this.gerando.set(false);window.open(URL.createObjectURL(p),'_blank')},error:()=>{this.gerando.set(false);this.erro.set('Não foi possível gerar o documento agora.')}})} }
