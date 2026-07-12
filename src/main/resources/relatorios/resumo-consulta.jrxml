@@ -1,10 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo-consulta" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="34" bottomMargin="30">
-<parameter name="IDENTIFICACAO" class="java.lang.String"/><parameter name="CRESCIMENTO" class="java.lang.String"/><parameter name="DESENVOLVIMENTO" class="java.lang.String"/><parameter name="TRAJETORIA" class="java.lang.String"/><parameter name="CONTEXTO" class="java.lang.String"/><parameter name="ATIVIDADES" class="java.lang.String"/><parameter name="GERADO_EM" class="java.lang.String"/>
-<title><band height="770"><staticText><reportElement x="0" y="0" width="515" height="26" forecolor="#9F243B"/><textElement><font size="18" isBold="true"/></textElement><text><![CDATA[Pueria | Resumo para consulta]]></text></staticText><textField><reportElement x="0" y="28" width="515" height="12" forecolor="#746761"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{GERADO_EM}]]></textFieldExpression></textField><line><reportElement x="0" y="48" width="515" height="1" forecolor="#DCCFC8"/></line>
-<staticText><reportElement x="0" y="62" width="515" height="13" forecolor="#47688F"/><textElement><font size="9" isBold="true"/></textElement><text><![CDATA[IDENTIFICAÇÃO E CONTEXTO DE NASCIMENTO]]></text></staticText><textField textAdjust="StretchHeight"><reportElement x="0" y="78" width="515" height="45"/><textElement><font size="10"/></textElement><textFieldExpression><![CDATA[$P{IDENTIFICACAO}]]></textFieldExpression></textField>
-<staticText><reportElement x="0" y="136" width="515" height="13" forecolor="#47688F"/><textElement><font size="9" isBold="true"/></textElement><text><![CDATA[CRESCIMENTO - ÚLTIMAS MEDIDAS E REFERÊNCIA]]></text></staticText><textField textAdjust="StretchHeight"><reportElement x="0" y="153" width="515" height="130" backcolor="#F7F9FC" mode="Opaque"/><textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement><textFieldExpression><![CDATA[$P{CRESCIMENTO}]]></textFieldExpression></textField>
-<staticText><reportElement x="0" y="298" width="515" height="13" forecolor="#9F243B"/><textElement><font size="9" isBold="true"/></textElement><text><![CDATA[DESENVOLVIMENTO - PONTOS PARA CONVERSAR]]></text></staticText><textField textAdjust="StretchHeight"><reportElement x="0" y="315" width="515" height="125" backcolor="#FFF8EE" mode="Opaque"/><textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement><textFieldExpression><![CDATA[$P{DESENVOLVIMENTO}]]></textFieldExpression></textField>
-<staticText><reportElement x="0" y="455" width="515" height="13" forecolor="#76507D"/><textElement><font size="9" isBold="true"/></textElement><text><![CDATA[TRAJETÓRIA DE MUDANÇAS DOS MARCOS]]></text></staticText><textField textAdjust="StretchHeight"><reportElement x="0" y="472" width="515" height="95" backcolor="#F7F3F9" mode="Opaque"/><textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement><textFieldExpression><![CDATA[$P{TRAJETORIA}]]></textFieldExpression></textField>
-<staticText><reportElement x="0" y="582" width="515" height="13" forecolor="#A77728"/><textElement><font size="9" isBold="true"/></textElement><text><![CDATA[CONTEXTO FAMILIAR E ATIVIDADES]]></text></staticText><textField textAdjust="StretchHeight"><reportElement x="0" y="599" width="515" height="100" backcolor="#FFFBF6" mode="Opaque"/><textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement><textFieldExpression><![CDATA[$P{CONTEXTO}]]></textFieldExpression></textField><staticText><reportElement x="0" y="712" width="515" height="27" forecolor="#746761"/><textElement><font size="8"/></textElement><text><![CDATA[Este documento organiza registros do acompanhamento e não estabelece diagnóstico ou substitui avaliação pediátrica.]]></text></staticText></band></title>
+    <parameter name="IDENTIFICACAO" class="java.lang.String"/>
+    <parameter name="CRESCIMENTO" class="java.lang.String"/>
+    <parameter name="DESENVOLVIMENTO" class="java.lang.String"/>
+    <parameter name="TRAJETORIA" class="java.lang.String"/>
+    <parameter name="CONTEXTO" class="java.lang.String"/>
+    <parameter name="ATIVIDADES" class="java.lang.String"/>
+    <parameter name="GERADO_EM" class="java.lang.String"/>
+
+    <title>
+        <band height="54">
+            <staticText>
+                <reportElement x="0" y="0" width="515" height="26" forecolor="#9F243B"/>
+                <textElement><font size="18" isBold="true"/></textElement>
+                <text><![CDATA[Pueria | Resumo para consulta]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="0" y="28" width="515" height="12" forecolor="#746761"/>
+                <textElement><font size="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{GERADO_EM}]]></textFieldExpression>
+            </textField>
+            <line><reportElement x="0" y="48" width="515" height="1" forecolor="#DCCFC8"/></line>
+        </band>
+    </title>
+
+    <detail>
+        <band height="245" splitType="Stretch">
+            <staticText>
+                <reportElement positionType="Float" x="0" y="8" width="515" height="13" forecolor="#47688F"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[IDENTIFICAÇÃO E CONTEXTO DE NASCIMENTO]]></text>
+            </staticText>
+            <textField textAdjust="StretchHeight">
+                <reportElement positionType="Float" x="0" y="24" width="515" height="20"/>
+                <textElement><font size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{IDENTIFICACAO}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement positionType="Float" x="0" y="56" width="515" height="13" forecolor="#47688F"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[CRESCIMENTO - ÚLTIMAS MEDIDAS E REFERÊNCIA]]></text>
+            </staticText>
+            <textField textAdjust="StretchHeight">
+                <reportElement positionType="Float" x="0" y="73" width="515" height="20" backcolor="#F7F9FC" mode="Opaque"/>
+                <textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{CRESCIMENTO}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement positionType="Float" x="0" y="106" width="515" height="13" forecolor="#9F243B"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[DESENVOLVIMENTO - PONTOS PARA CONVERSAR]]></text>
+            </staticText>
+            <textField textAdjust="StretchHeight">
+                <reportElement positionType="Float" x="0" y="123" width="515" height="20" backcolor="#FFF8EE" mode="Opaque"/>
+                <textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{DESENVOLVIMENTO}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement positionType="Float" x="0" y="156" width="515" height="13" forecolor="#76507D"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[TRAJETÓRIA DE MUDANÇAS DOS MARCOS]]></text>
+            </staticText>
+            <textField textAdjust="StretchHeight">
+                <reportElement positionType="Float" x="0" y="173" width="515" height="20" backcolor="#F7F3F9" mode="Opaque"/>
+                <textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{TRAJETORIA}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement positionType="Float" x="0" y="206" width="515" height="13" forecolor="#A77728"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[CONTEXTO FAMILIAR E ATIVIDADES]]></text>
+            </staticText>
+            <textField textAdjust="StretchHeight">
+                <reportElement positionType="Float" x="0" y="223" width="515" height="20" backcolor="#FFFBF6" mode="Opaque"/>
+                <textElement><font size="9"/><paragraph leftIndent="10" rightIndent="10" spacingBefore="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{CONTEXTO}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="22">
+            <line><reportElement x="0" y="0" width="515" height="1" forecolor="#DCCFC8"/></line>
+            <staticText>
+                <reportElement x="0" y="6" width="515" height="12" forecolor="#746761"/>
+                <textElement><font size="8"/></textElement>
+                <text><![CDATA[Este documento organiza registros do acompanhamento e não estabelece diagnóstico ou substitui avaliação pediátrica.]]></text>
+            </staticText>
+        </band>
+    </pageFooter>
 </jasperReport>
