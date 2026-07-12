@@ -124,6 +124,13 @@
 .trajetoria-card__icone { align-items: center; background: var(--area-fundo, #dce9f6); border-radius: 50%; color: var(--area-cor, #47688f); display: inline-flex; height: 36px; justify-content: center; width: 36px; }
 .trajetoria-card__lista div { display: grid; gap: 3px; }.trajetoria-card__lista span { color: var(--pueria-texto-suave); font-size: .9rem; }
 
+.estimulos-card { border-top: 4px solid #416c4b; display: grid; gap: 16px; padding: 22px; }
+.estimulos-card h2, .estimulos-card h3, .estimulos-card p { margin: 0; }.estimulos-card > div > p:not(.pueria-eyebrow) { color: var(--pueria-texto-suave); margin-top: 6px; }
+.estimulos-card__lista { display: grid; gap: 10px; }.estimulos-card__lista article { align-items: flex-start; border: 1px solid var(--pueria-borda); border-left: 3px solid var(--area-cor, #416c4b); display: grid; gap: 12px; grid-template-columns: auto minmax(0, 1fr) auto; padding: 14px; }
+.estimulos-card__lista article[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.estimulos-card__lista article[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.estimulos-card__lista article[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.estimulos-card__lista article[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
+.estimulos-card__icone { align-items:center; background:var(--area-fundo,#dcebdc); border-radius:50%; color:var(--area-cor,#416c4b); display:inline-flex; height:38px; justify-content:center; width:38px; }.estimulos-card__lista article > div { display:grid; gap:8px; }.estimulos-card__lista h3 { font-size:1rem; }.estimulos-card__lista p { color:var(--pueria-texto-suave); line-height:1.45; }.estimulos-card details { color:var(--pueria-texto-suave); font-size:.88rem; }.estimulos-card summary { cursor:pointer; color:var(--pueria-vermelho-profundo); font-weight:700; }.estimulos-card details p { margin-top:7px; }
+.estimulos-card__feito { align-self:center; background:var(--pueria-folha-clara); border-radius:4px; color:var(--pueria-folha-escura); font-size:.82rem; font-weight:760; padding:8px 10px; }.estimulos-card .pueria-button { align-self:center; white-space:nowrap; }
+
 .historico-card { display: grid; gap: 12px; padding: 22px; }
 .historico-lista article {
   display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center;
@@ -144,6 +151,7 @@
   .marcos-page__hero, .painel-idade, .etapa-card__body, .apoio-card, .relato-desenvolvimento { padding: 18px; }
   .relato-desenvolvimento__tipos { width: 100%; }.relato-desenvolvimento__tipos button { flex: 1 1 10rem; }
   .marco-card__actions, .modo-tabs, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
+  .estimulos-card { padding:18px; }.estimulos-card__lista article { grid-template-columns:auto minmax(0,1fr); }.estimulos-card__lista .pueria-button, .estimulos-card__feito { grid-column:2; justify-self:start; }
   .etapa-nav { align-items: stretch; flex-direction: column; }
   .historico-lista article { grid-template-columns: 1fr; }
 }

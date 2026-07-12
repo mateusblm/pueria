@@ -229,6 +229,34 @@
           </section>
         }
 
+        @if (estimulos().length > 0) {
+          <section class="pueria-card estimulos-card">
+            <div>
+              <p class="pueria-eyebrow">Na rotina</p>
+              <h2>Uma ideia para experimentar</h2>
+              <p>Escolha apenas o que fizer sentido hoje. Estas sugestões acompanham a fase atual e não substituem orientação profissional.</p>
+            </div>
+            <div class="estimulos-card__lista">
+              @for (estimulo of estimulos(); track estimulo.id) {
+                <article [attr.data-tema]="temaArea(estimulo.area)">
+                  <span class="estimulos-card__icone"><app-icon [name]="iconeArea(estimulo.area)" [size]="19" /></span>
+                  <div>
+                    <span class="marco-area" [attr.data-tema]="temaArea(estimulo.area)">{{ labelArea(estimulo.area) }}</span>
+                    <h3>{{ estimulo.titulo }}</h3>
+                    <p>{{ estimulo.descricao }}</p>
+                    <details><summary>Cuidados e fonte</summary><p><strong>Cuidados:</strong> {{ estimulo.cuidado }}</p><p><strong>Fonte:</strong> {{ estimulo.fonte }}</p></details>
+                  </div>
+                  @if (estimulo.experimentado) {
+                    <span class="estimulos-card__feito">Experimentamos</span>
+                  } @else {
+                    <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoEstimuloId() === estimulo.id" (click)="registrarEstimulo(estimulo)">Experimentar</button>
+                  }
+                </article>
+              }
+            </div>
+          </section>
+        }
+
         <section class="pueria-card relato-desenvolvimento">
           <div>
             <p class="pueria-eyebrow">Contexto da família</p>

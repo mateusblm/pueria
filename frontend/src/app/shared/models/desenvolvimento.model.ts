@@ -18,6 +18,19 @@ export interface RegistrarRelatoDesenvolvimentoRequest {
   descricao: string;
 }
 
+export interface EstimuloDesenvolvimento {
+  id: string;
+  area: AreaDesenvolvimento;
+  titulo: string;
+  descricao: string;
+  cuidado: string;
+  fonte: string;
+  versaoCatalogo: string;
+  experimentado: boolean;
+  observacao?: string | null;
+  experimentadoEm?: string | null;
+}
+
 export interface MarcoDesenvolvimento {
   id: string;
   idadeMeses: number;

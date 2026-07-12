@@ -4,7 +4,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AreaDesenvolvimento, MarcoDesenvolvimento, ModalidadeRegistroMarcoDesenvolvimento, RelatoDesenvolvimento, StatusMarcoDesenvolvimento, TipoRelatoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
+import { AreaDesenvolvimento, EstimuloDesenvolvimento, MarcoDesenvolvimento, ModalidadeRegistroMarcoDesenvolvimento, RelatoDesenvolvimento, StatusMarcoDesenvolvimento, TipoRelatoDesenvolvimento } from '../../../shared/models/desenvolvimento.model';
 import { DesenvolvimentoService } from '../desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 import { CriancasService } from '../../criancas/criancas.service';
@@ -65,6 +65,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly crianca = signal<Crianca | null>(null);
   readonly marcos = signal<MarcoDesenvolvimento[]>([]);
   readonly relatos = signal<RelatoDesenvolvimento[]>([]);
+  readonly estimulos = signal<EstimuloDesenvolvimento[]>([]);
   readonly carregando = signal(true);
   readonly salvandoId = signal<string | null>(null);
   readonly erro = signal('');
@@ -74,6 +75,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly tipoRelato = signal<TipoRelatoDesenvolvimento>('PREOCUPACAO_FAMILIA');
   readonly descricaoRelato = signal('');
   readonly salvandoRelato = signal(false);
+  readonly salvandoEstimuloId = signal<string | null>(null);
 
   readonly areas: AreaDesenvolvimento[] = ['SOCIAL_EMOCIONAL', 'LINGUAGEM_COMUNICACAO', 'COGNITIVO', 'MOTOR'];
 
@@ -210,6 +212,11 @@ export class MarcosCriancaComponent implements OnInit {
       error: () => this.erro.set('Não foi possível carregar os relatos de desenvolvimento agora.')
     });
 
+    this.desenvolvimentoService.listarEstimulos(this.criancaId()).subscribe({
+      next: (estimulos) => this.estimulos.set(estimulos),
+      error: () => this.erro.set('Não foi possível preparar as sugestões de atividades agora.')
+    });
+
     this.criancasService.buscarPorId(this.criancaId()).subscribe({
       next: (crianca) => this.crianca.set(crianca)
     });
@@ -312,6 +319,16 @@ export class MarcosCriancaComponent implements OnInit {
       .pipe(finalize(() => this.salvandoRelato.set(false)))
       .subscribe({
         next: () => this.relatos.update((itens) => itens.filter((item) => item.id !== relato.id)),
+        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      });
+  }
+
+  registrarEstimulo(estimulo: EstimuloDesenvolvimento): void {
+    this.salvandoEstimuloId.set(estimulo.id);
+    this.desenvolvimentoService.registrarEstimulo(this.criancaId(), estimulo.id)
+      .pipe(finalize(() => this.salvandoEstimuloId.set(null)))
+      .subscribe({
+        next: () => this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? { ...item, experimentado: true, experimentadoEm: new Date().toISOString() } : item)),
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }

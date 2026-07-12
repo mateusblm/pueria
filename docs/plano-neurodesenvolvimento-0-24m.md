@@ -26,7 +26,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | Idade corrigida | Implementado | O desenvolvimento seleciona etapas por idade corrigida em prematuros até 24 meses corrigidos e torna a idade usada visível no fluxo. |
 | Histórico longitudinal | Pendente | O registro atual mantém o estado mais recente do marco, sem eventos históricos por checkpoint. |
 | Regras de atenção | Parcial | Há orientação de conversa, mas não há motor versionado de trajetória, regressão e prioridade. |
-| Estímulos | Pendente | Não há banco de atividades mensais conectado a domínio, idade e resposta. |
+| Estímulos | Parcial | Há catálogo versionado de 2 a 24 meses, sugestões leves por faixa, prioridade por área e registro opcional de atividade experimentada. |
 | M-CHAT-R/F | Bloqueado | Exige fluxo independente e licença comercial antes da incorporação. |
 | Relatório para consulta | Pendente | Deve consolidar marcos, trajetória, atividades e pontos a conversar. |
 
@@ -67,10 +67,10 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 
 | ID | Entrega | Status | Critério de aceite |
 |---|---|---|---|
-| NEU-30 | Criar banco de estímulos mensais de 0 a 24 meses. | Pendente | Atividade possui faixa etária, domínio, objetivo, fonte, cuidados e texto familiar. |
-| NEU-31 | Mostrar poucos estímulos contextuais por vez. | Pendente | Sugestões se relacionam à idade e aos domínios observados, sem prescrição ou sobrecarga. |
-| NEU-32 | Incluir avisos de segurança revisados clinicamente. | Pendente | Conteúdos de bruços, sono, mobilidade e objetos pequenos têm orientação segura adequada à idade. |
-| NEU-33 | Permitir marcar atividade como experimentada e registrar observação opcional. | Pendente | Histórico não é tratado como adesão obrigatória ou indicador diagnóstico. |
+| NEU-30 | Criar banco de estímulos mensais de 0 a 24 meses. | Parcial | Catálogo `ESTIMULOS_V1_2026_07` cobre 2 a 24 meses em faixas de desenvolvimento, com domínio, fonte, cuidados e texto familiar; a granularidade mensal completa segue pendente. |
+| NEU-31 | Mostrar poucos estímulos contextuais por vez. | Implementado | A tela mostra duas sugestões por vez, priorizando áreas com respostas “Às vezes” ou “Ainda não”, sem prescrição ou sobrecarga. |
+| NEU-32 | Incluir avisos de segurança revisados clinicamente. | Implementado | Cada sugestão traz cuidados sob demanda para bruços, supervisão, movimento livre e objetos pequenos. |
+| NEU-33 | Permitir marcar atividade como experimentada e registrar observação opcional. | Parcial | A família pode marcar “Experimentamos”; a anotação opcional na interface ainda será adicionada. |
 
 ### Fase 4 - Triagem validada e relatório
 

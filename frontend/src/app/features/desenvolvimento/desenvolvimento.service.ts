@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { MarcoDesenvolvimento, RelatoDesenvolvimento, RegistrarMarcoDesenvolvimentoRequest, RegistrarRelatoDesenvolvimentoRequest } from '../../shared/models/desenvolvimento.model';
+import { EstimuloDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento, RegistrarMarcoDesenvolvimentoRequest, RegistrarRelatoDesenvolvimentoRequest } from '../../shared/models/desenvolvimento.model';
 
 @Injectable({ providedIn: 'root' })
 export class DesenvolvimentoService {
@@ -31,6 +31,16 @@ export class DesenvolvimentoService {
 
   removerRelato(criancaId: string, relatoId: string): Observable<void> {
     return this.http.delete<void>(`/api/criancas/${criancaId}/desenvolvimento/relatos/${relatoId}`)
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
+
+  listarEstimulos(criancaId: string): Observable<EstimuloDesenvolvimento[]> {
+    return this.http.get<EstimuloDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/estimulos`)
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
+
+  registrarEstimulo(criancaId: string, estimuloId: string): Observable<void> {
+    return this.http.put<void>(`/api/criancas/${criancaId}/desenvolvimento/estimulos/${estimuloId}`, {})
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 }
