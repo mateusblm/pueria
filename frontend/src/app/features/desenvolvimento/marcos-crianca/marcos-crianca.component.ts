@@ -263,8 +263,8 @@ export class MarcosCriancaComponent implements OnInit {
 
   labelStatus(status: StatusMarcoDesenvolvimento): string {
     const labels: Record<StatusMarcoDesenvolvimento, string> = {
-      OBSERVADO: 'Sim',
-      NAO_TENHO_CERTEZA: 'Não tenho certeza',
+      OBSERVADO: 'Sim, sempre',
+      NAO_TENHO_CERTEZA: 'Às vezes',
       AINDA_NAO_OBSERVADO: 'Ainda não',
       NAO_LEMBRO: 'Não lembro',
       NAO_AVALIADO: 'Não respondido'
@@ -281,9 +281,9 @@ export class MarcosCriancaComponent implements OnInit {
 
   labelPontosAtencao(total: number): string {
     if (total === 0) {
-      return 'Sem dúvidas';
+      return 'Sem pontos para conversar';
     }
-    return total === 1 ? '1 dúvida' : `${total} dúvidas`;
+    return total === 1 ? '1 ponto para conversar' : `${total} pontos para conversar`;
   }
 
   dataResumo(): string {

@@ -97,7 +97,7 @@
                 [class.resposta--active]="marco.status === 'OBSERVADO'"
                 [disabled]="salvandoId() === marco.id"
                 (click)="registrar(marco, 'OBSERVADO')">
-                Sim
+                Sim, sempre
               </button>
               <button
                 type="button"
@@ -105,7 +105,7 @@
                 [class.resposta--active]="marco.status === 'NAO_TENHO_CERTEZA'"
                 [disabled]="salvandoId() === marco.id"
                 (click)="registrar(marco, 'NAO_TENHO_CERTEZA')">
-                Não tenho certeza
+                Às vezes
               </button>
               <button
                 type="button"
@@ -183,8 +183,8 @@
             <article class="pueria-card resultado-area" [attr.data-tema]="temaArea(area.area)">
               <div class="resultado-area__header"><span class="resultado-area__icone"><app-icon [name]="iconeArea(area.area)" [size]="21" /></span><p class="pueria-eyebrow">{{ area.label }}</p></div>
               <div class="resultado-area__grade">
-                <span><strong>{{ area.observados }}</strong> Sim</span>
-                <span><strong>{{ area.duvidas }}</strong> Dúvidas</span>
+                <span><strong>{{ area.observados }}</strong> Sim, sempre</span>
+                <span><strong>{{ area.duvidas }}</strong> Às vezes</span>
                 <span><strong>{{ area.aindaNao }}</strong> Ainda não</span>
                 <span><strong>{{ area.pendentes }}</strong> Sem resposta</span>
               </div>
@@ -195,12 +195,12 @@
         <section class="pueria-card apoio-card apoio-card--alerta">
           <p class="pueria-eyebrow">Quando conversar</p>
           @if (pontosDeAtencao().length === 0) {
-            <h2>Sem dúvidas registradas nesta faixa</h2>
+            <h2>Sem pontos para conversar nesta faixa</h2>
             <p>Continue acompanhando a rotina e registre quando surgir uma dúvida.</p>
           } @else {
             <h2>Leve estas respostas para a consulta</h2>
             <p>
-              Estes são marcos esperados para a idade da criança que foram marcados como “Ainda não” ou “Não tenho certeza”.
+              Estes são marcos desta faixa que foram marcados como “Ainda não” ou “Às vezes”.
               Isso não é diagnóstico; serve para orientar a conversa e decidir se é preciso acompanhar mais de perto.
             </p>
             <ul>
