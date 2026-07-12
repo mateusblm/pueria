@@ -86,18 +86,20 @@ export class MarcosCriancaComponent implements OnInit {
 
   readonly textoIdadeReferencia = computed(() => {
     const crianca = this.crianca();
-    if (!crianca?.prematura || !crianca.semanasGestacionais) {
-      return '';
-    }
-
-    const dataReferencia = this.adicionarDias(crianca.dataNascimento, Math.max(0,
-      40 * 7 - (crianca.semanasGestacionais * 7 + (crianca.diasGestacionais ?? 0))));
-    const mesesCorrigidos = this.mesesCompletos(dataReferencia, new Date());
-
-    if (mesesCorrigidos >= 24) {
+    const mesesCorrigidos = this.idadeCorrigidaEmMeses(crianca);
+    if (mesesCorrigidos === null || mesesCorrigidos >= 24) {
       return '';
     }
     return `Idade corrigida nesta avaliação: ${this.tituloIdade(mesesCorrigidos)}.`;
+  });
+
+  readonly textoSemMarcos = computed(() => {
+    const crianca = this.crianca();
+    const mesesCorrigidos = this.idadeCorrigidaEmMeses(crianca);
+    if (mesesCorrigidos !== null && mesesCorrigidos < 2) {
+      return `Pela idade corrigida, ${crianca?.nome ?? 'a criança'} tem ${this.tituloIdade(mesesCorrigidos)}. A primeira etapa aparecerá aos 2 meses de idade corrigida.`;
+    }
+    return 'Ainda estamos preparando a primeira etapa de acompanhamento desta criança.';
   });
 
   readonly etapaRetrospectiva = computed(() => {
@@ -447,6 +449,14 @@ export class MarcosCriancaComponent implements OnInit {
       meses--;
     }
     return Math.max(0, meses);
+  }
+
+  private idadeCorrigidaEmMeses(crianca: Crianca | null): number | null {
+    if (!crianca?.prematura || !crianca.semanasGestacionais) {
+      return null;
+    }
+    const diasParaTermo = Math.max(0, 40 * 7 - (crianca.semanasGestacionais * 7 + (crianca.diasGestacionais ?? 0)));
+    return this.mesesCompletos(this.adicionarDias(crianca.dataNascimento, diasParaTermo), new Date());
   }
 
   private posicionarPrimeiraPendente(): void {

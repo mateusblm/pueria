@@ -27,7 +27,9 @@
     <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   } @else if (marcosDaIdade().length === 0) {
     <div class="pueria-card marcos-page__state">
-      Ainda não há marcos disponíveis para a idade desta criança.
+      <p class="pueria-eyebrow">Desenvolvimento</p>
+      <h2>A primeira etapa ainda está por vir</h2>
+      <p>{{ textoSemMarcos() }}</p>
     </div>
   } @else {
     <section class="pueria-card painel-idade">
