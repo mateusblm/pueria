@@ -50,6 +50,7 @@ public class TokenJwtService implements GeradorToken {
         payload.put("sub", usuario.getEmail());
         payload.put("uid", usuario.getId().toString());
         payload.put("tipo", usuario.getTipo().name());
+        payload.put("psv", assinaturaSenha(usuario));
         payload.put("iat", agora);
         payload.put("exp", agora + expiracaoSegundos);
 
@@ -62,6 +63,10 @@ public class TokenJwtService implements GeradorToken {
     }
 
     public String validarEObterEmail(String token) {
+        return validarEObterAutenticacao(token).email();
+    }
+
+    public AutenticacaoJwtValidada validarEObterAutenticacao(String token) {
         try {
             String[] partes = token.split("\\.");
             if (partes.length != 3) {
@@ -82,16 +87,21 @@ public class TokenJwtService implements GeradorToken {
             }
 
             Object email = payload.get("sub");
-            if (email == null || email.toString().isBlank()) {
+            Object assinaturaSenha = payload.get("psv");
+            if (email == null || email.toString().isBlank() || assinaturaSenha == null) {
                 throw new CredenciaisInvalidasException("Token JWT inválido");
             }
 
-            return email.toString();
+            return new AutenticacaoJwtValidada(email.toString(), assinaturaSenha.toString());
         } catch (CredenciaisInvalidasException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new CredenciaisInvalidasException("Token JWT inválido");
         }
+    }
+
+    public boolean correspondeAssinaturaSenha(Usuario usuario, String assinatura) {
+        return MessageDigest.isEqual(assinaturaSenha(usuario).getBytes(StandardCharsets.UTF_8), assinatura.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -128,4 +138,11 @@ public class TokenJwtService implements GeradorToken {
             throw new IllegalStateException("Falha ao assinar token JWT", ex);
         }
     }
+
+    private String assinaturaSenha(Usuario usuario) {
+        try { return java.util.HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(usuario.getSenhaCriptografada().getBytes(StandardCharsets.UTF_8))); }
+        catch (Exception ex) { throw new IllegalStateException("Falha ao validar a sessão", ex); }
+    }
+
+    public record AutenticacaoJwtValidada(String email, String assinaturaSenha) { }
 }

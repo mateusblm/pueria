@@ -66,6 +66,10 @@ public class Usuario {
         return new Usuario(id, nome, email, senhaCriptografada, tipo, ativo, criadoEm, atualizadoEm);
     }
 
+    public Usuario comSenhaCriptografada(String novaSenhaCriptografada) {
+        return new Usuario(id, nome, email, novaSenhaCriptografada, tipo, ativo, criadoEm, LocalDateTime.now());
+    }
+
     private static UUID validarId(UUID id) {
         if (id == null) {
             throw new RegraDominioException("O usuário deve possuir identificador");

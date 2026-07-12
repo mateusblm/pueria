@@ -36,3 +36,9 @@ seguranca:
 pueria:
   cors:
     allowed-origins: ${PUERIA_CORS_ALLOWED_ORIGINS:http://localhost:4200}
+  frontend-url: ${PUERIA_FRONTEND_URL:http://localhost:4200}
+  email:
+    habilitado: ${PUERIA_EMAIL_HABILITADO:false}
+    remetente: ${PUERIA_EMAIL_REMETENTE:nao-responda@pueria.com.br}
+  redefinicao-senha:
+    expiracao-minutos: ${PUERIA_REDEFINICAO_SENHA_EXPIRACAO_MINUTOS:15}

@@ -1,5 +1,9 @@
 package br.com.pueria.pueria.usuarios.infraestrutura.web;
 
+import br.com.pueria.pueria.usuarios.aplicacao.GeradorTokenRedefinicaoSenha;
+import br.com.pueria.pueria.usuarios.dominio.TokenRedefinicaoSenha;
+import br.com.pueria.pueria.usuarios.dominio.TokenRedefinicaoSenhaRepositorio;
+import br.com.pueria.pueria.usuarios.dominio.UsuarioRepositorio;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.blankOrNullString;
@@ -25,6 +31,12 @@ class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private UsuarioRepositorio usuarios;
+    @Autowired
+    private TokenRedefinicaoSenhaRepositorio tokens;
+    @Autowired
+    private GeradorTokenRedefinicaoSenha geradorToken;
 
     @Test
     void deveCadastrarUsuario() throws Exception {
@@ -113,6 +125,50 @@ class AuthControllerTest {
                                 """))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.erro").value("Credenciais inválidas"));
+    }
+
+    @Test
+    void deveResponderDeFormaNeutraParaSolicitacaoDeRedefinicao() throws Exception {
+        mockMvc.perform(post("/api/auth/recuperar-senha")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"email\": \"nao.existe@email.com\" }"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deveRedefinirSenhaComTokenValidoEAceitarUsoUnico() throws Exception {
+        cadastrarUsuario("Mateus", "mateus.redefinicao@email.com", "senha-antiga");
+        String sessaoAnterior = obterToken("mateus.redefinicao@email.com", "senha-antiga");
+        var usuario = usuarios.buscarPorEmail("mateus.redefinicao@email.com").orElseThrow();
+        String tokenPuro = geradorToken.gerar();
+        tokens.salvar(TokenRedefinicaoSenha.criar(usuario.getId(), geradorToken.calcularHash(tokenPuro), LocalDateTime.now().plusMinutes(15)));
+
+        mockMvc.perform(post("/api/auth/redefinir-senha")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                { "token": "%s", "novaSenha": "senha-nova" }
+                                """.formatted(tokenPuro)))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"email\": \"mateus.redefinicao@email.com\", \"senha\": \"senha-antiga\" }"))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"email\": \"mateus.redefinicao@email.com\", \"senha\": \"senha-nova\" }"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/usuarios/me").header("Authorization", "Bearer " + sessaoAnterior))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/api/auth/redefinir-senha")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                { "token": "%s", "novaSenha": "outra-senha" }
+                                """.formatted(tokenPuro)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

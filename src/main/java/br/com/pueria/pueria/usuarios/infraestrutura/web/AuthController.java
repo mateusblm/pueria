@@ -6,6 +6,8 @@ import br.com.pueria.pueria.usuarios.aplicacao.CadastrarUsuarioUseCase;
 import br.com.pueria.pueria.usuarios.aplicacao.LoginComando;
 import br.com.pueria.pueria.usuarios.aplicacao.TokenAutenticacao;
 import br.com.pueria.pueria.usuarios.aplicacao.UsuarioResumo;
+import br.com.pueria.pueria.usuarios.aplicacao.SolicitarRedefinicaoSenhaUseCase;
+import br.com.pueria.pueria.usuarios.aplicacao.RedefinirSenhaUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +24,15 @@ public class AuthController {
 
     private final CadastrarUsuarioUseCase cadastrarUsuarioUseCase;
     private final AutenticarUsuarioUseCase autenticarUsuarioUseCase;
+    private final SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase;
+    private final RedefinirSenhaUseCase redefinirSenhaUseCase;
 
-    public AuthController(CadastrarUsuarioUseCase cadastrarUsuarioUseCase, AutenticarUsuarioUseCase autenticarUsuarioUseCase) {
+    public AuthController(CadastrarUsuarioUseCase cadastrarUsuarioUseCase, AutenticarUsuarioUseCase autenticarUsuarioUseCase,
+            SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase, RedefinirSenhaUseCase redefinirSenhaUseCase) {
         this.cadastrarUsuarioUseCase = cadastrarUsuarioUseCase;
         this.autenticarUsuarioUseCase = autenticarUsuarioUseCase;
+        this.solicitarRedefinicaoSenhaUseCase = solicitarRedefinicaoSenhaUseCase;
+        this.redefinirSenhaUseCase = redefinirSenhaUseCase;
     }
 
     @PostMapping("/cadastro")
@@ -45,5 +52,17 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
         TokenAutenticacao token = autenticarUsuarioUseCase.executar(new LoginComando(request.email(), request.senha()));
         return ResponseEntity.ok(AuthResponse.de(token));
+    }
+
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<Void> solicitarRedefinicao(@RequestBody @Valid SolicitarRedefinicaoSenhaRequest request) {
+        solicitarRedefinicaoSenhaUseCase.executar(request.email());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<Void> redefinirSenha(@RequestBody @Valid RedefinirSenhaRequest request) {
+        redefinirSenhaUseCase.executar(request.token(), request.novaSenha());
+        return ResponseEntity.noContent().build();
     }
 }

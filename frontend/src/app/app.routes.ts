@@ -10,7 +10,9 @@ export const routes: Routes = [
     loadComponent: () => import('./layout/auth-layout/auth-layout.component').then((m) => m.AuthLayoutComponent),
     children: [
       { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent) },
-      { path: 'cadastro', loadComponent: () => import('./features/auth/cadastro/cadastro.component').then((m) => m.CadastroComponent) }
+      { path: 'cadastro', loadComponent: () => import('./features/auth/cadastro/cadastro.component').then((m) => m.CadastroComponent) },
+      { path: 'recuperar-senha', loadComponent: () => import('./features/auth/recuperar-senha/recuperar-senha.component').then((m) => m.RecuperarSenhaComponent) },
+      { path: 'redefinir-senha', loadComponent: () => import('./features/auth/redefinir-senha/redefinir-senha.component').then((m) => m.RedefinirSenhaComponent) }
     ]
   },
   {

@@ -1,0 +1,7 @@
+<div class="auth-form">
+  <div><p class="pueria-eyebrow">Acesso</p><h2>Redefinir senha</h2><p>Informe seu e-mail para receber as instruções de acesso.</p></div>
+  @if (enviado()) { <div class="pueria-message pueria-message--sucesso">Se houver uma conta com este e-mail, enviaremos as instruções em instantes.</div> }
+  @if (erro()) { <div class="pueria-message pueria-message--erro">{{ erro() }}</div> }
+  @if (!enviado()) { <form class="pueria-form" [formGroup]="form" (ngSubmit)="enviar()"><div class="pueria-field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" formControlName="email" /></div><button class="pueria-button" type="submit" [disabled]="carregando()">{{ carregando() ? 'Enviando...' : 'Enviar instruções' }}</button></form> }
+  <p class="auth-form__link"><a routerLink="/login">Voltar para entrar</a></p>
+</div>

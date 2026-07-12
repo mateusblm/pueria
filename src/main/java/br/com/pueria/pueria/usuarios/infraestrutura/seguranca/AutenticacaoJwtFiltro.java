@@ -38,10 +38,10 @@ public class AutenticacaoJwtFiltro extends OncePerRequestFilter {
 
         try {
             String token = authorization.substring(7);
-            String email = tokenJwtService.validarEObterEmail(token);
+            var dadosToken = tokenJwtService.validarEObterAutenticacao(token);
 
-            usuarioRepositorio.buscarPorEmail(email)
-                    .filter(Usuario::isAtivo)
+            usuarioRepositorio.buscarPorEmail(dadosToken.email())
+                    .filter(usuario -> usuario.isAtivo() && tokenJwtService.correspondeAssinaturaSenha(usuario, dadosToken.assinaturaSenha()))
                     .ifPresent(usuario -> {
                         List<SimpleGrantedAuthority> authorities = List.of(
                                 new SimpleGrantedAuthority("ROLE_" + usuario.getTipo().name())

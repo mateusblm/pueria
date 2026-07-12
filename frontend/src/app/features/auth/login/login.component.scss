@@ -31,6 +31,15 @@
   text-decoration: none;
 }
 
+.auth-form__forgot {
+  color: var(--pueria-coral-escuro);
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 750;
+  margin-top: 0.5rem;
+  text-decoration: none;
+}
+
 .auth-form .pueria-button {
   min-height: 48px;
   margin-top: 2px;

@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { Observable, tap, timeout } from 'rxjs';
 
 import { Usuario } from '../../shared/models/usuario.model';
-import { AuthResponse, CadastroUsuarioRequest, LoginRequest } from './auth.models';
+import { AuthResponse, CadastroUsuarioRequest, LoginRequest, RedefinirSenhaRequest, SolicitarRedefinicaoSenhaRequest } from './auth.models';
 
 const TOKEN_STORAGE_KEY = 'pueria.token';
 
@@ -30,6 +30,14 @@ export class AuthService {
       timeout(15000),
       tap((response) => this.salvarToken(response.token))
     );
+  }
+
+  solicitarRedefinicaoSenha(request: SolicitarRedefinicaoSenhaRequest): Observable<void> {
+    return this.http.post<void>('/api/auth/recuperar-senha', request).pipe(timeout(15000));
+  }
+
+  redefinirSenha(request: RedefinirSenhaRequest): Observable<void> {
+    return this.http.post<void>('/api/auth/redefinir-senha', request).pipe(timeout(15000));
   }
 
   usuarioAtual(): Observable<Usuario> {

@@ -55,6 +55,8 @@ public class SegurancaConfig {
                         .requestMatchers(
                                 "/api/auth/cadastro",
                                 "/api/auth/login",
+                                "/api/auth/recuperar-senha",
+                                "/api/auth/redefinir-senha",
                                 "/api/status",
                                 "/actuator/health"
                         ).permitAll()
