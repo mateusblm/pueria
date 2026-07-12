@@ -18,7 +18,7 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<jasperreports.version>7.0.7</jasperreports.version>
+		<jasperreports.version>6.21.3</jasperreports.version>
 	</properties>
 
 	<dependencies>
