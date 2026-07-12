@@ -191,6 +191,8 @@ Status usados:
 
 ## Próximo recorte de implementação recomendado
 
+> O plano atualizado de Neurodesenvolvimento 0-24 meses está em `docs/plano-neurodesenvolvimento-0-24m.md`. Ele substitui a priorização anterior de desenvolvimento por uma sequência clínica versionada, incluindo idade corrigida, trajetória, estímulos e dependências de licença.
+
 ### Recorte 1: ajustes rápidos de UX/conteúdo
 
 - DEV-01.
