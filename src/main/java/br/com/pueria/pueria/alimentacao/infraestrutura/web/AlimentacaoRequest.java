@@ -4,6 +4,7 @@ import br.com.pueria.pueria.alimentacao.aplicacao.AtualizarRegistroAlimentacaoCo
 import br.com.pueria.pueria.alimentacao.aplicacao.RegistroAlimentacaoComando;
 import br.com.pueria.pueria.alimentacao.dominio.DadosAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.EstagioAlimentar;
+import br.com.pueria.pueria.alimentacao.dominio.OrigemPreparoAlimento;
 import br.com.pueria.pueria.alimentacao.dominio.TexturaAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.TipoLeiteAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.TipoOrigemAlimento;
@@ -55,6 +56,7 @@ public record AlimentacaoRequest(
         Boolean preocupacaoFamilia,
         @Size(max = 1000) String observacao,
         TipoOrigemAlimento tipoOrigemAlimento,
+        OrigemPreparoAlimento origemPreparoAlimento,
         @Valid @Size(max = 250) List<AlimentoRegistroAlimentacaoRequest> alimentosOferecidos
 ) {
     RegistroAlimentacaoComando paraRegistrar(UUID criancaId, String emailResponsavel) {
@@ -104,6 +106,7 @@ public record AlimentacaoRequest(
                 preocupacaoFamilia,
                 observacao,
                 tipoOrigemAlimento,
+                origemPreparoAlimento,
                 alimentosOferecidos == null ? List.of() : alimentosOferecidos.stream()
                         .map(AlimentoRegistroAlimentacaoRequest::paraDominio)
                         .toList()

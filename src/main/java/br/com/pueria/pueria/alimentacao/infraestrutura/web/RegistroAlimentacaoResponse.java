@@ -2,6 +2,7 @@ package br.com.pueria.pueria.alimentacao.infraestrutura.web;
 
 import br.com.pueria.pueria.alimentacao.aplicacao.RegistroAlimentacaoDetalhado;
 import br.com.pueria.pueria.alimentacao.dominio.EstagioAlimentar;
+import br.com.pueria.pueria.alimentacao.dominio.OrigemPreparoAlimento;
 import br.com.pueria.pueria.alimentacao.dominio.RegistroAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.TexturaAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.TipoLeiteAlimentacao;
@@ -52,6 +53,7 @@ public record RegistroAlimentacaoResponse(
         Boolean preocupacaoFamilia,
         String observacao,
         TipoOrigemAlimento tipoOrigemAlimento,
+        OrigemPreparoAlimento origemPreparoAlimento,
         List<AlimentoRegistroAlimentacaoResponse> alimentosOferecidos,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm,
@@ -99,6 +101,7 @@ public record RegistroAlimentacaoResponse(
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
                 registro.getTipoOrigemAlimento(),
+                registro.getOrigemPreparoAlimento(),
                 registro.getAlimentosOferecidos().stream()
                         .map(AlimentoRegistroAlimentacaoResponse::de)
                         .toList(),

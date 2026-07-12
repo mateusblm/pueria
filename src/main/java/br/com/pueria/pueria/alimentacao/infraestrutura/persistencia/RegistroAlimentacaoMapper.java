@@ -59,6 +59,7 @@ class RegistroAlimentacaoMapper {
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
                 registro.getTipoOrigemAlimento(),
+                registro.getOrigemPreparoAlimento(),
                 alimentosParaEntidade(registro.getAlimentosOferecidos()),
                 registro.getCriadoEm(),
                 registro.getAtualizadoEm()
@@ -104,6 +105,7 @@ class RegistroAlimentacaoMapper {
                 entidade.getPreocupacaoFamilia(),
                 entidade.getObservacao(),
                 entidade.getTipoOrigemAlimento(),
+                entidade.getOrigemPreparoAlimento(),
                 alimentosParaDominio(entidade.getAlimentosOferecidos())
         );
     }

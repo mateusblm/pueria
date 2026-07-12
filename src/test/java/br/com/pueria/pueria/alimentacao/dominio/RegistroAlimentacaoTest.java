@@ -20,6 +20,7 @@ class RegistroAlimentacaoTest {
         assertEquals(EstagioAlimentar.NAO_INFORMADO, registro.getEstagioAlimentar());
         assertEquals(TexturaAlimentar.NAO_INFORMADO, registro.getTexturaPredominante());
         assertEquals(TipoOrigemAlimento.NAO_INFORMADO, registro.getTipoOrigemAlimento());
+        assertEquals(OrigemPreparoAlimento.NAO_INFORMADO, registro.getOrigemPreparoAlimento());
     }
 
     @Test
@@ -152,6 +153,7 @@ class RegistroAlimentacaoTest {
                 null,
                 observacao,
                 TipoOrigemAlimento.NAO_INFORMADO,
+                OrigemPreparoAlimento.NAO_INFORMADO,
                 alimentos
         );
     }

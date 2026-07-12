@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.alimentacao.infraestrutura.persistencia;
 
 import br.com.pueria.pueria.alimentacao.dominio.EstagioAlimentar;
+import br.com.pueria.pueria.alimentacao.dominio.OrigemPreparoAlimento;
 import br.com.pueria.pueria.alimentacao.dominio.TexturaAlimentar;
 import br.com.pueria.pueria.alimentacao.dominio.TipoLeiteAlimentacao;
 import br.com.pueria.pueria.alimentacao.dominio.TipoOrigemAlimento;
@@ -81,6 +82,10 @@ public class RegistroAlimentacaoJpaEntidade {
     @Column(name = "tipo_origem_alimento", nullable = false, length = 30)
     private TipoOrigemAlimento tipoOrigemAlimento;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "origem_preparo_alimento", nullable = false, length = 30)
+    private OrigemPreparoAlimento origemPreparoAlimento;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "registros_alimentacao_alimentos", joinColumns = @JoinColumn(name = "registro_alimentacao_id"))
     @OrderBy("grupo ASC, nome ASC")
@@ -94,7 +99,7 @@ public class RegistroAlimentacaoJpaEntidade {
 
     protected RegistroAlimentacaoJpaEntidade() {}
 
-    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, TipoOrigemAlimento tipoOrigemAlimento, List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosOferecidos, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, TipoOrigemAlimento tipoOrigemAlimento, OrigemPreparoAlimento origemPreparoAlimento, List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosOferecidos, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
@@ -134,6 +139,7 @@ public class RegistroAlimentacaoJpaEntidade {
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = observacao;
         this.tipoOrigemAlimento = tipoOrigemAlimento;
+        this.origemPreparoAlimento = origemPreparoAlimento;
         this.alimentosOferecidos = alimentosOferecidos == null ? new ArrayList<>() : new ArrayList<>(alimentosOferecidos);
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
@@ -178,6 +184,7 @@ public class RegistroAlimentacaoJpaEntidade {
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
     public TipoOrigemAlimento getTipoOrigemAlimento() { return tipoOrigemAlimento; }
+    public OrigemPreparoAlimento getOrigemPreparoAlimento() { return origemPreparoAlimento; }
     public List<AlimentoRegistroAlimentacaoJpaEmbeddable> getAlimentosOferecidos() { return alimentosOferecidos; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }

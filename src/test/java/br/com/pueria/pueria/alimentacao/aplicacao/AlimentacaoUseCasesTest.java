@@ -124,6 +124,7 @@ class AlimentacaoUseCasesTest {
                 false,
                 null,
                 TipoOrigemAlimento.MISTO,
+                OrigemPreparoAlimento.PREPARO_EM_CASA,
                 List.of(
                         new AlimentoRegistroAlimentacao("banana", "Banana", GrupoAlimento.FRUTA),
                         new AlimentoRegistroAlimentacao("cenoura", "Cenoura", GrupoAlimento.LEGUME_HORTALICA_FRUTO)

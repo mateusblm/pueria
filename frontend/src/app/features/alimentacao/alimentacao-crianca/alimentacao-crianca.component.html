@@ -60,6 +60,10 @@
             <span>Origem predominante</span>
             <strong>{{ labelOrigemAlimento(registro.tipoOrigemAlimento) }}</strong>
           </article>
+          <article>
+            <span>Preparo predominante</span>
+            <strong>{{ labelOrigemPreparo(registro.origemPreparoAlimento) }}</strong>
+          </article>
         </div>
 
         @if (possuiAlgumaAnalise(registro)) {
@@ -180,13 +184,22 @@
           </div>
 
           <label class="alimentacao-variedade__origem">
-            <span>De onde vêm, em geral, os alimentos oferecidos?</span>
+            <span>Tipo predominante dos alimentos oferecidos</span>
             <select formControlName="tipoOrigemAlimento">
               @for (opcao of origensAlimentos; track opcao.valor) {
                 <option [value]="opcao.valor">{{ opcao.label }}</option>
               }
             </select>
             <small>Essa informação descreve a rotina, sem julgamento sobre a escolha da família.</small>
+          </label>
+
+          <label class="alimentacao-variedade__origem">
+            <span>Como os alimentos são preparados ou obtidos, em geral?</span>
+            <select formControlName="origemPreparoAlimento">
+              @for (opcao of origensPreparo; track opcao.valor) {
+                <option [value]="opcao.valor">{{ opcao.label }}</option>
+              }
+            </select>
           </label>
 
           <div class="alimentacao-variedade__resumo">

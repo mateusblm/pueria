@@ -2,6 +2,7 @@ export type TipoLeiteAlimentacao = 'LEITE_MATERNO' | 'FORMULA_INFANTIL' | 'MISTO
 export type EstagioAlimentar = 'APENAS_LEITE' | 'INICIANDO_ALIMENTACAO_COMPLEMENTAR' | 'ALIMENTACAO_COMPLEMENTAR_ESTABELECIDA' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
 export type TexturaAlimentar = 'LIQUIDA' | 'PASTOSA' | 'AMASSADA' | 'PEDACOS_MACIOS' | 'COMIDA_DA_FAMILIA' | 'NAO_INFORMADO';
 export type TipoOrigemAlimento = 'ORGANICO' | 'CONVENCIONAL' | 'MISTO' | 'NAO_INFORMADO';
+export type OrigemPreparoAlimento = 'PREPARO_EM_CASA' | 'PREPARO_NA_ESCOLA_CRECHE' | 'PREPARO_EM_RESTAURANTES' | 'ALIMENTOS_CONGELADOS' | 'MISTO_CASA_RESTAURANTE' | 'NAO_INFORMADO';
 export type AceitacaoAlimento = 'BOA' | 'PARCIAL' | 'RECUSOU' | 'NAO_INFORMADA';
 export type ClassificacaoGluten = 'CONTEM' | 'NAO_CONTEM' | 'PODE_CONTER_TRACOS' | 'NAO_INFORMADO' | 'NAO_SE_APLICA';
 export type SituacaoSinaisOferta = 'NAO_INFORMADO' | 'NENHUM_PERCEBIDO' | 'SINAIS_PERCEBIDOS';
@@ -94,6 +95,7 @@ export interface RegistroAlimentacao {
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
   tipoOrigemAlimento: TipoOrigemAlimento;
+  origemPreparoAlimento: OrigemPreparoAlimento;
   alimentosOferecidos: AlimentoRegistroAlimentacao[];
   criadoEm: string;
   atualizadoEm?: string | null;
@@ -138,5 +140,6 @@ export interface SalvarRegistroAlimentacaoRequest {
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
   tipoOrigemAlimento?: TipoOrigemAlimento;
+  origemPreparoAlimento?: OrigemPreparoAlimento;
   alimentosOferecidos?: AlimentoRegistroAlimentacao[];
 }

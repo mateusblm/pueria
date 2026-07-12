@@ -53,6 +53,7 @@ public class RegistroAlimentacao {
     private final Boolean preocupacaoFamilia;
     private final String observacao;
     private final TipoOrigemAlimento tipoOrigemAlimento;
+    private final OrigemPreparoAlimento origemPreparoAlimento;
     private final List<AlimentoRegistroAlimentacao> alimentosOferecidos;
     private final LocalDateTime criadoEm;
     private final LocalDateTime atualizadoEm;
@@ -97,6 +98,7 @@ public class RegistroAlimentacao {
             Boolean preocupacaoFamilia,
             String observacao,
             TipoOrigemAlimento tipoOrigemAlimento,
+            OrigemPreparoAlimento origemPreparoAlimento,
             List<AlimentoRegistroAlimentacao> alimentosOferecidos,
             LocalDateTime criadoEm,
             LocalDateTime atualizadoEm
@@ -140,6 +142,7 @@ public class RegistroAlimentacao {
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = tratarObservacao(observacao);
         this.tipoOrigemAlimento = tipoOrigemAlimento == null ? TipoOrigemAlimento.NAO_INFORMADO : tipoOrigemAlimento;
+        this.origemPreparoAlimento = origemPreparoAlimento == null ? OrigemPreparoAlimento.NAO_INFORMADO : origemPreparoAlimento;
         this.alimentosOferecidos = tratarAlimentos(alimentosOferecidos, this.dataRegistro);
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
         this.atualizadoEm = atualizadoEm;
@@ -186,6 +189,7 @@ public class RegistroAlimentacao {
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
                 dados.tipoOrigemAlimento(),
+                dados.origemPreparoAlimento(),
                 dados.alimentosOferecidos(),
                 LocalDateTime.now(),
                 null
@@ -233,6 +237,7 @@ public class RegistroAlimentacao {
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
                 dados.tipoOrigemAlimento(),
+                dados.origemPreparoAlimento(),
                 dados.alimentosOferecidos(),
                 criadoEm,
                 atualizadoEm
@@ -280,6 +285,7 @@ public class RegistroAlimentacao {
                 dados.preocupacaoFamilia(),
                 dados.observacao(),
                 dados.tipoOrigemAlimento(),
+                dados.origemPreparoAlimento(),
                 dados.alimentosOferecidos(),
                 criadoEm,
                 LocalDateTime.now()
@@ -387,6 +393,7 @@ public class RegistroAlimentacao {
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
     public TipoOrigemAlimento getTipoOrigemAlimento() { return tipoOrigemAlimento; }
+    public OrigemPreparoAlimento getOrigemPreparoAlimento() { return origemPreparoAlimento; }
     public List<AlimentoRegistroAlimentacao> getAlimentosOferecidos() { return alimentosOferecidos; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
     public LocalDateTime getAtualizadoEm() { return atualizadoEm; }

@@ -41,5 +41,6 @@ public record DadosAlimentacao(
         Boolean preocupacaoFamilia,
         String observacao,
         TipoOrigemAlimento tipoOrigemAlimento,
+        OrigemPreparoAlimento origemPreparoAlimento,
         List<AlimentoRegistroAlimentacao> alimentosOferecidos
 ) {}

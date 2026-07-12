@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { AceitacaoAlimento, AlimentoRegistroAlimentacao, ClassificacaoGluten, EstagioAlimentar, GrupoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, SituacaoSinaisOferta, TexturaAlimentar, TipoLeiteAlimentacao, TipoOrigemAlimento } from '../../../shared/models/alimentacao.model';
+import { AceitacaoAlimento, AlimentoRegistroAlimentacao, ClassificacaoGluten, EstagioAlimentar, GrupoAlimento, OrigemPreparoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, SituacaoSinaisOferta, TexturaAlimentar, TipoLeiteAlimentacao, TipoOrigemAlimento } from '../../../shared/models/alimentacao.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { AlimentacaoService } from '../alimentacao.service';
 import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './catalogo-alimentos';
@@ -105,6 +105,15 @@ export class AlimentacaoCriancaComponent implements OnInit {
     { valor: 'MISTO', label: 'Uma combinação dos dois' }
   ];
 
+  readonly origensPreparo: Opcao<OrigemPreparoAlimento>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Prefiro não informar' },
+    { valor: 'PREPARO_EM_CASA', label: 'Preparo em casa' },
+    { valor: 'PREPARO_NA_ESCOLA_CRECHE', label: 'Preparo na escola/creche' },
+    { valor: 'PREPARO_EM_RESTAURANTES', label: 'Preparo em restaurantes' },
+    { valor: 'ALIMENTOS_CONGELADOS', label: 'Alimentos congelados' },
+    { valor: 'MISTO_CASA_RESTAURANTE', label: 'Misto casa/restaurante' }
+  ];
+
   readonly aceitacoes: Opcao<AceitacaoAlimento>[] = [
     { valor: 'NAO_INFORMADA', label: 'Não informado' },
     { valor: 'BOA', label: 'Aceitou bem' },
@@ -162,6 +171,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
     familiaTranquilaGanhoPesoAtual: [false],
     preocupacaoFamilia: [false],
     tipoOrigemAlimento: this.fb.nonNullable.control<TipoOrigemAlimento>('NAO_INFORMADO'),
+    origemPreparoAlimento: this.fb.nonNullable.control<OrigemPreparoAlimento>('NAO_INFORMADO'),
     observacao: ['', Validators.maxLength(1000)]
   });
 
@@ -304,6 +314,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
       familiaTranquilaGanhoPesoAtual: !!registro.familiaTranquilaGanhoPesoAtual,
       preocupacaoFamilia: !!registro.preocupacaoFamilia,
       tipoOrigemAlimento: registro.tipoOrigemAlimento ?? 'NAO_INFORMADO',
+      origemPreparoAlimento: registro.origemPreparoAlimento ?? 'NAO_INFORMADO',
       observacao: registro.observacao ?? ''
     });
     this.alimentosSelecionados.set(registro.alimentosOferecidos ?? []);
@@ -350,6 +361,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
       familiaTranquilaGanhoPesoAtual: false,
       preocupacaoFamilia: false,
       tipoOrigemAlimento: 'NAO_INFORMADO',
+      origemPreparoAlimento: 'NAO_INFORMADO',
       observacao: ''
     });
   }
@@ -372,6 +384,10 @@ export class AlimentacaoCriancaComponent implements OnInit {
 
   labelOrigemAlimento(valor: TipoOrigemAlimento): string {
     return this.origensAlimentos.find((opcao) => opcao.valor === valor)?.label ?? 'Prefiro não informar';
+  }
+
+  labelOrigemPreparo(valor: OrigemPreparoAlimento): string {
+    return this.origensPreparo.find((opcao) => opcao.valor === valor)?.label ?? 'Prefiro não informar';
   }
 
   abrirModalAlimentos(): void {
@@ -631,6 +647,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
       familiaTranquilaGanhoPesoAtual: valor.familiaTranquilaGanhoPesoAtual,
       preocupacaoFamilia: valor.preocupacaoFamilia,
       tipoOrigemAlimento: valor.tipoOrigemAlimento,
+      origemPreparoAlimento: valor.origemPreparoAlimento,
       observacao: valor.observacao?.trim() || null,
       alimentosOferecidos: alimentos
     };
