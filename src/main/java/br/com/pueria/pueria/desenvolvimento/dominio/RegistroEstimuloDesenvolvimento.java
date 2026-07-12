@@ -13,4 +13,10 @@ public record RegistroEstimuloDesenvolvimento(UUID id, UUID criancaId, UUID esti
         }
         return new RegistroEstimuloDesenvolvimento(UUID.randomUUID(), criancaId, estimuloId, nota, LocalDateTime.now());
     }
+
+    public RegistroEstimuloDesenvolvimento atualizarObservacao(String observacao) {
+        String nota = observacao == null || observacao.isBlank() ? null : observacao.trim();
+        if (nota != null && nota.length() > 500) throw new RegraDominioException("A observação sobre a atividade deve ter até 500 caracteres.");
+        return new RegistroEstimuloDesenvolvimento(id, criancaId, estimuloId, nota, experimentadoEm);
+    }
 }

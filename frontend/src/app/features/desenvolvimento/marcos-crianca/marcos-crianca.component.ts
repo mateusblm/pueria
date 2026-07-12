@@ -66,6 +66,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly marcos = signal<MarcoDesenvolvimento[]>([]);
   readonly relatos = signal<RelatoDesenvolvimento[]>([]);
   readonly estimulos = signal<EstimuloDesenvolvimento[]>([]);
+  readonly historicoEstimulos = signal<EstimuloDesenvolvimento[]>([]);
   readonly carregando = signal(true);
   readonly salvandoId = signal<string | null>(null);
   readonly erro = signal('');
@@ -216,6 +217,7 @@ export class MarcosCriancaComponent implements OnInit {
       next: (estimulos) => this.estimulos.set(estimulos),
       error: () => this.erro.set('Não foi possível preparar as sugestões de atividades agora.')
     });
+    this.desenvolvimentoService.listarHistoricoEstimulos(this.criancaId()).subscribe({ next: (itens) => this.historicoEstimulos.set(itens) });
 
     this.criancasService.buscarPorId(this.criancaId()).subscribe({
       next: (crianca) => this.crianca.set(crianca)
@@ -325,11 +327,29 @@ export class MarcosCriancaComponent implements OnInit {
 
   registrarEstimulo(estimulo: EstimuloDesenvolvimento): void {
     this.salvandoEstimuloId.set(estimulo.id);
-    this.desenvolvimentoService.registrarEstimulo(this.criancaId(), estimulo.id)
+    this.desenvolvimentoService.registrarEstimulo(this.criancaId(), estimulo.id, estimulo.observacao)
       .pipe(finalize(() => this.salvandoEstimuloId.set(null)))
       .subscribe({
-        next: () => this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? { ...item, experimentado: true, experimentadoEm: new Date().toISOString() } : item)),
+        next: () => {
+          const atualizado = { ...estimulo, experimentado: true, experimentadoEm: estimulo.experimentadoEm ?? new Date().toISOString() };
+          this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? atualizado : item));
+          this.historicoEstimulos.update((itens) => [atualizado, ...itens.filter((item) => item.id !== estimulo.id)]);
+        },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      });
+  }
+
+  salvarObservacaoEstimulo(estimulo: EstimuloDesenvolvimento, observacao: string): void {
+    const valor = observacao.trim() || null;
+    if (!estimulo.experimentado || valor === (estimulo.observacao ?? null)) return;
+    this.salvandoEstimuloId.set(estimulo.id);
+    this.desenvolvimentoService.registrarEstimulo(this.criancaId(), estimulo.id, valor)
+      .pipe(finalize(() => this.salvandoEstimuloId.set(null)))
+      .subscribe({
+        next: () => {
+          this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? { ...item, observacao: valor } : item));
+          this.historicoEstimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? { ...item, observacao: valor } : item));
+        }, error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }
 

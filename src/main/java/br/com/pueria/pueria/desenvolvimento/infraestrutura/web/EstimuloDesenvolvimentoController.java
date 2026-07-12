@@ -7,5 +7,6 @@ import java.util.*;
 @RestController @RequestMapping("/api/criancas/{criancaId}/desenvolvimento/estimulos") public class EstimuloDesenvolvimentoController {
  private final GerenciarEstimulosDesenvolvimentoUseCase useCase; public EstimuloDesenvolvimentoController(GerenciarEstimulosDesenvolvimentoUseCase useCase){this.useCase=useCase;}
  @GetMapping public List<EstimuloDesenvolvimentoResponse> listar(@PathVariable UUID criancaId,Authentication auth){return useCase.listar(criancaId,auth.getName()).stream().map(EstimuloDesenvolvimentoResponse::de).toList();}
+ @GetMapping("/historico") public List<EstimuloDesenvolvimentoResponse> historico(@PathVariable UUID criancaId,Authentication auth){return useCase.listarHistorico(criancaId,auth.getName()).stream().map(EstimuloDesenvolvimentoResponse::de).toList();}
  @PutMapping("/{estimuloId}") public void registrar(@PathVariable UUID criancaId,@PathVariable UUID estimuloId,@Valid @RequestBody RegistrarEstimuloDesenvolvimentoRequest request,Authentication auth){useCase.registrar(criancaId,estimuloId,request.observacao(),auth.getName());}
 }

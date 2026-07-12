@@ -70,7 +70,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | NEU-30 | Criar banco de estímulos mensais de 0 a 24 meses. | Parcial | Catálogo `ESTIMULOS_V1_2026_07` cobre 2 a 24 meses em faixas de desenvolvimento, com domínio, fonte, cuidados e texto familiar; a granularidade mensal completa segue pendente. |
 | NEU-31 | Mostrar poucos estímulos contextuais por vez. | Implementado | A tela mostra duas sugestões por vez, priorizando áreas com respostas “Às vezes” ou “Ainda não”, sem prescrição ou sobrecarga. |
 | NEU-32 | Incluir avisos de segurança revisados clinicamente. | Implementado | Cada sugestão traz cuidados sob demanda para bruços, supervisão, movimento livre e objetos pequenos. |
-| NEU-33 | Permitir marcar atividade como experimentada e registrar observação opcional. | Parcial | A família pode marcar “Experimentamos”; a anotação opcional na interface ainda será adicionada. |
+| NEU-33 | Permitir marcar atividade como experimentada e registrar observação opcional. | Implementado | A família pode marcar “Experimentamos”, incluir nota opcional sob demanda e consultar um histórico compacto, sem indicador de adesão ou desempenho. |
 
 ### Fase 4 - Triagem validada e relatório
 

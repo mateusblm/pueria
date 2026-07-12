@@ -244,7 +244,9 @@
                     <span class="marco-area" [attr.data-tema]="temaArea(estimulo.area)">{{ labelArea(estimulo.area) }}</span>
                     <h3>{{ estimulo.titulo }}</h3>
                     <p>{{ estimulo.descricao }}</p>
-                    <details><summary>Cuidados e fonte</summary><p><strong>Cuidados:</strong> {{ estimulo.cuidado }}</p><p><strong>Fonte:</strong> {{ estimulo.fonte }}</p></details>
+                    <details><summary>Cuidados e fonte</summary><p><strong>Cuidados:</strong> {{ estimulo.cuidado }}</p><p><strong>Fonte:</strong> {{ estimulo.fonte }}</p>
+                      @if (estimulo.experimentado) { <label class="estimulos-card__nota"><span>Uma anotação opcional</span><textarea rows="2" maxlength="500" [value]="estimulo.observacao ?? ''" placeholder="Ex.: gostou quando fizemos antes do banho." (blur)="salvarObservacaoEstimulo(estimulo, $any($event.target).value)"></textarea></label> }
+                    </details>
                   </div>
                   @if (estimulo.experimentado) {
                     <span class="estimulos-card__feito">Experimentamos</span>
@@ -254,6 +256,9 @@
                 </article>
               }
             </div>
+            @if (historicoEstimulos().length > 0) {
+              <div class="estimulos-card__historico"><strong>Já experimentamos</strong><span>@for (estimulo of historicoEstimulos(); track estimulo.id) { {{ estimulo.titulo }}@if (!$last) { · } }</span></div>
+            }
           </section>
         }
 

@@ -65,7 +65,16 @@ public class GerenciarEstimulosDesenvolvimentoUseCase {
         validarAcesso(criancaId, email);
         estimulos.buscarPorId(estimuloId).orElseThrow(() -> new RecursoNaoEncontradoException("Atividade não encontrada."));
         return registrosEstimulos.buscarPorCriancaEEstimulo(criancaId, estimuloId)
+                .map(existente -> registrosEstimulos.salvar(existente.atualizarObservacao(observacao)))
                 .orElseGet(() -> registrosEstimulos.salvar(RegistroEstimuloDesenvolvimento.registrar(criancaId, estimuloId, observacao)));
+    }
+
+    @Transactional(readOnly = true)
+    public List<EstimuloDesenvolvimentoResumo> listarHistorico(UUID criancaId, String email) {
+        validarAcesso(criancaId, email);
+        return registrosEstimulos.listarPorCrianca(criancaId).stream()
+                .map(registro -> estimulos.buscarPorId(registro.estimuloId()).map(item -> paraResumo(item, registro)).orElse(null))
+                .filter(item -> item != null).toList();
     }
 
     private Crianca validarAcesso(UUID criancaId, String email) {
