@@ -57,7 +57,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 
 | ID | Entrega | Status | Critério de aceite |
 |---|---|---|---|
-| NEU-20 | Persistir eventos de resposta por criança, marco, checkpoint e data. | Parcial | Cada marco já fica associado ao checkpoint e à modalidade retrospectiva/atual; a trilha de revisões de uma mesma resposta continua pendente. |
+| NEU-20 | Persistir eventos de resposta por criança, marco, checkpoint e data. | Implementado | A primeira resposta e cada mudança real de status ou observação são registradas com data, valores anterior/novo e modalidade. |
 | NEU-21 | Registrar relato opcional de perda de habilidade. | Implementado | A família pode informar perda de habilidade ou preocupação, com contexto e data, sem o app nomear diagnóstico. |
 | NEU-22 | Implementar orientação de atenção gradual. | Parcial | A perda de habilidade orienta conversa com o pediatra o quanto antes; as regras graduais por janela clínica ainda dependem da validação da dra. |
 | NEU-23 | Agregar respostas persistentes e múltiplos domínios em uma única orientação. | Implementado | Respostas “Às vezes” e “Ainda não” em mais de uma fase são agrupadas por área, sem classificar risco ou repetir alertas. |

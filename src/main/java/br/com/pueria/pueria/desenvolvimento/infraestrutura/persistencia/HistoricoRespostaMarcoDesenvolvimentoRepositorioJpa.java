@@ -1,0 +1,3 @@
+package br.com.pueria.pueria.desenvolvimento.infraestrutura.persistencia;
+import br.com.pueria.pueria.desenvolvimento.dominio.*; import org.springframework.stereotype.Repository;
+@Repository public class HistoricoRespostaMarcoDesenvolvimentoRepositorioJpa implements HistoricoRespostaMarcoDesenvolvimentoRepositorio { private final HistoricoRespostaMarcoDesenvolvimentoJpaRepository repository; public HistoricoRespostaMarcoDesenvolvimentoRepositorioJpa(HistoricoRespostaMarcoDesenvolvimentoJpaRepository repository){this.repository=repository;} public HistoricoRespostaMarcoDesenvolvimento salvar(HistoricoRespostaMarcoDesenvolvimento h){repository.save(new HistoricoRespostaMarcoDesenvolvimentoJpaEntidade(h));return h;} }

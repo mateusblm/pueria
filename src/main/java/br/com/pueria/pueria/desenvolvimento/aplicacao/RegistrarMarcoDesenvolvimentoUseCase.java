@@ -29,19 +29,22 @@ public class RegistrarMarcoDesenvolvimentoUseCase {
     private final VinculoResponsavelCriancaRepositorio vinculoRepositorio;
     private final MarcoDesenvolvimentoRepositorio marcoRepositorio;
     private final RegistroMarcoDesenvolvimentoRepositorio registroRepositorio;
+    private final br.com.pueria.pueria.desenvolvimento.dominio.HistoricoRespostaMarcoDesenvolvimentoRepositorio historicoRepositorio;
 
     public RegistrarMarcoDesenvolvimentoUseCase(
             CriancaRepositorio criancaRepositorio,
             UsuarioRepositorio usuarioRepositorio,
             VinculoResponsavelCriancaRepositorio vinculoRepositorio,
             MarcoDesenvolvimentoRepositorio marcoRepositorio,
-            RegistroMarcoDesenvolvimentoRepositorio registroRepositorio
+            RegistroMarcoDesenvolvimentoRepositorio registroRepositorio,
+            br.com.pueria.pueria.desenvolvimento.dominio.HistoricoRespostaMarcoDesenvolvimentoRepositorio historicoRepositorio
     ) {
         this.criancaRepositorio = criancaRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
         this.vinculoRepositorio = vinculoRepositorio;
         this.marcoRepositorio = marcoRepositorio;
         this.registroRepositorio = registroRepositorio;
+        this.historicoRepositorio = historicoRepositorio;
     }
 
     @Transactional
@@ -66,7 +69,8 @@ public class RegistrarMarcoDesenvolvimentoUseCase {
             throw new RegraDominioException("Este marco ainda não pertence à faixa etária atual da criança.");
         }
 
-        RegistroMarcoDesenvolvimento registro = registroRepositorio.buscarPorCriancaEMarco(comando.criancaId(), comando.marcoId())
+        RegistroMarcoDesenvolvimento anterior = registroRepositorio.buscarPorCriancaEMarco(comando.criancaId(), comando.marcoId()).orElse(null);
+        RegistroMarcoDesenvolvimento registro = java.util.Optional.ofNullable(anterior)
                 .map(existente -> existente.atualizar(comando.status(), comando.observacao()))
                 .orElseGet(() -> RegistroMarcoDesenvolvimento.registrar(
                         comando.criancaId(),
@@ -78,7 +82,9 @@ public class RegistrarMarcoDesenvolvimentoUseCase {
                         comando.observacao()
                 ));
 
-        return registroRepositorio.salvar(registro);
+        RegistroMarcoDesenvolvimento salvo = registroRepositorio.salvar(registro);
+        if (anterior == null || anterior.getStatus() != salvo.getStatus() || !java.util.Objects.equals(anterior.getObservacao(), salvo.getObservacao())) historicoRepositorio.salvar(br.com.pueria.pueria.desenvolvimento.dominio.HistoricoRespostaMarcoDesenvolvimento.registrar(comando.criancaId(), comando.marcoId(), anterior, salvo));
+        return salvo;
     }
 
 }
