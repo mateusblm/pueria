@@ -24,4 +24,5 @@ public record MarcoDesenvolvimentoResumo(
         String observacao,
         LocalDateTime registradoEm
 ) {
+    public String getDescricao() { return descricao; }
 }
