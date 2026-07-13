@@ -39,6 +39,11 @@ export class DesenvolvimentoService {
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 
+  buscarEstimuloParaMarco(criancaId: string, marcoId: string): Observable<EstimuloDesenvolvimento> {
+    return this.http.get<EstimuloDesenvolvimento>(`/api/criancas/${criancaId}/desenvolvimento/estimulos/marcos/${marcoId}`)
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
+
   registrarEstimulo(criancaId: string, estimuloId: string, observacao?: string | null): Observable<void> {
     return this.http.put<void>(`/api/criancas/${criancaId}/desenvolvimento/estimulos/${estimuloId}`, { observacao: observacao ?? null })
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));

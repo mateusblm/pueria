@@ -67,6 +67,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly relatos = signal<RelatoDesenvolvimento[]>([]);
   readonly estimulos = signal<EstimuloDesenvolvimento[]>([]);
   readonly historicoEstimulos = signal<EstimuloDesenvolvimento[]>([]);
+  readonly estimuloParaMarco = signal<EstimuloDesenvolvimento | null>(null);
   readonly carregando = signal(true);
   readonly salvandoId = signal<string | null>(null);
   readonly erro = signal('');
@@ -204,6 +205,7 @@ export class MarcosCriancaComponent implements OnInit {
           this.marcos.set(ordenados);
           this.idadeSelecionada.set(idadeAtual);
           this.posicionarPrimeiraPendente();
+          this.carregarEstimuloParaMarcoAtual();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -239,7 +241,7 @@ export class MarcosCriancaComponent implements OnInit {
             ? 'RETROSPECTIVO'
             : 'ACOMPANHAMENTO_ATUAL';
           this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, status, modalidade } : item));
-          this.avancarDepoisDeResponder();
+          this.carregarEstimuloParaMarco({ ...marco, status, modalidade });
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -282,14 +284,22 @@ export class MarcosCriancaComponent implements OnInit {
     this.idadeSelecionada.set(idadeMeses);
     this.modo.set('responder');
     this.posicionarPrimeiraPendente();
+    this.carregarEstimuloParaMarcoAtual();
   }
 
   etapaAnterior(): void {
     this.indiceEtapa.update((indice) => Math.max(0, indice - 1));
+    this.carregarEstimuloParaMarcoAtual();
   }
 
   proximaEtapa(): void {
     this.indiceEtapa.update((indice) => Math.min(this.marcosDaIdade().length - 1, indice + 1));
+    this.carregarEstimuloParaMarcoAtual();
+  }
+
+  seguirAposSugestao(): void {
+    this.avancarDepoisDeResponder();
+    this.carregarEstimuloParaMarcoAtual();
   }
 
   imprimirResumo(): void {
@@ -333,6 +343,7 @@ export class MarcosCriancaComponent implements OnInit {
         next: () => {
           const atualizado = { ...estimulo, experimentado: true, experimentadoEm: estimulo.experimentadoEm ?? new Date().toISOString() };
           this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? atualizado : item));
+          this.estimuloParaMarco.update((item) => item?.id === estimulo.id ? atualizado : item);
           this.historicoEstimulos.update((itens) => [atualizado, ...itens.filter((item) => item.id !== estimulo.id)]);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -355,6 +366,16 @@ export class MarcosCriancaComponent implements OnInit {
 
   labelTipoRelato(tipo: TipoRelatoDesenvolvimento): string {
     return tipo === 'PERDA_HABILIDADE' ? 'Perda de habilidade' : 'Preocupação da família';
+  }
+
+  textoConviteEstimulo(status: StatusMarcoDesenvolvimento): string {
+    if (status === 'OBSERVADO') {
+      return 'Que bom observar isso na rotina. Esta é uma ideia leve para continuar brincando e fortalecendo essa descoberta.';
+    }
+    if (status === 'NAO_TENHO_CERTEZA') {
+      return 'Uma ideia simples para observar essa habilidade em um momento tranquilo, sem testar nem cobrar uma resposta.';
+    }
+    return 'Uma ideia leve para experimentar no ritmo da criança. Não é treino, nem substitui a conversa com o pediatra quando houver preocupação.';
   }
 
   textoOrientacaoMarco(marco: MarcoDesenvolvimento): string {
@@ -499,6 +520,31 @@ export class MarcosCriancaComponent implements OnInit {
   private posicionarPrimeiraPendente(): void {
     const primeiraPendente = this.marcosDaIdade().findIndex((marco) => marco.status === 'NAO_AVALIADO');
     this.indiceEtapa.set(primeiraPendente >= 0 ? primeiraPendente : 0);
+  }
+
+  private carregarEstimuloParaMarcoAtual(): void {
+    const marco = this.marcoAtual();
+    if (!marco) {
+      this.estimuloParaMarco.set(null);
+      return;
+    }
+    this.carregarEstimuloParaMarco(marco);
+  }
+
+  private carregarEstimuloParaMarco(marco: MarcoDesenvolvimento): void {
+    if (marco.status === 'NAO_AVALIADO' || marco.status === 'NAO_LEMBRO') {
+      this.estimuloParaMarco.set(null);
+      return;
+    }
+    this.estimuloParaMarco.set(null);
+    this.desenvolvimentoService.buscarEstimuloParaMarco(this.criancaId(), marco.id).subscribe({
+      next: (estimulo) => {
+        if (this.marcoAtual()?.id === marco.id) {
+          this.estimuloParaMarco.set(estimulo);
+        }
+      },
+      error: () => this.estimuloParaMarco.set(null)
+    });
   }
 
   private avancarDepoisDeResponder(): void {

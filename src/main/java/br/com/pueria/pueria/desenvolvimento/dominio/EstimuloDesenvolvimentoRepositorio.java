@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface EstimuloDesenvolvimentoRepositorio {
     List<EstimuloDesenvolvimento> listarAtivosParaIdade(int idadeMeses);
+    Optional<EstimuloDesenvolvimento> buscarAtivoParaMarco(UUID marcoId);
     Optional<EstimuloDesenvolvimento> buscarPorId(UUID id);
 }

@@ -60,6 +60,18 @@ public class GerenciarEstimulosDesenvolvimentoUseCase {
                 .limit(2).map(item -> paraResumo(item, registros.get(item.id()))).toList();
     }
 
+    @Transactional(readOnly = true)
+    public EstimuloDesenvolvimentoResumo buscarParaMarco(UUID criancaId, UUID marcoId, String email) {
+        validarAcesso(criancaId, email);
+        marcos.buscarPorId(marcoId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Marco de desenvolvimento não encontrado."));
+        Map<UUID, RegistroEstimuloDesenvolvimento> registros = registrosEstimulos.listarPorCrianca(criancaId).stream()
+                .collect(Collectors.toMap(RegistroEstimuloDesenvolvimento::estimuloId, Function.identity()));
+        EstimuloDesenvolvimento estimulo = estimulos.buscarAtivoParaMarco(marcoId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Ainda não há uma sugestão para este marco."));
+        return paraResumo(estimulo, registros.get(estimulo.id()));
+    }
+
     @Transactional
     public RegistroEstimuloDesenvolvimento registrar(UUID criancaId, UUID estimuloId, String observacao, String email) {
         validarAcesso(criancaId, email);

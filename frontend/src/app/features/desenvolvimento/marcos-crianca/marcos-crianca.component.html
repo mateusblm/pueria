@@ -147,6 +147,30 @@
                 (blur)="salvarObservacao(marco, $any($event.target).value)"></textarea>
             </label>
 
+            @if (estimuloParaMarco(); as estimulo) {
+              <aside class="estimulo-do-marco" [attr.data-tema]="temaArea(estimulo.area)">
+                <div class="estimulo-do-marco__cabecalho">
+                  <span class="estimulo-do-marco__icone"><app-icon [name]="iconeArea(estimulo.area)" [size]="18" /></span>
+                  <div>
+                    <p class="pueria-eyebrow">Uma ideia para experimentar</p>
+                    <h3>{{ estimulo.titulo }}</h3>
+                  </div>
+                </div>
+                <p>{{ textoConviteEstimulo(marco.status) }}</p>
+                <p class="estimulo-do-marco__descricao">{{ estimulo.descricao }}</p>
+                <details>
+                  <summary>Cuidados e fonte</summary>
+                  <p><strong>Cuidados:</strong> {{ estimulo.cuidado }}</p>
+                  <p><strong>Fonte:</strong> {{ estimulo.fonte }}</p>
+                </details>
+                @if (estimulo.experimentado) {
+                  <span class="estimulos-card__feito">Experimentamos</span>
+                } @else {
+                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoEstimuloId() === estimulo.id" (click)="registrarEstimulo(estimulo)">Experimentar</button>
+                }
+              </aside>
+            }
+
             <details class="marco-fonte">
               <summary>Sobre este marco</summary>
               <p><strong>Fonte:</strong> {{ textoFonteMarco(marco) }}</p>
@@ -156,7 +180,11 @@
             <div class="etapa-nav">
               <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() === 0" (click)="etapaAnterior()">Anterior</button>
               <span>Etapa {{ indiceEtapa() + 1 }} de {{ marcosDaIdade().length }}</span>
-              <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() >= marcosDaIdade().length - 1" (click)="proximaEtapa()">Seguinte</button>
+              @if (estimuloParaMarco()) {
+                <button type="button" class="pueria-button pueria-button--secondary" (click)="seguirAposSugestao()">Continuar</button>
+              } @else {
+                <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() >= marcosDaIdade().length - 1" (click)="proximaEtapa()">Seguinte</button>
+              }
             </div>
           </div>
         </article>
