@@ -1,0 +1,112 @@
+<section class="saude-page">
+  <a [routerLink]="rotaRetorno()" class="saude-page__back">&larr; {{ textoRetorno() }}</a>
+
+  <header class="saude-page__hero">
+    <div>
+      <p class="pueria-eyebrow">Saúde e cuidados</p>
+      <h1>{{ crianca()?.nome ?? 'Acompanhamento de saúde' }}</h1>
+      <p>Organize informações da rotina de cuidado para recordar e levar à consulta quando fizer sentido.</p>
+    </div>
+    <span class="saude-page__hero-icon"><app-icon name="stethoscope" [size]="38" /></span>
+  </header>
+
+  <aside class="saude-lembrete">
+    <app-icon name="heartPulse" [size]="20" />
+    <span><strong>Lembrete:</strong> toda prescrição deve ser feita por um profissional de saúde habilitado.</span>
+  </aside>
+
+  @if (carregando()) {
+    <div class="pueria-card saude-page__state">Preparando os registros de saúde...</div>
+  } @else if (erro() && !crianca()) {
+    <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
+  } @else {
+    @if (erro()) { <div class="pueria-message pueria-message--erro">{{ erro() }}</div> }
+    @if (aviso()) { <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div> }
+
+    <section class="saude-layout">
+      <article class="pueria-card saude-formulario">
+        <div>
+          <p class="pueria-eyebrow">Novo registro</p>
+          <h2>{{ editandoId() ? 'Editar registro' : 'O que você quer registrar?' }}</h2>
+        </div>
+
+        <div class="saude-tipo" role="group" aria-label="Tipo de registro">
+          <button type="button" [class.saude-tipo__ativo]="form.controls.tipo.value === 'MEDICAMENTO_SUPLEMENTO'" (click)="selecionarTipo('MEDICAMENTO_SUPLEMENTO')">
+            <app-icon name="heartPulse" [size]="18" /> Suplementos e medicamentos
+          </button>
+          <button type="button" [class.saude-tipo__ativo]="form.controls.tipo.value === 'INTERCORRENCIA_CLINICA'" (click)="selecionarTipo('INTERCORRENCIA_CLINICA')">
+            <app-icon name="stethoscope" [size]="18" /> Intercorrência clínica
+          </button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="salvar()">
+          <label>
+            <span>Data</span>
+            <input type="text" inputmode="numeric" maxlength="10" formControlName="dataRegistro" aria-label="Data do registro" />
+          </label>
+          <label>
+            <span>{{ tituloTipo(form.controls.tipo.value) }}</span>
+            <small>{{ descricaoFormulario() }}</small>
+            <textarea rows="8" maxlength="4000" formControlName="descricao"></textarea>
+            <em>{{ form.controls.descricao.value?.length ?? 0 }}/4000</em>
+          </label>
+          <div class="saude-formulario__acoes">
+            @if (editandoId()) {
+              <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar</button>
+            }
+            <button type="submit" class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar registro' }}</button>
+          </div>
+        </form>
+      </article>
+
+      <aside class="saude-resumo">
+        <article>
+          <span><app-icon name="heartPulse" [size]="21" /></span>
+          <div><strong>{{ registrosMedicamentos().length }}</strong><p>registros de suplementos e medicamentos</p></div>
+        </article>
+        <article>
+          <span><app-icon name="stethoscope" [size]="21" /></span>
+          <div><strong>{{ intercorrencias().length }}</strong><p>intercorrências clínicas registradas</p></div>
+        </article>
+      </aside>
+    </section>
+
+    <section class="saude-historico">
+      <div>
+        <p class="pueria-eyebrow">Histórico</p>
+        <h2>Registros para lembrar e compartilhar</h2>
+      </div>
+
+      @if (registros().length === 0) {
+        <article class="pueria-card saude-historico__vazio">
+          <app-icon name="heartPulse" [size]="25" />
+          <p>Quando quiser, registre aqui informações importantes para uma próxima consulta ou para recordar no futuro.</p>
+        </article>
+      } @else {
+        <div class="saude-historico__lista">
+          @for (registro of registros(); track registro.id) {
+            <article class="pueria-card registro-saude" [attr.data-tipo]="registro.tipo">
+              <div class="registro-saude__meta">
+                <span class="registro-saude__icone"><app-icon [name]="registro.tipo === 'MEDICAMENTO_SUPLEMENTO' ? 'heartPulse' : 'stethoscope'" [size]="19" /></span>
+                <div><strong>{{ tituloTipo(registro.tipo) }}</strong><time>{{ formatarData(registro.dataRegistro) }}</time></div>
+              </div>
+              <p>{{ registro.descricao }}</p>
+              @if (confirmandoRemocaoId() === registro.id) {
+                <div class="registro-saude__confirmacao">
+                  <span>Remover este registro?</span>
+                  <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarRemocao()">Manter</button>
+                  <button type="button" class="pueria-button registro-saude__remover" [disabled]="removendoId() === registro.id" (click)="remover(registro)">{{ removendoId() === registro.id ? 'Removendo...' : 'Remover' }}</button>
+                </div>
+              } @else {
+                <div class="registro-saude__acoes">
+                  <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
+                  <button type="button" class="registro-saude__link" (click)="confirmarRemocao(registro.id)">Remover</button>
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+</section>

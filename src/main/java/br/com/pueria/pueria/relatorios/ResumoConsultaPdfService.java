@@ -10,6 +10,8 @@ import br.com.pueria.pueria.desenvolvimento.aplicacao.ListarMarcosDesenvolviment
 import br.com.pueria.pueria.desenvolvimento.dominio.HistoricoRespostaMarcoDesenvolvimentoRepositorio;
 import br.com.pueria.pueria.desenvolvimento.dominio.MarcoDesenvolvimentoRepositorio;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
+import br.com.pueria.pueria.saude.aplicacao.GerenciarRegistrosSaudeUseCase;
+import br.com.pueria.pueria.saude.dominio.TipoRegistroSaude;
 import br.com.pueria.pueria.usuarios.dominio.UsuarioRepositorio;
 import net.sf.jasperreports.engine.*;
 import org.springframework.core.io.ClassPathResource;
@@ -28,13 +30,14 @@ public class ResumoConsultaPdfService {
     private final ListarMarcosDesenvolvimentoUseCase marcos; private final GerenciarRelatosDesenvolvimentoUseCase relatos;
     private final GerenciarEstimulosDesenvolvimentoUseCase estimulos; private final ListarAvaliacoesCurvaCrescimentoUseCase crescimento;
     private final MedidaCrescimentoRepositorio medidas; private final HistoricoRespostaMarcoDesenvolvimentoRepositorio historico; private final MarcoDesenvolvimentoRepositorio catalogoMarcos;
+    private final GerenciarRegistrosSaudeUseCase saude;
 
     public ResumoConsultaPdfService(CriancaRepositorio criancas, UsuarioRepositorio usuarios, VinculoResponsavelCriancaRepositorio vinculos,
             ListarMarcosDesenvolvimentoUseCase marcos, GerenciarRelatosDesenvolvimentoUseCase relatos, GerenciarEstimulosDesenvolvimentoUseCase estimulos,
             ListarAvaliacoesCurvaCrescimentoUseCase crescimento, MedidaCrescimentoRepositorio medidas,
-            HistoricoRespostaMarcoDesenvolvimentoRepositorio historico, MarcoDesenvolvimentoRepositorio catalogoMarcos) {
+            HistoricoRespostaMarcoDesenvolvimentoRepositorio historico, MarcoDesenvolvimentoRepositorio catalogoMarcos, GerenciarRegistrosSaudeUseCase saude) {
         this.criancas=criancas; this.usuarios=usuarios; this.vinculos=vinculos; this.marcos=marcos; this.relatos=relatos; this.estimulos=estimulos;
-        this.crescimento=crescimento; this.medidas=medidas; this.historico=historico; this.catalogoMarcos=catalogoMarcos;
+        this.crescimento=crescimento; this.medidas=medidas; this.historico=historico; this.catalogoMarcos=catalogoMarcos; this.saude=saude;
     }
 
     public byte[] gerar(UUID criancaId, String email) {
@@ -42,7 +45,7 @@ public class ResumoConsultaPdfService {
         Map<String,Object> p = new HashMap<>();
         p.put("IDENTIFICACAO", identificacao(crianca)); p.put("CRESCIMENTO", crescimento(criancaId, email));
         p.put("DESENVOLVIMENTO", desenvolvimento(criancaId, email)); p.put("TRAJETORIA", trajetoria(criancaId));
-        p.put("CONTEXTO", "Relatos da família\n" + contexto(criancaId, email) + "\n\nAtividades experimentadas\n" + atividades(criancaId, email)); p.put("ATIVIDADES", atividades(criancaId, email));
+        p.put("CONTEXTO", "Histórico de saúde relatado pela família\n" + saude(criancaId, email) + "\n\nRelatos da família\n" + contexto(criancaId, email) + "\n\nAtividades experimentadas\n" + atividades(criancaId, email)); p.put("ATIVIDADES", atividades(criancaId, email));
         p.put("GERADO_EM", "Gerado em " + LocalDate.now().format(DATA));
         try (InputStream in = new ClassPathResource("relatorios/resumo-consulta.jrxml").getInputStream()) {
             JasperReport report = JasperCompileManager.compileReport(in);
@@ -70,6 +73,7 @@ public class ResumoConsultaPdfService {
     }
     private String trajetoria(UUID id) { String texto = historico.listarPorCrianca(id).stream().limit(6).map(h -> catalogoMarcos.buscarPorId(h.marcoId()).map(m -> h.registradoEm().toLocalDate().format(DATA)+" | "+m.getDescricao()+"\n"+(h.statusAnterior()==null?"Primeira resposta":h.statusAnterior().name().replace('_',' '))+" -> "+h.statusNovo().name().replace('_',' ')).orElse("")).filter(s -> !s.isBlank()).collect(Collectors.joining("\n\n")); return texto.isBlank()?"Ainda não há mudanças de resposta registradas.":texto; }
     private String contexto(UUID id,String email) { String texto=relatos.listar(id,email).stream().limit(5).map(r -> r.getTipo().name().replace('_',' ')+"\n"+r.getDescricao()).collect(Collectors.joining("\n\n")); return texto.isBlank()?"Sem relatos familiares registrados.":texto; }
+    private String saude(UUID id,String email) { String texto=saude.listar(id,email).stream().limit(6).map(r -> r.getDataRegistro().format(DATA)+" | "+(r.getTipo()== TipoRegistroSaude.MEDICAMENTO_SUPLEMENTO ? "Suplementos e medicamentos" : "Intercorrência clínica")+"\n"+r.getDescricao()).collect(Collectors.joining("\n\n")); return texto.isBlank()?"Sem registros de saúde informados.":texto; }
     private String atividades(UUID id,String email) { String texto=estimulos.listarHistorico(id,email).stream().limit(5).map(e -> e.titulo()+(e.observacao()==null?"":"\n"+e.observacao())).collect(Collectors.joining("\n\n")); return texto.isBlank()?"Sem atividades marcadas como experimentadas.":texto; }
     private Crianca validar(UUID id,String email){var u=usuarios.buscarPorEmail(email).orElseThrow();if(!vinculos.usuarioPodeAcessarCrianca(u.getId(),id))throw new IllegalArgumentException("Criança não encontrada.");return criancas.buscarPorId(id).orElseThrow();}
 }

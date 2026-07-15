@@ -73,7 +73,7 @@
             <staticText>
                 <reportElement positionType="Float" x="0" y="206" width="515" height="13" forecolor="#A77728"/>
                 <textElement><font size="9" isBold="true"/></textElement>
-                <text><![CDATA[CONTEXTO FAMILIAR E ATIVIDADES]]></text>
+                <text><![CDATA[SAÚDE, CONTEXTO FAMILIAR E ATIVIDADES]]></text>
             </staticText>
             <textField textAdjust="StretchHeight">
                 <reportElement positionType="Float" x="0" y="223" width="515" height="20" backcolor="#FFFBF6" mode="Opaque"/>

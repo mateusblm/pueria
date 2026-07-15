@@ -17,6 +17,7 @@
       </div>
       <div class="detalhe-page__actions">
         <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
+        <a [routerLink]="['/criancas', crianca.id, 'saude']" class="pueria-button pueria-button--secondary">Saúde e cuidados</a>
         <a [routerLink]="['/criancas', crianca.id, 'para-a-consulta']" class="pueria-button pueria-button--secondary">Para a consulta</a>
         <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
           Remover perfil
@@ -279,6 +280,15 @@
             </div>
           }
         </dl>
+      </article>
+
+      <article class="pueria-card detalhe-card detalhe-card--saude">
+        <p class="pueria-eyebrow">Saúde e cuidados</p>
+        <div class="detalhe-card--saude__conteudo">
+          <span><app-icon name="stethoscope" [size]="24" /></span>
+          <p>Registre suplementos, medicamentos em uso e intercorrências clínicas para lembrar e compartilhar na consulta.</p>
+        </div>
+        <a [routerLink]="['/criancas', crianca.id, 'saude']" class="pueria-button pueria-button--secondary">Abrir saúde e cuidados</a>
       </article>
 
     </div>

@@ -30,6 +30,7 @@ export const routes: Routes = [
       { path: 'criancas/:id/transito-intestinal', loadComponent: () => import('./features/transito-intestinal/transito-intestinal-crianca/transito-intestinal-crianca.component').then((m) => m.TransitoIntestinalCriancaComponent) },
       { path: 'criancas/:id/sono', loadComponent: () => import('./features/sono/sono-crianca/sono-crianca.component').then((m) => m.SonoCriancaComponent) },
       { path: 'criancas/:id/telas', loadComponent: () => import('./features/telas/telas-crianca/telas-crianca.component').then((m) => m.TelasCriancaComponent) },
+      { path: 'criancas/:id/saude', loadComponent: () => import('./features/saude/saude-crianca/saude-crianca.component').then((m) => m.SaudeCriancaComponent) },
       { path: 'criancas/:id/para-a-consulta', loadComponent: () => import('./features/relatorios/relatorios-crianca/relatorios-crianca.component').then((m) => m.RelatoriosCriancaComponent) },
       { path: 'criancas/:id', loadComponent: () => import('./features/criancas/detalhe-crianca/detalhe-crianca.component').then((m) => m.DetalheCriancaComponent) },
       { path: 'app/criancas', pathMatch: 'full', redirectTo: 'criancas' },
@@ -41,6 +42,7 @@ export const routes: Routes = [
       { path: 'app/criancas/:id/transito-intestinal', redirectTo: 'criancas/:id/transito-intestinal' },
       { path: 'app/criancas/:id/sono', redirectTo: 'criancas/:id/sono' },
       { path: 'app/criancas/:id/telas', redirectTo: 'criancas/:id/telas' },
+      { path: 'app/criancas/:id/saude', redirectTo: 'criancas/:id/saude' },
       { path: 'app/criancas/:id', redirectTo: 'criancas/:id' },
       { path: 'app/acompanhamento', pathMatch: 'full', redirectTo: 'acompanhamento' },
       { path: 'desenvolvimento', pathMatch: 'full', redirectTo: 'acompanhamento' },
@@ -53,6 +55,7 @@ export const routes: Routes = [
       { path: 'minhas-criancas/:id/transito-intestinal', redirectTo: 'criancas/:id/transito-intestinal' },
       { path: 'minhas-criancas/:id/sono', redirectTo: 'criancas/:id/sono' },
       { path: 'minhas-criancas/:id/telas', redirectTo: 'criancas/:id/telas' },
+      { path: 'minhas-criancas/:id/saude', redirectTo: 'criancas/:id/saude' },
       { path: 'minhas-criancas/:id', redirectTo: 'criancas/:id' }
     ]
   },
