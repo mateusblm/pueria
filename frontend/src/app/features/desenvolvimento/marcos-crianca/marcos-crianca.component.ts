@@ -371,7 +371,7 @@ export class MarcosCriancaComponent implements OnInit {
 
   textoConviteEstimulo(status: StatusMarcoDesenvolvimento): string {
     if (status === 'OBSERVADO') {
-      return 'Que bom observar isso na rotina. Esta é uma ideia leve para continuar brincando e fortalecendo essa descoberta.';
+      return '';
     }
     if (status === 'NAO_TENHO_CERTEZA') {
       return 'Uma ideia simples para observar essa habilidade em um momento tranquilo. Você pode retomar a observação nas próximas 4 a 6 semanas, sem testar nem cobrar uma resposta.';

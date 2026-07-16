@@ -164,7 +164,9 @@
                     <h3>{{ estimulo.titulo }}</h3>
                   </div>
                 </div>
-                <p>{{ textoConviteEstimulo(marco.status) }}</p>
+                @if (textoConviteEstimulo(marco.status); as convite) {
+                  <p>{{ convite }}</p>
+                }
                 <p class="estimulo-do-marco__descricao">{{ estimulo.descricao }}</p>
                 <details>
                   <summary>Cuidados e fonte</summary>
