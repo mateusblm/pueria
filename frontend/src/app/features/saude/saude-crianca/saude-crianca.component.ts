@@ -117,12 +117,12 @@ export class SaudeCriancaComponent implements OnInit {
     });
   }
 
-  tituloTipo(tipo: TipoRegistroSaude): string { return tipo === 'MEDICAMENTO_SUPLEMENTO' ? 'Suplementos e medicamentos' : 'Intercorrência clínica'; }
+  tituloTipo(tipo: TipoRegistroSaude): string { return tipo === 'MEDICAMENTO_SUPLEMENTO' ? 'Suplementos e medicamentos de uso diário' : 'Intercorrência clínica'; }
 
   descricaoFormulario(): string {
     return this.form.controls.tipo.value === 'MEDICAMENTO_SUPLEMENTO'
-      ? 'Registre o que está em uso para ajudar a lembrar e compartilhar na consulta.'
-      : 'Registre o que deseja lembrar ou compartilhar em uma próxima consulta.';
+      ? 'Registre apenas o que a criança usa todos os dias. Medicamentos usados por causa de uma intercorrência devem ser registrados na própria intercorrência.'
+      : 'Registre o que aconteceu, o atendimento ou a orientação recebidos e os medicamentos usados somente nesta intercorrência.';
   }
 
   formatarData(data: string): string { return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`)); }

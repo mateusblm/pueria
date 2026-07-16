@@ -307,8 +307,6 @@
   text-align: right;
 }
 
-.detalhe-card--saude { display:grid; gap:14px; }.detalhe-card--saude__conteudo { align-items:flex-start; display:flex; gap:10px; }.detalhe-card--saude__conteudo span { align-items:center; background:#f6dfe4; border-radius:50%; color:#914657; display:flex; flex:0 0 auto; height:42px; justify-content:center; width:42px; }.detalhe-card--saude__conteudo p { color:var(--pueria-texto-suave); line-height:1.45; margin:0; }.detalhe-card--saude .pueria-button { justify-self:start; }
-
 @media (min-width: 760px) {
   .detalhe-page__hero {
     grid-template-columns: 1fr auto;

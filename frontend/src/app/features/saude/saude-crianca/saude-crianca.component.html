@@ -32,7 +32,7 @@
 
         <div class="saude-tipo" role="group" aria-label="Tipo de registro">
           <button type="button" [class.saude-tipo__ativo]="form.controls.tipo.value === 'MEDICAMENTO_SUPLEMENTO'" (click)="selecionarTipo('MEDICAMENTO_SUPLEMENTO')">
-            <app-icon name="heartPulse" [size]="18" /> Suplementos e medicamentos
+            <app-icon name="heartPulse" [size]="18" /> Uso diário
           </button>
           <button type="button" [class.saude-tipo__ativo]="form.controls.tipo.value === 'INTERCORRENCIA_CLINICA'" (click)="selecionarTipo('INTERCORRENCIA_CLINICA')">
             <app-icon name="stethoscope" [size]="18" /> Intercorrência clínica
@@ -62,7 +62,7 @@
       <aside class="saude-resumo">
         <article>
           <span><app-icon name="heartPulse" [size]="21" /></span>
-          <div><strong>{{ registrosMedicamentos().length }}</strong><p>registros de suplementos e medicamentos</p></div>
+          <div><strong>{{ registrosMedicamentos().length }}</strong><p>suplementos e medicamentos de uso diário</p></div>
         </article>
         <article>
           <span><app-icon name="stethoscope" [size]="21" /></span>

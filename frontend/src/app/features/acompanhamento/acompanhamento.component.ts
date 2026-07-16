@@ -402,6 +402,13 @@ export class AcompanhamentoComponent implements OnInit {
         rota: ['/criancas', resumo.crianca.id, 'telas'],
         icone: 'smartphone',
         tema: 'telas'
+      },
+      {
+        titulo: 'Saúde e cuidados',
+        detalhe: 'Registre suplementos de uso diário e intercorrências para lembrar na consulta.',
+        rota: ['/criancas', resumo.crianca.id, 'saude'],
+        icone: 'stethoscope',
+        tema: 'saude'
       }
     ];
   }
