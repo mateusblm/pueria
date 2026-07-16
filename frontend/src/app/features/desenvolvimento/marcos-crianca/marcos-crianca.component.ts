@@ -68,6 +68,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly estimulos = signal<EstimuloDesenvolvimento[]>([]);
   readonly historicoEstimulos = signal<EstimuloDesenvolvimento[]>([]);
   readonly estimuloParaMarco = signal<EstimuloDesenvolvimento | null>(null);
+  readonly orientacaoPrioritariaMarco = signal<string | null>(null);
   readonly carregando = signal(true);
   readonly salvandoId = signal<string | null>(null);
   readonly erro = signal('');
@@ -526,16 +527,26 @@ export class MarcosCriancaComponent implements OnInit {
     const marco = this.marcoAtual();
     if (!marco) {
       this.estimuloParaMarco.set(null);
+      this.orientacaoPrioritariaMarco.set(null);
       return;
     }
     this.carregarEstimuloParaMarco(marco);
   }
 
   private carregarEstimuloParaMarco(marco: MarcoDesenvolvimento): void {
+    this.orientacaoPrioritariaMarco.set(null);
     if (marco.status === 'NAO_AVALIADO' || marco.status === 'NAO_LEMBRO') {
       this.estimuloParaMarco.set(null);
       return;
     }
+
+    const orientacaoPrioritaria = this.orientacaoPrioritariaPara(marco);
+    if (orientacaoPrioritaria) {
+      this.estimuloParaMarco.set(null);
+      this.orientacaoPrioritariaMarco.set(orientacaoPrioritaria);
+      return;
+    }
+
     this.estimuloParaMarco.set(null);
     this.desenvolvimentoService.buscarEstimuloParaMarco(this.criancaId(), marco.id).subscribe({
       next: (estimulo) => {
@@ -545,6 +556,22 @@ export class MarcosCriancaComponent implements OnInit {
       },
       error: () => this.estimuloParaMarco.set(null)
     });
+  }
+
+  private orientacaoPrioritariaPara(marco: MarcoDesenvolvimento): string | null {
+    if (marco.status !== 'AINDA_NAO_OBSERVADO') {
+      return null;
+    }
+
+    if (marco.id === '10000000-0000-0000-0000-000000000204') {
+      return 'Como a reação a sons altos inesperados ainda não foi observada, vale conversar com o pediatra sobre a audição da criança. Este registro pode ajudar na consulta.';
+    }
+
+    if (marco.id === '10000000-0000-0000-0000-000000000208') {
+      return 'Se o movimento de braços e pernas dos dois lados ainda não foi observado, ou se você percebe diferença entre os lados, vale conversar com o pediatra. Registre o que percebeu para levar à consulta.';
+    }
+
+    return null;
   }
 
   private avancarDepoisDeResponder(): void {

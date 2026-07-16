@@ -147,7 +147,15 @@
                 (blur)="salvarObservacao(marco, $any($event.target).value)"></textarea>
             </label>
 
-            @if (estimuloParaMarco(); as estimulo) {
+            @if (orientacaoPrioritariaMarco(); as orientacao) {
+              <aside class="orientacao-marco-prioritaria" aria-live="polite">
+                <span class="orientacao-marco-prioritaria__icone"><app-icon name="stethoscope" [size]="18" /></span>
+                <div>
+                  <p class="pueria-eyebrow">Para conversar na consulta</p>
+                  <p>{{ orientacao }}</p>
+                </div>
+              </aside>
+            } @else if (estimuloParaMarco(); as estimulo) {
               <aside class="estimulo-do-marco" [attr.data-tema]="temaArea(estimulo.area)">
                 <div class="estimulo-do-marco__cabecalho">
                   <span class="estimulo-do-marco__icone"><app-icon [name]="iconeArea(estimulo.area)" [size]="18" /></span>
@@ -180,7 +188,7 @@
             <div class="etapa-nav">
               <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() === 0" (click)="etapaAnterior()">Anterior</button>
               <span>Etapa {{ indiceEtapa() + 1 }} de {{ marcosDaIdade().length }}</span>
-              @if (estimuloParaMarco()) {
+              @if (orientacaoPrioritariaMarco() || estimuloParaMarco()) {
                 <button type="button" class="pueria-button pueria-button--secondary" (click)="seguirAposSugestao()">Continuar</button>
               } @else {
                 <button type="button" class="pueria-button pueria-button--secondary" [disabled]="indiceEtapa() >= marcosDaIdade().length - 1" (click)="proximaEtapa()">Seguinte</button>
