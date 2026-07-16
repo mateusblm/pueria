@@ -374,9 +374,9 @@ export class MarcosCriancaComponent implements OnInit {
       return 'Que bom observar isso na rotina. Esta é uma ideia leve para continuar brincando e fortalecendo essa descoberta.';
     }
     if (status === 'NAO_TENHO_CERTEZA') {
-      return 'Uma ideia simples para observar essa habilidade em um momento tranquilo, sem testar nem cobrar uma resposta.';
+      return 'Uma ideia simples para observar essa habilidade em um momento tranquilo. Você pode retomar a observação nas próximas 4 a 6 semanas, sem testar nem cobrar uma resposta.';
     }
-    return 'Uma ideia leve para experimentar no ritmo da criança. Não é treino, nem substitui a conversa com o pediatra quando houver preocupação.';
+    return 'Uma ideia leve para experimentar no ritmo da criança. Vale observar novamente nas próximas 4 a 6 semanas e levar essa observação à próxima consulta de rotina, especialmente se continuar.';
   }
 
   textoOrientacaoMarco(marco: MarcoDesenvolvimento): string {

@@ -26,7 +26,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 | Idade corrigida | Implementado | O desenvolvimento seleciona etapas por idade corrigida em prematuros até 24 meses corrigidos e torna a idade usada visível no fluxo. |
 | Histórico longitudinal | Pendente | O registro atual mantém o estado mais recente do marco, sem eventos históricos por checkpoint. |
 | Regras de atenção | Parcial | Há orientação de conversa, mas não há motor versionado de trajetória, regressão e prioridade. |
-| Estímulos | Parcial | Há catálogo versionado de 2 a 24 meses, sugestões leves por faixa, prioridade por área e registro opcional de atividade experimentada. |
+| Estímulos | Implementado | Catálogo versionado com 65 atividades específicas, uma para cada marco de 2 a 24 meses; o fluxo mostra a atividade de forma leve após a resposta e preserva orientações de consulta nos sinais que não devem ser tratados como treino em casa. |
 | M-CHAT-R/F | Bloqueado | Exige fluxo independente e licença comercial antes da incorporação. |
 | Relatório para consulta | Parcial | PDF Jasper inicial reúne identificação, prematuridade, desenvolvimento, contexto familiar, atividades e última referência de crescimento. |
 
@@ -67,7 +67,7 @@ Documento de execução baseado nos materiais clínicos enviados pela dra. em 12
 
 | ID | Entrega | Status | Critério de aceite |
 |---|---|---|---|
-| NEU-30 | Criar banco de estímulos mensais de 0 a 24 meses. | Parcial | Catálogo `ESTIMULOS_V1_2026_07` cobre 2 a 24 meses em faixas de desenvolvimento, com domínio, fonte, cuidados e texto familiar; a granularidade mensal completa segue pendente. |
+| NEU-30 | Criar banco de estímulos de 0 a 24 meses. | Implementado | Catálogo `ESTIMULOS_MARCO_V2_2026_07` vincula uma atividade validada pela dra. a cada um dos 65 marcos atuais, com fonte, cuidados e versão. |
 | NEU-31 | Mostrar poucos estímulos contextuais por vez. | Implementado | A tela mostra duas sugestões por vez, priorizando áreas com respostas “Às vezes” ou “Ainda não”, sem prescrição ou sobrecarga. |
 | NEU-32 | Incluir avisos de segurança revisados clinicamente. | Implementado | Cada sugestão traz cuidados sob demanda para bruços, supervisão, movimento livre e objetos pequenos. |
 | NEU-33 | Permitir marcar atividade como experimentada e registrar observação opcional. | Implementado | A família pode marcar “Experimentamos”, incluir nota opcional sob demanda e consultar um histórico compacto, sem indicador de adesão ou desempenho. |
