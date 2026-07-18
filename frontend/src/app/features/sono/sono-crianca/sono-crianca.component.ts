@@ -40,6 +40,7 @@ export class SonoCriancaComponent implements OnInit {
   readonly erro = signal('');
   readonly aviso = signal('');
   readonly editandoId = signal('');
+  readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly superficiesSono: Opcao<SuperficieSono>[] = [
@@ -119,6 +120,29 @@ export class SonoCriancaComponent implements OnInit {
       });
   }
 
+  avancarEtapa(): void {
+    this.erro.set('');
+    try {
+      this.lerData(this.form.controls.dataRegistro.value);
+      const dormiu = this.lerHorario(this.form.controls.horarioDormiu.value, 'horário de dormir');
+      const acordou = this.lerHorario(this.form.controls.horarioAcordou.value, 'horário de acordar');
+      if ((dormiu && !acordou) || (!dormiu && acordou)) {
+        throw new Error('Informe os dois horários ou deixe ambos em branco por enquanto.');
+      }
+      if (dormiu && acordou && dormiu === acordou) {
+        throw new Error('O horário de dormir e o horário de acordar não podem ser iguais.');
+      }
+      this.etapaRegistro.set(2);
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise os dados do descanso.');
+    }
+  }
+
+  voltarEtapa(): void {
+    this.erro.set('');
+    this.etapaRegistro.set(1);
+  }
+
   salvar(): void {
     this.erro.set('');
     this.aviso.set('');
@@ -166,6 +190,7 @@ export class SonoCriancaComponent implements OnInit {
 
   editar(registro: RegistroSono): void {
     this.editandoId.set(registro.id);
+    this.etapaRegistro.set(1);
     this.erro.set('');
     this.aviso.set('');
     this.form.patchValue({
@@ -197,6 +222,7 @@ export class SonoCriancaComponent implements OnInit {
 
   cancelarEdicao(): void {
     this.editandoId.set('');
+    this.etapaRegistro.set(1);
     this.form.reset({
       dataRegistro: this.formatarEntradaData(this.dataMaximaIso),
       horarioDormiu: '',

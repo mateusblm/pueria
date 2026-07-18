@@ -221,6 +221,205 @@
   padding: 0.85rem;
 }
 
+/* A rotina abre em etapas para manter o registro curto e calmo. */
+.sono-page {
+  gap: 1.15rem;
+  max-width: 1020px;
+}
+
+.sono-page__hero {
+  border: 1px solid #d9e2f0;
+  border-left: 0;
+  border-radius: 18px;
+  background: #f6f8fd;
+  padding: 1.35rem 1.5rem;
+}
+
+.sono-page__hero .pueria-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.45rem);
+  line-height: 1.1;
+}
+
+.sono-page__identidade > span,
+.sono-atualizacao__icone {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 14px;
+  background: #e0e9f8;
+}
+
+.sono-page__identidade > span {
+  width: 52px;
+  height: 52px;
+}
+
+.sono-sintese {
+  gap: 1rem;
+  border: 1px solid #dde4ee;
+  border-top: 1px solid #dde4ee;
+  border-radius: 16px;
+  background: #fff;
+  padding: 1.35rem;
+}
+
+.sono-sintese__grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.sono-sintese__grid article {
+  min-height: 90px;
+  border-color: #e1e7f0;
+  border-radius: 12px;
+  background: #f9faff;
+  padding: .8rem;
+}
+
+.sono-analise {
+  gap: .65rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.sono-analise div {
+  border: 1px solid #e6eaf1;
+  border-radius: 12px;
+  background: #fafbfe;
+  padding: .9rem;
+}
+
+.sono-layout {
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(15.5rem, .38fr);
+}
+
+.sono-atualizacao {
+  align-self: start;
+  min-width: 0;
+  border: 1px solid #dce3f0;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.sono-atualizacao > summary {
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  gap: .8rem;
+  list-style: none;
+  min-height: 78px;
+  padding: .95rem 1rem;
+}
+
+.sono-atualizacao > summary::-webkit-details-marker {
+  display: none;
+}
+
+.sono-atualizacao > summary > span:nth-child(2) {
+  display: grid;
+  gap: .2rem;
+  min-width: 0;
+}
+
+.sono-atualizacao summary strong {
+  color: var(--pueria-texto);
+}
+
+.sono-atualizacao summary small,
+.sono-etapas__tempo {
+  color: var(--pueria-texto-suave);
+  line-height: 1.35;
+}
+
+.sono-atualizacao > summary::after {
+  content: '+';
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  border: 1px solid #dbe2ee;
+  border-radius: 50%;
+  color: #4d688f;
+  font-size: 1.25rem;
+}
+
+.sono-atualizacao[open] > summary {
+  border-bottom: 1px solid #e7ebf3;
+  background: #f8f9fd;
+}
+
+.sono-atualizacao[open] > summary::after {
+  content: '-';
+}
+
+.sono-atualizacao__icone {
+  width: 38px;
+  height: 38px;
+}
+
+.sono-atualizacao .sono-form {
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1.2rem;
+}
+
+.sono-form {
+  gap: 1rem;
+}
+
+.sono-etapas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+}
+
+.sono-etapas span {
+  border-radius: 999px;
+  background: #eef1f6;
+  color: var(--pueria-texto-suave);
+  font-size: .82rem;
+  font-weight: 750;
+  padding: .52rem .8rem;
+  text-align: center;
+}
+
+.sono-etapas .sono-etapas__passo--ativo {
+  background: #4d688f;
+  color: #fff;
+}
+
+.sono-etapas__tempo {
+  display: block;
+  text-align: center;
+}
+
+.sono-etapas__acoes {
+  display: grid;
+  gap: .65rem;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.sono-historico {
+  align-self: start;
+  border: 1px solid #e1e5ed;
+  border-radius: 14px;
+  background: #fff;
+  padding: 1.1rem;
+}
+
+.sono-historico h2 {
+  margin: .15rem 0 0;
+  font-size: 1.25rem;
+}
+
+.sono-historico article {
+  border-color: #e3e8f0;
+  border-radius: 10px;
+}
+
 @media (max-width: 960px) {
   .sono-sintese__grid,
   .sono-analise,
@@ -241,5 +440,25 @@
 
   .sono-historico {
     position: static;
+  }
+
+  .sono-sintese__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .sono-page__hero,
+  .sono-sintese {
+    padding: 1.05rem;
+  }
+
+  .sono-sintese__header .pueria-button,
+  .sono-etapas__acoes {
+    width: 100%;
+  }
+
+  .sono-etapas__acoes {
+    grid-template-columns: 1fr;
   }
 }
