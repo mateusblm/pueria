@@ -177,8 +177,9 @@
   display: grid;
   flex: 1 1 10.5rem;
   gap: 8px;
+  grid-template-rows: 32px 92px 46px minmax(58px, 1fr);
   max-width: 14rem;
-  min-height: 226px;
+  min-height: 276px;
   min-width: 0;
   padding: 12px;
   text-align: center;
@@ -205,7 +206,7 @@
   background: #f8ece7;
   border-radius: 8px;
   display: flex;
-  height: 72px;
+  height: 92px;
   justify-content: center;
   margin: 0 auto;
   overflow: hidden;
@@ -220,10 +221,13 @@
 }
 
 .intestinal-scale__card strong {
+  align-self: start;
   font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .intestinal-scale__card small {
+  align-self: start;
   color: var(--pueria-texto-suave);
   font-size: 0.78rem;
   line-height: 1.35;
@@ -312,6 +316,12 @@
   }
 
   .intestinal-scale__drawing {
-    width: min(100%, 180px);
+    height: 104px;
+    width: min(100%, 200px);
+  }
+
+  .intestinal-scale__card {
+    grid-template-rows: 32px 104px 46px minmax(58px, 1fr);
+    min-height: 288px;
   }
 }
