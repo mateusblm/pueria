@@ -12,8 +12,8 @@
     <div class="telas-page__hero">
       <div>
         <p class="pueria-eyebrow">Telas</p>
-        <div class="telas-page__identidade"><span><app-icon name="smartphone" [size]="28" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
-        <p class="pueria-subtitle">Observe os momentos de uso e encontre pequenos ajustes possíveis na rotina.</p>
+        <div class="telas-page__identidade"><span><app-icon name="smartphone" [size]="28" /></span><h1 class="pueria-title">Telas na rotina</h1></div>
+        <p class="pueria-subtitle">Observe os momentos de uso de {{ crianca.nome }} e encontre pequenos ajustes possíveis na rotina.</p>
       </div>
     </div>
 
@@ -100,6 +100,14 @@
     }
 
     <div class="telas-layout">
+      <details class="telas-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
+        <summary>
+          <span class="telas-atualizacao__icone"><app-icon name="smartphone" [size]="21" /></span>
+          <span>
+            <strong>{{ editandoId() ? 'Editar registro de telas' : 'Registrar telas na rotina' }}</strong>
+            <small>{{ ultimoRegistro() ? 'Registre um novo retrato da rotina quando ela mudar.' : 'Comece por uma estimativa de um dia comum.' }}</small>
+          </span>
+        </summary>
       <form class="pueria-card telas-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div class="telas-form__header">
           <div>
@@ -111,6 +119,12 @@
           }
         </div>
 
+        <div class="telas-etapas" aria-label="Etapas do registro">
+          <span [class.telas-etapas__passo--ativo]="etapaRegistro() === 1">1. Tempo e aparelhos</span>
+          <span [class.telas-etapas__passo--ativo]="etapaRegistro() === 2">2. Contexto e apoio</span>
+        </div>
+
+        @if (etapaRegistro() === 1) {
         <section class="telas-form__bloco telas-form__tempo">
           <div class="telas-form__bloco-titulo">
             <span>1</span>
@@ -175,6 +189,10 @@
           </div>
         </section>
 
+        <button type="button" class="pueria-button" (click)="avancarEtapa()">Continuar</button>
+        <small class="telas-etapas__tempo">Leva menos de 1 minuto</small>
+        } @else {
+
         <section class="telas-form__bloco">
           <div class="telas-form__bloco-titulo">
             <span>3</span>
@@ -221,10 +239,16 @@
           <textarea formControlName="observacao" rows="4" placeholder="Ex.: momento em que a tela ajuda, quando atrapalha, combinados da casa ou dúvidas para a consulta."></textarea>
         </label>
 
-        <button type="submit" class="pueria-button" [disabled]="salvando()">
-          {{ salvando() ? 'Salvando...' : 'Salvar registro' }}
-        </button>
+        <div class="telas-etapas__acoes">
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="voltarEtapa()">Voltar</button>
+          <button type="submit" class="pueria-button" [disabled]="salvando()">
+            {{ salvando() ? 'Salvando...' : 'Salvar registro' }}
+          </button>
+        </div>
+        <small class="telas-etapas__tempo">Você pode registrar somente o que observou na rotina.</small>
+        }
       </form>
+      </details>
 
       <aside class="pueria-card telas-historico">
         <p class="pueria-eyebrow">Histórico</p>

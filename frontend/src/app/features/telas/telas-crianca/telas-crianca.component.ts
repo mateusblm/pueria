@@ -40,6 +40,7 @@ export class TelasCriancaComponent implements OnInit {
   readonly erro = signal('');
   readonly aviso = signal('');
   readonly editandoId = signal('');
+  readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly tiposConteudo: Opcao<TipoConteudoTela>[] = [
@@ -116,6 +117,23 @@ export class TelasCriancaComponent implements OnInit {
       });
   }
 
+  avancarEtapa(): void {
+    this.erro.set('');
+    try {
+      this.lerData(this.form.controls.dataRegistro.value);
+      this.lerHorasParaMinutos(this.form.controls.minutosDiaSemana.value, 'tempo em dias de semana');
+      this.lerHorasParaMinutos(this.form.controls.minutosFimSemana.value, 'tempo em fim de semana');
+      this.etapaRegistro.set(2);
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise os dados de tempo de tela.');
+    }
+  }
+
+  voltarEtapa(): void {
+    this.erro.set('');
+    this.etapaRegistro.set(1);
+  }
+
   salvar(): void {
     this.erro.set('');
     this.aviso.set('');
@@ -163,6 +181,7 @@ export class TelasCriancaComponent implements OnInit {
 
   editar(registro: RegistroTelas): void {
     this.editandoId.set(registro.id);
+    this.etapaRegistro.set(1);
     this.erro.set('');
     this.aviso.set('');
     this.form.patchValue({
@@ -197,6 +216,7 @@ export class TelasCriancaComponent implements OnInit {
 
   cancelarEdicao(): void {
     this.editandoId.set('');
+    this.etapaRegistro.set(1);
     this.form.reset({
       dataRegistro: this.formatarEntradaData(this.dataMaximaIso),
       minutosDiaSemana: '',
