@@ -177,7 +177,9 @@
     position: sticky;
     top: 0;
     width: auto;
-    min-height: 100vh;
+    height: 100vh;
+    min-height: 0;
+    align-self: start;
     transform: none;
     box-shadow: none;
     padding: 28px 20px;

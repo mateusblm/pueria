@@ -461,6 +461,10 @@ export class AcompanhamentoComponent implements OnInit {
     return `${anos} ${anos === 1 ? 'ano' : 'anos'} e ${meses} ${meses === 1 ? 'mês' : 'meses'}`;
   }
 
+  artigoDaCrianca(sexo: Sexo | null): string {
+    return sexo === 'MASCULINO' ? 'O' : 'A';
+  }
+
   private escolherResumoInicial(resumos: ResumoCrianca[]): ResumoCrianca | undefined {
     return [...resumos].sort((a, b) => {
       const diferencaPrioridade = this.pontuacaoResumo(b) - this.pontuacaoResumo(a);

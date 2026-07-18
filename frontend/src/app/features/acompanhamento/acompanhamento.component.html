@@ -41,7 +41,7 @@
 
     <section class="acompanhamento-home">
       <header class="acompanhamento-home__saudacao">
-        <h1>Olá! A <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+        <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
         <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
       </header>
 
