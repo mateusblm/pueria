@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { FacilidadeLimpezaFezes, RegistroTransitoIntestinal, SalvarRegistroTransitoIntestinalRequest, TipoFezesBristol } from '../../../shared/models/transito-intestinal.model';
+import { ClassificacaoFezes, FacilidadeLimpezaFezes, RegistroTransitoIntestinal, SalvarRegistroTransitoIntestinalRequest, TipoFezesBristol } from '../../../shared/models/transito-intestinal.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { TransitoIntestinalService } from '../transito-intestinal.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
@@ -222,6 +222,17 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   labelFacilidade(valor: FacilidadeLimpezaFezes): string {
     return this.facilidadesLimpeza.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
+  }
+
+  labelClassificacaoFezes(classificacao: ClassificacaoFezes): string {
+    const labels: Record<ClassificacaoFezes, string> = {
+      ENDURECIDA: 'Mais endurecida',
+      ESPERADA: 'Faixa esperada',
+      MAIS_MACIA: 'Mais macia',
+      LIQUIDA: 'Líquida',
+      SEM_DADOS: 'Aguardando registro do aspecto'
+    };
+    return labels[classificacao];
   }
 
   possuiAlgumaAnalise(registro: RegistroTransitoIntestinal | null): boolean {
