@@ -17,7 +17,7 @@ O redesign toma como referência o handoff visual recebido e seus protótipos, m
 ## Sequência de implementação
 
 1. **Fundação visual e navegação** - tipografia, cores por domínio, componentes globais, autenticação e shells responsivos. **Concluído em 18/07/2026**
-2. **Acompanhamento e crianças** - página inicial, seleção de criança, listagem, cadastro e perfil.
+2. **Acompanhamento e crianças** - página inicial, seleção de criança, listagem, cadastro e perfil. **Concluído em 18/07/2026**
 3. **Neurodesenvolvimento** - jornada por etapas, trajetória, resposta retroativa, estímulos e contexto da família.
 4. **Crescimento** - resumo, gráficos OMS/INTERGROWTH, registro, histórico e detalhes técnicos.
 5. **Rotina** - alimentação, trânsito intestinal, sono, telas e saúde e cuidados.

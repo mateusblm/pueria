@@ -7,7 +7,7 @@
       Perfis das crianças da sua família para organizar o cuidado, os registros e a evolução nos primeiros anos.
     </p>
     @if (!carregando() && !erro() && criancas().length > 0) {
-      <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+      <a routerLink="/criancas/nova" class="pueria-button"><app-icon name="plus" [size]="18" /> Adicionar criança</a>
     }
   </div>
 
@@ -23,7 +23,7 @@
       <p>
         Cadastre sua criança ou uma criança sob seus cuidados para iniciar uma linha do tempo preventiva.
       </p>
-      <a routerLink="/criancas/nova" class="pueria-button">Adicionar criança</a>
+      <a routerLink="/criancas/nova" class="pueria-button"><app-icon name="plus" [size]="18" /> Adicionar criança</a>
     </div>
   } @else {
     <div class="criancas-page__grid">
@@ -59,6 +59,10 @@
           </div>
         </article>
       }
+      <a class="crianca-card crianca-card--adicionar" routerLink="/criancas/nova">
+        <span><app-icon name="plus" [size]="24" /></span>
+        <strong>Adicionar outra criança</strong>
+      </a>
     </div>
   }
 </section>

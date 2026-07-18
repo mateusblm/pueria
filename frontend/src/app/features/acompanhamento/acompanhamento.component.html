@@ -1,4 +1,5 @@
 <section class="acompanhamento-page">
+  @if (!possuiCriancas()) {
   <div class="acompanhamento-page__hero">
     <div>
       <p class="pueria-eyebrow">Acompanhamento</p>
@@ -14,6 +15,7 @@
       <app-icon class="familia-flor" name="sparkles" [size]="24" />
     </div>
   </div>
+  }
 
   @if (carregando()) {
     <div class="pueria-card acompanhamento-page__state">Carregando acompanhamento...</div>
@@ -44,20 +46,19 @@
             <span class="acompanhamento-avatar"><app-icon name="baby" [size]="28" /></span>
             <p class="pueria-eyebrow">Hoje no acompanhamento</p>
           </div>
-          <h2>{{ foco.crianca.nome }}</h2>
-          <p>{{ calcularIdade(foco.crianca.dataNascimento) }} · Faixa de referência: {{ idadeReferencia(foco.marcos) }}</p>
-          <strong>{{ mensagemDoDia(foco) }}</strong>
+          <h1>Olá! {{ foco.crianca.nome }} tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+          <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
         </div>
 
         <div class="acompanhamento-destaque__painel">
           <div>
-            <span>Marcos preenchidos</span>
-            <strong>{{ progressoAtual.respondidos }}/{{ progressoAtual.total }}</strong>
+            <span>Acompanhamento em andamento</span>
+            <strong>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }}</strong>
           </div>
           <div class="progresso" aria-hidden="true">
             <span [style.width.%]="progressoAtual.percentual"></span>
           </div>
-          <small>{{ progressoAtual.percentual }}% da idade atual</small>
+          <small>{{ mensagemDoDia(foco) }}</small>
           <a [routerLink]="rotaAcaoPrincipal(foco)" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">{{ textoAcaoPrincipal(foco) }}</a>
         </div>
       </article>
@@ -65,7 +66,7 @@
       <aside class="pueria-card acompanhamento-prioridades">
         <div>
           <p class="pueria-eyebrow">Próximos passos</p>
-          <h2>O que fazer agora</h2>
+          <h2>Próximos passos</h2>
         </div>
 
         <div class="acompanhamento-prioridades__lista">
@@ -83,14 +84,14 @@
     @if (!foco.erro) {
       <section class="pueria-card acompanhamento-consulta">
         <div>
-          <p class="pueria-eyebrow">Consulta</p>
+          <p class="pueria-eyebrow">Para a consulta</p>
           <h2>{{ labelPontosAtencao(pontos) }}</h2>
           <p>
-            Use as respostas dos marcos junto com crescimento, alimentação, trânsito intestinal, sono e telas para levar uma visão mais completa à consulta.
+            Reúna os registros que fazem sentido compartilhar com o pediatra em um resumo claro.
           </p>
         </div>
         <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button pueria-button--secondary">
-          Revisar desenvolvimento
+          Abrir resumo
         </a>
       </section>
 
@@ -174,7 +175,7 @@
                 <strong>{{ resumo.crianca.nome }}</strong>
                 <span>{{ calcularIdade(resumo.crianca.dataNascimento) }}</span>
               </div>
-              <small>{{ progressoResumo.percentual }}% dos marcos da idade atual</small>
+              <small>{{ progressoResumo.respondidos }} de {{ progressoResumo.total }} marcos da idade atual</small>
               <div class="outra-crianca__acoes">
                 <button type="button" class="pueria-button" (click)="selecionarCriancaEmFoco(resumo)">Ver resumo</button>
                 <a [routerLink]="['/criancas', resumo.crianca.id]" class="pueria-button pueria-button--secondary">Acompanhar</a>
