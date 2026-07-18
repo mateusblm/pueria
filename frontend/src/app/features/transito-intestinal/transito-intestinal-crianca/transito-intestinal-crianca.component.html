@@ -144,7 +144,7 @@
               >
                 <span class="intestinal-scale__number">{{ tipo.numero }}</span>
                 <span class="intestinal-scale__drawing" [class]="'intestinal-scale__drawing--' + tipo.numero" aria-hidden="true">
-                  <i></i><b></b>
+                  <img [src]="'assets/bristol/bristol-tipo-' + tipo.numero + '.png'" alt="" />
                 </span>
                 <strong>{{ tipo.titulo }}</strong>
                 <small>{{ tipo.descricao }}</small>

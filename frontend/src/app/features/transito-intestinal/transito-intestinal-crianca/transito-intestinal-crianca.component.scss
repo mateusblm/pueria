@@ -199,7 +199,7 @@
 
 .intestinal-scale__drawing {
   align-items: center;
-  background: #fbf0ec;
+  background: #f8ece7;
   border-radius: 8px;
   display: flex;
   height: 58px;
@@ -210,72 +210,10 @@
   width: 88px;
 }
 
-.intestinal-scale__drawing i {
-  background: #9b644f;
-  display: block;
-  position: relative;
-  z-index: 1;
-}
-
-.intestinal-scale__drawing b { display: none; }
-
-.intestinal-scale__drawing--1 i {
-  border-radius: 999px;
-  box-shadow: -20px 0 0 #9b644f, 20px 0 0 #9b644f;
-  height: 14px;
-  width: 14px;
-}
-
-.intestinal-scale__drawing--2 i {
-  border-radius: 14px;
-  box-shadow: -21px 0 0 #9b644f, 21px 0 0 #9b644f;
-  height: 18px;
-  width: 19px;
-}
-
-.intestinal-scale__drawing--3 i {
-  border-radius: 16px;
-  height: 20px;
-  width: 52px;
-}
-
-.intestinal-scale__drawing--3 b {
-  background: #f5d8ce;
-  display: block;
-  height: 28px;
-  position: absolute;
-  transform: rotate(24deg);
-  width: 3px;
-  z-index: 2;
-}
-
-.intestinal-scale__drawing--4 i {
-  border-radius: 999px;
-  height: 21px;
-  width: 58px;
-}
-
-.intestinal-scale__drawing--5 i {
-  border-radius: 999px;
-  box-shadow: -23px 0 0 #9b644f, 23px 0 0 #9b644f;
-  height: 19px;
-  width: 19px;
-}
-
-.intestinal-scale__drawing--6 i {
-  border-radius: 50% 50% 42% 42%;
-  box-shadow: -24px 0 0 #9b644f, 24px 0 0 #9b644f;
-  height: 26px;
-  width: 18px;
-}
-
-.intestinal-scale__drawing--7 i {
-  background: #b88372;
-  border-radius: 50% 50% 44% 44%;
-  box-shadow: -25px 3px 0 #b88372, 25px -3px 0 #b88372;
-  height: 32px;
-  opacity: 0.72;
-  width: 18px;
+.intestinal-scale__drawing img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
 }
 
 .intestinal-scale__card strong {
