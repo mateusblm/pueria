@@ -113,6 +113,8 @@
 .acompanhamento-destaque__painel,
 .acompanhamento-prioridades,
 .acompanhamento-consulta,
+.acompanhamento-relatos,
+.acompanhamento-trajetoria,
 .acompanhamento-outras {
   display: grid;
   gap: 14px;
@@ -212,6 +214,118 @@
   padding: 20px;
   background: #fffaf7;
 }
+
+.acompanhamento-relatos {
+  gap: 18px;
+  padding: 22px;
+  border-left: 4px solid #c99745;
+  background: #fffdf8;
+}
+
+.acompanhamento-relatos--prioritario {
+  border-left-color: var(--pueria-vermelho-flor);
+  background: #fff8f5;
+}
+
+.acompanhamento-relatos__cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.acompanhamento-relatos__cabecalho h2,
+.acompanhamento-trajetoria h2,
+.acompanhamento-relatos__cabecalho p,
+.acompanhamento-trajetoria p,
+.acompanhamento-relatos__lista p {
+  margin: 0;
+}
+
+.acompanhamento-relatos__cabecalho h2,
+.acompanhamento-trajetoria h2 {
+  color: var(--pueria-texto);
+}
+
+.acompanhamento-relatos__cabecalho p,
+.acompanhamento-relatos__lista p,
+.acompanhamento-trajetoria p,
+.acompanhamento-trajetoria time {
+  color: var(--pueria-texto-suave);
+}
+
+.acompanhamento-relatos__icone {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #f8e5d3;
+  color: #86591d;
+}
+
+.acompanhamento-relatos--prioritario .acompanhamento-relatos__icone {
+  background: #fde3df;
+  color: var(--pueria-vermelho-profundo);
+}
+
+.acompanhamento-relatos__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 10px;
+}
+
+.acompanhamento-relatos__lista article {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(159, 36, 59, .14);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.acompanhamento-relatos__lista article div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.acompanhamento-relatos__lista strong { color: var(--pueria-texto); }
+.acompanhamento-relatos__lista span { color: var(--pueria-texto-suave); font-size: .78rem; white-space: nowrap; }
+
+.acompanhamento-relatos .pueria-button { justify-self: start; }
+
+.acompanhamento-trajetoria {
+  padding: 22px;
+  background: #fbf8fc;
+}
+
+.acompanhamento-trajetoria__lista {
+  display: grid;
+  gap: 0;
+}
+
+.acompanhamento-trajetoria__lista article {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+  padding: 13px 0;
+  border-top: 1px solid rgba(112, 69, 130, .14);
+}
+
+.acompanhamento-trajetoria__ponto {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: #76507d;
+  box-shadow: 0 0 0 4px #eee6f2;
+}
+
+.acompanhamento-trajetoria__lista strong { color: #5a3567; }
+.acompanhamento-trajetoria__lista time { font-size: .82rem; white-space: nowrap; }
 
 .acompanhamento-modulos {
   display: grid;
@@ -468,6 +582,8 @@
   .acompanhamento-destaque,
   .acompanhamento-prioridades,
   .acompanhamento-consulta,
+  .acompanhamento-relatos,
+  .acompanhamento-trajetoria,
   .modulo-cuidado,
   .outra-crianca,
   .acompanhamento-page__state,
@@ -490,6 +606,12 @@
   .cadastro-modal__actions .pueria-button {
     width: 100%;
   }
+}
+
+@media (max-width: 640px) {
+  .acompanhamento-relatos__cabecalho { gap: 12px; }
+  .acompanhamento-trajetoria__lista article { grid-template-columns: 18px minmax(0, 1fr); }
+  .acompanhamento-trajetoria__lista time { grid-column: 2; }
 }
 
 @media (max-width: 520px) {

@@ -18,6 +18,15 @@ export interface RegistrarRelatoDesenvolvimentoRequest {
   descricao: string;
 }
 
+export type TipoEventoTrajetoriaDesenvolvimento = 'PRIMEIRA_OBSERVACAO' | 'NOVA_OBSERVACAO' | 'OBSERVADO_NOVAMENTE';
+
+export interface EventoTrajetoriaDesenvolvimento {
+  tipo: TipoEventoTrajetoriaDesenvolvimento;
+  descricaoMarco: string;
+  area: AreaDesenvolvimento;
+  registradoEm: string;
+}
+
 export interface EstimuloDesenvolvimento {
   id: string;
   area: AreaDesenvolvimento;

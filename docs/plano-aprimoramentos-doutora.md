@@ -37,10 +37,10 @@ Documento de execução baseado em `APRIMORAMENTOS.docx`, recebido em 18/07/2026
 
 ## Fase 1 - Segurança e leitura clínica do neurodesenvolvimento
 
-- [ ] APR-10 Fazer `Preocupação da família` aparecer como ponto para conversar com o pediatra nos resultados e no relatório.
-- [ ] APR-11 Criar destaque prioritário, acolhedor e acionável para `Perda de habilidade`, inclusive no Acompanhamento e no relatório para consulta.
-- [ ] APR-12 Exibir aquisições novas e consolidações de habilidades a partir do histórico de respostas, sem equivaler mudança de registro a diagnóstico.
-- [ ] APR-13 Revisar a nomenclatura de `oportunidade de estímulo` e seu lugar no fluxo, mantendo atividades leves e individualizadas por marco.
+- [x] APR-10 Fazer `Preocupação da família` aparecer como ponto para conversar com o pediatra nos resultados e no relatório.
+- [x] APR-11 Criar destaque prioritário, acolhedor e acionável para `Perda de habilidade`, inclusive no Acompanhamento e no relatório para consulta.
+- [x] APR-12 Exibir aquisições novas e observações repetidas a partir do histórico de respostas, sem equivaler mudança de registro a diagnóstico.
+- [x] APR-13 Revisar a nomenclatura de `oportunidade de estímulo` e seu lugar no fluxo, mantendo atividades leves e individualizadas por marco.
 
 **Aceite:** preocupações e regressões ficam visíveis para a família e úteis na consulta; o produto não emite diagnóstico nem recomenda conduta clínica.
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { EstimuloDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento, RegistrarMarcoDesenvolvimentoRequest, RegistrarRelatoDesenvolvimentoRequest } from '../../shared/models/desenvolvimento.model';
+import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento, RegistrarMarcoDesenvolvimentoRequest, RegistrarRelatoDesenvolvimentoRequest } from '../../shared/models/desenvolvimento.model';
 
 @Injectable({ providedIn: 'root' })
 export class DesenvolvimentoService {
@@ -21,6 +21,11 @@ export class DesenvolvimentoService {
 
   listarRelatos(criancaId: string): Observable<RelatoDesenvolvimento[]> {
     return this.http.get<RelatoDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/relatos`)
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
+
+  listarTrajetoria(criancaId: string): Observable<EventoTrajetoriaDesenvolvimento[]> {
+    return this.http.get<EventoTrajetoriaDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/trajetoria`)
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 

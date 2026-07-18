@@ -93,6 +93,60 @@
           Revisar desenvolvimento
         </a>
       </section>
+
+      @if (relatosParaConversa(foco.relatos).length > 0) {
+        <section class="pueria-card acompanhamento-relatos" [class.acompanhamento-relatos--prioritario]="existePerdaHabilidade(foco.relatos)">
+          <div class="acompanhamento-relatos__cabecalho">
+            <div>
+              <p class="pueria-eyebrow">Contexto da família</p>
+              <h2>Para conversar na consulta</h2>
+              <p>
+                @if (existePerdaHabilidade(foco.relatos)) {
+                  Há uma perda de habilidade registrada pela família. Vale conversar com o pediatra o quanto antes.
+                } @else {
+                  Observações registradas pela família para ajudar a contextualizar a conversa com o pediatra.
+                }
+              </p>
+            </div>
+            <span class="acompanhamento-relatos__icone"><app-icon [name]="existePerdaHabilidade(foco.relatos) ? 'heartPulse' : 'message'" [size]="24" /></span>
+          </div>
+          <div class="acompanhamento-relatos__lista">
+            @for (relato of relatosParaConversa(foco.relatos); track relato.id) {
+              <article>
+                <div>
+                  <strong>{{ tituloRelato(relato) }}</strong>
+                  <span>{{ formatarDataRegistro(relato.registradoEm) }}</span>
+                </div>
+                <p>{{ relato.descricao }}</p>
+              </article>
+            }
+          </div>
+          <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button pueria-button--secondary">
+            Ver registros do desenvolvimento
+          </a>
+        </section>
+      }
+
+      @if (foco.trajetoria.length > 0) {
+        <section class="pueria-card acompanhamento-trajetoria">
+          <div>
+            <p class="pueria-eyebrow">Neurodesenvolvimento</p>
+            <h2>Observações recentes</h2>
+          </div>
+          <div class="acompanhamento-trajetoria__lista">
+            @for (evento of foco.trajetoria; track evento.registradoEm + evento.descricaoMarco) {
+              <article>
+                <span class="acompanhamento-trajetoria__ponto" aria-hidden="true"></span>
+                <div>
+                  <strong>{{ textoTrajetoria(evento) }}</strong>
+                  <p>{{ evento.descricaoMarco }}</p>
+                </div>
+                <time>{{ formatarDataRegistro(evento.registradoEm) }}</time>
+              </article>
+            }
+          </div>
+        </section>
+      }
     }
 
     <section class="acompanhamento-modulos" aria-label="Módulos de acompanhamento">

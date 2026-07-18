@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { catchError, finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { Crianca, Parentesco, Sexo, TipoParto } from '../../shared/models/crianca.model';
-import { MarcoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
+import { EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
 import { CriancasService } from '../criancas/criancas.service';
 import { DesenvolvimentoService } from '../desenvolvimento/desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
@@ -12,6 +12,8 @@ import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/
 type ResumoCrianca = {
   crianca: Crianca;
   marcos: MarcoDesenvolvimento[];
+  relatos: RelatoDesenvolvimento[];
+  trajetoria: EventoTrajetoriaDesenvolvimento[];
   erro?: string;
 };
 
@@ -101,9 +103,13 @@ export class AcompanhamentoComponent implements OnInit {
           }
 
           return forkJoin(criancas.map((crianca) =>
-            this.desenvolvimentoService.listarMarcos(crianca.id).pipe(
-              map((marcos) => ({ crianca, marcos })),
-              catchError(() => of({ crianca, marcos: [], erro: 'Não foi possível carregar o desenvolvimento agora.' }))
+            forkJoin({
+              marcos: this.desenvolvimentoService.listarMarcos(crianca.id),
+              relatos: this.desenvolvimentoService.listarRelatos(crianca.id).pipe(catchError(() => of([]))),
+              trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([])))
+            }).pipe(
+              map(({ marcos, relatos, trajetoria }) => ({ crianca, marcos, relatos, trajetoria })),
+              catchError(() => of({ crianca, marcos: [], relatos: [], trajetoria: [], erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
         }),
@@ -265,6 +271,29 @@ export class AcompanhamentoComponent implements OnInit {
       return 'Sem dúvidas para a consulta';
     }
     return total === 1 ? '1 dúvida para a consulta' : `${total} dúvidas para a consulta`;
+  }
+
+  relatosParaConversa(relatos: RelatoDesenvolvimento[]): RelatoDesenvolvimento[] {
+    return relatos.slice(0, 3);
+  }
+
+  existePerdaHabilidade(relatos: RelatoDesenvolvimento[]): boolean {
+    return relatos.some((relato) => relato.tipo === 'PERDA_HABILIDADE');
+  }
+
+  tituloRelato(relato: RelatoDesenvolvimento): string {
+    return relato.tipo === 'PERDA_HABILIDADE' ? 'Perda de habilidade registrada' : 'Preocupação da família';
+  }
+
+  textoTrajetoria(evento: EventoTrajetoriaDesenvolvimento): string {
+    if (evento.tipo === 'OBSERVADO_NOVAMENTE') {
+      return 'Observado novamente';
+    }
+    return evento.tipo === 'NOVA_OBSERVACAO' ? 'Passou a ser observado' : 'Primeira observação registrada';
+  }
+
+  formatarDataRegistro(data: string): string {
+    return new Intl.DateTimeFormat('pt-BR').format(new Date(data));
   }
 
   mensagemDoDia(resumo: ResumoCrianca): string {
