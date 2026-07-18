@@ -107,3 +107,61 @@
     display: none;
   }
 }
+
+/* Cadastro longo, organizado em capítulos visuais curtos. */
+.crianca-form-page {
+  width: min(100%, 880px);
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.crianca-form-page__header {
+  padding: 6px 2px 4px;
+  border-left: 0;
+}
+
+.crianca-form-page__header .pueria-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.crianca-form {
+  gap: 16px;
+  padding: 16px;
+  border-top: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.crianca-form__section {
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid var(--pueria-borda);
+  border-bottom: 1px solid var(--pueria-borda);
+  border-radius: var(--pueria-raio-menor);
+  background: #fff;
+}
+
+.crianca-form__section > .pueria-eyebrow {
+  margin-bottom: 2px;
+}
+
+.crianca-form__actions {
+  position: sticky;
+  bottom: 14px;
+  padding: 12px;
+  border: 1px solid #eedbd2;
+  border-radius: var(--pueria-raio-menor);
+  background: rgba(255, 253, 250, 0.94);
+  box-shadow: 0 10px 25px rgba(70, 45, 34, 0.08);
+}
+
+@media (max-width: 640px) {
+  .crianca-form {
+    padding: 0;
+  }
+
+  .crianca-form__section {
+    padding: 18px;
+  }
+}

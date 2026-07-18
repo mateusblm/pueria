@@ -201,6 +201,62 @@
   color: #6b5559;
 }
 
+/* Perfil da criança: dados importantes visíveis sem competir com o acompanhamento. */
+.detalhe-page {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.detalhe-page__hero {
+  padding: 28px;
+  border-left-width: 1px;
+  border-color: #f0d2d7;
+  border-radius: var(--pueria-raio);
+  background: linear-gradient(135deg, #fff8f8, #fffdf9);
+}
+
+.detalhe-page__identidade > span {
+  width: 58px;
+  height: 58px;
+  background: #fde2e7;
+  color: var(--pueria-vermelho-flor);
+}
+
+.detalhe-page__identidade .pueria-title {
+  margin: 0;
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+}
+
+.detalhe-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.detalhe-page__actions .pueria-button {
+  width: auto;
+}
+
+.detalhe-card,
+.painel-integrado {
+  border-radius: var(--pueria-raio);
+}
+
+@media (max-width: 640px) {
+  .detalhe-page__hero {
+    padding: 21px;
+  }
+
+  .detalhe-page__actions {
+    display: grid;
+  }
+
+  .detalhe-page__actions .pueria-button {
+    width: 100%;
+  }
+}
+
 .painel-integrado__acoes {
   display: grid;
   gap: 14px;

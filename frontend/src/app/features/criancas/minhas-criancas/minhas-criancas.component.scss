@@ -150,3 +150,115 @@
   color: var(--pueria-vermelho-flor);
   background: #fff;
 }
+
+/* Redesign da área de família: o perfil é a ação principal, não uma ficha técnica. */
+.criancas-page {
+  width: min(100%, 880px);
+  margin: 0 auto;
+  gap: 18px;
+}
+
+.criancas-page__hero {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  border-radius: var(--pueria-raio);
+  background: linear-gradient(135deg, #fff7f8, #fffaf6);
+}
+
+.criancas-page__hero-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 2px;
+  background: #fde2e7;
+  color: var(--pueria-vermelho-flor);
+}
+
+.criancas-page__hero .pueria-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.criancas-page__hero .pueria-subtitle {
+  max-width: 40rem;
+}
+
+.criancas-page__empty {
+  justify-items: start;
+  padding: 28px;
+  border-style: dashed;
+  border-color: #efcfd1;
+  background: #fffdfb;
+}
+
+.criancas-page__grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  align-items: stretch;
+}
+
+.crianca-card {
+  min-height: 276px;
+  padding: 22px;
+  border-color: #dce8df;
+  border-radius: var(--pueria-raio);
+  background: #fff;
+}
+
+.crianca-card__identidade > span {
+  width: 48px;
+  height: 48px;
+  background: #e2f0e5;
+}
+
+.crianca-card__identidade h2 {
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.65rem;
+  font-weight: 600;
+}
+
+.crianca-card > div:first-child > p {
+  margin-top: 8px;
+  font-size: 0.88rem;
+}
+
+.crianca-card dl {
+  gap: 0;
+}
+
+.crianca-card dl div {
+  min-height: 38px;
+  align-items: center;
+  padding-top: 0;
+}
+
+.crianca-card__actions {
+  margin-top: auto;
+}
+
+.crianca-card__actions .pueria-button {
+  flex: 1;
+  justify-content: center;
+}
+
+.crianca-card--adicionar {
+  min-height: 276px;
+  border-radius: var(--pueria-raio);
+  color: var(--pueria-texto-suave);
+}
+
+.crianca-card--adicionar strong {
+  color: var(--pueria-texto);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .criancas-page__hero,
+  .criancas-page__empty,
+  .crianca-card {
+    padding: 20px;
+  }
+
+  .crianca-card {
+    min-height: 0;
+  }
+}
