@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { Crianca, Parentesco, Sexo, TipoParto } from '../../shared/models/crianca.model';
 import { EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
@@ -36,6 +36,7 @@ export class AcompanhamentoComponent implements OnInit {
   private readonly criancasService = inject(CriancasService);
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
 
   readonly resumos = signal<ResumoCrianca[]>([]);
   readonly carregando = signal(true);
@@ -88,6 +89,11 @@ export class AcompanhamentoComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    const criancaId = this.route.snapshot.queryParamMap.get('crianca');
+    if (criancaId) {
+      this.criancaEmFocoId.set(criancaId);
+      localStorage.setItem('pueria.criancaEmFocoId', criancaId);
+    }
     this.carregar();
   }
 

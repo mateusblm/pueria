@@ -9,278 +9,78 @@
       <a routerLink="/criancas" class="pueria-button pueria-button--secondary">Voltar</a>
     </div>
   } @else if (crianca(); as crianca) {
-    <div class="pueria-card detalhe-page__hero">
+    <header class="pueria-card detalhe-page__hero">
       <div>
-        <p class="pueria-eyebrow">Perfil da criança</p>
+        <p class="pueria-eyebrow">Dados da criança</p>
         <div class="detalhe-page__identidade"><span><app-icon name="baby" [size]="30" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
-        <p class="pueria-subtitle">{{ calcularIdade(crianca.dataNascimento) }}</p>
+        <p class="pueria-subtitle">{{ calcularIdade(crianca.dataNascimento) }} · informações de nascimento e saúde inicial.</p>
       </div>
       <div class="detalhe-page__actions">
-        <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button">Editar perfil</a>
-        <a [routerLink]="['/criancas', crianca.id, 'para-a-consulta']" class="pueria-button pueria-button--secondary">Para a consulta</a>
-        <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">
-          Remover perfil
-        </button>
+        <a routerLink="/acompanhamento" [queryParams]="{ crianca: crianca.id }" class="pueria-button">Abrir acompanhamento</a>
+        <a [routerLink]="['/criancas', crianca.id, 'editar']" class="pueria-button pueria-button--secondary">Editar dados</a>
+        <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="abrirConfirmacaoRemocao()">Remover perfil</button>
       </div>
-    </div>
+    </header>
 
     @if (confirmandoRemocao()) {
       <section class="pueria-card detalhe-page__confirm" aria-labelledby="remover-perfil-titulo">
         <div>
           <p class="pueria-eyebrow">Remoção de perfil</p>
           <h2 id="remover-perfil-titulo">Deseja remover este perfil?</h2>
-          <p>
-            Os dados básicos de {{ crianca.nome }} sairão da sua lista. Essa ação deve ser usada apenas quando o cadastro não fizer mais parte do acompanhamento.
-          </p>
+          <p>Os dados básicos de {{ crianca.nome }} sairão da sua lista. Essa ação deve ser usada apenas quando o cadastro não fizer mais parte do acompanhamento.</p>
         </div>
-
         <div class="detalhe-page__confirm-actions">
-          <button type="button" class="pueria-button pueria-button--secondary" [disabled]="removendo()" (click)="cancelarRemocao()">
-            Manter perfil
-          </button>
-          <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="confirmarRemocao()">
-            {{ removendo() ? 'Removendo...' : 'Remover perfil' }}
-          </button>
+          <button type="button" class="pueria-button pueria-button--secondary" [disabled]="removendo()" (click)="cancelarRemocao()">Manter perfil</button>
+          <button type="button" class="pueria-button detalhe-page__danger" [disabled]="removendo()" (click)="confirmarRemocao()">{{ removendo() ? 'Removendo...' : 'Remover perfil' }}</button>
         </div>
       </section>
     }
 
-    @if (erro()) {
-      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
-    }
+    @if (erro()) { <div class="pueria-message pueria-message--erro">{{ erro() }}</div> }
 
-    @if (painel(); as painel) {
-      <section class="pueria-card painel-integrado">
-        <div class="painel-integrado__header">
-          <div>
-            <p class="pueria-eyebrow">Acompanhamento integrado</p>
-            <h2>Como está a rotina agora</h2>
-            <p>{{ painel.frase }}</p>
-            <small>{{ painel.periodo }}</small>
-          </div>
-          <a routerLink="/acompanhamento" class="pueria-button pueria-button--secondary">Ver todas as crianças</a>
-        </div>
-
-        <div class="painel-integrado__modulos">
-          @for (modulo of painel.modulos; track modulo.titulo) {
-            <article class="painel-modulo" [class]="classeEstado(modulo.estado)" [attr.data-tema]="temaModulo(modulo.titulo)">
-              <div class="painel-modulo__cabecalho">
-                <span class="painel-modulo__icone"><app-icon [name]="iconeModulo(modulo.titulo)" [size]="22" /></span>
-                <div class="painel-modulo__topo">
-                  <span>{{ labelEstado(modulo.estado) }}</span>
-                  <small>{{ modulo.subtitulo }}</small>
-                </div>
-              </div>
-              <h3>{{ modulo.titulo }}</h3>
-              <strong>{{ modulo.valor }}</strong>
-              <p>{{ modulo.detalhe }}</p>
-              <a [routerLink]="modulo.rota" [queryParams]="{ origem: 'perfil' }" class="pueria-button pueria-button--secondary">{{ modulo.acao }}</a>
-            </article>
-          }
-        </div>
-
-        <div class="painel-integrado__acoes">
-          <article class="painel-acao painel-acao--casa">
-            <p class="pueria-eyebrow">Em casa</p>
-            <h3>Acompanhar na rotina</h3>
-            @if (painel.acompanharCasa.length > 0) {
-              @for (acao of painel.acompanharCasa; track acao.titulo + acao.texto) {
-                <div>
-                  <strong>{{ acao.titulo }}</strong>
-                  <p>{{ acao.texto }}</p>
-                </div>
-              }
-            } @else {
-              <p class="painel-integrado__vazio">Ainda não há padrão repetido suficiente para sugerir uma observação específica em casa.</p>
-            }
-          </article>
-
-          <article class="painel-acao painel-acao--app">
-            <p class="pueria-eyebrow">No app</p>
-            <h3>Completar registros</h3>
-            @if (painel.completarApp.length > 0) {
-              @for (acao of painel.completarApp; track acao.titulo + acao.texto) {
-                <div>
-                  <strong>{{ acao.titulo }}</strong>
-                  <p>{{ acao.texto }}</p>
-                </div>
-              }
-            } @else {
-              <p class="painel-integrado__vazio">Os principais módulos já têm dados suficientes para uma primeira leitura integrada.</p>
-            }
-          </article>
-
-          <article class="painel-acao painel-acao--consulta">
-            <p class="pueria-eyebrow">Consulta</p>
-            <h3>Levar ao pediatra</h3>
-            @if (painel.conversarConsulta.length > 0) {
-              @for (acao of painel.conversarConsulta; track acao.titulo + acao.texto) {
-                <div>
-                  <strong>{{ acao.titulo }}</strong>
-                  <p>{{ acao.texto }}</p>
-                </div>
-              }
-            } @else {
-              <p class="painel-integrado__vazio">Não há ponto prioritário para consulta identificado pelos registros atuais.</p>
-            }
-          </article>
-
-          <article class="painel-acao painel-acao--fortes">
-            <p class="pueria-eyebrow">Indo bem</p>
-            <h3>Pontos preservados</h3>
-            @if (painel.pontosFortes.length > 0) {
-              @for (acao of painel.pontosFortes; track acao.titulo + acao.texto) {
-                <div>
-                  <strong>{{ acao.titulo }}</strong>
-                  <p>{{ acao.texto }}</p>
-                </div>
-              }
-            } @else {
-              <p class="painel-integrado__vazio">Com mais registros, o Pueria também passa a destacar o que está estável.</p>
-            }
-          </article>
-        </div>
-      </section>
-    }
-
-    <div class="detalhe-page__grid">
+    <section class="detalhe-page__grid" aria-label="Informações cadastradas">
       <article class="pueria-card detalhe-card">
         <p class="pueria-eyebrow">Dados básicos</p>
         <dl>
-          <div>
-            <dt>Data de nascimento</dt>
-            <dd>{{ formatarData(crianca.dataNascimento) }}</dd>
-          </div>
-          <div>
-            <dt>Sexo</dt>
-            <dd>{{ labelSexo(crianca.sexo) }}</dd>
-          </div>
-          <div>
-            <dt>Prematuridade</dt>
-            <dd>{{ crianca.prematura ? 'Sim' : 'Não' }}</dd>
-          </div>
+          <div><dt>Data de nascimento</dt><dd>{{ formatarData(crianca.dataNascimento) }}</dd></div>
+          <div><dt>Sexo</dt><dd>{{ labelSexo(crianca.sexo) }}</dd></div>
+          <div><dt>Prematuridade</dt><dd>{{ crianca.prematura ? 'Sim' : 'Não' }}</dd></div>
         </dl>
       </article>
-
       <article class="pueria-card detalhe-card">
         <p class="pueria-eyebrow">Parto e nascimento</p>
         <dl>
-          <div>
-            <dt>Idade gestacional</dt>
-            <dd>{{ formatarIdadeGestacional(crianca.semanasGestacionais, crianca.diasGestacionais) }}</dd>
-          </div>
-          <div>
-            <dt>Tipo de gestação</dt>
-            <dd>{{ labelTipoGestacao(crianca.tipoGestacao) }}</dd>
-          </div>
-          <div>
-            <dt>Tipo de parto</dt>
-            <dd>{{ labelTipoParto(crianca.tipoParto) }}</dd>
-          </div>
-          <div>
-            <dt>Peso ao nascer</dt>
-            <dd>{{ formatarPeso(crianca.pesoNascimentoGramas) }}</dd>
-          </div>
-          <div>
-            <dt>Comprimento ao nascer</dt>
-            <dd>{{ formatarMedida(crianca.comprimentoNascimentoCm, 'cm') }}</dd>
-          </div>
-          <div>
-            <dt>Perímetro cefálico ao nascer</dt>
-            <dd>{{ formatarMedida(crianca.perimetroCefalicoNascimentoCm, 'cm') }}</dd>
-          </div>
-          <div>
-            <dt>Apgar</dt>
-            <dd>1º min: {{ formatarApgar(crianca.apgarUmMinuto) }} · 5º min: {{ formatarApgar(crianca.apgarCincoMinutos) }}</dd>
-          </div>
-          <div>
-            <dt>Primeiras horas</dt>
-            <dd>{{ listarIntercorrencias(crianca) }}</dd>
-          </div>
-          @if (crianca.observacoesNascimento) {
-            <div>
-              <dt>Observações</dt>
-              <dd>{{ crianca.observacoesNascimento }}</dd>
-            </div>
-          }
+          <div><dt>Idade gestacional</dt><dd>{{ formatarIdadeGestacional(crianca.semanasGestacionais, crianca.diasGestacionais) }}</dd></div>
+          <div><dt>Tipo de gestação</dt><dd>{{ labelTipoGestacao(crianca.tipoGestacao) }}</dd></div>
+          <div><dt>Tipo de parto</dt><dd>{{ labelTipoParto(crianca.tipoParto) }}</dd></div>
+          <div><dt>Peso ao nascer</dt><dd>{{ formatarPeso(crianca.pesoNascimentoGramas) }}</dd></div>
+          <div><dt>Comprimento ao nascer</dt><dd>{{ formatarMedida(crianca.comprimentoNascimentoCm, 'cm') }}</dd></div>
+          <div><dt>Perímetro cefálico ao nascer</dt><dd>{{ formatarMedida(crianca.perimetroCefalicoNascimentoCm, 'cm') }}</dd></div>
+          <div><dt>Apgar</dt><dd>1º min: {{ formatarApgar(crianca.apgarUmMinuto) }} · 5º min: {{ formatarApgar(crianca.apgarCincoMinutos) }}</dd></div>
+          <div><dt>Primeiras horas</dt><dd>{{ listarIntercorrencias(crianca) }}</dd></div>
+          @if (crianca.observacoesNascimento) { <div><dt>Observações</dt><dd>{{ crianca.observacoesNascimento }}</dd></div> }
         </dl>
       </article>
-
       <article class="pueria-card detalhe-card">
         <p class="pueria-eyebrow">Gestação e primeiros dias</p>
         <dl>
-          <div>
-            <dt>Pré-natal</dt>
-            <dd>{{ crianca.preNatalRealizado ? 'Realizado' : 'Não informado' }}</dd>
-          </div>
-          <div>
-            <dt>Consultas de pré-natal</dt>
-            <dd>{{ crianca.consultasPreNatal ?? 'Não informado' }}</dd>
-          </div>
-          <div>
-            <dt>Gestação</dt>
-            <dd>{{ listarPontosGestacao(crianca) }}</dd>
-          </div>
-          @if (crianca.observacoesGestacao) {
-            <div>
-              <dt>Observações da gestação</dt>
-              <dd>{{ crianca.observacoesGestacao }}</dd>
-            </div>
-          }
-          <div>
-            <dt>Alta hospitalar</dt>
-            <dd>{{ crianca.diasAltaHospitalar == null ? 'Não informado' : crianca.diasAltaHospitalar + ' dia(s)' }}</dd>
-          </div>
-          <div>
-            <dt>Retorno ao hospital</dt>
-            <dd>{{ crianca.retornoHospitalarPrimeiraSemana ? 'Na primeira semana' : 'Não registrado' }}</dd>
-          </div>
-          <div>
-            <dt>Triagens neonatais</dt>
-            <dd>
-              Pezinho: {{ labelTriagem(crianca.testePezinho) }} ·
-              Orelhinha: {{ labelTriagem(crianca.testeOrelhinha) }} ·
-              Olhinho: {{ labelTriagem(crianca.testeOlhinho) }} ·
-              Coraçãozinho: {{ labelTriagem(crianca.testeCoracaozinho) }}
-            </dd>
-          </div>
-          <div>
-            <dt>Alimentação inicial</dt>
-            <dd>{{ labelAlimentacaoInicial(crianca.alimentacaoInicial) }}</dd>
-          </div>
-          <div>
-            <dt>Primeira hora</dt>
-            <dd>{{ crianca.amamentacaoPrimeiraHora ? 'Mamou na primeira hora de vida' : 'Não informado' }}</dd>
-          </div>
+          <div><dt>Pré-natal</dt><dd>{{ crianca.preNatalRealizado ? 'Realizado' : 'Não informado' }}</dd></div>
+          <div><dt>Consultas de pré-natal</dt><dd>{{ crianca.consultasPreNatal ?? 'Não informado' }}</dd></div>
+          <div><dt>Gestação</dt><dd>{{ listarPontosGestacao(crianca) }}</dd></div>
+          <div><dt>Alta hospitalar</dt><dd>{{ crianca.diasAltaHospitalar == null ? 'Não informado' : crianca.diasAltaHospitalar + ' dia(s)' }}</dd></div>
+          <div><dt>Triagens neonatais</dt><dd>Pezinho: {{ labelTriagem(crianca.testePezinho) }} · Orelhinha: {{ labelTriagem(crianca.testeOrelhinha) }} · Olhinho: {{ labelTriagem(crianca.testeOlhinho) }} · Coraçãozinho: {{ labelTriagem(crianca.testeCoracaozinho) }}</dd></div>
+          <div><dt>Alimentação inicial</dt><dd>{{ labelAlimentacaoInicial(crianca.alimentacaoInicial) }}</dd></div>
         </dl>
       </article>
-
       <article class="pueria-card detalhe-card">
         <p class="pueria-eyebrow">Informações de saúde conhecidas</p>
         <dl>
-          <div>
-            <dt>Trissomia 21 (síndrome de Down)</dt>
-            <dd>{{ labelStatusCondicao(crianca.statusT21) }}</dd>
-          </div>
-          @if (crianca.sexo === 'FEMININO') {
-            <div>
-              <dt>Síndrome de Turner</dt>
-              <dd>{{ labelStatusCondicao(crianca.statusTurner) }}</dd>
-            </div>
-          }
-          <div>
-            <dt>Outra condição genética ou neurológica relevante</dt>
-            <dd>{{ crianca.outraCondicaoRelevante ? 'Informada' : 'Não informada' }}</dd>
-          </div>
-          @if (crianca.observacoesCondicaoRelevante) {
-            <div>
-              <dt>Observações da família</dt>
-              <dd>{{ crianca.observacoesCondicaoRelevante }}</dd>
-            </div>
-          }
+          <div><dt>Trissomia 21 (síndrome de Down)</dt><dd>{{ labelStatusCondicao(crianca.statusT21) }}</dd></div>
+          @if (crianca.sexo === 'FEMININO') { <div><dt>Síndrome de Turner</dt><dd>{{ labelStatusCondicao(crianca.statusTurner) }}</dd></div> }
+          <div><dt>Outra condição genética ou neurológica relevante</dt><dd>{{ crianca.outraCondicaoRelevante ? 'Informada' : 'Não informada' }}</dd></div>
+          @if (crianca.observacoesCondicaoRelevante) { <div><dt>Observações da família</dt><dd>{{ crianca.observacoesCondicaoRelevante }}</dd></div> }
         </dl>
       </article>
-
-    </div>
+    </section>
   }
 </section>

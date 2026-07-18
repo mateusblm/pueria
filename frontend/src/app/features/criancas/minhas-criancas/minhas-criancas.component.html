@@ -48,13 +48,12 @@
             </div>
           </dl>
           <div class="crianca-card__actions">
-            <a class="pueria-button" [routerLink]="['/criancas', crianca.id]">Ver perfil</a>
+            <a class="pueria-button" routerLink="/acompanhamento" [queryParams]="{ crianca: crianca.id }">Acompanhar</a>
             <a
               class="pueria-button pueria-button--secondary"
-              [routerLink]="['/criancas', crianca.id, 'editar']"
-              [queryParams]="{ origem: 'minhas-criancas' }"
+              [routerLink]="['/criancas', crianca.id]"
             >
-              Editar
+              Dados
             </a>
           </div>
         </article>
