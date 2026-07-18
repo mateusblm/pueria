@@ -167,3 +167,239 @@
   .marcos-page__back, .marcos-page__hero, .painel-idade, .modo-tabs, .etapa-card, .pueria-button { display: none !important; }
   .pueria-card, .marco-card { box-shadow: none !important; break-inside: avoid; }
 }
+
+/* Fluxo principal: uma descoberta por vez, com detalhes disponíveis só quando desejados. */
+.marcos-page {
+  width: min(100%, 880px);
+  margin: 0 auto;
+  gap: 16px;
+}
+
+.marcos-page__hero {
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 24px;
+  border-width: 1px;
+  border-color: #e5d8ef;
+  border-radius: var(--pueria-raio);
+  background: #fbf7fc;
+}
+
+.marcos-page__hero .pueria-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+.marcos-page__hero-visual {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: #eee3f6;
+}
+
+.marcos-orbita {
+  display: none;
+}
+
+.marcos-orbita--um {
+  display: grid;
+  inset: 0;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: inherit;
+  box-shadow: none;
+  background: transparent;
+  color: #71479d;
+}
+
+.aviso-acompanhamento {
+  padding: 11px 13px;
+  border: 1px solid #cee6d6;
+  border-left: 1px solid #cee6d6;
+  border-radius: var(--pueria-raio-menor);
+  background: #f1f9f3;
+  color: #316645;
+  font-size: 0.82rem;
+}
+
+.aviso-acompanhamento app-icon {
+  color: #316645;
+}
+
+.painel-idade {
+  gap: 10px;
+  padding: 18px 20px;
+  border-top-width: 1px;
+  border-color: #e3d4ed;
+  border-radius: var(--pueria-raio-menor);
+  background: #fff;
+}
+
+.painel-idade__header strong {
+  color: #69428e;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.15rem;
+}
+
+.painel-idade > p:not(.painel-idade__referencia) {
+  margin: 0;
+  color: var(--pueria-texto-suave);
+  font-size: 0.84rem;
+}
+
+.painel-idade__referencia {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+}
+
+.painel-idade__historico {
+  margin-top: 2px;
+  border-top: 1px solid var(--pueria-borda);
+  padding-top: 10px;
+}
+
+.painel-idade__historico summary,
+.nota-marco summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--pueria-vermelho-profundo);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.painel-idade__historico .linha-tempo-marcos__etapas {
+  margin-top: 11px;
+}
+
+.linha-tempo-marcos__etapas button {
+  min-width: 92px;
+  border-radius: var(--pueria-raio-menor);
+}
+
+.modo-tabs {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.modo-tabs button {
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pueria-texto-suave);
+  font-size: 0.84rem;
+}
+
+.modo-tabs__active {
+  background: #eee3f4 !important;
+  color: #61426c !important;
+}
+
+.etapa-card {
+  display: grid;
+  grid-template-columns: minmax(210px, 0.62fr) minmax(0, 1fr);
+  border-top-width: 1px;
+  border-color: #e4d8ec;
+  border-radius: var(--pueria-raio);
+}
+
+.etapa-card__media {
+  min-height: 100%;
+  background: #f6f0f8;
+}
+
+.etapa-card__media img {
+  height: 100%;
+  min-height: 300px;
+  max-height: none;
+}
+
+.etapa-card__body {
+  align-content: start;
+  gap: 15px;
+  padding: 24px;
+}
+
+.etapa-card__meta {
+  justify-content: flex-start;
+}
+
+.etapa-card h2 {
+  max-width: 28ch;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: clamp(1.55rem, 2.6vw, 2rem);
+  font-weight: 600;
+}
+
+.marco-card__actions {
+  gap: 8px;
+}
+
+.resposta {
+  min-height: 46px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+}
+
+.nota-marco {
+  gap: 10px;
+  border-top: 1px solid var(--pueria-borda);
+  padding-top: 13px;
+}
+
+.nota-marco textarea {
+  margin-top: 9px;
+  border-radius: var(--pueria-raio-menor);
+  background: #fffdfa;
+}
+
+.estimulo-do-marco,
+.orientacao-marco-prioritaria {
+  border-radius: var(--pueria-raio-menor);
+}
+
+.etapa-nav {
+  margin-top: 2px;
+  border-top: 1px solid var(--pueria-borda);
+  padding-top: 14px;
+}
+
+.etapa-nav .pueria-button {
+  min-height: 40px;
+}
+
+@media (max-width: 700px) {
+  .marcos-page__hero {
+    padding: 20px;
+  }
+
+  .etapa-card {
+    grid-template-columns: 1fr;
+  }
+
+  .etapa-card__media img {
+    min-height: 180px;
+    max-height: 220px;
+  }
+
+  .etapa-card__body {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .marcos-page__hero-visual {
+    display: none;
+  }
+
+  .marco-card__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .modo-tabs {
+    justify-content: flex-start;
+  }
+}

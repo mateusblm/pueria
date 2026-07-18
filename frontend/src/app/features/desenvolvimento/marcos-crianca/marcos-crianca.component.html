@@ -38,42 +38,29 @@
           <p class="pueria-eyebrow">Faixa atual</p>
           <h2>{{ tituloIdadeSelecionada() }}</h2>
         </div>
-        <strong>{{ progresso().respondidos }}/{{ progresso().total }}</strong>
+        <strong>{{ progresso().respondidos }} de {{ progresso().total }}</strong>
       </div>
       <div class="progresso" aria-hidden="true">
         <span [style.width.%]="progresso().percentual"></span>
       </div>
-      <p>{{ progresso().percentual }}% dos marcos desta idade já foram respondidos.</p>
+      <p>{{ progresso().percentual }}% desta etapa já foi registrada.</p>
       @if (textoIdadeReferencia()) {
         <p class="painel-idade__referencia">{{ textoIdadeReferencia() }}</p>
       }
-    </section>
-
-    <section class="linha-tempo-marcos" aria-label="História do desenvolvimento">
-      <div>
-        <p class="pueria-eyebrow">História do desenvolvimento</p>
-        <h2>Escolha uma etapa para registrar</h2>
-      </div>
-      <div class="linha-tempo-marcos__etapas">
-        @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
-          <button
-            type="button"
-            [class.linha-tempo-marcos__etapa--ativa]="grupo.idadeMeses === idadeSelecionada()"
-            (click)="selecionarIdade(grupo.idadeMeses)">
-            <strong>{{ grupo.titulo }}</strong>
-            <span>{{ grupo.respondidos }}/{{ grupo.total }}</span>
-          </button>
-        }
-      </div>
-    </section>
-
-    <section class="areas-resumo" aria-label="Áreas do desenvolvimento">
-      @for (area of areasResumo(); track area.area) {
-        <article class="area-resumo" [attr.data-tema]="temaArea(area.area)">
-          <span class="area-resumo__icone"><app-icon [name]="iconeArea(area.area)" [size]="21" /></span>
-          <div><strong>{{ area.label }}</strong><span>{{ labelPendencias(area.pendentes) }}</span></div>
-        </article>
-      }
+      <details class="painel-idade__historico">
+        <summary>Revisar outras fases</summary>
+        <div class="linha-tempo-marcos__etapas">
+          @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
+            <button
+              type="button"
+              [class.linha-tempo-marcos__etapa--ativa]="grupo.idadeMeses === idadeSelecionada()"
+              (click)="selecionarIdade(grupo.idadeMeses)">
+              <strong>{{ grupo.titulo }}</strong>
+              <span>{{ grupo.respondidos }}/{{ grupo.total }}</span>
+            </button>
+          }
+        </div>
+      </details>
     </section>
 
     <div class="modo-tabs" role="tablist" aria-label="Modo de acompanhamento">
@@ -137,15 +124,15 @@
               }
             </div>
 
-            <label class="nota-marco">
-              <span>Anotações da rotina</span>
+            <details class="nota-marco">
+              <summary>Anotar algo sobre a rotina</summary>
               <textarea
                 rows="3"
                 [value]="marco.observacao ?? ''"
                 placeholder="Ex.: percebi isso durante a brincadeira, mas não acontece sempre."
                 [disabled]="salvandoId() === marco.id"
                 (blur)="salvarObservacao(marco, $any($event.target).value)"></textarea>
-            </label>
+            </details>
 
             @if (orientacaoPrioritariaMarco(); as orientacao) {
               <aside class="orientacao-marco-prioritaria" aria-live="polite">
