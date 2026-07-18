@@ -637,9 +637,15 @@
   max-width: 19ch;
   margin: 0;
   font-family: var(--pueria-fonte-titulo);
-  font-size: 2.4rem;
-  font-weight: 600;
-  line-height: 1.02;
+  font-size: 2.15rem;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.acompanhamento-destaque__conteudo h1 em {
+  color: var(--pueria-vermelho-flor);
+  font-style: italic;
+  font-weight: 500;
 }
 
 .acompanhamento-destaque__painel {
@@ -740,6 +746,111 @@
   .acompanhamento-destaque__conteudo h1,
   .acompanhamento-destaque__conteudo h2 {
     font-size: 2.05rem;
+  }
+}
+
+/* Estado preenchido inspirado diretamente no protótipo de referência. */
+.acompanhamento-home {
+  gap: 16px;
+}
+
+.acompanhamento-home__saudacao h1 {
+  margin: 0 0 5px;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 2.15rem;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.acompanhamento-home__saudacao h1 em {
+  color: var(--pueria-vermelho-flor);
+  font-weight: 500;
+}
+
+.acompanhamento-home__saudacao p {
+  margin: 0;
+  color: var(--pueria-texto-suave);
+  font-size: 0.9rem;
+}
+
+.acompanhamento-destaque {
+  border-color: #d8e8dd;
+  background: #f1f7f2;
+  padding: 20px;
+}
+
+.acompanhamento-destaque__status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.acompanhamento-destaque__anel {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 5px solid #dce8df;
+  border-top-color: var(--pueria-folha-escura);
+  border-radius: 50%;
+  color: var(--pueria-folha-escura);
+  font-family: var(--pueria-fonte-titulo);
+  font-weight: 600;
+}
+
+.acompanhamento-destaque__status h2 {
+  margin: 0;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.acompanhamento-destaque__status p {
+  margin: 3px 0 0;
+  color: var(--pueria-texto-suave);
+  font-size: 0.78rem;
+}
+
+.acompanhamento-destaque__aquisicao {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 16px;
+  border: 1px solid #dfe8e0;
+  border-radius: var(--pueria-raio-menor);
+  background: #fff;
+  padding: 11px 13px;
+  color: var(--pueria-folha-escura);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.acompanhamento-destaque__aquisicao app-icon {
+  color: #d29a35;
+}
+
+.acompanhamento-prioridades h2 {
+  font-size: 1.25rem;
+}
+
+.acompanhamento-modulos {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.modulo-cuidado {
+  min-height: 116px;
+  padding: 15px;
+}
+
+.modulo-cuidado strong {
+  font-size: 0.72rem;
+  -webkit-line-clamp: 1;
+}
+
+@media (max-width: 640px) {
+  .acompanhamento-home__saudacao h1 {
+    font-size: 1.9rem;
   }
 }
 

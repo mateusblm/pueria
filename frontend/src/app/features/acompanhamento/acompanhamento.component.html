@@ -40,26 +40,22 @@
     @let pontos = pontosAtencao(foco.marcos);
 
     <section class="acompanhamento-home">
-      <article class="pueria-card acompanhamento-destaque">
-        <div class="acompanhamento-destaque__conteudo">
-          <div class="acompanhamento-destaque__identidade">
-            <span class="acompanhamento-avatar"><app-icon name="baby" [size]="28" /></span>
-            <p class="pueria-eyebrow">Hoje no acompanhamento</p>
-          </div>
-          <h1>Olá! {{ foco.crianca.nome }} tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-          <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
-        </div>
+      <header class="acompanhamento-home__saudacao">
+        <h1>Olá! A <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+        <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
+      </header>
 
-        <div class="acompanhamento-destaque__painel">
+      <article class="pueria-card acompanhamento-destaque">
+        <div class="acompanhamento-destaque__status">
+          <span class="acompanhamento-destaque__anel">{{ progressoAtual.percentual }}%</span>
           <div>
-            <span>Acompanhamento em andamento</span>
-            <strong>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }}</strong>
+            <h2>{{ progressoAtual.percentual === 100 ? 'Acompanhamento em dia' : 'Vamos continuar' }}</h2>
+            <p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} marcos da idade atual registrados.</p>
           </div>
-          <div class="progresso" aria-hidden="true">
-            <span [style.width.%]="progressoAtual.percentual"></span>
-          </div>
-          <small>{{ mensagemDoDia(foco) }}</small>
-          <a [routerLink]="rotaAcaoPrincipal(foco)" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">{{ textoAcaoPrincipal(foco) }}</a>
+        </div>
+        <div class="acompanhamento-destaque__aquisicao">
+          <app-icon name="sparkles" [size]="16" />
+          <span>{{ mensagemDoDia(foco) }}</span>
         </div>
       </article>
 
