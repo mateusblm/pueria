@@ -1,5 +1,7 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -13,6 +15,7 @@ declare global {
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const authService = inject(AuthService);
+  const router = inject(Router);
   const token = authService.token;
   const requestComApi = request.clone({
     url: aplicarApiUrl(request.url)
@@ -22,11 +25,20 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
     return next(requestComApi);
   }
 
-  return next(
-    requestComApi.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
+  const requisicaoAutenticada = requestComApi.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return next(requisicaoAutenticada).pipe(
+    catchError((erro: unknown) => {
+      if (erro instanceof HttpErrorResponse && erro.status === 401 && !request.url.includes('/api/auth/')) {
+        const retorno = router.url.startsWith('/') ? router.url : '/acompanhamento';
+        authService.sair();
+        void router.navigate(['/login'], { queryParams: { sessao: 'expirada', retorno } });
       }
+      return throwError(() => erro);
     })
   );
 };

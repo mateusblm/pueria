@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize, TimeoutError } from 'rxjs';
 
 import { AuthService } from '../../../core/auth/auth.service';
@@ -17,6 +17,7 @@ export class LoginComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly carregando = signal(false);
   readonly erro = signal('');
@@ -26,6 +27,12 @@ export class LoginComponent {
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required]]
   });
+
+  ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.get('sessao') === 'expirada') {
+      this.erro.set('Sua sessão terminou. Entre novamente para continuar salvando seus registros.');
+    }
+  }
 
   alternarSenha(): void {
     this.senhaVisivel.update((visivel) => !visivel);
@@ -51,7 +58,7 @@ export class LoginComponent {
         this.carregando.set(false);
       }))
       .subscribe({
-        next: () => void this.router.navigateByUrl('/acompanhamento'),
+        next: () => void this.router.navigateByUrl(this.rotaAposLogin()),
         error: (erro: unknown) => {
           if (erro instanceof TimeoutError) {
             this.erro.set('A conexão demorou mais que o esperado. Verifique sua internet e tente novamente.');
@@ -63,5 +70,10 @@ export class LoginComponent {
             : 'Não foi possível entrar agora. Tente novamente.');
         }
       });
+  }
+
+  private rotaAposLogin(): string {
+    const retorno = this.route.snapshot.queryParamMap.get('retorno');
+    return retorno?.startsWith('/') ? retorno : '/acompanhamento';
   }
 }

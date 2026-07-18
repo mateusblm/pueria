@@ -29,6 +29,7 @@ public class SegurancaConfig {
     public SegurancaConfig(@Value("${pueria.cors.allowed-origins:http://localhost:4200}") String allowedOrigins) {
         this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
+                .map(origem -> origem.replaceAll("/+$", ""))
                 .filter(origem -> !origem.isBlank())
                 .toList();
     }
