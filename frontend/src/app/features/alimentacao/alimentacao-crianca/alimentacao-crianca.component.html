@@ -12,8 +12,8 @@
     <div class="alimentacao-page__hero">
       <div>
         <p class="pueria-eyebrow">Alimentação</p>
-        <div class="alimentacao-page__identidade"><span><app-icon name="salad" [size]="29" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
-        <p class="pueria-subtitle">Uma visão gentil da rotina, da variedade e das descobertas à mesa.</p>
+        <div class="alimentacao-page__identidade"><span><app-icon name="salad" [size]="29" /></span><h1 class="pueria-title">Rotina alimentar</h1></div>
+        <p class="pueria-subtitle">Uma visão gentil da rotina, da variedade e das descobertas à mesa de {{ crianca.nome }}.</p>
       </div>
     </div>
 
@@ -109,6 +109,14 @@
     }
 
     <div class="alimentacao-layout">
+      <details class="alimentacao-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
+        <summary>
+          <span class="alimentacao-atualizacao__icone"><app-icon name="salad" [size]="21" /></span>
+          <span>
+            <strong>{{ editandoId() ? 'Editar rotina alimentar' : 'Atualizar rotina alimentar' }}</strong>
+            <small>{{ ultimoRegistro() ? 'Registre mudanças, alimentos novos ou observações.' : 'Comece com o que faz parte da rotina hoje.' }}</small>
+          </span>
+        </summary>
       <form class="pueria-card alimentacao-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div class="alimentacao-form__header">
           <div>
@@ -272,6 +280,7 @@
           {{ salvando() ? 'Salvando...' : 'Salvar alimentação' }}
         </button>
       </form>
+      </details>
 
       <aside class="pueria-card alimentacao-historico">
         <p class="pueria-eyebrow">Histórico</p>
