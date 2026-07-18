@@ -99,4 +99,17 @@ class RegistroSonoTest {
         assertTrue(registro.getRangerDentesDuranteSono());
         assertTrue(registro.getAcordaBemDisposto());
     }
+
+    @Test
+    void deveManterSeparadosOsSinaisDiurnosRelatadosPelaFamilia() {
+        DadosSono dados = new DadosSono(LocalDate.now(), null, null, null, null, null, false, true, false,
+                SuperficieSono.BERCO, AmbienteSono.QUARTO_DOS_RESPONSAVEIS, List.of(), false, false,
+                false, false, false, false, false, true, true, true, false, null);
+
+        RegistroSono registro = RegistroSono.registrar(UUID.randomUUID(), dados);
+
+        assertTrue(registro.getDificilDeSerAcordado());
+        assertTrue(registro.getMalHumorado());
+        assertTrue(registro.getIrritado());
+    }
 }

@@ -27,6 +27,7 @@ public class RegistroAlimentacao {
     private final Boolean usaColher;
     private final Boolean blwMisto;
     private final Boolean autoalimentacao;
+    private final Boolean alimentadoExclusivamentePorCuidador;
     private final TexturaAlimentar texturaPredominante;
     private final Boolean consomeFrutas;
     private final Boolean consomeLegumesVerduras;
@@ -72,6 +73,7 @@ public class RegistroAlimentacao {
             Boolean usaColher,
             Boolean blwMisto,
             Boolean autoalimentacao,
+            Boolean alimentadoExclusivamentePorCuidador,
             TexturaAlimentar texturaPredominante,
             Boolean consomeFrutas,
             Boolean consomeLegumesVerduras,
@@ -116,6 +118,7 @@ public class RegistroAlimentacao {
         this.usaColher = usaColher;
         this.blwMisto = blwMisto;
         this.autoalimentacao = autoalimentacao;
+        this.alimentadoExclusivamentePorCuidador = alimentadoExclusivamentePorCuidador;
         this.texturaPredominante = texturaPredominante == null ? TexturaAlimentar.NAO_INFORMADO : texturaPredominante;
         this.consomeFrutas = consomeFrutas;
         this.consomeLegumesVerduras = consomeLegumesVerduras;
@@ -163,6 +166,7 @@ public class RegistroAlimentacao {
                 dados.usaColher(),
                 dados.blwMisto(),
                 dados.autoalimentacao(),
+                dados.alimentadoExclusivamentePorCuidador(),
                 dados.texturaPredominante(),
                 dados.consomeFrutas(),
                 dados.consomeLegumesVerduras(),
@@ -211,6 +215,7 @@ public class RegistroAlimentacao {
                 dados.usaColher(),
                 dados.blwMisto(),
                 dados.autoalimentacao(),
+                dados.alimentadoExclusivamentePorCuidador(),
                 dados.texturaPredominante(),
                 dados.consomeFrutas(),
                 dados.consomeLegumesVerduras(),
@@ -259,6 +264,7 @@ public class RegistroAlimentacao {
                 dados.usaColher(),
                 dados.blwMisto(),
                 dados.autoalimentacao(),
+                dados.alimentadoExclusivamentePorCuidador(),
                 dados.texturaPredominante(),
                 dados.consomeFrutas(),
                 dados.consomeLegumesVerduras(),
@@ -367,6 +373,7 @@ public class RegistroAlimentacao {
     public Boolean getUsaColher() { return usaColher; }
     public Boolean getBlwMisto() { return blwMisto; }
     public Boolean getAutoalimentacao() { return autoalimentacao; }
+    public Boolean getAlimentadoExclusivamentePorCuidador() { return alimentadoExclusivamentePorCuidador; }
     public TexturaAlimentar getTexturaPredominante() { return texturaPredominante; }
     public Boolean getConsomeFrutas() { return consomeFrutas; }
     public Boolean getConsomeLegumesVerduras() { return consomeLegumesVerduras; }

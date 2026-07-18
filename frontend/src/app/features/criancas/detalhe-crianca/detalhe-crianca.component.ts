@@ -197,13 +197,13 @@ export class DetalheCriancaComponent implements OnInit {
 
   private resumoDesenvolvimento(crianca: Crianca): ModuloResumo {
     if (this.errosModulos()['desenvolvimento']) {
-      return this.moduloIndisponivel('Desenvolvimento', 'Marcos da idade', ['/criancas', crianca.id, 'desenvolvimento']);
+      return this.moduloIndisponivel('Neurodesenvolvimento', 'Marcos da idade', ['/criancas', crianca.id, 'desenvolvimento']);
     }
 
     const marcos = this.marcos();
     if (marcos.length === 0) {
       return {
-        titulo: 'Desenvolvimento',
+        titulo: 'Neurodesenvolvimento',
         subtitulo: 'Marcos da idade',
         estado: 'pendente',
         valor: 'Sem faixa carregada',
@@ -220,7 +220,7 @@ export class DetalheCriancaComponent implements OnInit {
     const total = marcosDaIdade.length;
 
     return {
-      titulo: 'Desenvolvimento',
+      titulo: 'Neurodesenvolvimento',
       subtitulo: `Faixa: ${idade === undefined ? 'idade atual' : this.tituloIdade(idade)}`,
       estado: total === 0 ? 'pendente' : pontosConsulta > 0 ? 'atencao' : respondidos === total ? 'ok' : 'pendente',
       valor: total === 0 ? 'Sem marcos' : `${respondidos}/${total}`,
@@ -526,7 +526,7 @@ export class DetalheCriancaComponent implements OnInit {
     const respondidos = marcosDaIdade.filter((marco) => marco.status !== 'NAO_AVALIADO').length;
     if (total > 0 && respondidos < total) {
       acoes.push({
-        titulo: 'Desenvolvimento',
+        titulo: 'Neurodesenvolvimento',
         texto: `Faltam ${total - respondidos} marco(s) da faixa atual. Responder essa etapa melhora a leitura integrada do acompanhamento.`
       });
     }
@@ -735,7 +735,7 @@ export class DetalheCriancaComponent implements OnInit {
 
   iconeModulo(titulo: string): AppIconName {
     const icones: Record<string, AppIconName> = {
-      Desenvolvimento: 'brain',
+      Neurodesenvolvimento: 'brain',
       Crescimento: 'chart',
       Alimentação: 'salad',
       'Trânsito intestinal': 'toilet',
@@ -747,7 +747,7 @@ export class DetalheCriancaComponent implements OnInit {
 
   temaModulo(titulo: string): string {
     const temas: Record<string, string> = {
-      Desenvolvimento: 'desenvolvimento',
+      Neurodesenvolvimento: 'desenvolvimento',
       Crescimento: 'crescimento',
       Alimentação: 'alimentacao',
       'Trânsito intestinal': 'intestinal',

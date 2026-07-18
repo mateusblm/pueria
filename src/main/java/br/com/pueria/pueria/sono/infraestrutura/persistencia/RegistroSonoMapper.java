@@ -38,6 +38,9 @@ class RegistroSonoMapper {
                 registro.getAcordaBemDisposto(),
                 registro.getSonolenciaDiurna(),
                 registro.getIrritabilidadeCansaco(),
+                registro.getDificilDeSerAcordado(),
+                registro.getMalHumorado(),
+                registro.getIrritado(),
                 registro.getPreocupacaoFamilia(),
                 registro.getObservacao(),
                 registro.getCriadoEm(),
@@ -66,6 +69,9 @@ class RegistroSonoMapper {
                 entidade.getAcordaBemDisposto(),
                 entidade.getSonolenciaDiurna(),
                 entidade.getIrritabilidadeCansaco(),
+                entidade.getDificilDeSerAcordado(),
+                entidade.getMalHumorado(),
+                entidade.getIrritado(),
                 entidade.getPreocupacaoFamilia(),
                 entidade.getObservacao()
         );

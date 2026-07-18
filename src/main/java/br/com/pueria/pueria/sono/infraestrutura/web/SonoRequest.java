@@ -36,6 +36,9 @@ public record SonoRequest(
         Boolean acordaBemDisposto,
         Boolean sonolenciaDiurna,
         Boolean irritabilidadeCansaco,
+        Boolean dificilDeSerAcordado,
+        Boolean malHumorado,
+        Boolean irritado,
         Boolean preocupacaoFamilia,
         @Size(max = 1000) String observacao
 ) {
@@ -68,6 +71,9 @@ public record SonoRequest(
                 acordaBemDisposto,
                 sonolenciaDiurna,
                 irritabilidadeCansaco,
+                dificilDeSerAcordado,
+                malHumorado,
+                irritado,
                 preocupacaoFamilia,
                 observacao
         );

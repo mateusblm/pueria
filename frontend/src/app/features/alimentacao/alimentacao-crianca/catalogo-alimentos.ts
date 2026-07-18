@@ -106,5 +106,5 @@ export const ORIENTACOES_GRUPOS: Partial<Record<GrupoAlimento | 'ALERGENICOS', s
   LEITE_DERIVADO: 'Antes de 1 ano, leite de vaca não deve substituir o leite materno ou a fórmula como bebida principal.',
   OLEAGINOSA: 'Para crianças pequenas, ofereça em pasta fina, farinha ou preparações adequadas. Não ofereça castanhas inteiras.',
   BEBIDA_LIQUIDO: 'Priorize água e fruta inteira. Sucos não são recomendados como parte habitual da rotina na primeira infância.',
-  ALERGENICOS: 'Esta seleção ajuda a lembrar quando e como o alimento foi oferecido. Ela não indica restrição nem diagnóstico de alergia.'
+  ALERGENICOS: 'Inclui leite de vaca, ovo, trigo, soja, amendoim, castanhas, peixes, frutos do mar e gergelim. Esta seleção registra a oferta e os sinais observados; não indica restrição nem diagnóstico de alergia.'
 };

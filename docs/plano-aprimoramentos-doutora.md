@@ -18,14 +18,22 @@ Documento de execução baseado em `APRIMORAMENTOS.docx`, recebido em 18/07/2026
 
 ## Fase 0 - Auditoria e ajustes de base
 
-- [ ] APR-00 Auditar cada solicitação contra a implementação atual e registrar o estado real neste documento.
-- [ ] APR-01 Renomear a apresentação de `Desenvolvimento` para `Neurodesenvolvimento` nos pontos voltados à família, preservando rotas e contratos internos quando possível.
-- [ ] APR-02 Revisar os textos de telas: autoplay, notificações, brincar ao ar livre e leitura/brincadeira sem tela.
-- [ ] APR-03 Ajustar os sinais observados do sono para `Difícil de ser acordado`, `Mal-humorado` e `Irritado`; investigar e cobrir com teste o erro de salvamento relatado.
-- [ ] APR-04 Trocar a ilustração atual da escala de Bristol por uma representação visual mais clara e consistente com o design do Puéria.
-- [ ] APR-05 Revisar alimentação: plural em `Como acontecem as refeições`, opção de alimentação exclusivamente por cuidador e orientação de rastreabilidade de alimentos alergênicos incluindo leite de vaca.
+- [x] APR-00 Auditar cada solicitação contra a implementação atual e registrar o estado real neste documento.
+- [x] APR-01 Renomear a apresentação de `Desenvolvimento` para `Neurodesenvolvimento` nos pontos voltados à família, preservando rotas e contratos internos quando possível.
+- [x] APR-02 Revisar os textos de telas: autoplay, notificações, brincar ao ar livre e leitura/brincadeira sem tela.
+- [x] APR-03 Ajustar os sinais observados do sono para `Difícil de ser acordado`, `Mal-humorado` e `Irritado`; investigar e cobrir com teste o erro de salvamento relatado.
+- [x] APR-04 Trocar a ilustração atual da escala de Bristol por uma representação visual mais clara e consistente com o design do Puéria.
+- [x] APR-05 Revisar alimentação: plural em `Como acontecem as refeições`, opção de alimentação exclusivamente por cuidador e orientação de rastreabilidade de alimentos alergênicos incluindo leite de vaca.
 
 **Aceite:** textos consistentes na interface e no PDF, sem regressão de salvamento ou responsividade.
+
+### Auditoria concluída em 18/07/2026
+
+- A interface e a navegação interna preservam as rotas técnicas de desenvolvimento; a apresentação para a família passou a usar `Neurodesenvolvimento`.
+- O catálogo já continha leite de vaca como alimento alergênico rastreável. A orientação agora o nomeia explicitamente e reforça que registro não equivale a restrição ou diagnóstico.
+- A alimentação já usava o plural em `Como acontecem as refeições`; foi adicionada a opção persistida de alimentação exclusivamente conduzida por cuidador.
+- O único sinal combinado de irritabilidade/cansaço no sono foi substituído na experiência atual por três sinais independentes. O campo anterior permanece apenas para leitura de registros históricos.
+- A visualização da escala de Bristol foi redesenhada com formas mais distintas por tipo. O dado selecionado, os textos de consistência e os pontos para consulta não foram alterados.
 
 ## Fase 1 - Segurança e leitura clínica do neurodesenvolvimento
 

@@ -69,6 +69,7 @@ export interface RegistroAlimentacao {
   usaColher?: boolean | null;
   blwMisto?: boolean | null;
   autoalimentacao?: boolean | null;
+  alimentadoExclusivamentePorCuidador?: boolean | null;
   texturaPredominante: TexturaAlimentar;
   consomeFrutas?: boolean | null;
   consomeLegumesVerduras?: boolean | null;
@@ -114,6 +115,7 @@ export interface SalvarRegistroAlimentacaoRequest {
   usaColher?: boolean | null;
   blwMisto?: boolean | null;
   autoalimentacao?: boolean | null;
+  alimentadoExclusivamentePorCuidador?: boolean | null;
   texturaPredominante: TexturaAlimentar;
   consomeFrutas?: boolean | null;
   consomeLegumesVerduras?: boolean | null;

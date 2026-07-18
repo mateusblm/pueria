@@ -37,6 +37,9 @@ export interface RegistroSono {
   acordaBemDisposto?: boolean | null;
   sonolenciaDiurna?: boolean | null;
   irritabilidadeCansaco?: boolean | null;
+  dificilDeSerAcordado?: boolean | null;
+  malHumorado?: boolean | null;
+  irritado?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
   minutosSonoNoturno?: number | null;
@@ -66,6 +69,9 @@ export interface SalvarRegistroSonoRequest {
   acordaBemDisposto?: boolean | null;
   sonolenciaDiurna?: boolean | null;
   irritabilidadeCansaco?: boolean | null;
+  dificilDeSerAcordado?: boolean | null;
+  malHumorado?: boolean | null;
+  irritado?: boolean | null;
   preocupacaoFamilia?: boolean | null;
   observacao?: string | null;
 }

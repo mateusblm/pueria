@@ -46,6 +46,7 @@ public class RegistroAlimentacaoJpaEntidade {
     private Boolean usaColher;
     private Boolean blwMisto;
     private Boolean autoalimentacao;
+    private Boolean alimentadoExclusivamentePorCuidador;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "textura_predominante", nullable = false, length = 30)
@@ -99,7 +100,7 @@ public class RegistroAlimentacaoJpaEntidade {
 
     protected RegistroAlimentacaoJpaEntidade() {}
 
-    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, TipoOrigemAlimento tipoOrigemAlimento, OrigemPreparoAlimento origemPreparoAlimento, List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosOferecidos, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroAlimentacaoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoLeiteAlimentacao tipoLeite, EstagioAlimentar estagioAlimentar, Integer idadeInicioAlimentacaoComplementarMeses, Integer refeicoesPorDia, Boolean consomeAgua, Boolean usaMamadeira, Boolean usaCopo, Boolean usaColher, Boolean blwMisto, Boolean autoalimentacao, Boolean alimentadoExclusivamentePorCuidador, TexturaAlimentar texturaPredominante, Boolean consomeFrutas, Boolean consomeLegumesVerduras, Boolean consomeLegumes, Boolean consomeVerduras, Boolean consomeCereaisTuberculos, Boolean consomeFeijoesLeguminosas, Boolean consomeCarnesOvos, Boolean ultraprocessadosFrequentes, Boolean bebidasAdocadas, Boolean acucarAdicionado, Boolean salAdicionado, Boolean telasDuranteRefeicoes, Boolean refeicoesEmFamilia, Boolean rotinaAlimentarRegular, Boolean seletividadeAlimentar, Boolean recusaPersistente, Boolean engasgosFrequentes, Boolean vomitosRecorrentes, Boolean constipacao, Boolean diarreiaRecorrente, Boolean dificuldadeGanhoPesoPercebida, Boolean familiaTranquilaGanhoPesoAtual, Boolean preocupacaoFamilia, String observacao, TipoOrigemAlimento tipoOrigemAlimento, OrigemPreparoAlimento origemPreparoAlimento, List<AlimentoRegistroAlimentacaoJpaEmbeddable> alimentosOferecidos, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
@@ -113,6 +114,7 @@ public class RegistroAlimentacaoJpaEntidade {
         this.usaColher = usaColher;
         this.blwMisto = blwMisto;
         this.autoalimentacao = autoalimentacao;
+        this.alimentadoExclusivamentePorCuidador = alimentadoExclusivamentePorCuidador;
         this.texturaPredominante = texturaPredominante;
         this.consomeFrutas = consomeFrutas;
         this.consomeLegumesVerduras = consomeLegumesVerduras;
@@ -158,6 +160,7 @@ public class RegistroAlimentacaoJpaEntidade {
     public Boolean getUsaColher() { return usaColher; }
     public Boolean getBlwMisto() { return blwMisto; }
     public Boolean getAutoalimentacao() { return autoalimentacao; }
+    public Boolean getAlimentadoExclusivamentePorCuidador() { return alimentadoExclusivamentePorCuidador; }
     public TexturaAlimentar getTexturaPredominante() { return texturaPredominante; }
     public Boolean getConsomeFrutas() { return consomeFrutas; }
     public Boolean getConsomeLegumesVerduras() { return consomeLegumesVerduras; }

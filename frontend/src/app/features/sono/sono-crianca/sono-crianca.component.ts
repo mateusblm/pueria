@@ -83,7 +83,9 @@ export class SonoCriancaComponent implements OnInit {
     rangerDentesDuranteSono: [false],
     acordaBemDisposto: [false],
     sonolenciaDiurna: [false],
-    irritabilidadeCansaco: [false],
+    dificilDeSerAcordado: [false],
+    malHumorado: [false],
+    irritado: [false],
     preocupacaoFamilia: [false],
     observacao: ['', Validators.maxLength(1000)]
   });
@@ -185,7 +187,9 @@ export class SonoCriancaComponent implements OnInit {
       rangerDentesDuranteSono: !!registro.rangerDentesDuranteSono,
       acordaBemDisposto: !!registro.acordaBemDisposto,
       sonolenciaDiurna: !!registro.sonolenciaDiurna,
-      irritabilidadeCansaco: !!registro.irritabilidadeCansaco,
+      dificilDeSerAcordado: !!registro.dificilDeSerAcordado,
+      malHumorado: !!registro.malHumorado,
+      irritado: !!registro.irritado,
       preocupacaoFamilia: !!registro.preocupacaoFamilia,
       observacao: registro.observacao ?? ''
     });
@@ -212,7 +216,9 @@ export class SonoCriancaComponent implements OnInit {
       rangerDentesDuranteSono: false,
       acordaBemDisposto: false,
       sonolenciaDiurna: false,
-      irritabilidadeCansaco: false,
+      dificilDeSerAcordado: false,
+      malHumorado: false,
+      irritado: false,
       preocupacaoFamilia: false,
       observacao: ''
     });
@@ -302,7 +308,9 @@ export class SonoCriancaComponent implements OnInit {
       rangerDentesDuranteSono: valor.rangerDentesDuranteSono,
       acordaBemDisposto: valor.acordaBemDisposto,
       sonolenciaDiurna: valor.sonolenciaDiurna,
-      irritabilidadeCansaco: valor.irritabilidadeCansaco,
+      dificilDeSerAcordado: valor.dificilDeSerAcordado,
+      malHumorado: valor.malHumorado,
+      irritado: valor.irritado,
       preocupacaoFamilia: valor.preocupacaoFamilia,
       observacao: valor.observacao?.trim() || null
     };

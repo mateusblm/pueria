@@ -58,8 +58,8 @@ public class AnaliseSonoService {
         if (Boolean.TRUE.equals(registro.getPausasRespiratoriasPercebidas())) {
             conversaConsulta.add("Pausas respiratórias percebidas durante o sono merecem avaliação com o pediatra.");
         }
-        if (Boolean.TRUE.equals(registro.getSonolenciaDiurna()) || Boolean.TRUE.equals(registro.getIrritabilidadeCansaco())) {
-            conversaConsulta.add("Sonolência, irritabilidade ou cansaço durante o dia ajudam a contextualizar a qualidade do sono na consulta.");
+        if (Boolean.TRUE.equals(registro.getSonolenciaDiurna()) || Boolean.TRUE.equals(registro.getDificilDeSerAcordado()) || Boolean.TRUE.equals(registro.getMalHumorado()) || Boolean.TRUE.equals(registro.getIrritado()) || Boolean.TRUE.equals(registro.getIrritabilidadeCansaco())) {
+            conversaConsulta.add("Sonolência ou mudanças de humor durante o dia ajudam a contextualizar a qualidade do sono na consulta.");
         }
         if (Boolean.TRUE.equals(registro.getPreocupacaoFamilia())) {
             conversaConsulta.add("A preocupação da família é um dado importante. Leve o registro de alguns dias para a próxima conversa com o pediatra.");

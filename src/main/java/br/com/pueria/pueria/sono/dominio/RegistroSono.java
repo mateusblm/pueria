@@ -33,6 +33,9 @@ public class RegistroSono {
     private final Boolean acordaBemDisposto;
     private final Boolean sonolenciaDiurna;
     private final Boolean irritabilidadeCansaco;
+    private final Boolean dificilDeSerAcordado;
+    private final Boolean malHumorado;
+    private final Boolean irritado;
     private final Boolean preocupacaoFamilia;
     private final String observacao;
     private final LocalDateTime criadoEm;
@@ -67,6 +70,9 @@ public class RegistroSono {
         this.acordaBemDisposto = dados.acordaBemDisposto();
         this.sonolenciaDiurna = dados.sonolenciaDiurna();
         this.irritabilidadeCansaco = dados.irritabilidadeCansaco();
+        this.dificilDeSerAcordado = dados.dificilDeSerAcordado();
+        this.malHumorado = dados.malHumorado();
+        this.irritado = dados.irritado();
         this.preocupacaoFamilia = dados.preocupacaoFamilia();
         this.observacao = tratarObservacao(dados.observacao());
         this.criadoEm = Objects.requireNonNull(criadoEm, "A data de criação é obrigatória.");
@@ -166,6 +172,9 @@ public class RegistroSono {
     public Boolean getAcordaBemDisposto() { return acordaBemDisposto; }
     public Boolean getSonolenciaDiurna() { return sonolenciaDiurna; }
     public Boolean getIrritabilidadeCansaco() { return irritabilidadeCansaco; }
+    public Boolean getDificilDeSerAcordado() { return dificilDeSerAcordado; }
+    public Boolean getMalHumorado() { return malHumorado; }
+    public Boolean getIrritado() { return irritado; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getCriadoEm() { return criadoEm; }

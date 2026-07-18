@@ -52,6 +52,9 @@ public class RegistroSonoJpaEntidade {
     private Boolean acordaBemDisposto;
     private Boolean sonolenciaDiurna;
     private Boolean irritabilidadeCansaco;
+    private Boolean dificilDeSerAcordado;
+    private Boolean malHumorado;
+    private Boolean irritado;
     private Boolean preocupacaoFamilia;
 
     @Column(length = 1000)
@@ -65,7 +68,7 @@ public class RegistroSonoJpaEntidade {
 
     protected RegistroSonoJpaEntidade() {}
 
-    public RegistroSonoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, LocalTime horarioDormiu, LocalTime horarioAcordou, Integer quantidadeCochilos, Integer minutosCochilos, Integer despertaresNoturnos, Boolean dificuldadeIniciarSono, Boolean rotinaSonoConsistente, Boolean telasAntesDormir, SuperficieSono superficieSono, AmbienteSono ambienteSono, List<TipoDespertarNoturno> tiposDespertarNoturno, Boolean roncosFrequentes, Boolean pausasRespiratoriasPercebidas, Boolean sonoAgitado, Boolean rangerDentesDuranteSono, Boolean acordaBemDisposto, Boolean sonolenciaDiurna, Boolean irritabilidadeCansaco, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroSonoJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, LocalTime horarioDormiu, LocalTime horarioAcordou, Integer quantidadeCochilos, Integer minutosCochilos, Integer despertaresNoturnos, Boolean dificuldadeIniciarSono, Boolean rotinaSonoConsistente, Boolean telasAntesDormir, SuperficieSono superficieSono, AmbienteSono ambienteSono, List<TipoDespertarNoturno> tiposDespertarNoturno, Boolean roncosFrequentes, Boolean pausasRespiratoriasPercebidas, Boolean sonoAgitado, Boolean rangerDentesDuranteSono, Boolean acordaBemDisposto, Boolean sonolenciaDiurna, Boolean irritabilidadeCansaco, Boolean dificilDeSerAcordado, Boolean malHumorado, Boolean irritado, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
@@ -87,6 +90,9 @@ public class RegistroSonoJpaEntidade {
         this.acordaBemDisposto = acordaBemDisposto;
         this.sonolenciaDiurna = sonolenciaDiurna;
         this.irritabilidadeCansaco = irritabilidadeCansaco;
+        this.dificilDeSerAcordado = dificilDeSerAcordado;
+        this.malHumorado = malHumorado;
+        this.irritado = irritado;
         this.preocupacaoFamilia = preocupacaoFamilia;
         this.observacao = observacao;
         this.criadoEm = criadoEm;
@@ -114,6 +120,9 @@ public class RegistroSonoJpaEntidade {
     public Boolean getAcordaBemDisposto() { return acordaBemDisposto; }
     public Boolean getSonolenciaDiurna() { return sonolenciaDiurna; }
     public Boolean getIrritabilidadeCansaco() { return irritabilidadeCansaco; }
+    public Boolean getDificilDeSerAcordado() { return dificilDeSerAcordado; }
+    public Boolean getMalHumorado() { return malHumorado; }
+    public Boolean getIrritado() { return irritado; }
     public Boolean getPreocupacaoFamilia() { return preocupacaoFamilia; }
     public String getObservacao() { return observacao; }
     public LocalDateTime getCriadoEm() { return criadoEm; }

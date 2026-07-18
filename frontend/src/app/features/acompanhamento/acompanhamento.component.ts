@@ -359,7 +359,7 @@ export class AcompanhamentoComponent implements OnInit {
 
     return [
       {
-        titulo: 'Desenvolvimento',
+        titulo: 'Neurodesenvolvimento',
         detalhe: progresso.total === 0
           ? 'Inicie os marcos da idade atual.'
           : `${progresso.percentual}% dos marcos da idade atual preenchidos.`,
