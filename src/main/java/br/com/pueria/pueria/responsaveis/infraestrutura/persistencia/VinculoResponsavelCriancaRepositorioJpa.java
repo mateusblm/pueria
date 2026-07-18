@@ -45,6 +45,11 @@ public class VinculoResponsavelCriancaRepositorioJpa implements VinculoResponsav
     }
 
     @Override
+    public void removerPorId(UUID id) {
+        repository.deleteById(id);
+    }
+
+    @Override
     public void removerPorCrianca(UUID criancaId) {
         repository.deleteByCriancaId(criancaId);
     }

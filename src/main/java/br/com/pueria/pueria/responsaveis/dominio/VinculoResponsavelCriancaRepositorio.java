@@ -16,5 +16,9 @@ public interface VinculoResponsavelCriancaRepositorio {
 
     List<UUID> listarCriancaIdsPorUsuario(UUID usuarioId);
 
+    default void removerPorId(UUID id) {
+        throw new UnsupportedOperationException("Remoção individual de vínculo não suportada.");
+    }
+
     void removerPorCrianca(UUID criancaId);
 }
