@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
@@ -9,6 +9,7 @@ import { CriancasService } from '../../criancas/criancas.service';
 import { AlimentacaoService } from '../alimentacao.service';
 import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './catalogo-alimentos';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
+import { ToastService } from '../../../core/toast/toast.service';
 
 type Opcao<T extends string> = { valor: T; label: string };
 type FiltroCatalogo = GrupoAlimento | 'TODOS' | 'ALERGENICOS' | 'LEGUMES_E_FOLHAS' | 'GRAOS_E_LEGUMINOSAS' | 'FONTES_ANIMAIS';
@@ -25,6 +26,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly alimentacaoService = inject(AlimentacaoService);
+  private readonly toast = inject(ToastService);
 
   readonly crianca = signal<Crianca | null>(null);
 
@@ -42,6 +44,14 @@ export class AlimentacaoCriancaComponent implements OnInit {
   readonly salvando = signal(false);
   readonly erro = signal('');
   readonly aviso = signal('');
+  private readonly notificarErro = effect(() => {
+    const mensagem = this.erro();
+    if (mensagem) this.toast.erro(mensagem);
+  });
+  private readonly notificarSucesso = effect(() => {
+    const mensagem = this.aviso();
+    if (mensagem) this.toast.sucesso(mensagem);
+  });
   readonly editandoId = signal('');
   readonly modalAlimentosAberta = signal(false);
   readonly buscaAlimento = signal('');

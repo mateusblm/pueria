@@ -17,13 +17,6 @@
       </div>
     </div>
 
-    @if (erro()) {
-      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
-    }
-    @if (aviso()) {
-      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
-    }
-
     @if (ultimoRegistro(); as registro) {
       <section class="pueria-card intestinal-sintese">
         <div class="intestinal-sintese__header">

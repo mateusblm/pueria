@@ -28,13 +28,6 @@
       <a [routerLink]="['/criancas', crianca.id]" class="pueria-button pueria-button--secondary">Perfil</a>
     </div>
 
-    @if (aviso()) {
-      <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div>
-    }
-    @if (erro()) {
-      <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
-    }
-
     @if (medidasOrdenadas().length > 0) {
       <section class="pueria-card crescimento-graficos crescimento-graficos--principal" aria-labelledby="crescimento-graficos-titulo">
         <div class="crescimento-historico__header">

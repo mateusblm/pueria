@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
@@ -8,6 +8,7 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResponsavelMedicaoCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
+import { ToastService } from '../../../core/toast/toast.service';
 
 type PontoGraficoCrescimento = {
   label: string;
@@ -68,6 +69,7 @@ export class CrescimentoCriancaComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly crescimentoService = inject(CrescimentoService);
+  private readonly toast = inject(ToastService);
 
   readonly crianca = signal<Crianca | null>(null);
   readonly medidas = signal<MedidaCrescimento[]>([]);
@@ -79,6 +81,14 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly erro = signal('');
   readonly aviso = signal('');
+  private readonly notificarErro = effect(() => {
+    const mensagem = this.erro();
+    if (mensagem) this.toast.erro(mensagem);
+  });
+  private readonly notificarSucesso = effect(() => {
+    const mensagem = this.aviso();
+    if (mensagem) this.toast.sucesso(mensagem);
+  });
   readonly detalheAbertoIndicador = signal('');
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 

@@ -20,9 +20,6 @@
   } @else if (erro() && !crianca()) {
     <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   } @else {
-    @if (erro()) { <div class="pueria-message pueria-message--erro">{{ erro() }}</div> }
-    @if (aviso()) { <div class="pueria-message pueria-message--sucesso">{{ aviso() }}</div> }
-
     <section class="saude-layout">
       <article class="pueria-card saude-formulario">
         <div>
