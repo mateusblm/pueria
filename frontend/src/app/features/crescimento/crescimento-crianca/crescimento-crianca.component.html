@@ -177,11 +177,19 @@
     }
 
     <div class="crescimento-page__grid">
-      <section class="pueria-card crescimento-form" aria-labelledby="crescimento-form-titulo">
-        <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar medida' : 'Nova medida' }}</p>
-        <h2 id="crescimento-form-titulo">{{ editandoId() ? 'Editar registro' : 'Registrar crescimento' }}</h2>
+      <details class="crescimento-atualizacao" [open]="medidasOrdenadas().length === 0 || editandoId() !== null">
+        <summary>
+          <span class="crescimento-atualizacao__icone"><app-icon name="chart" [size]="20" /></span>
+          <span>
+            <strong>{{ editandoId() ? 'Editar medida' : 'Registrar nova medida' }}</strong>
+            <small>{{ medidasOrdenadas().length === 0 ? 'Comece o histórico com a primeira medida.' : 'Atualize peso, comprimento ou perímetro cefálico.' }}</small>
+          </span>
+        </summary>
+        <section class="pueria-card crescimento-form" aria-labelledby="crescimento-form-titulo">
+          <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar medida' : 'Nova medida' }}</p>
+          <h2 id="crescimento-form-titulo">{{ editandoId() ? 'Editar registro' : 'Registrar crescimento' }}</h2>
 
-        <form [formGroup]="form" (ngSubmit)="salvar()">
+          <form [formGroup]="form" (ngSubmit)="salvar()">
           <label>
             Data da medição
             <input type="text" inputmode="numeric" autocomplete="off" formControlName="dataMedicao" placeholder="dd/mm/aaaa" />
@@ -244,8 +252,9 @@
               {{ salvando() ? 'Salvando...' : 'Salvar medida' }}
             </button>
           </div>
-        </form>
-      </section>
+          </form>
+        </section>
+      </details>
 
       <aside class="crescimento-side">
         <section class="pueria-card crescimento-resumo">
