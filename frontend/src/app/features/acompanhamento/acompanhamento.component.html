@@ -142,7 +142,7 @@
             Reúna os registros que fazem sentido compartilhar com o pediatra em um resumo claro.
           </p>
         </div>
-        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button pueria-button--secondary">
+        <a [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']" class="pueria-button pueria-button--secondary">
           Abrir resumo
         </a>
       </section>
@@ -174,7 +174,7 @@
               </article>
             }
           </div>
-          <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button pueria-button--secondary">
+          <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }" class="pueria-button pueria-button--secondary">
             Ver registros do desenvolvimento
           </a>
         </section>

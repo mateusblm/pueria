@@ -205,8 +205,12 @@ export class MarcosCriancaComponent implements OnInit {
 
           this.marcos.set(ordenados);
           this.idadeSelecionada.set(idadeAtual);
-          this.posicionarPrimeiraPendente();
-          this.carregarEstimuloParaMarcoAtual();
+          if (this.route.snapshot.queryParamMap.get('modo') === 'resultados') {
+            this.modo.set('resultados');
+          } else {
+            this.posicionarPrimeiraPendente();
+            this.carregarEstimuloParaMarcoAtual();
+          }
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });

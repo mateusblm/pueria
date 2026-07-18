@@ -359,7 +359,7 @@ export class AcompanhamentoComponent implements OnInit {
       passos.push({
         titulo: 'Preparar conversa com o pediatra',
         detalhe: this.labelPontosAtencao(pontos),
-        rota: ['/criancas', resumo.crianca.id, 'desenvolvimento'],
+        rota: ['/criancas', resumo.crianca.id, 'para-a-consulta'],
         destaque: true,
         icone: 'stethoscope'
       });
