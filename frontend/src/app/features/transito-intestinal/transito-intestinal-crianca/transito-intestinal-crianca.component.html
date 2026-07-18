@@ -12,8 +12,8 @@
     <div class="intestinal-page__hero">
       <div>
         <p class="pueria-eyebrow">Trânsito intestinal</p>
-        <div class="intestinal-page__identidade"><span><app-icon name="toilet" [size]="28" /></span><h1 class="pueria-title">{{ crianca.nome }}</h1></div>
-        <p class="pueria-subtitle">Observe a rotina ao longo dos dias, sem tirar conclusões a partir de um registro isolado.</p>
+        <div class="intestinal-page__identidade"><span><app-icon name="toilet" [size]="28" /></span><h1 class="pueria-title">Trânsito intestinal</h1></div>
+        <p class="pueria-subtitle">Observe a rotina de {{ crianca.nome }} ao longo dos dias, sem tirar conclusões a partir de um registro isolado.</p>
       </div>
     </div>
 
@@ -97,6 +97,14 @@
     }
 
     <div class="intestinal-layout">
+      <details class="intestinal-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
+        <summary>
+          <span class="intestinal-atualizacao__icone"><app-icon name="toilet" [size]="21" /></span>
+          <span>
+            <strong>{{ editandoId() ? 'Editar registro do dia' : 'Registrar um dia' }}</strong>
+            <small>{{ ultimoRegistro() ? 'Acrescente um novo dia quando fizer sentido observar o padrão.' : 'Comece por um dia comum, sem precisar preencher tudo.' }}</small>
+          </span>
+        </summary>
       <form class="pueria-card intestinal-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div class="intestinal-form__header">
           <div>
@@ -108,6 +116,12 @@
           }
         </div>
 
+        <div class="intestinal-etapas" aria-label="Etapas do registro">
+          <span [class.intestinal-etapas__passo--ativo]="etapaRegistro() === 1">1. Dia</span>
+          <span [class.intestinal-etapas__passo--ativo]="etapaRegistro() === 2">2. Aspecto e sinais</span>
+        </div>
+
+        @if (etapaRegistro() === 1) {
         <div class="intestinal-form__grid">
           <label>
             <span>Data</span>
@@ -126,6 +140,9 @@
             </select>
           </label>
         </div>
+        <button type="button" class="pueria-button" (click)="avancarEtapa()">Continuar</button>
+        <small class="intestinal-etapas__tempo">Leva menos de 1 minuto</small>
+        } @else {
 
         <section class="intestinal-scale" aria-labelledby="bristol-titulo">
           <div>
@@ -188,10 +205,16 @@
           <textarea formControlName="observacao" rows="4" placeholder="Ex.: alimentos do dia, mudança de fórmula, hidratação, dor, febre ou dúvidas para a consulta."></textarea>
         </label>
 
-        <button type="submit" class="pueria-button" [disabled]="salvando()">
-          {{ salvando() ? 'Salvando...' : 'Salvar registro' }}
-        </button>
+        <div class="intestinal-etapas__acoes">
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="voltarEtapa()">Voltar</button>
+          <button type="submit" class="pueria-button" [disabled]="salvando()">
+            {{ salvando() ? 'Salvando...' : 'Salvar registro' }}
+          </button>
+        </div>
+        <small class="intestinal-etapas__tempo">Você pode registrar somente o que observou hoje.</small>
+        }
       </form>
+      </details>
 
       <aside class="pueria-card intestinal-historico">
         <p class="pueria-eyebrow">Histórico</p>

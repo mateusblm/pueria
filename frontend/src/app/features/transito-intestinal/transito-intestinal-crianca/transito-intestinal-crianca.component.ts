@@ -47,6 +47,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
   readonly erro = signal('');
   readonly aviso = signal('');
   readonly editandoId = signal('');
+  readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly tiposBristol: BristolOpcao[] = [
@@ -117,6 +118,21 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     this.form.controls.tipoFezes.setValue(tipo);
   }
 
+  avancarEtapa(): void {
+    this.erro.set('');
+    try {
+      this.lerData(this.form.controls.dataRegistro.value);
+      this.etapaRegistro.set(2);
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise os dados do dia.');
+    }
+  }
+
+  voltarEtapa(): void {
+    this.erro.set('');
+    this.etapaRegistro.set(1);
+  }
+
   salvar(): void {
     this.erro.set('');
     this.aviso.set('');
@@ -164,6 +180,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   editar(registro: RegistroTransitoIntestinal): void {
     this.editandoId.set(registro.id);
+    this.etapaRegistro.set(1);
     this.erro.set('');
     this.aviso.set('');
     this.form.patchValue({
@@ -188,6 +205,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   cancelarEdicao(): void {
     this.editandoId.set('');
+    this.etapaRegistro.set(1);
     this.form.reset({
       dataRegistro: this.formatarEntradaData(this.dataMaximaIso),
       tipoFezes: 'NAO_INFORMADO',

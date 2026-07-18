@@ -288,6 +288,229 @@
   color: var(--pueria-texto-suave);
 }
 
+/* Registro em duas etapas: primeiro o dia, depois o aspecto e os sinais observados. */
+.intestinal-page {
+  gap: 1.15rem;
+  max-width: 1020px;
+}
+
+.intestinal-page__hero {
+  border: 1px solid #eed8c9;
+  border-left: 0;
+  border-radius: 18px;
+  background: #fff7f2;
+  padding: 1.35rem 1.5rem;
+}
+
+.intestinal-page__hero .pueria-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.45rem);
+  line-height: 1.1;
+}
+
+.intestinal-page__identidade > span,
+.intestinal-atualizacao__icone {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 14px;
+  background: #f7e4d9;
+}
+
+.intestinal-page__identidade > span {
+  width: 52px;
+  height: 52px;
+}
+
+.intestinal-sintese {
+  gap: 1rem;
+  border: 1px solid #eadcd4;
+  border-top: 1px solid #eadcd4;
+  border-radius: 16px;
+  background: #fffdfb;
+  padding: 1.35rem;
+}
+
+.intestinal-sintese__grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.intestinal-sintese__grid article {
+  min-height: 86px;
+  border-color: #f1e0d7;
+  border-radius: 12px;
+  padding: .8rem;
+}
+
+.intestinal-analise {
+  gap: .65rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.intestinal-analise > div {
+  border: 1px solid #f2e6df;
+  border-radius: 12px;
+  padding: .9rem;
+}
+
+.intestinal-layout {
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(15.5rem, .38fr);
+}
+
+.intestinal-atualizacao {
+  align-self: start;
+  min-width: 0;
+  border: 1px solid #ecd9cf;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.intestinal-atualizacao > summary {
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  gap: .8rem;
+  list-style: none;
+  min-height: 78px;
+  padding: .95rem 1rem;
+}
+
+.intestinal-atualizacao > summary::-webkit-details-marker {
+  display: none;
+}
+
+.intestinal-atualizacao > summary > span:nth-child(2) {
+  display: grid;
+  gap: .2rem;
+  min-width: 0;
+}
+
+.intestinal-atualizacao summary strong {
+  color: var(--pueria-texto);
+}
+
+.intestinal-atualizacao summary small,
+.intestinal-etapas__tempo {
+  color: var(--pueria-texto-suave);
+  line-height: 1.35;
+}
+
+.intestinal-atualizacao > summary::after {
+  content: '+';
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  border: 1px solid #eedbd0;
+  border-radius: 50%;
+  color: #89533f;
+  font-size: 1.25rem;
+}
+
+.intestinal-atualizacao[open] > summary {
+  border-bottom: 1px solid #f3e5de;
+  background: #fffaf7;
+}
+
+.intestinal-atualizacao[open] > summary::after {
+  content: '-';
+}
+
+.intestinal-atualizacao__icone {
+  width: 38px;
+  height: 38px;
+}
+
+.intestinal-atualizacao .intestinal-form {
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1.2rem;
+}
+
+.intestinal-form {
+  gap: 1rem;
+}
+
+.intestinal-etapas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+}
+
+.intestinal-etapas span {
+  border-radius: 999px;
+  background: #f3eee9;
+  color: var(--pueria-texto-suave);
+  font-size: .82rem;
+  font-weight: 750;
+  padding: .52rem .8rem;
+  text-align: center;
+}
+
+.intestinal-etapas .intestinal-etapas__passo--ativo {
+  background: #9a5e48;
+  color: #fff;
+}
+
+.intestinal-etapas__tempo {
+  display: block;
+  text-align: center;
+}
+
+.intestinal-etapas__acoes {
+  display: grid;
+  gap: .65rem;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.intestinal-scale {
+  border-color: #ecdcd2;
+  border-radius: 12px;
+  background: #fffaf7;
+  padding: 1rem;
+}
+
+.intestinal-scale__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.intestinal-scale__card {
+  width: auto;
+  max-width: none;
+  min-height: 218px;
+  padding: .7rem;
+  grid-template-rows: 28px 76px 40px minmax(44px, 1fr);
+}
+
+.intestinal-scale__drawing {
+  height: 76px;
+  width: min(100%, 120px);
+}
+
+.intestinal-historico {
+  align-self: start;
+  border: 1px solid #ebdfd8;
+  border-radius: 14px;
+  background: #fffdfb;
+  padding: 1.1rem;
+}
+
+.intestinal-historico h2 {
+  margin: .15rem 0 0;
+  font-size: 1.25rem;
+}
+
+.intestinal-historico__lista article {
+  border-color: #f0e2db;
+  border-radius: 10px;
+}
+
 @media (max-width: 1100px) {
   .intestinal-layout {
     grid-template-columns: 1fr;
@@ -295,6 +518,10 @@
 
   .intestinal-historico {
     position: static;
+  }
+
+  .intestinal-sintese__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -323,5 +550,30 @@
   .intestinal-scale__card {
     grid-template-rows: 32px 104px 46px minmax(58px, 1fr);
     min-height: 288px;
+  }
+
+  .intestinal-scale__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .intestinal-atualizacao > summary {
+    min-height: 72px;
+    padding: .8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .intestinal-page__hero,
+  .intestinal-sintese {
+    padding: 1.05rem;
+  }
+
+  .intestinal-sintese__header .pueria-button,
+  .intestinal-etapas__acoes {
+    width: 100%;
+  }
+
+  .intestinal-etapas__acoes {
+    grid-template-columns: 1fr;
   }
 }
