@@ -776,7 +776,8 @@
 .acompanhamento-destaque {
   border-color: #d8e8dd;
   background: #f1f7f2;
-  padding: 20px;
+  min-height: 164px;
+  padding: 26px;
 }
 
 .acompanhamento-destaque__status {
@@ -834,18 +835,33 @@
   font-size: 1.25rem;
 }
 
+.acompanhamento-prioridades {
+  min-height: 212px;
+  padding: 26px;
+}
+
 .acompanhamento-modulos {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  row-gap: 12px;
+}
+
+.acompanhamento-modulos__titulo {
+  grid-column: 1 / -1;
+  margin: 3px 0 2px;
+  color: #8a7f7a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .modulo-cuidado {
-  min-height: 116px;
+  min-height: 108px;
   padding: 15px;
 }
 
 .modulo-cuidado strong {
-  font-size: 0.72rem;
-  -webkit-line-clamp: 1;
+  display: none;
 }
 
 @media (max-width: 640px) {
