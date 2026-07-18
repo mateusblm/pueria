@@ -6,13 +6,15 @@
 .auth-form h2 {
   margin: 0;
   color: var(--pueria-texto);
-  font-size: 1.7rem;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 2rem;
+  font-weight: 600;
   letter-spacing: 0;
 }
 
 .auth-form > :first-child {
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f0d8d4;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .auth-form p {
@@ -32,7 +34,7 @@
 }
 
 .auth-form .pueria-button {
-  min-height: 48px;
+  min-height: 50px;
   margin-top: 2px;
 }
 

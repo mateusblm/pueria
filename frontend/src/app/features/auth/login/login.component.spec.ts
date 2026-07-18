@@ -20,7 +20,16 @@ describe('LoginComponent', () => {
       providers: [
         { provide: AuthService, useValue: authService },
         { provide: Router, useValue: router },
-        { provide: ActivatedRoute, useValue: {} }
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: {
+                get: () => null
+              }
+            }
+          }
+        }
       ]
     }).compileComponents();
   });

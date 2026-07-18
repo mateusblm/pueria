@@ -5,8 +5,8 @@
 }
 
 .brand__flor {
-  width: 58px;
-  height: 58px;
+  width: 38px;
+  height: 38px;
   flex: 0 0 auto;
   overflow: visible;
 }
@@ -60,14 +60,16 @@
 .brand strong {
   display: block;
   color: var(--pueria-texto);
-  font-size: 1.38rem;
-  letter-spacing: -0.045em;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.42rem;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 .brand span {
   display: block;
-  max-width: 220px;
+  max-width: 180px;
   color: var(--pueria-texto-suave);
-  font-size: 0.78rem;
+  font-size: 0.66rem;
   line-height: 1.35;
 }

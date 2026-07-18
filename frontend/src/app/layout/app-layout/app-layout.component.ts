@@ -30,4 +30,10 @@ export class AppLayoutComponent {
     this.authService.sair();
     void this.router.navigateByUrl('/login');
   }
+
+  irParaConsulta(): void {
+    this.fecharMenu();
+    const criancaId = localStorage.getItem('pueria.criancaEmFocoId');
+    void this.router.navigateByUrl(criancaId ? `/criancas/${criancaId}/para-a-consulta` : '/criancas');
+  }
 }

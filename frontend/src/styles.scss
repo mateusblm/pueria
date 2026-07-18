@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700;6..72,800&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap');
+
 :root {
   /* Identidade Pueria: flor vermelha linear, acolhedora e preventiva. */
   --pueria-vermelho-flor: #d92d4a;
@@ -26,7 +28,23 @@
   --pueria-sombra-suave: 0 16px 42px rgba(101, 55, 48, 0.08);
   --pueria-raio: 8px;
   --pueria-raio-menor: 6px;
-  --pueria-fonte: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --pueria-fonte: "Instrument Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --pueria-fonte-titulo: "Newsreader", Georgia, serif;
+
+  --pueria-neuro-fundo: #f0e7f7;
+  --pueria-neuro-texto: #6b4e9e;
+  --pueria-crescimento-fundo: #dcebdd;
+  --pueria-crescimento-texto: #3c654b;
+  --pueria-alimentacao-fundo: #fff1d9;
+  --pueria-alimentacao-texto: #9d701d;
+  --pueria-eliminacao-fundo: #f0e2d6;
+  --pueria-eliminacao-texto: #8a5a3c;
+  --pueria-sono-fundo: #e2e8f5;
+  --pueria-sono-texto: #47597e;
+  --pueria-telas-fundo: #daecec;
+  --pueria-telas-texto: #2f6f6f;
+  --pueria-saude-fundo: #fbe0e4;
+  --pueria-saude-texto: #b52e48;
 }
 
 * {
@@ -41,8 +59,10 @@ body {
 body {
   margin: 0;
   color: var(--pueria-texto);
-  background: #f8f2ec;
+  background: var(--pueria-fundo);
   font-family: var(--pueria-fonte);
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 a {
@@ -51,7 +71,8 @@ a {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -61,7 +82,7 @@ button {
 
 .pueria-page {
   min-height: 100vh;
-  padding: 22px;
+  padding: 28px clamp(18px, 4vw, 48px);
 }
 
 .pueria-card {
@@ -69,7 +90,7 @@ button {
   border: 1px solid rgba(234, 219, 212, 0.88);
   border-radius: var(--pueria-raio);
   background: #fff;
-  box-shadow: 0 8px 24px rgba(77, 54, 50, 0.08);
+  box-shadow: 0 8px 24px rgba(77, 54, 50, 0.05);
 }
 
 .pueria-eyebrow {
@@ -84,8 +105,10 @@ button {
 .pueria-title {
   margin: 0;
   color: var(--pueria-texto);
-  font-size: clamp(2.15rem, 8vw, 4rem);
-  line-height: 0.95;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 3.25rem;
+  font-weight: 600;
+  line-height: 0.98;
   letter-spacing: 0;
 }
 
@@ -114,7 +137,8 @@ button {
 }
 
 .pueria-field input,
-.pueria-field select {
+.pueria-field select,
+.pueria-field textarea {
   width: 100%;
   min-height: 50px;
   border: 1px solid var(--pueria-borda);
@@ -127,7 +151,8 @@ button {
 }
 
 .pueria-field input:focus,
-.pueria-field select:focus {
+.pueria-field select:focus,
+.pueria-field textarea:focus {
   border-color: rgba(217, 45, 74, 0.66);
   box-shadow: 0 0 0 4px rgba(217, 45, 74, 0.12);
   background: #fff;
@@ -188,7 +213,7 @@ button {
 }
 
 .pueria-message {
-  border-radius: 16px;
+  border-radius: var(--pueria-raio);
   padding: 12px 14px;
   font-size: 0.92rem;
   line-height: 1.5;
@@ -227,4 +252,36 @@ button {
 
 .pueria-message[role="alert"] {
   scroll-margin-top: 24px;
+}
+
+.auth-form h2 {
+  margin: 0;
+  color: var(--pueria-texto);
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.auth-form > :first-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.pueria-section-title {
+  margin: 0;
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+@media (max-width: 640px) {
+  .pueria-page {
+    padding: 22px 18px 92px;
+  }
+
+  .pueria-title {
+    font-size: 2.75rem;
+  }
 }

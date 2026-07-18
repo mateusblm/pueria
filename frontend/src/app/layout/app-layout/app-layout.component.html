@@ -1,8 +1,8 @@
 <div class="app-shell">
   <header class="app-shell__topbar">
     <app-brand-mark></app-brand-mark>
-    <button type="button" class="app-shell__menu-button" (click)="abrirMenu()" aria-label="Abrir menu">
-      <app-icon name="menu" [size]="22" />
+    <button type="button" class="app-shell__menu-button" (click)="abrirMenu()" aria-label="Abrir menu" title="Abrir menu">
+      <app-icon name="menu" [size]="20" />
     </button>
   </header>
 
@@ -25,6 +25,10 @@
         <app-icon name="baby" [size]="20" />
         Minha criança
       </a>
+      <button type="button" (click)="irParaConsulta()">
+        <app-icon name="stethoscope" [size]="20" />
+        Para a consulta
+      </button>
     </nav>
 
     <button type="button" class="app-shell__logout" (click)="sair()">
@@ -36,4 +40,19 @@
   <main class="app-shell__content">
     <router-outlet></router-outlet>
   </main>
+
+  <nav class="app-shell__mobile-nav" aria-label="Navegação principal">
+    <a routerLink="/acompanhamento" routerLinkActive="ativo" title="Início">
+      <app-icon name="home" [size]="18" />
+      <span>Início</span>
+    </a>
+    <a routerLink="/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" title="Minha criança">
+      <app-icon name="baby" [size]="18" />
+      <span>Criança</span>
+    </a>
+    <button type="button" (click)="irParaConsulta()" title="Para a consulta">
+      <app-icon name="stethoscope" [size]="18" />
+      <span>Consulta</span>
+    </button>
+  </nav>
 </div>
