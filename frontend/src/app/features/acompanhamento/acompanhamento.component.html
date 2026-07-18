@@ -47,7 +47,7 @@
 
       <article class="pueria-card acompanhamento-destaque">
         <div class="acompanhamento-destaque__status">
-          <span class="acompanhamento-destaque__anel">{{ progressoAtual.percentual }}%</span>
+          <span class="acompanhamento-destaque__anel" [class.acompanhamento-destaque__anel--completo]="progressoAtual.percentual === 100">{{ progressoAtual.percentual }}%</span>
           <div>
             <h2>{{ progressoAtual.percentual === 100 ? 'Acompanhamento em dia' : 'Vamos continuar' }}</h2>
             <p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} marcos da idade atual registrados.</p>

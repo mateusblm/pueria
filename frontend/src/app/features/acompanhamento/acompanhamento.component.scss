@@ -752,6 +752,8 @@
 /* Estado preenchido inspirado diretamente no protótipo de referência. */
 .acompanhamento-home {
   gap: 16px;
+  width: 100%;
+  max-width: none;
 }
 
 .acompanhamento-home__saudacao h1 {
@@ -798,6 +800,10 @@
   color: var(--pueria-folha-escura);
   font-family: var(--pueria-fonte-titulo);
   font-weight: 600;
+}
+
+.acompanhamento-destaque__anel--completo {
+  border-color: var(--pueria-folha-escura);
 }
 
 .acompanhamento-destaque__status h2 {
