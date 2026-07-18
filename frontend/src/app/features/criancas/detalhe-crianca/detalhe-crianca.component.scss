@@ -88,6 +88,7 @@
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: stretch;
 }
 
 .painel-modulo {
@@ -95,6 +96,8 @@
   border-radius: 18px;
   display: grid;
   gap: 12px;
+  grid-template-rows: 74px 42px 40px minmax(82px, 1fr) 42px;
+  min-height: 350px;
   min-width: 0;
   padding: 18px;
 }
@@ -117,11 +120,9 @@
 }
 
 .painel-modulo__topo {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: space-between;
+  align-content: start;
+  display: grid;
+  gap: 6px;
   flex: 1;
   min-width: 0;
 }
@@ -148,6 +149,7 @@
 
 .painel-modulo h3 {
   font-size: 1.2rem;
+  line-height: 1.25;
 }
 
 .painel-modulo strong {
@@ -157,6 +159,7 @@
 }
 
 .painel-modulo .pueria-button {
+  align-self: end;
   justify-self: start;
   min-height: 42px;
 }
