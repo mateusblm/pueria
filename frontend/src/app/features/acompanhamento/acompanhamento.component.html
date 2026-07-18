@@ -74,36 +74,53 @@
         </section>
       }
 
-      <article class="pueria-card acompanhamento-destaque">
-        <div class="acompanhamento-destaque__status">
-          <span class="acompanhamento-destaque__anel" [class.acompanhamento-destaque__anel--completo]="progressoAtual.percentual === 100">{{ progressoAtual.percentual }}%</span>
-          <div>
-            <h2>{{ progressoAtual.percentual === 100 ? 'Acompanhamento em dia' : 'Vamos continuar' }}</h2>
-            <p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} marcos da idade atual registrados.</p>
+      @if (progressoAtual.respondidos === 0) {
+        <article class="pueria-card acompanhamento-estado-inicial">
+          <div class="acompanhamento-estado-inicial__titulo">
+            <span><app-icon name="baby" [size]="20" /></span>
+            <div>
+              <h2>Vamos começar</h2>
+              <p>Ainda sem registros, tudo bem.</p>
+            </div>
           </div>
-        </div>
-        <div class="acompanhamento-destaque__aquisicao">
-          <app-icon name="sparkles" [size]="16" />
-          <span>{{ mensagemDoDia(foco) }}</span>
-        </div>
-      </article>
+          <p>Os primeiros marcos levam poucos minutos e ajudam a tornar a próxima consulta mais completa.</p>
+          <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">
+            Fazer o primeiro registro
+            <app-icon name="chevronRight" [size]="18" />
+          </a>
+        </article>
+      } @else {
+        <article class="pueria-card acompanhamento-destaque">
+          <div class="acompanhamento-destaque__status">
+            <span class="acompanhamento-destaque__anel" [class.acompanhamento-destaque__anel--completo]="progressoAtual.percentual === 100">{{ progressoAtual.percentual }}%</span>
+            <div>
+              <h2>{{ progressoAtual.percentual === 100 ? 'Acompanhamento em dia' : 'Vamos continuar' }}</h2>
+              <p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} marcos da idade atual registrados.</p>
+            </div>
+          </div>
+          <div class="acompanhamento-destaque__aquisicao">
+            <app-icon name="sparkles" [size]="16" />
+            <span>{{ mensagemDoDia(foco) }}</span>
+          </div>
+        </article>
 
-      <aside class="pueria-card acompanhamento-prioridades">
-        <div>
-          <p class="pueria-eyebrow">Próximos passos</p>
-          <h2>Próximos passos</h2>
-        </div>
+        <aside class="pueria-card acompanhamento-prioridades">
+          <div>
+            <p class="pueria-eyebrow">Próximos passos</p>
+            <h2>Próximos passos</h2>
+          </div>
 
-        <div class="acompanhamento-prioridades__lista">
-          @for (passo of proximosPassos(foco); track passo.titulo) {
-            <a [routerLink]="passo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="prioridade" [class.prioridade--destaque]="passo.destaque">
-              <span class="prioridade__icone"><app-icon [name]="passo.icone" [size]="20" /></span>
-              <span class="prioridade__conteudo"><strong>{{ passo.titulo }}</strong><span>{{ passo.detalhe }}</span></span>
-              <app-icon class="prioridade__seta" name="chevronRight" [size]="18" />
-            </a>
-          }
-        </div>
-      </aside>
+          <div class="acompanhamento-prioridades__lista">
+            @for (passo of proximosPassos(foco); track passo.titulo) {
+              <a [routerLink]="passo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="prioridade" [class.prioridade--destaque]="passo.destaque">
+                <span class="prioridade__icone"><app-icon [name]="passo.icone" [size]="20" /></span>
+                <span class="prioridade__conteudo"><strong>{{ passo.titulo }}</strong><span>{{ passo.detalhe }}</span></span>
+                <app-icon class="prioridade__seta" name="chevronRight" [size]="18" />
+              </a>
+            }
+          </div>
+        </aside>
+      }
     </section>
 
     <section class="acompanhamento-modulos" aria-label="Áreas de acompanhamento">
