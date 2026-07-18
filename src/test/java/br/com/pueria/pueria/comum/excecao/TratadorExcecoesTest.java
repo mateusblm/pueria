@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.comum.excecao;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,5 +32,17 @@ class TratadorExcecoesTest {
         assertThat(resposta.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(resposta.getBody()).isNotNull();
         assertThat(resposta.getBody().status()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarMensagemSeguraParaViolacaoDeIntegridade() {
+        ResponseEntity<ErroApi> resposta = tratador.tratarViolacaoDeIntegridade(
+                new DataIntegrityViolationException("detalhe interno do banco")
+        );
+
+        assertThat(resposta.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(resposta.getBody()).isNotNull();
+        assertThat(resposta.getBody().erro()).isEqualTo("Não foi possível salvar o registro");
+        assertThat(resposta.getBody().mensagens()).containsExactly("Revise os dados informados e tente novamente.");
     }
 }

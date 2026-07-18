@@ -2,6 +2,7 @@ package br.com.pueria.pueria.comum.excecao;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,17 @@ public class TratadorExcecoes {
 
         return ResponseEntity.badRequest().body(
                 ErroApi.criar(HttpStatus.BAD_REQUEST.value(), "Dados inválidos", mensagens)
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroApi> tratarViolacaoDeIntegridade(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErroApi.criar(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Não foi possível salvar o registro",
+                        List.of("Revise os dados informados e tente novamente.")
+                )
         );
     }
 
