@@ -1,14 +1,16 @@
 .auth-form {
   display: grid;
-  gap: 22px;
+  width: min(100%, 360px);
+  margin: 0 auto;
+  gap: 24px;
 }
 
 .auth-form h2 {
   margin: 0;
   color: var(--pueria-texto);
   font-family: var(--pueria-fonte-titulo);
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.1rem;
+  font-weight: 500;
   letter-spacing: 0;
 }
 
@@ -30,7 +32,7 @@
 
 .auth-form__forgot {
   color: var(--pueria-coral-escuro);
-  display: inline-block;
+  display: block;
   font-size: 0.9rem;
   font-weight: 750;
   margin-top: 0.5rem;
@@ -38,8 +40,17 @@
 }
 
 .auth-form .pueria-button {
-  min-height: 50px;
+  min-height: 52px;
   margin-top: 2px;
+}
+
+.auth-form input:-webkit-autofill,
+.auth-form input:-webkit-autofill:hover,
+.auth-form input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--pueria-texto);
+  -webkit-box-shadow: 0 0 0 1000px #fffdfa inset;
+  box-shadow: 0 0 0 1000px #fffdfa inset;
+  transition: background-color 9999s ease-out 0s;
 }
 
 .auth-password {
