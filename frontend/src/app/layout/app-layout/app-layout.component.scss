@@ -96,7 +96,8 @@
   text-align: left;
 }
 
-.app-shell__nav a.ativo {
+.app-shell__nav a.ativo,
+.app-shell__nav button.ativo {
   border-color: rgba(217, 45, 74, 0.18);
   background: var(--pueria-rosa-nevoa);
   color: var(--pueria-vermelho-profundo);
@@ -156,7 +157,8 @@
   font-weight: 700;
 }
 
-.app-shell__mobile-nav a.ativo {
+.app-shell__mobile-nav a.ativo,
+.app-shell__mobile-nav button.ativo {
   color: var(--pueria-vermelho-flor);
 }
 

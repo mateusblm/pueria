@@ -25,7 +25,7 @@
         <app-icon name="baby" [size]="20" />
         Minha criança
       </a>
-      <button type="button" (click)="irParaConsulta()">
+      <button type="button" (click)="irParaConsulta()" [class.ativo]="consultaEstaAtiva()">
         <app-icon name="stethoscope" [size]="20" />
         Para a consulta
       </button>
@@ -50,7 +50,7 @@
       <app-icon name="baby" [size]="18" />
       <span>Criança</span>
     </a>
-    <button type="button" (click)="irParaConsulta()" title="Para a consulta">
+    <button type="button" (click)="irParaConsulta()" [class.ativo]="consultaEstaAtiva()" title="Para a consulta">
       <app-icon name="stethoscope" [size]="18" />
       <span>Consulta</span>
     </button>

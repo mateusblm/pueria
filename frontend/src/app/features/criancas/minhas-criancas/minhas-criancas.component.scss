@@ -251,7 +251,19 @@
   font-size: 0.95rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 759px) {
+  .criancas-page,
+  .criancas-page__hero,
+  .criancas-page__grid,
+  .crianca-card {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .criancas-page__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .criancas-page__hero,
   .criancas-page__empty,
   .crianca-card {
@@ -260,5 +272,6 @@
 
   .crianca-card {
     min-height: 0;
+    overflow: hidden;
   }
 }

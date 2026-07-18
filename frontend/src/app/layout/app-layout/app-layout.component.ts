@@ -36,4 +36,8 @@ export class AppLayoutComponent {
     const criancaId = localStorage.getItem('pueria.criancaEmFocoId');
     void this.router.navigateByUrl(criancaId ? `/criancas/${criancaId}/para-a-consulta` : '/criancas');
   }
+
+  consultaEstaAtiva(): boolean {
+    return this.router.url.includes('/para-a-consulta');
+  }
 }
