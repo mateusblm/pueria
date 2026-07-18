@@ -39,7 +39,8 @@ public class SegurancaConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             AutenticacaoJwtFiltro autenticacaoJwtFiltro,
-            RateLimitFiltro rateLimitFiltro
+            RateLimitFiltro rateLimitFiltro,
+            ValidacaoOrigemAuthFiltro validacaoOrigemAuthFiltro
     ) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
@@ -58,6 +59,8 @@ public class SegurancaConfig {
                         .requestMatchers(
                                 "/api/auth/cadastro",
                                 "/api/auth/login",
+                                "/api/auth/refresh",
+                                "/api/auth/logout",
                                 "/api/auth/recuperar-senha",
                                 "/api/auth/redefinir-senha",
                                 "/api/status",
@@ -65,6 +68,7 @@ public class SegurancaConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(validacaoOrigemAuthFiltro, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(autenticacaoJwtFiltro, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(rateLimitFiltro, AutenticacaoJwtFiltro.class)
                 .build();
@@ -77,7 +81,7 @@ public class SegurancaConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
         configuration.setExposedHeaders(List.of("Location"));
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

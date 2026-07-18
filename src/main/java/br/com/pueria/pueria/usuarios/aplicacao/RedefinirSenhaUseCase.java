@@ -2,6 +2,7 @@ package br.com.pueria.pueria.usuarios.aplicacao;
 
 import br.com.pueria.pueria.comum.excecao.RegraDominioException;
 import br.com.pueria.pueria.usuarios.dominio.TokenRedefinicaoSenhaRepositorio;
+import br.com.pueria.pueria.usuarios.dominio.SessaoAutenticacaoRepositorio;
 import br.com.pueria.pueria.usuarios.dominio.UsuarioRepositorio;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +14,15 @@ public class RedefinirSenhaUseCase {
     private final TokenRedefinicaoSenhaRepositorio tokens;
     private final GeradorTokenRedefinicaoSenha gerador;
     private final CriptografiaSenha criptografia;
+    private final SessaoAutenticacaoRepositorio sessoes;
 
     public RedefinirSenhaUseCase(UsuarioRepositorio usuarios, TokenRedefinicaoSenhaRepositorio tokens,
-            GeradorTokenRedefinicaoSenha gerador, CriptografiaSenha criptografia) {
+            GeradorTokenRedefinicaoSenha gerador, CriptografiaSenha criptografia, SessaoAutenticacaoRepositorio sessoes) {
         this.usuarios = usuarios;
         this.tokens = tokens;
         this.gerador = gerador;
         this.criptografia = criptografia;
+        this.sessoes = sessoes;
     }
 
     public void executar(String tokenPuro, String novaSenha) {
@@ -34,5 +37,6 @@ public class RedefinirSenhaUseCase {
         usuarios.salvar(usuario.comSenhaCriptografada(criptografia.criptografar(novaSenha)));
         tokens.salvar(token.marcarComoUsado());
         tokens.invalidarAtivosDoUsuario(usuario.getId());
+        sessoes.revogarSessoesAtivasDoUsuario(usuario.getId());
     }
 }

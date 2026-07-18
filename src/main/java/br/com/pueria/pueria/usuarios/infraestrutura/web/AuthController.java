@@ -4,7 +4,8 @@ import br.com.pueria.pueria.usuarios.aplicacao.AutenticarUsuarioUseCase;
 import br.com.pueria.pueria.usuarios.aplicacao.CadastrarUsuarioComando;
 import br.com.pueria.pueria.usuarios.aplicacao.CadastrarUsuarioUseCase;
 import br.com.pueria.pueria.usuarios.aplicacao.LoginComando;
-import br.com.pueria.pueria.usuarios.aplicacao.TokenAutenticacao;
+import br.com.pueria.pueria.usuarios.aplicacao.SessaoAutenticacaoService;
+import br.com.pueria.pueria.usuarios.dominio.UsuarioRepositorio;
 import br.com.pueria.pueria.usuarios.aplicacao.UsuarioResumo;
 import br.com.pueria.pueria.usuarios.aplicacao.SolicitarRedefinicaoSenhaUseCase;
 import br.com.pueria.pueria.usuarios.aplicacao.RedefinirSenhaUseCase;
@@ -14,6 +15,10 @@ import br.com.pueria.pueria.comum.seguranca.RateLimitResult;
 import br.com.pueria.pueria.comum.seguranca.RateLimitService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,16 +38,24 @@ public class AuthController {
     private final RedefinirSenhaUseCase redefinirSenhaUseCase;
     private final RateLimitService rateLimitService;
     private final IdentificadorCliente identificadorCliente;
+    private final UsuarioRepositorio usuarioRepositorio;
+    private final SessaoAutenticacaoService sessaoAutenticacaoService;
+    private final boolean cookieSeguro;
 
     public AuthController(CadastrarUsuarioUseCase cadastrarUsuarioUseCase, AutenticarUsuarioUseCase autenticarUsuarioUseCase,
             SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase, RedefinirSenhaUseCase redefinirSenhaUseCase,
-            RateLimitService rateLimitService, IdentificadorCliente identificadorCliente) {
+            RateLimitService rateLimitService, IdentificadorCliente identificadorCliente, UsuarioRepositorio usuarioRepositorio,
+            SessaoAutenticacaoService sessaoAutenticacaoService,
+            @Value("${seguranca.refresh-token.cookie-secure:true}") boolean cookieSeguro) {
         this.cadastrarUsuarioUseCase = cadastrarUsuarioUseCase;
         this.autenticarUsuarioUseCase = autenticarUsuarioUseCase;
         this.solicitarRedefinicaoSenhaUseCase = solicitarRedefinicaoSenhaUseCase;
         this.redefinirSenhaUseCase = redefinirSenhaUseCase;
         this.rateLimitService = rateLimitService;
         this.identificadorCliente = identificadorCliente;
+        this.usuarioRepositorio = usuarioRepositorio;
+        this.sessaoAutenticacaoService = sessaoAutenticacaoService;
+        this.cookieSeguro = cookieSeguro;
     }
 
     @PostMapping("/cadastro")
@@ -60,8 +73,27 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
-        TokenAutenticacao token = autenticarUsuarioUseCase.executar(new LoginComando(request.email(), request.senha()));
-        return ResponseEntity.ok(AuthResponse.de(token));
+        autenticarUsuarioUseCase.executar(new LoginComando(request.email(), request.senha()));
+        var usuario = usuarioRepositorio.buscarPorEmail(request.email()).orElseThrow();
+        var credenciais = sessaoAutenticacaoService.criar(usuario);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookieRefresh(credenciais.refreshToken(), sessaoAutenticacaoService.refreshExpiracaoSegundos()).toString()).body(AuthResponse.de(credenciais.accessToken()));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@CookieValue(name = "pueria_refresh", defaultValue = "") String refreshToken) {
+        if (refreshToken.isBlank()) {
+            return ResponseEntity.status(401).build();
+        }
+        var credenciais = sessaoAutenticacaoService.renovar(refreshToken);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookieRefresh(credenciais.refreshToken(), sessaoAutenticacaoService.refreshExpiracaoSegundos()).toString()).body(AuthResponse.de(credenciais.accessToken()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@CookieValue(name = "pueria_refresh", defaultValue = "") String refreshToken) {
+        if (!refreshToken.isBlank()) {
+            sessaoAutenticacaoService.revogar(refreshToken);
+        }
+        return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookieRefresh("", 0).toString()).build();
     }
 
     @PostMapping("/recuperar-senha")
@@ -82,5 +114,15 @@ public class AuthController {
     public ResponseEntity<Void> redefinirSenha(@RequestBody @Valid RedefinirSenhaRequest request) {
         redefinirSenhaUseCase.executar(request.token(), request.novaSenha());
         return ResponseEntity.noContent().build();
+    }
+
+    private ResponseCookie cookieRefresh(String valor, long maxAgeSegundos) {
+        return ResponseCookie.from("pueria_refresh", valor)
+                .httpOnly(true)
+                .secure(cookieSeguro)
+                .sameSite(cookieSeguro ? "None" : "Lax")
+                .path("/api/auth")
+                .maxAge(maxAgeSegundos)
+                .build();
     }
 }

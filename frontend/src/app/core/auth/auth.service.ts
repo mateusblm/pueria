@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap, timeout } from 'rxjs';
+import { Observable, finalize, shareReplay, tap, timeout } from 'rxjs';
 
 import { Usuario } from '../../shared/models/usuario.model';
 import { AuthResponse, CadastroUsuarioRequest, LoginRequest, RedefinirSenhaRequest, SolicitarRedefinicaoSenhaRequest } from './auth.models';
 
-const TOKEN_STORAGE_KEY = 'pueria.token';
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly tokenSignal = signal<string | null>(localStorage.getItem(TOKEN_STORAGE_KEY));
+  private readonly tokenSignal = signal<string | null>(null);
+  private renovacaoEmAndamento$?: Observable<AuthResponse>;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -26,10 +25,25 @@ export class AuthService {
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>('/api/auth/login', request).pipe(
+    return this.http.post<AuthResponse>('/api/auth/login', request, { withCredentials: true }).pipe(
       timeout(15000),
       tap((response) => this.salvarToken(response.token))
     );
+  }
+
+  renovarSessao(): Observable<AuthResponse> {
+    if (!this.renovacaoEmAndamento$) {
+      this.renovacaoEmAndamento$ = this.http
+        .post<AuthResponse>('/api/auth/refresh', {}, { withCredentials: true })
+        .pipe(
+          timeout(15000),
+          tap((response) => this.salvarToken(response.token)),
+          finalize(() => (this.renovacaoEmAndamento$ = undefined)),
+          shareReplay({ bufferSize: 1, refCount: false })
+        );
+    }
+
+    return this.renovacaoEmAndamento$;
   }
 
   solicitarRedefinicaoSenha(request: SolicitarRedefinicaoSenhaRequest): Observable<void> {
@@ -45,12 +59,15 @@ export class AuthService {
   }
 
   sair(): void {
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    this.limparSessaoLocal();
+    this.http.post<void>('/api/auth/logout', {}, { withCredentials: true }).pipe(timeout(15000)).subscribe({ error: () => undefined });
+  }
+
+  limparSessaoLocal(): void {
     this.tokenSignal.set(null);
   }
 
   private salvarToken(token: string): void {
-    localStorage.setItem(TOKEN_STORAGE_KEY, token);
     this.tokenSignal.set(token);
   }
 }

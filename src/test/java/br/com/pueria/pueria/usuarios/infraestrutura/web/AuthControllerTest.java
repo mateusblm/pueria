@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.servlet.http.Cookie;
 
 import java.time.LocalDateTime;
 
@@ -92,9 +93,51 @@ class AuthControllerTest {
                                 }
                                 """))
                 .andExpect(status().isOk())
+                .andExpect(header().string("Set-Cookie", org.hamcrest.Matchers.containsString("pueria_refresh=")))
+                .andExpect(header().string("Set-Cookie", org.hamcrest.Matchers.containsString("HttpOnly")))
                 .andExpect(jsonPath("$.tipo").value("Bearer"))
                 .andExpect(jsonPath("$.token", not(blankOrNullString())))
                 .andExpect(jsonPath("$.expiraEmSegundos").value(3600));
+    }
+
+    @Test
+    void deveRenovarTokenRotacionandoApenasUmaVezCadaSessao() throws Exception {
+        cadastrarUsuario("Mateus", "mateus.refresh@email.com", "senha123");
+        Cookie refreshAnterior = obterCookieRefresh("mateus.refresh@email.com", "senha123");
+
+        var resposta = mockMvc.perform(post("/api/auth/refresh")
+                        .header("Origin", "http://localhost:4200")
+                        .cookie(refreshAnterior))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token", not(blankOrNullString())))
+                .andReturn()
+                .getResponse();
+
+        Cookie refreshNovo = resposta.getCookie("pueria_refresh");
+        org.junit.jupiter.api.Assertions.assertNotNull(refreshNovo);
+        org.junit.jupiter.api.Assertions.assertNotEquals(refreshAnterior.getValue(), refreshNovo.getValue());
+
+        mockMvc.perform(post("/api/auth/refresh")
+                        .header("Origin", "http://localhost:4200")
+                        .cookie(refreshAnterior))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deveEncerrarSessaoELimparCookieDeRefresh() throws Exception {
+        cadastrarUsuario("Mateus", "mateus.logout@email.com", "senha123");
+        Cookie refresh = obterCookieRefresh("mateus.logout@email.com", "senha123");
+
+        mockMvc.perform(post("/api/auth/logout")
+                        .header("Origin", "http://localhost:4200")
+                        .cookie(refresh))
+                .andExpect(status().isNoContent())
+                .andExpect(header().string("Set-Cookie", org.hamcrest.Matchers.containsString("Max-Age=0")));
+
+        mockMvc.perform(post("/api/auth/refresh")
+                        .header("Origin", "http://localhost:4200")
+                        .cookie(refresh))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -139,6 +182,7 @@ class AuthControllerTest {
     void deveRedefinirSenhaComTokenValidoEAceitarUsoUnico() throws Exception {
         cadastrarUsuario("Mateus", "mateus.redefinicao@email.com", "senha-antiga");
         String sessaoAnterior = obterToken("mateus.redefinicao@email.com", "senha-antiga");
+        Cookie refreshAnterior = obterCookieRefresh("mateus.redefinicao@email.com", "senha-antiga");
         var usuario = usuarios.buscarPorEmail("mateus.redefinicao@email.com").orElseThrow();
         String tokenPuro = geradorToken.gerar();
         tokens.salvar(TokenRedefinicaoSenha.criar(usuario.getId(), geradorToken.calcularHash(tokenPuro), LocalDateTime.now().plusMinutes(15)));
@@ -161,6 +205,11 @@ class AuthControllerTest {
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/usuarios/me").header("Authorization", "Bearer " + sessaoAnterior))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/api/auth/refresh")
+                        .header("Origin", "http://localhost:4200")
+                        .cookie(refreshAnterior))
                 .andExpect(status().isUnauthorized());
 
         mockMvc.perform(post("/api/auth/redefinir-senha")
@@ -220,5 +269,20 @@ class AuthControllerTest {
         int inicio = response.indexOf("\"token\":\"") + 9;
         int fim = response.indexOf("\"", inicio);
         return response.substring(inicio, fim);
+    }
+
+    private Cookie obterCookieRefresh(String email, String senha) throws Exception {
+        return mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "%s",
+                                  "senha": "%s"
+                                }
+                                """.formatted(email, senha)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getCookie("pueria_refresh");
     }
 }

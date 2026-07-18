@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.comum.seguranca;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,13 @@ public class IdentificadorCliente {
     }
 
     public String porSessao(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("pueria_refresh".equals(cookie.getName()) && !cookie.getValue().isBlank()) {
+                    return hash(cookie.getValue());
+                }
+            }
+        }
         String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.startsWith("Bearer ") && authorization.length() > 7) {
             return hash(authorization.substring(7));

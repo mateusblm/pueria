@@ -31,7 +31,10 @@ management:
 seguranca:
   jwt:
     secret: ${PUERIA_JWT_SECRET:pueria-dev-secret-altere-este-valor-em-producao-256-bits}
-    expiracao-segundos: ${PUERIA_JWT_EXPIRACAO_SEGUNDOS:3600}
+    expiracao-segundos: ${PUERIA_JWT_EXPIRACAO_SEGUNDOS:900}
+  refresh-token:
+    expiracao-dias: ${PUERIA_REFRESH_TOKEN_EXPIRACAO_DIAS:30}
+    cookie-secure: ${PUERIA_REFRESH_TOKEN_COOKIE_SECURE:true}
 
 pueria:
   cors:
