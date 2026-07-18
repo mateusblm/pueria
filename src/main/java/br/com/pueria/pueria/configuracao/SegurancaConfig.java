@@ -1,6 +1,7 @@
 package br.com.pueria.pueria.configuracao;
 
 import br.com.pueria.pueria.usuarios.infraestrutura.seguranca.AutenticacaoJwtFiltro;
+import br.com.pueria.pueria.comum.seguranca.RateLimitFiltro;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,8 @@ public class SegurancaConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            AutenticacaoJwtFiltro autenticacaoJwtFiltro
+            AutenticacaoJwtFiltro autenticacaoJwtFiltro,
+            RateLimitFiltro rateLimitFiltro
     ) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
@@ -64,6 +66,7 @@ public class SegurancaConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(autenticacaoJwtFiltro, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(rateLimitFiltro, AutenticacaoJwtFiltro.class)
                 .build();
     }
 

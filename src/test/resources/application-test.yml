@@ -20,3 +20,7 @@ seguranca:
   jwt:
     secret: pueria-test-secret-com-tamanho-suficiente-para-hmac-sha256
     expiracao-segundos: 3600
+
+pueria:
+  rate-limit:
+    habilitado: false

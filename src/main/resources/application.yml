@@ -42,3 +42,6 @@ pueria:
     remetente: ${PUERIA_EMAIL_REMETENTE:nao-responda@pueria.com.br}
   redefinicao-senha:
     expiracao-minutos: ${PUERIA_REDEFINICAO_SENHA_EXPIRACAO_MINUTOS:15}
+  rate-limit:
+    habilitado: ${PUERIA_RATE_LIMIT_HABILITADO:true}
+    confiar-cabecalhos-encaminhados: ${PUERIA_RATE_LIMIT_CONFIAR_CABECALHOS_ENCAMINHADOS:false}

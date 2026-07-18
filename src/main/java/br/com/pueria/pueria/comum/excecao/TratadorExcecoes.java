@@ -1,5 +1,6 @@
 package br.com.pueria.pueria.comum.excecao;
 
+import br.com.pueria.pueria.comum.seguranca.LimiteRequisicoesExcedidoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,6 +13,17 @@ import java.util.Locale;
 
 @RestControllerAdvice
 public class TratadorExcecoes {
+
+    @ExceptionHandler(LimiteRequisicoesExcedidoException.class)
+    public ResponseEntity<ErroApi> tratarLimiteRequisicoes(LimiteRequisicoesExcedidoException ex) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header("Retry-After", String.valueOf(ex.getRetryAfterSegundos()))
+                .body(ErroApi.criar(
+                        HttpStatus.TOO_MANY_REQUESTS.value(),
+                        "Limite de requisições excedido",
+                        List.of(ex.getMessage())
+                ));
+    }
 
     @ExceptionHandler(RegraDominioException.class)
     public ResponseEntity<ErroApi> tratarRegraDominio(RegraDominioException ex) {

@@ -8,6 +8,10 @@ import br.com.pueria.pueria.usuarios.aplicacao.TokenAutenticacao;
 import br.com.pueria.pueria.usuarios.aplicacao.UsuarioResumo;
 import br.com.pueria.pueria.usuarios.aplicacao.SolicitarRedefinicaoSenhaUseCase;
 import br.com.pueria.pueria.usuarios.aplicacao.RedefinirSenhaUseCase;
+import br.com.pueria.pueria.comum.seguranca.IdentificadorCliente;
+import br.com.pueria.pueria.comum.seguranca.LimiteRequisicoesExcedidoException;
+import br.com.pueria.pueria.comum.seguranca.RateLimitResult;
+import br.com.pueria.pueria.comum.seguranca.RateLimitService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,13 +31,18 @@ public class AuthController {
     private final AutenticarUsuarioUseCase autenticarUsuarioUseCase;
     private final SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase;
     private final RedefinirSenhaUseCase redefinirSenhaUseCase;
+    private final RateLimitService rateLimitService;
+    private final IdentificadorCliente identificadorCliente;
 
     public AuthController(CadastrarUsuarioUseCase cadastrarUsuarioUseCase, AutenticarUsuarioUseCase autenticarUsuarioUseCase,
-            SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase, RedefinirSenhaUseCase redefinirSenhaUseCase) {
+            SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase, RedefinirSenhaUseCase redefinirSenhaUseCase,
+            RateLimitService rateLimitService, IdentificadorCliente identificadorCliente) {
         this.cadastrarUsuarioUseCase = cadastrarUsuarioUseCase;
         this.autenticarUsuarioUseCase = autenticarUsuarioUseCase;
         this.solicitarRedefinicaoSenhaUseCase = solicitarRedefinicaoSenhaUseCase;
         this.redefinirSenhaUseCase = redefinirSenhaUseCase;
+        this.rateLimitService = rateLimitService;
+        this.identificadorCliente = identificadorCliente;
     }
 
     @PostMapping("/cadastro")
@@ -56,6 +66,14 @@ public class AuthController {
 
     @PostMapping("/recuperar-senha")
     public ResponseEntity<Void> solicitarRedefinicao(@RequestBody @Valid SolicitarRedefinicaoSenhaRequest request) {
+        RateLimitResult resultado = rateLimitService.consumir(
+                "senha:email:" + identificadorCliente.porEmail(request.email()),
+                3,
+                Duration.ofHours(1)
+        );
+        if (!resultado.permitido()) {
+            throw new LimiteRequisicoesExcedidoException(resultado.retryAfterSegundos());
+        }
         solicitarRedefinicaoSenhaUseCase.executar(request.email());
         return ResponseEntity.noContent().build();
     }
