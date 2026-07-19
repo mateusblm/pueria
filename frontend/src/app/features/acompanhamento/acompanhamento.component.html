@@ -38,11 +38,16 @@
     @let foco = criancaEmFoco();
     @let progressoAtual = progresso(foco.marcos);
     @let pontos = pontosAtencao(foco.marcos);
+    @let proximoPasso = proximosPassos(foco).at(0);
 
     <section class="acompanhamento-home">
       <header class="acompanhamento-home__saudacao">
-        <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-        <p>Um resumo breve para orientar o próximo passo.</p>
+        <div>
+          <p class="pueria-eyebrow">Início</p>
+          <h1>{{ foco.crianca.nome }} tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+          <p>Um lugar para escolher o próximo passo com calma.</p>
+        </div>
+        <a routerLink="/criancas" class="acompanhamento-home__perfil">Gerenciar crianças</a>
       </header>
 
       @if (outrasCriancas().length > 0) {
@@ -74,70 +79,38 @@
         </section>
       }
 
-      @if (progressoAtual.respondidos === 0) {
-        <article class="pueria-card acompanhamento-estado-inicial">
-          <div class="acompanhamento-estado-inicial__titulo">
-            <span><app-icon name="baby" [size]="20" /></span>
-            <div>
-              <h2>Vamos começar</h2>
-              <p>Ainda sem registros, tudo bem.</p>
-            </div>
-          </div>
-          <p>Os primeiros marcos levam poucos minutos e ajudam a tornar a próxima consulta mais completa.</p>
-          <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">
-            Fazer o primeiro registro
-            <app-icon name="chevronRight" [size]="18" />
-          </a>
-        </article>
-      } @else {
-        <article class="pueria-card acompanhamento-destaque">
-          <div class="acompanhamento-destaque__status">
-            <span class="acompanhamento-destaque__anel" [class.acompanhamento-destaque__anel--completo]="progressoAtual.percentual === 100">{{ progressoAtual.percentual }}%</span>
-            <div>
-              <h2>{{ progressoAtual.percentual === 100 ? 'Acompanhamento em dia' : 'Vamos continuar' }}</h2>
-              <p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} marcos da idade atual registrados.</p>
-            </div>
-          </div>
-          <div class="acompanhamento-destaque__aquisicao">
-            <app-icon name="sparkles" [size]="16" />
-            <span>{{ mensagemDoDia(foco) }}</span>
-          </div>
-        </article>
-
-        <aside class="pueria-card acompanhamento-prioridades">
+      @if (proximoPasso; as passo) {
+        <article class="pueria-card inicio-proximo-passo">
+          <span class="inicio-proximo-passo__icone"><app-icon [name]="passo.icone" [size]="25" /></span>
           <div>
-            <p class="pueria-eyebrow">Próximos passos</p>
-            <h2>Próximos passos</h2>
+            <p class="pueria-eyebrow">Próximo passo</p>
+            <h2>{{ passo.titulo }}</h2>
+            <p>{{ passo.detalhe }}</p>
           </div>
-
-          <div class="acompanhamento-prioridades__lista">
-            @for (passo of proximosPassos(foco); track passo.titulo) {
-              <a [routerLink]="passo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="prioridade" [class.prioridade--destaque]="passo.destaque">
-                <span class="prioridade__icone"><app-icon [name]="passo.icone" [size]="20" /></span>
-                <span class="prioridade__conteudo"><strong>{{ passo.titulo }}</strong><span>{{ passo.detalhe }}</span></span>
-                <app-icon class="prioridade__seta" name="chevronRight" [size]="18" />
-              </a>
-            }
-          </div>
-        </aside>
+          <a [routerLink]="passo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">Abrir <app-icon name="chevronRight" [size]="18" /></a>
+        </article>
       }
-    </section>
 
-    @if (!foco.erro) {
-      <section class="pueria-card acompanhamento-consulta">
-        <div>
-          <p class="pueria-eyebrow">Para a consulta</p>
-          <h2>{{ labelPontosAtencao(pontos) }}</h2>
-          <p>
-            Reúna os registros que fazem sentido compartilhar com o pediatra em um resumo claro.
-          </p>
-        </div>
-        <a [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']" class="pueria-button pueria-button--secondary">
-          Abrir resumo
+      <section class="inicio-destinos" aria-label="Áreas principais">
+        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-card inicio-destino inicio-destino--marcos">
+          <span class="inicio-destino__icone"><app-icon name="brain" [size]="23" /></span>
+          <div><p class="pueria-eyebrow">Marcos</p><h2>Neurodesenvolvimento</h2><p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} habilidades desta fase registradas.</p></div>
+          <app-icon name="chevronRight" [size]="19" />
+        </a>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'observacoes']" class="pueria-card inicio-destino inicio-destino--observacoes">
+          <span class="inicio-destino__icone"><app-icon name="message" [size]="23" /></span>
+          <div><p class="pueria-eyebrow">Acompanhamento</p><h2>Observações da rotina</h2><p>Registre apenas o que ajudar a entender um padrão ou preparar a consulta.</p></div>
+          <app-icon name="chevronRight" [size]="19" />
         </a>
       </section>
 
-    }
+      @if (!foco.erro) {
+        <section class="inicio-consulta">
+          <div><p class="pueria-eyebrow">Para a consulta</p><h2>{{ labelPontosAtencao(pontos) }}</h2><p>O resumo reúne os registros que fazem sentido compartilhar com o pediatra.</p></div>
+          <a [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']" class="pueria-button pueria-button--secondary">Abrir resumo</a>
+        </section>
+      }
+    </section>
 
   }
 
