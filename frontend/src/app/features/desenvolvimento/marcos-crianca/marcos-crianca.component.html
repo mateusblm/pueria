@@ -37,43 +37,49 @@
       <p>{{ textoSemMarcos() }}</p>
     </div>
   } @else {
-    <section class="pueria-card painel-idade">
-      <div class="painel-idade__header">
+    <section class="pueria-card painel-etapa">
+      <div class="painel-etapa__intro">
         <div>
-          <p class="pueria-eyebrow">Faixa atual</p>
-          <h2>{{ tituloIdadeSelecionada() }}</h2>
+          <p class="pueria-eyebrow">Etapa de desenvolvimento</p>
+          <h2>O que {{ crianca()?.nome ?? 'a criança' }} já faz aos {{ tituloIdadeSelecionada() }}?</h2>
+          <p>Responda olhando para o dia a dia. Não é uma prova e você pode voltar quando quiser.</p>
         </div>
-        <strong>{{ progresso().respondidos }} de {{ progresso().total }}</strong>
+        <span class="painel-etapa__progresso"><strong>{{ progresso().respondidos }}</strong> de {{ progresso().total }} respondidas</span>
       </div>
-      <div class="progresso" aria-hidden="true">
-        <span [style.width.%]="progresso().percentual"></span>
+      <div class="progresso" aria-hidden="true"><span [style.width.%]="progresso().percentual"></span></div>
+      @if (textoIdadeReferencia()) { <p class="painel-etapa__referencia">{{ textoIdadeReferencia() }}</p> }
+
+      <div class="painel-etapa__acoes" aria-label="Ações desta etapa">
+        <button type="button" [class.painel-etapa__acao--ativa]="modo() === 'responder'" (click)="abrirResponder()">
+          <app-icon name="brain" [size]="19" />
+          <span><strong>{{ progresso().respondidos === 0 ? 'Começar a responder' : 'Revisar habilidades' }}</strong><small>Uma habilidade por vez</small></span>
+        </button>
+        <button type="button" [class.painel-etapa__acao--ativa]="modo() === 'visao'" (click)="abrirVisao()">
+          <app-icon name="chart" [size]="19" />
+          <span><strong>Ver resumo</strong><small>Por área do desenvolvimento</small></span>
+        </button>
+        <button type="button" [class.painel-etapa__acao--ativa]="modo() === 'experimentos'" (click)="abrirExperimentos()">
+          <app-icon name="sparkles" [size]="19" />
+          <span><strong>Atividades</strong><small>Ideias para a rotina</small></span>
+        </button>
+        <button type="button" [class.painel-etapa__acao--ativa]="modo() === 'resultados'" (click)="abrirResultados()">
+          <app-icon name="stethoscope" [size]="19" />
+          <span><strong>Para a consulta</strong><small>Resumo para conversar</small></span>
+        </button>
       </div>
-      <p>{{ progresso().percentual }}% desta etapa já foi registrada.</p>
-      @if (textoIdadeReferencia()) {
-        <p class="painel-idade__referencia">{{ textoIdadeReferencia() }}</p>
-      }
-      <details class="painel-idade__historico">
-        <summary>Revisar outras fases</summary>
-        <div class="linha-tempo-marcos__etapas">
-          @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
-            <button
-              type="button"
-              [class.linha-tempo-marcos__etapa--ativa]="grupo.idadeMeses === idadeSelecionada()"
-              (click)="selecionarIdade(grupo.idadeMeses)">
-              <strong>{{ grupo.titulo }}</strong>
-              <span>{{ grupo.respondidos }}/{{ grupo.total }}</span>
-            </button>
-          }
-        </div>
-      </details>
     </section>
 
-    <div class="modo-tabs" role="tablist" aria-label="Modo de acompanhamento">
-      <button type="button" [class.modo-tabs__active]="modo() === 'visao'" (click)="abrirVisao()">Visão geral</button>
-      <button type="button" [class.modo-tabs__active]="modo() === 'responder'" (click)="abrirResponder()">Responder etapas</button>
-      <button type="button" [class.modo-tabs__active]="modo() === 'experimentos'" (click)="abrirExperimentos()">Experimentos</button>
-      <button type="button" [class.modo-tabs__active]="modo() === 'resultados'" (click)="abrirResultados()">Ver resultados</button>
-    </div>
+    <section class="seletor-fases" aria-label="Escolher etapa de desenvolvimento">
+      <div><p class="pueria-eyebrow">Outras idades</p><h2>Veja uma fase diferente</h2></div>
+      <div class="seletor-fases__lista">
+        @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
+          <button type="button" [class.seletor-fases__fase--ativa]="grupo.idadeMeses === idadeSelecionada()" (click)="selecionarIdade(grupo.idadeMeses)">
+            <strong>{{ grupo.titulo }}</strong>
+            <span>{{ grupo.respondidos === grupo.total ? 'Concluída' : grupo.respondidos + ' de ' + grupo.total }}</span>
+          </button>
+        }
+      </div>
+    </section>
 
     @if (modo() === 'visao') {
       <section class="marcos-visao" aria-label="Visão geral dos marcos">

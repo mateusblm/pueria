@@ -12,34 +12,19 @@
 .marcos-page__hero-visual { background: #eee3f4; border-radius: 49% 51% 44% 56%; height: 138px; justify-self: end; position: relative; width: 150px; }
 .marcos-orbita { align-items: center; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 7px 18px rgba(69, 45, 76, .12); display: flex; height: 54px; justify-content: center; position: absolute; width: 54px; }.marcos-orbita--um { background: #f5dce0; color: #8e4050; left: 15px; top: 26px; }.marcos-orbita--dois { background: #dce9f6; color: #405f86; right: 7px; top: 11px; }.marcos-orbita--tres { background: #dcebdc; bottom: 10px; color: #396246; right: 27px; }
 
-.marcos-page__hero h1, .marcos-page__hero p, .painel-idade h2, .painel-idade p,
+.marcos-page__hero h1, .marcos-page__hero p,
 .etapa-card h2, .apoio-card h2, .apoio-card p, .marco-card h3, .marco-card p,
 .resumo-consulta h2, .resumo-consulta p, .resultado-area p, .historico-card p { margin: 0; }
 
-.marcos-page__state, .painel-idade, .apoio-card { padding: 22px; }
-.painel-idade { border-top: 4px solid #76507d; display: grid; gap: 14px; }
-.painel-idade__header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.painel-idade__header strong { color: var(--pueria-vermelho-profundo); font-size: 1.55rem; }
-.painel-idade__referencia { border-left: 3px solid #76507d; color: var(--pueria-texto-suave); font-size: .9rem; padding-left: 10px; }
+.marcos-page__state, .apoio-card { padding: 22px; }
 
 .progresso { height: 10px; overflow: hidden; border-radius: 4px; background: #ece5ee; }
 .progresso span { display: block; height: 100%; border-radius: inherit; background: var(--pueria-sucesso); transition: width 180ms ease; }
 
-.modo-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-
-.linha-tempo-marcos { display: grid; gap: 12px; }
-.linha-tempo-marcos h2, .linha-tempo-marcos p { margin: 0; }
-.linha-tempo-marcos h2 { font-size: 1.2rem; }
-.linha-tempo-marcos__etapas { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
-.linha-tempo-marcos__etapas button { display: grid; flex: 0 0 auto; gap: 4px; min-width: 104px; border: 1px solid #e9dfda; border-radius: 6px; background: #fff; color: var(--pueria-texto); cursor: pointer; padding: 10px; text-align: left; }
-.linha-tempo-marcos__etapas button span { color: var(--pueria-texto-suave); font-size: .8rem; }
-.linha-tempo-marcos__etapas .linha-tempo-marcos__etapa--ativa { border-color: #76507d; background: #f5eff8; box-shadow: inset 0 3px 0 #76507d; }
-.modo-tabs button, .resposta {
+.resposta {
   border: 1px solid var(--pueria-borda); background: #fff; color: var(--pueria-texto);
   cursor: pointer; font: inherit; font-weight: 820;
 }
-.modo-tabs button { min-height: 48px; border-radius: 6px; }
-.modo-tabs__active { border-color: rgba(118, 80, 125, .38) !important; background: #eee3f4 !important; color: #61426c !important; }
 
 .areas-resumo { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }.area-resumo { align-items: center; background: #fff; border: 1px solid #e9dfda; border-top: 3px solid var(--area-cor, #76507d); display: flex; gap: 10px; min-height: 78px; padding: 11px; }.area-resumo__icone { align-items: center; background: var(--area-fundo, #eee3f4); border-radius: 50%; color: var(--area-cor, #76507d); display: inline-flex; height: 38px; justify-content: center; width: 38px; }.area-resumo div { display: grid; gap: 3px; }.area-resumo span:not(.area-resumo__icone) { color: var(--pueria-texto-suave); font-size: .8rem; }.area-resumo[data-tema='social'], .resultado-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.area-resumo[data-tema='linguagem'], .resultado-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.area-resumo[data-tema='cognicao'], .resultado-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.area-resumo[data-tema='movimento'], .resultado-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
 
@@ -155,16 +140,16 @@
 
 @media (max-width: 620px) {
   .marcos-page__hero { grid-template-columns: 1fr 98px; min-height: 164px; padding: 18px; }.marcos-page__hero-visual { height: 96px; width: 98px; }.marcos-orbita { border-width: 3px; height: 38px; width: 38px; }.marcos-orbita--um { left: 2px; top: 21px; }.marcos-orbita--dois { right: 1px; top: 2px; }.marcos-orbita--tres { bottom: 1px; right: 13px; }
-  .marcos-page__hero, .painel-idade, .etapa-card__body, .apoio-card, .relato-desenvolvimento { padding: 18px; }
+  .marcos-page__hero, .etapa-card__body, .apoio-card, .relato-desenvolvimento { padding: 18px; }
   .relato-desenvolvimento__tipos { width: 100%; }.relato-desenvolvimento__tipos button { flex: 1 1 10rem; }
-  .marco-card__actions, .modo-tabs, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
+  .marco-card__actions, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
   .estimulos-card { padding:18px; }.estimulos-card__lista article { grid-template-columns:auto minmax(0,1fr); }.estimulos-card__lista .pueria-button, .estimulos-card__feito { grid-column:2; justify-self:start; }
   .etapa-nav { align-items: stretch; flex-direction: column; }
   .historico-lista article { grid-template-columns: 1fr; }
 }
 
 @media print {
-  .marcos-page__back, .marcos-page__hero, .painel-idade, .modo-tabs, .etapa-card, .pueria-button { display: none !important; }
+  .marcos-page__back, .marcos-page__hero, .painel-etapa, .seletor-fases, .etapa-card, .pueria-button { display: none !important; }
   .pueria-card, .marco-card { box-shadow: none !important; break-inside: avoid; }
 }
 
@@ -178,7 +163,6 @@
 
 .marcos-page > *,
 .marcos-page__hero > div,
-.painel-idade__header > div,
 .etapa-card__meta > * {
   min-width: 0;
 }
@@ -235,75 +219,12 @@
   color: #316645;
 }
 
-.painel-idade {
-  gap: 10px;
-  padding: 18px 20px;
-  border-top-width: 1px;
-  border-color: #e3d4ed;
-  border-radius: var(--pueria-raio-menor);
-  background: #fff;
-}
-
-.painel-idade__header strong {
-  color: #69428e;
-  font-family: var(--pueria-fonte-titulo);
-  font-size: 1.15rem;
-}
-
-.painel-idade > p:not(.painel-idade__referencia) {
-  margin: 0;
-  color: var(--pueria-texto-suave);
-  font-size: 0.84rem;
-}
-
-.painel-idade__referencia {
-  margin: 2px 0 0;
-  font-size: 0.82rem;
-}
-
-.painel-idade__historico {
-  margin-top: 2px;
-  border-top: 1px solid var(--pueria-borda);
-  padding-top: 10px;
-}
-
-.painel-idade__historico summary,
 .nota-marco summary {
   width: fit-content;
   cursor: pointer;
   color: var(--pueria-vermelho-profundo);
   font-size: 0.86rem;
   font-weight: 700;
-}
-
-.painel-idade__historico .linha-tempo-marcos__etapas {
-  margin-top: 11px;
-}
-
-.linha-tempo-marcos__etapas button {
-  min-width: 92px;
-  border-radius: var(--pueria-raio-menor);
-}
-
-.modo-tabs {
-  display: flex;
-  justify-content: flex-end;
-  gap: 4px;
-}
-
-.modo-tabs button {
-  min-height: 38px;
-  padding: 7px 12px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--pueria-texto-suave);
-  font-size: 0.84rem;
-}
-
-.modo-tabs__active {
-  background: #eee3f4 !important;
-  color: #61426c !important;
 }
 
 .etapa-card {
@@ -417,9 +338,6 @@
     grid-template-columns: 1fr;
   }
 
-  .modo-tabs {
-    justify-content: flex-start;
-  }
 }
 
 .marcos-page__hero-cabecalho {
@@ -449,6 +367,71 @@
 .marcos-entenda__fechar:hover {
   background: #f8f1fb;
 }
+
+/* A etapa vem antes das ações: a família entende onde está antes de escolher o que fazer. */
+.painel-etapa {
+  display: grid;
+  gap: 16px;
+  border-top: 4px solid #76507d;
+  padding: 22px;
+}
+
+.painel-etapa__intro {
+  align-items: start;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.painel-etapa__intro > div { display: grid; gap: 6px; }
+.painel-etapa__intro h2 { margin: 0; font-size: clamp(1.28rem, 2.5vw, 1.7rem); line-height: 1.25; }
+.painel-etapa__intro p:not(.pueria-eyebrow) { margin: 0; color: var(--pueria-texto-suave); line-height: 1.45; }
+.painel-etapa__progresso { flex: 0 0 auto; color: #69428e; font-size: .86rem; text-align: right; white-space: nowrap; }
+.painel-etapa__progresso strong { font-family: var(--pueria-fonte-titulo); font-size: 1.36rem; }
+.painel-etapa__referencia { margin: -6px 0 0; color: var(--pueria-texto-suave); font-size: .82rem; }
+
+.painel-etapa__acoes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.painel-etapa__acoes button {
+  align-items: center;
+  border: 1px solid var(--pueria-borda);
+  border-radius: var(--pueria-raio-menor);
+  background: #fffdf9;
+  color: var(--pueria-texto);
+  display: flex;
+  gap: 9px;
+  min-height: 62px;
+  padding: 10px;
+  text-align: left;
+}
+
+.painel-etapa__acoes app-icon { color: #76507d; flex: 0 0 auto; }
+.painel-etapa__acoes span { display: grid; gap: 3px; min-width: 0; }
+.painel-etapa__acoes strong { font-size: .84rem; line-height: 1.16; }
+.painel-etapa__acoes small { color: var(--pueria-texto-suave); font-size: .72rem; line-height: 1.15; }
+.painel-etapa__acao--ativa { border-color: rgba(118, 80, 125, .4) !important; background: #f4edf8 !important; box-shadow: inset 0 3px 0 #76507d; }
+
+.seletor-fases { display: grid; gap: 10px; }
+.seletor-fases h2 { margin: 2px 0 0; font-size: 1.13rem; }
+.seletor-fases__lista { display: flex; gap: 8px; overflow-x: auto; padding: 2px 1px 8px; scrollbar-width: thin; }
+.seletor-fases__lista button {
+  display: grid;
+  flex: 0 0 126px;
+  gap: 4px;
+  border: 1px solid var(--pueria-borda);
+  border-radius: var(--pueria-raio-menor);
+  background: #fffdf9;
+  color: var(--pueria-texto);
+  padding: 11px;
+  text-align: left;
+}
+.seletor-fases__lista button strong { font-size: .88rem; }
+.seletor-fases__lista button span { color: var(--pueria-texto-suave); font-size: .75rem; }
+.seletor-fases__fase--ativa { border-color: #76507d !important; background: #f4edf8 !important; box-shadow: inset 0 3px 0 #76507d; }
 
 
 .marcos-entenda__fundo {
@@ -540,6 +523,12 @@
   .marcos-entenda h2 {
     font-size: 1.38rem;
   }
+
+  .painel-etapa { padding: 18px; }
+  .painel-etapa__intro { display: grid; gap: 10px; }
+  .painel-etapa__progresso { text-align: left; }
+  .painel-etapa__acoes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .painel-etapa__acoes button { align-items: flex-start; min-height: 70px; }
 
   .marcos-entenda__acoes .pueria-button {
     width: 100%;
