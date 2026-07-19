@@ -79,6 +79,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly descricaoRelato = signal('');
   readonly salvandoRelato = signal(false);
   readonly salvandoEstimuloId = signal<string | null>(null);
+  readonly entendaAberto = signal(false);
 
   readonly areas: AreaDesenvolvimento[] = ['SOCIAL_EMOCIONAL', 'LINGUAGEM_COMUNICACAO', 'COGNITIVO', 'MOTOR'];
 
@@ -279,6 +280,14 @@ export class MarcosCriancaComponent implements OnInit {
     if (this.progresso().respondidos < this.progresso().total) {
       this.posicionarPrimeiraPendente();
     }
+  }
+
+  abrirEntenda(): void {
+    this.entendaAberto.set(true);
+  }
+
+  fecharEntenda(): void {
+    this.entendaAberto.set(false);
   }
 
   abrirResultados(): void {

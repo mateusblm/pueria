@@ -3,7 +3,12 @@
 
   <div class="marcos-page__hero">
     <div>
-      <p class="pueria-eyebrow">Neurodesenvolvimento</p>
+      <div class="marcos-page__hero-cabecalho">
+        <p class="pueria-eyebrow">Neurodesenvolvimento</p>
+        <button type="button" class="marcos-page__entenda" (click)="abrirEntenda()" aria-label="Entenda como acompanhar os marcos" title="Como funciona">
+          <app-icon name="help" [size]="20" />
+        </button>
+      </div>
       <h1 class="pueria-title">Descobertas de cada fase</h1>
       <p class="pueria-subtitle">
         Observe a rotina com calma. Cada etapa mostra uma habilidade por vez, sem misturar idades futuras.
@@ -390,5 +395,32 @@
         </section>
       </div>
     }
+  }
+  @if (entendaAberto()) {
+    <div class="marcos-entenda__fundo" role="presentation" (click)="fecharEntenda()">
+      <section class="marcos-entenda" role="dialog" aria-modal="true" aria-labelledby="marcos-entenda-titulo" (click)="$event.stopPropagation()">
+        <div class="marcos-entenda__cabecalho">
+          <div>
+            <p class="pueria-eyebrow">Neurodesenvolvimento</p>
+            <h2 id="marcos-entenda-titulo">Cada descoberta tem seu tempo</h2>
+          </div>
+          <button type="button" class="marcos-entenda__fechar" (click)="fecharEntenda()" aria-label="Fechar explicação" title="Fechar">
+            <app-icon name="close" [size]="20" />
+          </button>
+        </div>
+        <img src="assets/ilustracoes/desenvolvimento-acolhedor.png" alt="Pessoa cuidadora brincando no chão com uma criança pequena." />
+        <div class="marcos-entenda__conteudo">
+          <p>Os marcos ajudam a organizar o que a família percebe no dia a dia de {{ crianca()?.nome ?? 'sua criança' }}. Cada criança tem seu ritmo, e este acompanhamento não substitui uma avaliação profissional.</p>
+          <ul>
+            <li>Responda apenas pelo que acontece na rotina.</li>
+            <li>Você pode voltar e atualizar uma observação quando quiser.</li>
+            <li>Observações e dúvidas podem ser levadas para a consulta.</li>
+          </ul>
+        </div>
+        <div class="marcos-entenda__acoes">
+          <button type="button" class="pueria-button" (click)="fecharEntenda()">Entendi</button>
+        </div>
+      </section>
+    </div>
   }
 </section>

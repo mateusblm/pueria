@@ -403,3 +403,128 @@
     justify-content: flex-start;
   }
 }
+
+.marcos-page__hero-cabecalho {
+  align-items: center;
+  display: flex;
+  gap: .75rem;
+  justify-content: space-between;
+}
+
+.marcos-page__entenda,
+.marcos-entenda__fechar {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dbcde8;
+  border-radius: 50%;
+  color: #76507d;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 40px;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  width: 40px;
+}
+
+.marcos-page__entenda:hover,
+.marcos-entenda__fechar:hover {
+  background: #f8f1fb;
+}
+
+.marcos-entenda__fundo {
+  align-items: center;
+  background: rgba(39, 29, 41, .52);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1.5rem;
+  position: fixed;
+  z-index: 1200;
+}
+
+.marcos-entenda {
+  background: #fffdfb;
+  border: 1px solid #e5d8ef;
+  border-radius: 18px;
+  box-shadow: 0 24px 64px rgba(39, 29, 41, .28);
+  max-height: min(760px, calc(100vh - 3rem));
+  max-width: 680px;
+  overflow: auto;
+  width: min(100%, 680px);
+}
+
+.marcos-entenda__cabecalho {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1.4rem 1.5rem 1rem;
+}
+
+.marcos-entenda h2 {
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.65rem;
+  margin: .25rem 0 0;
+}
+
+.marcos-entenda img {
+  aspect-ratio: 16 / 7;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.marcos-entenda__conteudo {
+  color: #51444c;
+  line-height: 1.55;
+  padding: 1.25rem 1.5rem 0;
+}
+
+.marcos-entenda__conteudo p {
+  margin: 0;
+}
+
+.marcos-entenda__conteudo ul {
+  display: grid;
+  gap: .55rem;
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.marcos-entenda__acoes {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.35rem 1.5rem 1.5rem;
+}
+
+@media (max-width: 560px) {
+  .marcos-page__hero-cabecalho {
+    align-items: flex-start;
+  }
+
+  .marcos-entenda__fundo {
+    align-items: flex-end;
+    padding: .75rem;
+  }
+
+  .marcos-entenda {
+    border-radius: 18px 18px 12px 12px;
+    max-height: calc(100vh - 1.5rem);
+  }
+
+  .marcos-entenda__cabecalho,
+  .marcos-entenda__conteudo,
+  .marcos-entenda__acoes {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+
+  .marcos-entenda h2 {
+    font-size: 1.38rem;
+  }
+
+  .marcos-entenda__acoes .pueria-button {
+    width: 100%;
+  }
+}

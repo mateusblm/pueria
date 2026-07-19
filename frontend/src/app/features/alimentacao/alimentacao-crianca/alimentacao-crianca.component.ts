@@ -53,6 +53,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly editandoId = signal('');
+  readonly entendaAberto = signal(false);
   readonly modalAlimentosAberta = signal(false);
   readonly buscaAlimento = signal('');
   readonly grupoAlimentoAtivo = signal<FiltroCatalogo>('TODOS');
@@ -412,6 +413,14 @@ export class AlimentacaoCriancaComponent implements OnInit {
   abrirModalAlimentos(grupo: FiltroCatalogo = 'TODOS'): void {
     this.grupoAlimentoAtivo.set(grupo);
     this.modalAlimentosAberta.set(true);
+  }
+
+  abrirEntenda(): void {
+    this.entendaAberto.set(true);
+  }
+
+  fecharEntenda(): void {
+    this.entendaAberto.set(false);
   }
 
   fecharModalAlimentos(): void {
