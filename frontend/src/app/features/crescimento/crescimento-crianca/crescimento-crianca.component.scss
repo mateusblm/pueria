@@ -173,9 +173,9 @@
 .crescimento-entenda__cabecalho h2 { margin: 0; }
 .crescimento-entenda__imagem { background: #edf5ee; border: 1px solid #d8e8dc; border-radius: 14px; overflow: hidden; }
 .crescimento-entenda__imagem img { display: block; height: auto; max-height: 15rem; object-fit: contain; object-position: center; width: 100%; }
-.crescimento-entenda__conteudo { color: var(--pueria-texto-suave); }
+.crescimento-entenda__conteudo { color: var(--pueria-texto-suave); display: grid; gap: 1rem; }
 .crescimento-entenda__conteudo p { margin: 0; }
-.crescimento-entenda__conteudo ul { display: grid; gap: .4rem; margin: .9rem 0; padding-left: 1.15rem; }
+.crescimento-entenda__conteudo ul { display: grid; gap: .4rem; margin: .65rem 0 0; padding-left: 1.15rem; }.crescimento-entenda__bloco { border: 1px solid #d8e8dc; border-radius: 12px; padding: 1rem; }.crescimento-entenda__bloco h3 { color: #3d694b; font-size: 1rem; margin: 0 0 .45rem; }.crescimento-entenda__bloco--destaque { background: #edf5ee; border-left: 3px solid #6f9277; }
 .crescimento-entenda__nota { background: #edf5ee; border-left: 3px solid #6f9277; color: #3d694b; padding: .75rem .85rem; }
 .crescimento-entenda__acao { justify-self: end; }
 

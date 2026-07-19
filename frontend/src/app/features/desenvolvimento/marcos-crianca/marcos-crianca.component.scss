@@ -490,6 +490,8 @@
 
 .marcos-entenda__conteudo {
   color: #51444c;
+  display: grid;
+  gap: 1rem;
   line-height: 1.55;
   padding: 1.25rem 1.5rem 0;
 }
@@ -498,12 +500,7 @@
   margin: 0;
 }
 
-.marcos-entenda__conteudo ul {
-  display: grid;
-  gap: .55rem;
-  margin: 1rem 0 0;
-  padding-left: 1.2rem;
-}
+.marcos-entenda__conteudo ul { display: grid; gap: .55rem; margin: .65rem 0 0; padding-left: 1.2rem; }.marcos-entenda__bloco { border: 1px solid #e5d8ef; border-radius: 12px; padding: 1rem; }.marcos-entenda__bloco h3 { color: #76507d; font-size: 1rem; margin: 0 0 .45rem; }.marcos-entenda__bloco--destaque { background: #f8f1fb; border-left: 3px solid #76507d; }
 
 .marcos-entenda__acoes {
   display: flex;

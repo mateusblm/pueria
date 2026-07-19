@@ -410,12 +410,9 @@
         </div>
         <img src="/assets/ilustracoes/desenvolvimento-acolhedor.png" alt="Pessoa cuidadora brincando no chão com uma criança pequena." />
         <div class="marcos-entenda__conteudo">
-          <p>Os marcos ajudam a organizar o que a família percebe no dia a dia de {{ crianca()?.nome ?? 'sua criança' }}. Cada criança tem seu ritmo, e este acompanhamento não substitui uma avaliação profissional.</p>
-          <ul>
-            <li>Responda apenas pelo que acontece na rotina.</li>
-            <li>Você pode voltar e atualizar uma observação quando quiser.</li>
-            <li>Observações e dúvidas podem ser levadas para a consulta.</li>
-          </ul>
+          <section class="marcos-entenda__bloco"><h3>Para que servem os marcos?</h3><p>Eles ajudam a organizar o que a família percebe no dia a dia de {{ crianca()?.nome ?? 'sua criança' }}. Cada criança tem seu ritmo.</p></section>
+          <section class="marcos-entenda__bloco"><h3>Como responder</h3><ul><li>Responda apenas pelo que acontece na rotina.</li><li>Marque uma dúvida quando ela fizer sentido; não é preciso ter certeza de tudo.</li><li>Você pode voltar e atualizar uma observação quando quiser.</li></ul></section>
+          <section class="marcos-entenda__bloco marcos-entenda__bloco--destaque"><h3>O que fazer com o resultado</h3><p>Use observações e dúvidas para deixar a conversa com o pediatra mais concreta. O acompanhamento não substitui uma avaliação profissional.</p></section>
         </div>
         <div class="marcos-entenda__acoes">
           <button type="button" class="pueria-button" (click)="fecharEntenda()">Entendi</button>
