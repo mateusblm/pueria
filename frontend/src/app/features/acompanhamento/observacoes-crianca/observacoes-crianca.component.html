@@ -1,0 +1,40 @@
+<section class="observacoes-page">
+  <a routerLink="/acompanhamento" class="observacoes-page__back">Voltar ao início</a>
+
+  @if (carregando()) {
+    <div class="pueria-card observacoes-page__state">Carregando acompanhamento...</div>
+  } @else if (erro()) {
+    <div class="pueria-card observacoes-page__state"><p class="pueria-message pueria-message--erro">{{ erro() }}</p></div>
+  } @else if (crianca(); as crianca) {
+    <header class="pueria-card observacoes-page__hero">
+      <div>
+        <p class="pueria-eyebrow">Acompanhamento</p>
+        <h1 class="pueria-title">Observações de {{ crianca.nome }}</h1>
+        <p class="pueria-subtitle">Escolha uma área quando houver algo útil para guardar, acompanhar ou levar para a consulta.</p>
+      </div>
+      <span class="observacoes-page__hero-icon"><app-icon name="message" [size]="28" /></span>
+    </header>
+
+    <p class="observacoes-page__nota"><app-icon name="sparkles" [size]="18" /> Não é preciso preencher tudo nem registrar todos os dias.</p>
+
+    @for (grupo of grupos; track grupo.titulo) {
+      <section class="observacoes-grupo" [attr.data-grupo]="grupo.titulo">
+        <div class="observacoes-grupo__header">
+          <div>
+            <p class="pueria-eyebrow">{{ grupo.titulo }}</p>
+            <p>{{ grupo.descricao }}</p>
+          </div>
+        </div>
+        <div class="observacoes-grupo__lista">
+          @for (modulo of grupo.modulos; track modulo.rota) {
+            <a [routerLink]="['/criancas', crianca.id, modulo.rota]" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-card observacao-modulo" [attr.data-tema]="modulo.tema">
+              <span class="observacao-modulo__icone"><app-icon [name]="modulo.icone" [size]="22" /></span>
+              <span class="observacao-modulo__conteudo"><strong>{{ modulo.titulo }}</strong><span>{{ modulo.descricao }}</span></span>
+              <app-icon name="chevronRight" [size]="18" />
+            </a>
+          }
+        </div>
+      </section>
+    }
+  }
+</section>

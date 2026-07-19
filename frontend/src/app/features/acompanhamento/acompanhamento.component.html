@@ -2,10 +2,10 @@
   @if (!possuiCriancas()) {
   <div class="acompanhamento-page__hero">
     <div>
-      <p class="pueria-eyebrow">Acompanhamento</p>
+      <p class="pueria-eyebrow">Início</p>
       <h1 class="pueria-title">Cuidado que cresce junto</h1>
       <p class="pueria-subtitle">
-        Uma visão clara do desenvolvimento, da saúde e da rotina da criança.
+        Um ponto de partida claro para organizar o acompanhamento e a consulta.
       </p>
     </div>
     <div class="acompanhamento-page__visual" aria-hidden="true">
@@ -42,7 +42,7 @@
     <section class="acompanhamento-home">
       <header class="acompanhamento-home__saudacao">
         <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-        <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
+        <p>Um resumo breve para orientar o próximo passo.</p>
       </header>
 
       @if (outrasCriancas().length > 0) {
@@ -123,16 +123,6 @@
       }
     </section>
 
-    <section class="acompanhamento-modulos" aria-label="Áreas de acompanhamento">
-      <p class="acompanhamento-modulos__titulo">Áreas de acompanhamento</p>
-      @for (modulo of modulosCuidado(foco); track modulo.titulo) {
-        <a [routerLink]="modulo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-card modulo-cuidado" [class.modulo-cuidado--destaque]="modulo.destaque" [attr.data-tema]="modulo.tema">
-          <span class="modulo-cuidado__icone"><app-icon [name]="modulo.icone" [size]="25" /></span>
-          <span class="modulo-cuidado__texto"><span>{{ modulo.titulo }}</span><strong>{{ modulo.detalhe }}</strong></span>
-        </a>
-      }
-    </section>
-
     @if (!foco.erro) {
       <section class="pueria-card acompanhamento-consulta">
         <div>
@@ -147,59 +137,6 @@
         </a>
       </section>
 
-      @if (relatosParaConversa(foco.relatos).length > 0) {
-        <section class="pueria-card acompanhamento-relatos" [class.acompanhamento-relatos--prioritario]="existePerdaHabilidade(foco.relatos)">
-          <div class="acompanhamento-relatos__cabecalho">
-            <div>
-              <p class="pueria-eyebrow">Contexto da família</p>
-              <h2>Para conversar na consulta</h2>
-              <p>
-                @if (existePerdaHabilidade(foco.relatos)) {
-                  Há uma perda de habilidade registrada pela família. Vale conversar com o pediatra o quanto antes.
-                } @else {
-                  Observações registradas pela família para ajudar a contextualizar a conversa com o pediatra.
-                }
-              </p>
-            </div>
-            <span class="acompanhamento-relatos__icone"><app-icon [name]="existePerdaHabilidade(foco.relatos) ? 'heartPulse' : 'message'" [size]="24" /></span>
-          </div>
-          <div class="acompanhamento-relatos__lista">
-            @for (relato of relatosParaConversa(foco.relatos); track relato.id) {
-              <article>
-                <div>
-                  <strong>{{ tituloRelato(relato) }}</strong>
-                  <span>{{ formatarDataRegistro(relato.registradoEm) }}</span>
-                </div>
-                <p>{{ relato.descricao }}</p>
-              </article>
-            }
-          </div>
-          <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }" class="pueria-button pueria-button--secondary">
-            Ver registros do desenvolvimento
-          </a>
-        </section>
-      }
-
-      @if (foco.trajetoria.length > 0) {
-        <section class="pueria-card acompanhamento-trajetoria">
-          <div>
-            <p class="pueria-eyebrow">Neurodesenvolvimento</p>
-            <h2>Observações recentes</h2>
-          </div>
-          <div class="acompanhamento-trajetoria__lista">
-            @for (evento of foco.trajetoria; track evento.registradoEm + evento.descricaoMarco) {
-              <article>
-                <span class="acompanhamento-trajetoria__ponto" aria-hidden="true"></span>
-                <div>
-                  <strong>{{ textoTrajetoria(evento) }}</strong>
-                  <p>{{ evento.descricaoMarco }}</p>
-                </div>
-                <time>{{ formatarDataRegistro(evento.registradoEm) }}</time>
-              </article>
-            }
-          </div>
-        </section>
-      }
     }
 
   }

@@ -127,7 +127,7 @@
   left: 0;
   z-index: 14;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--pueria-borda);
   background: rgba(255, 250, 244, 0.98);
   padding: 8px 14px calc(8px + env(safe-area-inset-bottom));

@@ -61,17 +61,26 @@ Documento de execução baseado em `APRIMORAMENTOS.docx`, recebido em 18/07/2026
 
 **Aceite:** uma pessoa cuidadora entende a trajetória; o profissional consegue abrir os dados técnicos necessários.
 
-## Fase 4 - Resumos mensais por domínio
+## Decisão de arquitetura - 19/07/2026
 
-- [ ] APR-40 Criar o registro mensal de sono: padrão geral, início do sono, despertares, sonecas, forma/local de adormecer, piora e contexto associado.
-- [ ] APR-41 Criar o registro mensal de alimentação: base alimentar, aceitação, hidratação, diversidade, progressão de textura, alimentos novos e possíveis reações observadas.
-- [ ] APR-42 Criar o resumo mensal de eliminações: frequência, padrão das fezes, sinais associados, intervalos sem evacuar e padrão de diurese.
-- [ ] APR-43 Criar o resumo mensal de sintomas e saúde: intercorrências, sintomas, intensidade, atendimento e uso eventual de medicamentos.
-- [ ] APR-44 Criar o resumo mensal de uso regular de medicamentos, vitaminas e suplementos, separado de uso agudo por intercorrência.
-- [ ] APR-45 Criar o resumo mensal de estilo de vida e ambiente: telas, ar livre, sol, brincadeira corporal e tempo em contenções.
-- [ ] APR-46 Criar o resumo mensal de rotina e contexto: cuidador, creche, mudanças, contato com outras crianças e eventos familiares.
+O Puéria não será organizado como diário obrigatório. A família registra somente o que for útil para entender um padrão ou preparar uma consulta. Para evitar repetição e sobrecarga:
 
-**Aceite:** cada domínio permite registrar o padrão predominante sem exigir diário detalhado; os dados ficam disponíveis para evolução e relatório.
+- `Início` orienta o próximo passo e reúne atalhos, sem duplicar históricos.
+- `Marcos` concentra exclusivamente o neurodesenvolvimento e seus resultados.
+- `Acompanhamento` reúne os módulos opcionais por corpo e saúde, rotina e contexto da família.
+- `Para a consulta` é o destino de síntese, cronologia e compartilhamento com o profissional.
+
+Os resumos da Fase 4 continuam necessários, mas serão oferecidos como síntese opcional do período a partir dos registros existentes — nunca como formulários mensais obrigatórios nem como um novo lugar para repetir os mesmos dados.
+
+## Fase 4 - Sínteses opcionais por domínio
+
+- [~] APR-40 Separar na navegação os destinos `Início`, `Marcos`, `Acompanhamento` e `Para a consulta`, preservando os dados e reduzindo duplicidade.
+- [ ] APR-41 Criar a síntese opcional de sono a partir de registros: padrão geral, início do sono, despertares, sonecas, forma/local de adormecer, piora e contexto associado.
+- [ ] APR-42 Criar a síntese opcional de alimentação e eliminações: base alimentar, aceitação, hidratação, diversidade, progressão de textura, alimentos novos, frequência, fezes, diurese e sinais associados.
+- [ ] APR-43 Criar a síntese opcional de saúde e cuidados: intercorrências, sintomas, intensidade, atendimento, medicamentos, vitaminas e suplementos.
+- [ ] APR-44 Criar a síntese opcional de estilo de vida e contexto: telas, ar livre, sol, brincadeira corporal, cuidador, creche, mudanças e eventos familiares.
+
+**Aceite:** cada domínio permite registrar o padrão predominante sem exigir diário detalhado; as sínteses usam os dados disponíveis e ficam acessíveis para a evolução e o relatório.
 
 ## Fase 5 - Linha do tempo e interpretação evolutiva
 

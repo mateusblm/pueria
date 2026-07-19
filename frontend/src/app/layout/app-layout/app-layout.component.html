@@ -17,14 +17,18 @@
     </div>
 
     <nav class="app-shell__nav" aria-label="Navegação principal">
-      <a routerLink="/acompanhamento" routerLinkActive="ativo" (click)="fecharMenu()">
-        <app-icon name="chart" [size]="20" />
+      <a routerLink="/acompanhamento" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">
+        <app-icon name="home" [size]="20" />
+        Início
+      </a>
+      <button type="button" (click)="irParaMarcos()" [class.ativo]="marcosEstaAtivo()">
+        <app-icon name="brain" [size]="20" />
+        Marcos
+      </button>
+      <button type="button" (click)="irParaAcompanhamento()" [class.ativo]="acompanhamentoEstaAtivo()">
+        <app-icon name="message" [size]="20" />
         Acompanhamento
-      </a>
-      <a routerLink="/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">
-        <app-icon name="baby" [size]="20" />
-        Minha criança
-      </a>
+      </button>
       <button type="button" (click)="irParaConsulta()" [class.ativo]="consultaEstaAtiva()">
         <app-icon name="stethoscope" [size]="20" />
         Para a consulta
@@ -46,10 +50,8 @@
       <app-icon name="home" [size]="18" />
       <span>Início</span>
     </a>
-    <a routerLink="/criancas" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" title="Minha criança">
-      <app-icon name="baby" [size]="18" />
-      <span>Criança</span>
-    </a>
+    <button type="button" (click)="irParaMarcos()" [class.ativo]="marcosEstaAtivo()" title="Marcos"><app-icon name="brain" [size]="18" /><span>Marcos</span></button>
+    <button type="button" (click)="irParaAcompanhamento()" [class.ativo]="acompanhamentoEstaAtivo()" title="Acompanhamento"><app-icon name="message" [size]="18" /><span>Acompanhar</span></button>
     <button type="button" (click)="irParaConsulta()" [class.ativo]="consultaEstaAtiva()" title="Para a consulta">
       <app-icon name="stethoscope" [size]="18" />
       <span>Consulta</span>

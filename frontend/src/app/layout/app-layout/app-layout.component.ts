@@ -32,12 +32,32 @@ export class AppLayoutComponent {
   }
 
   irParaConsulta(): void {
-    this.fecharMenu();
-    const criancaId = localStorage.getItem('pueria.criancaEmFocoId');
-    void this.router.navigateByUrl(criancaId ? `/criancas/${criancaId}/para-a-consulta` : '/criancas');
+    this.irParaAreaDaCrianca('para-a-consulta');
+  }
+
+  irParaMarcos(): void {
+    this.irParaAreaDaCrianca('desenvolvimento');
+  }
+
+  irParaAcompanhamento(): void {
+    this.irParaAreaDaCrianca('observacoes');
   }
 
   consultaEstaAtiva(): boolean {
     return this.router.url.includes('/para-a-consulta');
+  }
+
+  marcosEstaAtivo(): boolean {
+    return this.router.url.includes('/desenvolvimento');
+  }
+
+  acompanhamentoEstaAtivo(): boolean {
+    return this.router.url.includes('/observacoes');
+  }
+
+  private irParaAreaDaCrianca(area: string): void {
+    this.fecharMenu();
+    const criancaId = localStorage.getItem('pueria.criancaEmFocoId');
+    void this.router.navigateByUrl(criancaId ? `/criancas/${criancaId}/${area}` : '/criancas');
   }
 }
