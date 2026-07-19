@@ -310,7 +310,7 @@
           <button type="button" class="alimentacao-modal__fechar" aria-label="Fechar seleção de alimentos" (click)="fecharModalAlimentos()">×</button>
         </div>
 
-        <div class="alimentacao-modal__conteudo">
+        <div class="alimentacao-modal__filtros">
           <label class="alimentacao-modal__busca">
             <span>Buscar alimento</span>
             <input type="search" [value]="buscaAlimento()" (input)="alterarBuscaAlimento($event)" placeholder="Ex.: banana, cenoura, feijão" />
@@ -327,10 +327,12 @@
               </button>
             }
           </div>
+        </div>
 
-        @if (orientacaoGrupoAtivo()) {
-          <p class="alimentacao-modal__orientacao">{{ orientacaoGrupoAtivo() }}</p>
-        }
+        <div class="alimentacao-modal__conteudo">
+          @if (orientacaoGrupoAtivo()) {
+            <p class="alimentacao-modal__orientacao">{{ orientacaoGrupoAtivo() }}</p>
+          }
 
         @if (alimentoDetalhado(); as alimento) {
           <section class="alimentacao-modal__detalhes" aria-labelledby="detalhes-alimento-titulo">
@@ -455,7 +457,7 @@
               </article>
             }
           </div>
-        }
+          }
         </div>
 
         <div class="alimentacao-modal__rodape">

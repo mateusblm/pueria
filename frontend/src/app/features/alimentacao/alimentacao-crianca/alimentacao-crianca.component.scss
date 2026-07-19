@@ -326,7 +326,7 @@
 
 .alimentacao-modal__painel {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: 1rem;
   width: min(860px, 100%);
   max-height: min(92vh, 820px);
@@ -336,6 +336,11 @@
   background: #fffaf7;
   box-shadow: 0 28px 80px rgba(64, 40, 43, 0.28);
   padding: 1.35rem;
+}
+
+.alimentacao-modal__filtros {
+  display: grid;
+  gap: .75rem;
 }
 
 .alimentacao-modal__conteudo {
@@ -654,9 +659,12 @@
   }
 
   .alimentacao-modal__conteudo {
-    gap: .85rem;
     margin: 0 -1rem;
     padding: 0 1rem .25rem;
+  }
+
+  .alimentacao-modal__filtros {
+    gap: .55rem;
   }
 
   .alimentacao-modal__busca > span {
@@ -671,11 +679,18 @@
   .alimentacao-modal__grupos {
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: .25rem;
+    padding: 0 .1rem .35rem;
+    scrollbar-width: none;
+  }
+
+  .alimentacao-modal__grupos::-webkit-scrollbar {
+    display: none;
   }
 
   .alimentacao-modal__grupos button {
     flex: 0 0 auto;
+    font-size: .84rem;
+    padding: .42rem .68rem;
   }
 
   .alimentacao-modal__lista {
