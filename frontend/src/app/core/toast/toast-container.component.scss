@@ -1,7 +1,7 @@
 .toast-container {
   position: fixed;
-  z-index: 100;
-  top: 1rem;
+  z-index: 1200;
+  top: max(1rem, env(safe-area-inset-top));
   right: 1rem;
   display: grid;
   gap: .65rem;
