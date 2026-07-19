@@ -15,6 +15,15 @@
         <div class="sono-page__identidade"><span><app-icon name="moon" [size]="29" /></span><h1 class="pueria-title">Rotina de sono</h1></div>
         <p class="pueria-subtitle">Observe o descanso e os pequenos sinais que ajudam a entender o ritmo de {{ crianca.nome }}.</p>
       </div>
+      <button
+        type="button"
+        class="sono-page__entenda"
+        aria-label="Entenda o acompanhamento do sono"
+        title="Entenda o sono"
+        (click)="abrirEntenda()"
+      >
+        <app-icon name="help" [size]="20" />
+      </button>
     </div>
 
     @if (ultimoRegistro(); as registro) {
@@ -301,6 +310,38 @@
               <button type="button" class="pueria-button pueria-button--secondary" (click)="fecharDetalhe()">Fechar</button>
               <button type="button" class="pueria-button" (click)="editarDetalhe()">Editar registro</button>
             </div>
+          </section>
+        </div>
+      }
+
+      @if (entendaAberto()) {
+        <div class="sono-entenda__fundo" role="presentation" (click)="fecharEntenda()">
+          <section class="sono-entenda" role="dialog" aria-modal="true" aria-labelledby="sono-entenda-titulo" (click)="$event.stopPropagation()">
+            <header class="sono-entenda__cabecalho">
+              <div>
+                <p class="pueria-eyebrow">Entenda o sono</p>
+                <h2 id="sono-entenda-titulo">Pequenos registros mostram padrões</h2>
+              </div>
+              <button type="button" class="sono-entenda__fechar" aria-label="Fechar orientações sobre sono" (click)="fecharEntenda()">
+                <app-icon name="close" [size]="18" />
+              </button>
+            </header>
+
+            <div class="sono-entenda__imagem">
+              <img src="assets/ilustracoes/sono-seguro.png" alt="Bebê dormindo de barriga para cima em um berço vazio, com uma cuidadora por perto." loading="lazy" />
+            </div>
+
+            <div class="sono-entenda__conteudo">
+              <p>O sono muda bastante nos primeiros anos. Registrar alguns dias ajuda a reconhecer horários, cochilos e despertares que fazem parte da rotina de {{ crianca.nome }}.</p>
+              <ul>
+                <li>Observe o conjunto dos dias, não um registro isolado.</li>
+                <li>Anote o que costuma facilitar o momento de dormir.</li>
+                <li>Leve dúvidas persistentes para conversar na consulta.</li>
+              </ul>
+              <p class="sono-entenda__nota">Este espaço organiza o que a família percebe e não substitui a avaliação de um profissional de saúde.</p>
+            </div>
+
+            <button type="button" class="pueria-button sono-entenda__acao" (click)="fecharEntenda()">Entendi</button>
           </section>
         </div>
       }

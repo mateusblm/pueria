@@ -25,7 +25,18 @@
         <span class="crescimento-orbita crescimento-orbita--dois"><app-icon name="heartPulse" [size]="24" /></span>
         <span class="crescimento-orbita crescimento-orbita--tres"><app-icon name="chart" [size]="24" /></span>
       </div>
-      <a [routerLink]="['/criancas', crianca.id]" class="pueria-button pueria-button--secondary">Perfil</a>
+      <div class="crescimento-page__hero-actions">
+        <a [routerLink]="['/criancas', crianca.id]" class="pueria-button pueria-button--secondary">Perfil</a>
+        <button
+          type="button"
+          class="crescimento-page__entenda"
+          aria-label="Entenda o acompanhamento do crescimento"
+          title="Entenda o crescimento"
+          (click)="abrirEntenda()"
+        >
+          <app-icon name="help" [size]="20" />
+        </button>
+      </div>
     </div>
 
     @if (medidasOrdenadas().length > 0) {
@@ -358,6 +369,38 @@
         </div>
       }
     </section>
+
+    @if (entendaAberto()) {
+      <div class="crescimento-entenda__fundo" role="presentation" (click)="fecharEntenda()">
+        <section class="crescimento-entenda" role="dialog" aria-modal="true" aria-labelledby="crescimento-entenda-titulo" (click)="$event.stopPropagation()">
+          <header class="crescimento-entenda__cabecalho">
+            <div>
+              <p class="pueria-eyebrow">Entenda o crescimento</p>
+              <h2 id="crescimento-entenda-titulo">A trajetória importa mais que uma medida</h2>
+            </div>
+            <button type="button" class="crescimento-entenda__fechar" aria-label="Fechar orientações sobre crescimento" (click)="fecharEntenda()">
+              <app-icon name="close" [size]="18" />
+            </button>
+          </header>
+
+          <div class="crescimento-entenda__imagem">
+            <img src="assets/ilustracoes/crescimento-acolhedor.png" alt="Cuidadora acompanhando uma criança perto de uma régua de crescimento." loading="lazy" />
+          </div>
+
+          <div class="crescimento-entenda__conteudo">
+            <p>As medidas organizam a evolução de {{ crianca.nome }} ao longo do tempo. Por isso, a sequência costuma ser mais útil do que um número isolado.</p>
+            <ul>
+              <li>Peso, comprimento e perímetro cefálico são vistos em conjunto.</li>
+              <li>As curvas usam a referência adequada para idade e sexo.</li>
+              <li>O histórico pode tornar a conversa na consulta mais objetiva.</li>
+            </ul>
+            <p class="crescimento-entenda__nota">O Pueria apoia o acompanhamento e não substitui avaliação de um profissional de saúde.</p>
+          </div>
+
+          <button type="button" class="pueria-button crescimento-entenda__acao" (click)="fecharEntenda()">Entendi</button>
+        </section>
+      </div>
+    }
 
   }
 </section>

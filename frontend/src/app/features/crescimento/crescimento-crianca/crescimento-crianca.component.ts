@@ -93,6 +93,7 @@ export class CrescimentoCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly detalheAbertoIndicador = signal('');
+  readonly entendaAberto = signal(false);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
   readonly form = this.fb.group({
@@ -312,6 +313,14 @@ export class CrescimentoCriancaComponent implements OnInit {
 
   abrirDetalhes(grafico: GraficoCrescimento): void {
     this.detalheAbertoIndicador.set(grafico.indicador);
+  }
+
+  abrirEntenda(): void {
+    this.entendaAberto.set(true);
+  }
+
+  fecharEntenda(): void {
+    this.entendaAberto.set(false);
   }
 
   fecharDetalhes(): void {

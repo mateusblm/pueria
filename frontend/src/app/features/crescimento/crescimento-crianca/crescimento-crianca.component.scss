@@ -123,10 +123,65 @@
   color: #356847;
 }
 
-.crescimento-page__hero > .pueria-button {
+.crescimento-page__hero-actions {
   grid-column: 1 / -1;
+  align-items: center;
+  display: flex;
+  gap: .6rem;
   justify-self: start;
 }
+
+.crescimento-page__entenda,
+.crescimento-entenda__fechar {
+  align-items: center;
+  background: #edf5ee;
+  border: 1px solid #cde1d2;
+  border-radius: 50%;
+  color: #356847;
+  cursor: pointer;
+  display: inline-flex;
+  height: 2.45rem;
+  justify-content: center;
+  width: 2.45rem;
+}
+
+.crescimento-page__entenda:hover,
+.crescimento-entenda__fechar:hover { background: #dceee2; }
+
+.crescimento-entenda__fundo {
+  align-items: center;
+  background: rgba(35, 47, 37, .48);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 1150;
+}
+
+.crescimento-entenda {
+  background: #fffdfb;
+  border: 1px solid #d8e8dc;
+  border-radius: 18px;
+  box-shadow: 0 1.5rem 3rem rgba(39, 60, 43, .25);
+  display: grid;
+  gap: 1rem;
+  max-height: 90vh;
+  max-width: 42rem;
+  overflow-y: auto;
+  padding: 1.35rem;
+  width: min(100%, 42rem);
+}
+
+.crescimento-entenda__cabecalho { align-items: flex-start; display: flex; gap: 1rem; justify-content: space-between; }
+.crescimento-entenda__cabecalho h2 { margin: 0; }
+.crescimento-entenda__imagem { background: #edf5ee; border: 1px solid #d8e8dc; border-radius: 14px; overflow: hidden; }
+.crescimento-entenda__imagem img { display: block; height: min(15rem, 37vw); object-fit: cover; object-position: center; width: 100%; }
+.crescimento-entenda__conteudo { color: var(--pueria-texto-suave); }
+.crescimento-entenda__conteudo p { margin: 0; }
+.crescimento-entenda__conteudo ul { display: grid; gap: .4rem; margin: .9rem 0; padding-left: 1.15rem; }
+.crescimento-entenda__nota { background: #edf5ee; border-left: 3px solid #6f9277; color: #3d694b; padding: .75rem .85rem; }
+.crescimento-entenda__acao { justify-self: end; }
 
 .crescimento-graficos--principal {
   padding: 24px;
@@ -303,4 +358,9 @@
   .crescimento-atualizacao > summary {
     align-items: flex-start;
   }
+
+  .crescimento-entenda__fundo { align-items: flex-end; padding: 0; }
+  .crescimento-entenda { border-bottom-left-radius: 0; border-bottom-right-radius: 0; max-height: 88vh; padding: 1.2rem 1rem calc(1.2rem + env(safe-area-inset-bottom)); }
+  .crescimento-entenda__imagem img { height: 11rem; }
+  .crescimento-entenda__acao { justify-self: stretch; }
 }

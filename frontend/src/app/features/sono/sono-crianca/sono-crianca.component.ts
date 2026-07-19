@@ -61,6 +61,7 @@ export class SonoCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly registroAberto = signal(false);
   readonly registroDetalhadoId = signal<string | null>(null);
+  readonly entendaAberto = signal(false);
   readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -306,6 +307,14 @@ export class SonoCriancaComponent implements OnInit {
 
   abrirDetalhe(registroId: string): void {
     this.registroDetalhadoId.set(registroId);
+  }
+
+  abrirEntenda(): void {
+    this.entendaAberto.set(true);
+  }
+
+  fecharEntenda(): void {
+    this.entendaAberto.set(false);
   }
 
   fecharDetalhe(): void {
