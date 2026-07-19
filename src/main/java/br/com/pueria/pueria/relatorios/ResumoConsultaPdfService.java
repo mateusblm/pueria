@@ -224,7 +224,6 @@ public class ResumoConsultaPdfService {
         String texto = marcos.executar(criancaId, email).stream()
                 .filter(marco -> marco.status() == StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO
                         || marco.status() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA)
-                .limit(8)
                 .map(marco -> marco.idadeMeses() + " meses · " + rotuloEnum(marco.area().name())
                         + "\n" + marco.descricao() + " · "
                         + (marco.status() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA ? "Às vezes" : "Ainda não"))
@@ -248,7 +247,6 @@ public class ResumoConsultaPdfService {
 
     private String contexto(UUID criancaId, String email) {
         String texto = relatos.listar(criancaId, email).stream()
-                .limit(4)
                 .map(relato -> rotuloRelato(relato.getTipo().name()) + "\n" + relato.getDescricao())
                 .collect(Collectors.joining("\n\n"));
         return texto.isBlank() ? "Sem relatos familiares no período." : texto;
