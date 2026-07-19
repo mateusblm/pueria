@@ -290,6 +290,8 @@ button {
 
 @media (max-width:640px) { .inicio-primeiros-passos,.inicio-experimentos { padding:1.1rem; }.inicio-primeiros-passos>.pueria-button { justify-self:stretch; }.inicio-experimentos__cabecalho { display:grid; } }
 
+.estimulos-card--pagina { margin-top:.25rem; }.estimulos-card__vazio { align-items:flex-start; background:#f7f0fa; border:1px solid #e5d8ef; display:grid; gap:.8rem; grid-template-columns:auto minmax(0,1fr) auto; padding:1rem; }.estimulos-card__vazio>app-icon { color:#76507d; }.estimulos-card__vazio div { display:grid; gap:.25rem; }.estimulos-card__vazio p { color:var(--pueria-texto-suave); line-height:1.4; }.estimulos-card__vazio .pueria-button { align-self:center; white-space:nowrap; } @media (max-width:640px) { .estimulos-card__vazio { grid-template-columns:1fr; }.estimulos-card__vazio>app-icon { display:none; }.estimulos-card__vazio .pueria-button { justify-self:stretch; } }
+
 @media (max-width: 640px) {
   .pueria-page {
     padding: 22px 18px 92px;

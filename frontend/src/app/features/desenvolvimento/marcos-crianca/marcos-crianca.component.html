@@ -71,6 +71,7 @@
     <div class="modo-tabs" role="tablist" aria-label="Modo de acompanhamento">
       <button type="button" [class.modo-tabs__active]="modo() === 'visao'" (click)="abrirVisao()">Visão geral</button>
       <button type="button" [class.modo-tabs__active]="modo() === 'responder'" (click)="abrirResponder()">Responder etapas</button>
+      <button type="button" [class.modo-tabs__active]="modo() === 'experimentos'" (click)="abrirExperimentos()">Experimentos</button>
       <button type="button" [class.modo-tabs__active]="modo() === 'resultados'" (click)="abrirResultados()">Ver resultados</button>
     </div>
 
@@ -247,7 +248,7 @@
           </div>
         </article>
       }
-    } @else {
+    } @else if (modo() === 'resultados') {
       <div class="resultado-layout">
         <section class="pueria-card resumo-consulta">
           <div>
@@ -312,39 +313,6 @@
                 </article>
               }
             </div>
-          </section>
-        }
-
-        @if (estimulos().length > 0) {
-          <section class="pueria-card estimulos-card">
-            <div>
-              <p class="pueria-eyebrow">Atividades para a rotina</p>
-              <h2>Ideias para brincar juntos</h2>
-              <p>Escolha apenas o que fizer sentido hoje. Estas sugestões acompanham a fase atual e não substituem orientação profissional.</p>
-            </div>
-            <div class="estimulos-card__lista">
-              @for (estimulo of estimulos(); track estimulo.id) {
-                <article [attr.data-tema]="temaArea(estimulo.area)">
-                  <span class="estimulos-card__icone"><app-icon [name]="iconeArea(estimulo.area)" [size]="19" /></span>
-                  <div>
-                    <span class="marco-area" [attr.data-tema]="temaArea(estimulo.area)">{{ labelArea(estimulo.area) }}</span>
-                    <h3>{{ estimulo.titulo }}</h3>
-                    <p>{{ estimulo.descricao }}</p>
-                    <details><summary>Cuidados e fonte</summary><p><strong>Cuidados:</strong> {{ estimulo.cuidado }}</p><p><strong>Fonte:</strong> {{ estimulo.fonte }}</p>
-                      @if (estimulo.experimentado) { <label class="estimulos-card__nota"><span>Uma anotação opcional</span><textarea rows="2" maxlength="500" [value]="estimulo.observacao ?? ''" placeholder="Ex.: gostou quando fizemos antes do banho." (blur)="salvarObservacaoEstimulo(estimulo, $any($event.target).value)"></textarea></label> }
-                    </details>
-                  </div>
-                  @if (estimulo.experimentado) {
-                    <span class="estimulos-card__feito">Experimentamos</span>
-                  } @else {
-                    <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoEstimuloId() === estimulo.id" (click)="registrarEstimulo(estimulo)">Experimentar</button>
-                  }
-                </article>
-              }
-            </div>
-            @if (historicoEstimulos().length > 0) {
-              <div class="estimulos-card__historico"><strong>Já experimentamos</strong><span>@for (estimulo of historicoEstimulos(); track estimulo.id) { {{ estimulo.titulo }}@if (!$last) { · } }</span></div>
-            }
           </section>
         }
 
@@ -450,6 +418,41 @@
           }
         </section>
       </div>
+    } @else {
+      <section class="pueria-card estimulos-card estimulos-card--pagina">
+        <div>
+          <p class="pueria-eyebrow">Para a rotina</p>
+          <h2>Experimentos recomendados</h2>
+          <p>Estas ideias foram escolhidas porque alguns marcos foram marcados como “Ainda não” ou “Às vezes”. Escolha só o que combinar com o momento de vocês.</p>
+        </div>
+        @if (estimulos().length > 0) {
+          <div class="estimulos-card__lista">
+            @for (estimulo of estimulos(); track estimulo.id) {
+              <article [attr.data-tema]="temaArea(estimulo.area)">
+                <span class="estimulos-card__icone"><app-icon [name]="iconeArea(estimulo.area)" [size]="19" /></span>
+                <div>
+                  <span class="marco-area" [attr.data-tema]="temaArea(estimulo.area)">{{ labelArea(estimulo.area) }}</span>
+                  <h3>{{ estimulo.titulo }}</h3>
+                  <p>{{ estimulo.descricao }}</p>
+                  <details><summary>Cuidados e fonte</summary><p><strong>Cuidados:</strong> {{ estimulo.cuidado }}</p><p><strong>Fonte:</strong> {{ estimulo.fonte }}</p>
+                    @if (estimulo.experimentado) { <label class="estimulos-card__nota"><span>Uma anotação opcional</span><textarea rows="2" maxlength="500" [value]="estimulo.observacao ?? ''" placeholder="Ex.: gostou quando fizemos antes do banho." (blur)="salvarObservacaoEstimulo(estimulo, $any($event.target).value)"></textarea></label> }
+                  </details>
+                </div>
+                @if (estimulo.experimentado) {
+                  <span class="estimulos-card__feito">Experimentamos</span>
+                } @else {
+                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoEstimuloId() === estimulo.id" (click)="registrarEstimulo(estimulo)">Experimentar</button>
+                }
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="estimulos-card__vazio"><app-icon name="heart" [size]="22" /><div><strong>Sem experimentos recomendados agora</strong><p>Você pode voltar aos marcos quando quiser. Novas ideias aparecem quando uma resposta indicar que uma atividade pode ajudar na observação da rotina.</p></div><button type="button" class="pueria-button pueria-button--secondary" (click)="abrirResponder()">Revisar marcos</button></div>
+        }
+        @if (historicoEstimulos().length > 0) {
+          <div class="estimulos-card__historico"><strong>Já experimentamos</strong><span>@for (estimulo of historicoEstimulos(); track estimulo.id) { {{ estimulo.titulo }}@if (!$last) { · } }</span></div>
+        }
+      </section>
     }
   }
   @if (entendaAberto()) {

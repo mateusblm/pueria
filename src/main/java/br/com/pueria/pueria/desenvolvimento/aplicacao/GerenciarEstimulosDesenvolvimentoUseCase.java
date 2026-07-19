@@ -10,6 +10,7 @@ import br.com.pueria.pueria.desenvolvimento.dominio.IdadeReferenciaDesenvolvimen
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroEstimuloDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroEstimuloDesenvolvimentoRepositorio;
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroMarcoDesenvolvimentoRepositorio;
+import br.com.pueria.pueria.desenvolvimento.dominio.RegistroMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.MarcoDesenvolvimentoRepositorio;
 import br.com.pueria.pueria.desenvolvimento.dominio.StatusMarcoDesenvolvimento;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -70,6 +72,26 @@ public class GerenciarEstimulosDesenvolvimentoUseCase {
         EstimuloDesenvolvimento estimulo = estimulos.buscarAtivoParaMarco(marcoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Ainda não há uma sugestão para este marco."));
         return paraResumo(estimulo, registros.get(estimulo.id()));
+    }
+
+    @Transactional(readOnly = true)
+    public List<EstimuloDesenvolvimentoResumo> listarRecomendacoes(UUID criancaId, String email) {
+        validarAcesso(criancaId, email);
+        Map<UUID, RegistroEstimuloDesenvolvimento> registros = registrosEstimulos.listarPorCrianca(criancaId).stream()
+                .collect(Collectors.toMap(RegistroEstimuloDesenvolvimento::estimuloId, Function.identity()));
+
+        return registrosMarcos.listarPorCrianca(criancaId).stream()
+                .filter(registro -> registro.getStatus() == StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO
+                        || registro.getStatus() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA)
+                .sorted(Comparator.comparing((RegistroMarcoDesenvolvimento registro) ->
+                        registro.getStatus() != StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO)
+                        .thenComparing(RegistroMarcoDesenvolvimento::getRegistradoEm))
+                .map(registro -> estimulos.buscarAtivoParaMarco(registro.getMarcoId()).orElse(null))
+                .filter(item -> item != null)
+                .map(item -> paraResumo(item, registros.get(item.id())))
+                .filter(item -> !item.experimentado())
+                .collect(Collectors.collectingAndThen(Collectors.toMap(EstimuloDesenvolvimentoResumo::id, Function.identity(), (primeiro, ignorar) -> primeiro, LinkedHashMap::new),
+                        itens -> itens.values().stream().limit(3).toList()));
     }
 
     @Transactional

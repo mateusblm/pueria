@@ -38,7 +38,7 @@ type TrajetoriaArea = {
   total: number;
 };
 
-type ModoTela = 'visao' | 'responder' | 'resultados';
+type ModoTela = 'visao' | 'responder' | 'resultados' | 'experimentos';
 
 @Component({
   selector: 'app-marcos-crianca',
@@ -208,6 +208,8 @@ export class MarcosCriancaComponent implements OnInit {
           this.idadeSelecionada.set(idadeAtual);
           if (this.route.snapshot.queryParamMap.get('modo') === 'resultados') {
             this.modo.set('resultados');
+          } else if (this.route.snapshot.queryParamMap.get('modo') === 'experimentos') {
+            this.modo.set('experimentos');
           } else if (this.route.snapshot.queryParamMap.get('modo') === 'responder') {
             this.modo.set('responder');
             this.posicionarPrimeiraPendente();
@@ -224,7 +226,7 @@ export class MarcosCriancaComponent implements OnInit {
       error: () => this.erro.set('Não foi possível carregar os relatos de desenvolvimento agora.')
     });
 
-    this.desenvolvimentoService.listarEstimulos(this.criancaId()).subscribe({
+    this.desenvolvimentoService.listarRecomendacoes(this.criancaId()).subscribe({
       next: (estimulos) => this.estimulos.set(estimulos),
       error: () => this.erro.set('Não foi possível preparar as sugestões de atividades agora.')
     });
@@ -299,6 +301,10 @@ export class MarcosCriancaComponent implements OnInit {
 
   abrirResultados(): void {
     this.modo.set('resultados');
+  }
+
+  abrirExperimentos(): void {
+    this.modo.set('experimentos');
   }
 
   selecionarIdade(idadeMeses: number): void {

@@ -112,27 +112,11 @@ export class AcompanhamentoComponent implements OnInit {
           return forkJoin(criancas.map((crianca) =>
             forkJoin({
               marcos: this.desenvolvimentoService.listarMarcos(crianca.id),
+              estimulos: this.desenvolvimentoService.listarRecomendacoes(crianca.id).pipe(catchError(() => of([]))),
               relatos: this.desenvolvimentoService.listarRelatos(crianca.id).pipe(catchError(() => of([]))),
               trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([])))
             }).pipe(
-              switchMap(({ marcos, relatos, trajetoria }) => {
-                const marcosParaExperimentar = marcos.filter((marco) =>
-                  marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'
-                );
-                const recomendacoes = marcosParaExperimentar.length === 0
-                  ? of([] as (EstimuloDesenvolvimento | null)[])
-                  : forkJoin(marcosParaExperimentar.map((marco) =>
-                    this.desenvolvimentoService.buscarEstimuloParaMarco(crianca.id, marco.id).pipe(catchError(() => of(null)))
-                  ));
-
-                return recomendacoes.pipe(map((estimulos) => ({
-                  crianca,
-                  marcos,
-                  estimulos: estimulos.filter((estimulo): estimulo is EstimuloDesenvolvimento => estimulo !== null),
-                  relatos,
-                  trajetoria
-                })));
-              }),
+              map(({ marcos, estimulos, relatos, trajetoria }) => ({ crianca, marcos, estimulos, relatos, trajetoria })),
               catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
@@ -291,9 +275,7 @@ export class AcompanhamentoComponent implements OnInit {
   }
 
   experimentosRecomendados(resumo: ResumoCrianca): EstimuloDesenvolvimento[] {
-    return resumo.estimulos.filter((estimulo) => !estimulo.experimentado)
-      .filter((estimulo, indice, lista) => lista.findIndex((item) => item.id === estimulo.id) === indice)
-      .slice(0, 3);
+    return resumo.estimulos;
   }
 
   labelPontosAtencao(total: number): string {

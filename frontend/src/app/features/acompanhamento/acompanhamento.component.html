@@ -88,10 +88,10 @@
         </section>
       } @else if (experimentosRecomendados(foco).length > 0) {
         <section class="pueria-card inicio-experimentos">
-          <div class="inicio-experimentos__cabecalho"><div><p class="pueria-eyebrow">Para a rotina</p><h2>Experimentos recomendados</h2><p>Ideias simples escolhidas a partir das respostas dos marcos. Use apenas o que combinar com o momento de vocês.</p></div><a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }">Ver todos</a></div>
+          <div class="inicio-experimentos__cabecalho"><div><p class="pueria-eyebrow">Para a rotina</p><h2>Experimentos recomendados</h2><p>Ideias simples escolhidas a partir das respostas dos marcos. Use apenas o que combinar com o momento de vocês.</p></div><a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'experimentos' }">Ver todos</a></div>
           <div class="inicio-experimentos__lista">
             @for (estimulo of experimentosRecomendados(foco); track estimulo.id) {
-              <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }">
+              <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'experimentos' }">
                 <span class="inicio-experimentos__icone"><app-icon name="sparkles" [size]="19" /></span>
                 <span><strong>{{ estimulo.titulo }}</strong><small>{{ estimulo.descricao }}</small></span>
                 <app-icon name="chevronRight" [size]="18" />
