@@ -32,6 +32,7 @@ export class SaudeCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly erro = signal('');
   readonly aviso = signal('');
+  readonly entendaAberto = signal(false);
   private readonly notificarErro = effect(() => {
     const mensagem = this.erro();
     if (mensagem) this.toast.erro(mensagem);
@@ -50,6 +51,14 @@ export class SaudeCriancaComponent implements OnInit {
 
   readonly registrosMedicamentos = computed(() => this.registros().filter((registro) => registro.tipo === 'MEDICAMENTO_SUPLEMENTO'));
   readonly intercorrencias = computed(() => this.registros().filter((registro) => registro.tipo === 'INTERCORRENCIA_CLINICA'));
+
+  abrirEntenda(): void {
+    this.entendaAberto.set(true);
+  }
+
+  fecharEntenda(): void {
+    this.entendaAberto.set(false);
+  }
 
   rotaRetorno(): string[] {
     return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento'

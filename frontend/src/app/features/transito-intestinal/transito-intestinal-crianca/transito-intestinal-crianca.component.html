@@ -15,6 +15,7 @@
         <div class="intestinal-page__identidade"><span><app-icon name="toilet" [size]="28" /></span><h1 class="pueria-title">Trânsito intestinal</h1></div>
         <p class="pueria-subtitle">Observe a rotina de {{ crianca.nome }} ao longo dos dias, sem tirar conclusões a partir de um registro isolado.</p>
       </div>
+      <button type="button" class="intestinal-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento do trânsito intestinal" title="Entenda o trânsito intestinal"><app-icon name="help" [size]="20" /></button>
     </div>
 
     @if (ultimoRegistro(); as registro) {
@@ -209,6 +210,24 @@
           </div>
         }
       </aside>
+    </div>
+  }
+
+  @if (entendaAberto()) {
+    <div class="intestinal-entenda__fundo" role="presentation" (click)="fecharEntenda()">
+      <section class="intestinal-entenda" role="dialog" aria-modal="true" aria-labelledby="intestinal-entenda-titulo" (click)="$event.stopPropagation()">
+        <header class="intestinal-entenda__cabecalho">
+          <div><p class="pueria-eyebrow">Entenda o trânsito intestinal</p><h2 id="intestinal-entenda-titulo">Padrões ficam mais claros com o tempo</h2></div>
+          <button type="button" class="intestinal-entenda__fechar" aria-label="Fechar orientações" (click)="fecharEntenda()"><app-icon name="close" [size]="18" /></button>
+        </header>
+        <div class="intestinal-entenda__imagem"><img src="/assets/ilustracoes/transito-intestinal-acolhedor.png" alt="Cuidadora acompanhando uma criança perto de um penico infantil." loading="lazy" /></div>
+        <div class="intestinal-entenda__conteudo">
+          <p>Registrar alguns dias ajuda a perceber a rotina de {{ crianca()?.nome ?? 'sua criança' }} sem transformar uma observação isolada em conclusão.</p>
+          <ul><li>Conte o que foi observado, mesmo quando houver variação.</li><li>A escala é só um guia para descrever a consistência.</li><li>Leve sinais persistentes ou dúvidas para conversar na consulta.</li></ul>
+          <p class="intestinal-entenda__nota">O Pueria organiza observações da família e não substitui avaliação de um profissional de saúde.</p>
+        </div>
+        <button type="button" class="pueria-button intestinal-entenda__acao" (click)="fecharEntenda()">Entendi</button>
+      </section>
     </div>
   }
 </section>

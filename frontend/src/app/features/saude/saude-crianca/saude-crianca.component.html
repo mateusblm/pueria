@@ -7,6 +7,7 @@
       <h1>{{ crianca()?.nome ?? 'Acompanhamento de saúde' }}</h1>
       <p>Organize informações da rotina de cuidado para recordar e levar à consulta quando fizer sentido.</p>
     </div>
+    <button type="button" class="saude-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento de saúde" title="Entenda a saúde"><app-icon name="help" [size]="20" /></button>
     <span class="saude-page__hero-icon"><app-icon name="stethoscope" [size]="38" /></span>
   </header>
 
@@ -105,5 +106,23 @@
         </div>
       }
     </section>
+  }
+
+  @if (entendaAberto()) {
+    <div class="saude-entenda__fundo" role="presentation" (click)="fecharEntenda()">
+      <section class="saude-entenda" role="dialog" aria-modal="true" aria-labelledby="saude-entenda-titulo" (click)="$event.stopPropagation()">
+        <header class="saude-entenda__cabecalho">
+          <div><p class="pueria-eyebrow">Entenda a saúde</p><h2 id="saude-entenda-titulo">Informações que ajudam a cuidar em conjunto</h2></div>
+          <button type="button" class="saude-entenda__fechar" aria-label="Fechar orientações" (click)="fecharEntenda()"><app-icon name="close" [size]="18" /></button>
+        </header>
+        <div class="saude-entenda__imagem"><img src="/assets/ilustracoes/saude-acolhedora.png" alt="Responsável e criança consultando juntos uma caderneta de saúde." loading="lazy" /></div>
+        <div class="saude-entenda__conteudo">
+          <p>Este espaço ajuda a guardar informações que podem ser úteis para {{ crianca()?.nome ?? 'a criança' }}, para lembrar em casa e compartilhar em consultas.</p>
+          <ul><li>Registre apenas informações que façam sentido para a rotina.</li><li>Anote mudanças ou dúvidas para conversar com quem acompanha a criança.</li><li>Não altere nem inicie tratamentos sem orientação profissional.</li></ul>
+          <p class="saude-entenda__nota">O Pueria organiza registros familiares e não substitui orientação de um profissional de saúde.</p>
+        </div>
+        <button type="button" class="pueria-button saude-entenda__acao" (click)="fecharEntenda()">Entendi</button>
+      </section>
+    </div>
   }
 </section>
