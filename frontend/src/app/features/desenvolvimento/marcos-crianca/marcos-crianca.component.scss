@@ -317,11 +317,17 @@
 .etapa-card__media {
   min-height: 100%;
   background: #f6f0f8;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
 }
 
 .etapa-card__media img {
-  height: 100%;
-  min-height: 300px;
+  width: 180%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
   max-height: none;
 }
 
@@ -389,8 +395,14 @@
   }
 
   .etapa-card__media img {
-    min-height: 180px;
-    max-height: 220px;
+    width: 180%;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .etapa-card__media {
+    min-height: 260px;
+    max-height: 300px;
   }
 
   .etapa-card__body {
