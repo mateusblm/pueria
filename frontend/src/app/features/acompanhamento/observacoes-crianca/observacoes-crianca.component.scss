@@ -35,7 +35,10 @@
 @media (max-width: 640px) {
   .observacoes-page {
     gap: 1rem;
-    padding-right: 2px;
+    width: calc(100% - 1rem);
+    max-width: calc(100% - 1rem);
+    margin-left: 0;
+    margin-right: 1rem;
   }
 
   .observacoes-page__hero { align-items: flex-start; padding: 1.2rem; }
