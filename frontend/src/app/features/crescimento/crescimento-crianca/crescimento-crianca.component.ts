@@ -98,6 +98,7 @@ export class CrescimentoCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly detalheAbertoIndicador = signal('');
+  readonly indicadorSelecionado = signal('PESO_IDADE');
   readonly entendaAberto = signal(false);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -127,6 +128,10 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly referenciaAtual = computed(() => this.ultimaAvaliacaoCurva()?.resultados[0]?.fonte ?? 'Referência de crescimento');
   readonly contextoIdadeAtual = computed(() => this.textoContextoIdade(this.ultimaAvaliacaoCurva()));
   readonly graficosCurva = computed(() => this.montarGraficosCurva());
+  readonly graficoAtivo = computed(() => {
+    const graficos = this.graficosCurva();
+    return graficos.find((grafico) => grafico.indicador === this.indicadorSelecionado()) ?? graficos[0] ?? null;
+  });
   readonly graficoDetalhado = computed(() =>
     this.graficosCurva().find((grafico) => grafico.indicador === this.detalheAbertoIndicador()) ?? null
   );
@@ -318,6 +323,10 @@ export class CrescimentoCriancaComponent implements OnInit {
 
   abrirDetalhes(grafico: GraficoCrescimento): void {
     this.detalheAbertoIndicador.set(grafico.indicador);
+  }
+
+  selecionarIndicador(indicador: string): void {
+    this.indicadorSelecionado.set(indicador);
   }
 
   abrirEntenda(): void {
@@ -555,7 +564,7 @@ export class CrescimentoCriancaComponent implements OnInit {
       resumo: this.textoFamilia(recente),
       classe: this.classeResultado(recente),
       situacao: this.situacaoCurva(recente.classificacao),
-      corTrajetoria: this.corSituacao(recente.classificacao),
+      corTrajetoria: '#6d655f',
       valorInicial: pontos[0]?.valor ?? '',
       dataInicial: pontos[0]?.label ?? '',
       valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,

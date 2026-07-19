@@ -56,13 +56,24 @@
         @if (graficosCurva().length === 0) {
           <p class="crescimento-historico__empty">As curvas aparecem quando há sexo informado no perfil e medidas dentro da faixa de 0 a 5 anos da OMS.</p>
         } @else {
-          <div class="crescimento-graficos__grid">
+          <div class="crescimento-graficos__tabs" role="tablist" aria-label="Indicador de crescimento">
             @for (grafico of graficosCurva(); track grafico.indicador) {
-              <article class="crescimento-grafico" [attr.data-tema]="grafico.tema" [attr.data-situacao]="grafico.situacao">
+              <button
+                type="button"
+                role="tab"
+                class="crescimento-graficos__tab"
+                [class.crescimento-graficos__tab--ativa]="grafico.indicador === graficoAtivo()?.indicador"
+                [attr.aria-selected]="grafico.indicador === graficoAtivo()?.indicador"
+                (click)="selecionarIndicador(grafico.indicador)"
+              >{{ grafico.titulo }}</button>
+            }
+          </div>
+          @if (graficoAtivo(); as grafico) {
+              <article class="crescimento-grafico crescimento-grafico--ativo" [attr.data-tema]="grafico.tema" [attr.data-situacao]="grafico.situacao">
               <div class="crescimento-grafico__header">
                 <div>
                   <div class="crescimento-grafico__titulo"><span class="crescimento-grafico__icone"><app-icon [name]="grafico.icone" [size]="22" /></span><h3>{{ grafico.titulo }}</h3></div>
-                  <p>{{ grafico.resumo }}</p>
+                  <p>Trajetória nas medidas registradas.</p>
                 </div>
                 <button
                   type="button"
@@ -118,8 +129,7 @@
                   <span>{{ grafico.pontos.length }} medida(s)</span>
                 </div>
               </article>
-            }
-          </div>
+          }
         }
       </section>
     }
