@@ -20,7 +20,7 @@
 }
 
 .sono-page__state {
-  max-width: 760px;
+  max-width: 1180px;
   padding: 1.5rem;
 }
 
@@ -125,13 +125,6 @@
 
 .sono-analise li + li {
   margin-top: 0.55rem;
-}
-
-.sono-layout {
-  align-items: start;
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
 }
 
 .sono-form {
@@ -288,15 +281,6 @@
   padding: .9rem;
 }
 
-.sono-layout {
-  gap: 1rem;
-  grid-template-columns: minmax(0, 1fr) minmax(15.5rem, .38fr);
-}
-
-.sono-layout > app-registro-rapido {
-  display: contents;
-}
-
 .sono-atualizacao {
   align-self: start;
   min-width: 0;
@@ -416,6 +400,7 @@
 
 .sono-historico {
   align-self: start;
+  width: 100%;
   border: 1px solid #e1e5ed;
   border-radius: 14px;
   background: #fff;
@@ -435,8 +420,7 @@
 @media (max-width: 960px) {
   .sono-sintese__grid,
   .sono-analise,
-  .sono-form__grid,
-  .sono-layout {
+  .sono-form__grid {
     grid-template-columns: 1fr;
   }
 

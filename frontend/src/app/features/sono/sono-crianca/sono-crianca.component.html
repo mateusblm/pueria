@@ -94,11 +94,10 @@
       </section>
     }
 
-    <div class="sono-layout">
-      <section class="sono-atualizacao">
-        <button type="button" class="sono-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="20" />{{ ultimoRegistro() ? 'Registrar sono' : 'Registrar o primeiro sono' }}</button>
-      </section>
-      <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar rotina de sono' : 'Rotina de sono'" descricao="Registre só o que conseguiu observar hoje." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
+    <section class="sono-atualizacao">
+      <button type="button" class="sono-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="20" />{{ ultimoRegistro() ? 'Registrar sono' : 'Registrar o primeiro sono' }}</button>
+    </section>
+    <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar rotina de sono' : 'Rotina de sono'" descricao="Registre só o que conseguiu observar hoje." tema="sono" [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
       <form class="sono-form" [formGroup]="form" (ngSubmit)="salvar()">
 
         @if (etapaRegistro() === 1) {
@@ -217,6 +216,5 @@
           </div>
         }
       </aside>
-    </div>
   }
 </section>

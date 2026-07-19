@@ -11,6 +11,7 @@ export class RegistroRapidoComponent {
   readonly descricao = input('');
   readonly etapa = input(1);
   readonly totalEtapas = input(1);
+  readonly tema = input<'padrao' | 'sono'>('padrao');
   readonly fechar = output<void>();
   readonly passos = computed(() => Array.from({ length: this.totalEtapas() }, (_, indice) => indice + 1));
 

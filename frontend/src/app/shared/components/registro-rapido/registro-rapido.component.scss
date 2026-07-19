@@ -58,6 +58,34 @@
 .registro-rapido__passo--ativo { background: #d92d4e; }
 .registro-rapido__conteudo { padding: 22px 30px 30px; }
 
+.registro-rapido--sono .registro-rapido__painel {
+  border-color: #cfd9ec;
+  background: #fbfcff;
+}
+
+.registro-rapido--sono .registro-rapido__cabecalho {
+  border-bottom-color: #dce4f1;
+  background: #f0f3fb;
+}
+
+.registro-rapido--sono .registro-rapido__cabecalho .pueria-eyebrow,
+.registro-rapido--sono .registro-rapido__fechar {
+  color: #4d688f;
+}
+
+.registro-rapido--sono .registro-rapido__fechar {
+  border-color: #cbd8eb;
+  background: #f8faff;
+}
+
+.registro-rapido--sono .registro-rapido__passo {
+  background: #dce5f2;
+}
+
+.registro-rapido--sono .registro-rapido__passo--ativo {
+  background: #55729b;
+}
+
 @media (max-width: 680px) {
   .registro-rapido { align-items: end; padding: 0; }
   .registro-rapido__painel { width: 100%; max-height: 92dvh; border-radius: 22px 22px 0 0; }
