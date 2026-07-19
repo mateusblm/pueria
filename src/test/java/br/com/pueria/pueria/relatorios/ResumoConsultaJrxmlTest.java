@@ -1,19 +1,17 @@
 package br.com.pueria.pueria.relatorios;
 
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ResumoConsultaJrxmlTest {
@@ -22,7 +20,7 @@ class ResumoConsultaJrxmlTest {
     void compilaEGeraPdf() {
         try (var in = new ClassPathResource("relatorios/resumo-consulta.jrxml").getInputStream()) {
             var report = JasperCompileManager.compileReport(in);
-            var print = JasperFillManager.fillReport(report, parametrosDeExemplo(), new JRBeanCollectionDataSource(secoesDeExemplo()));
+            var print = JasperFillManager.fillReport(report, parametrosDeExemplo(), new JREmptyDataSource());
             byte[] pdf = JasperExportManager.exportReportToPdf(print);
 
             assertTrue(pdf.length > 100);
@@ -35,20 +33,24 @@ class ResumoConsultaJrxmlTest {
 
     private Map<String, Object> parametrosDeExemplo() {
         Map<String, Object> parametros = new HashMap<>();
-        parametros.put("IDENTIFICACAO", "Helena\nNascimento: 10/03/2026 | Sexo: Feminino\nPrematuridade: 35 semanas e 2 dias");
+        parametros.put("NOME_CRIANCA", "Helena Martins");
+        parametros.put("IDENTIFICACAO", "Nascimento 10/03/2026 - Sexo feminino - Prematuridade: 35 semanas e 2 dias");
         parametros.put("GERADO_EM", "Gerado em 12/07/2026");
+        parametros.put("CRESCIMENTO_DATA", "Aferido em 10/07/2026");
+        parametros.put("PESO", "6,2 kg");
+        parametros.put("COMPRIMENTO", "61 cm");
+        parametros.put("PERIMETRO", "40,5 cm");
+        parametros.put("CRESCIMENTO_TABELA", "Peso por idade - P48 - escore-z -0,05 - faixa esperada\nComprimento por idade - P52 - escore-z 0,04 - faixa esperada\nPerimetro cefalico por idade - P50 - escore-z 0,00 - faixa esperada");
+        parametros.put("ALIMENTACAO", "10/07/2026\nLeite materno - 5 refeicoes/dia - frutas");
+        parametros.put("SONO", "10/07/2026\ndorme 20:00 e acorda 07:00 - 2 cochilos");
+        parametros.put("TRANSITO", "10/07/2026\ntipo 4 - 1-2 evacuacoes/dia");
+        parametros.put("TELAS", "10/07/2026\n30 min em dias de semana - videos curtos");
+        parametros.put("PONTOS_DESENVOLVIMENTO", "2 meses - Cognitivo\nPresta atencao a rostos - Ainda nao\n\n2 meses - Social emocional\nSorri ao ver o rosto de alguem - As vezes");
+        parametros.put("OBSERVACOES", "12/07/2026 - Passou a ser observado\nAcalma-se no colo ou com a voz de quem cuida.\n\n10/07/2026 - Passou a ser observado\nFaz sons alem do choro.");
+        parametros.put("RELATOS_FAMILIA", "Preocupacao da familia\nTem acordado mais vezes durante a noite.");
+        parametros.put("SAUDE_CUIDADOS", "12/07/2026 - Intercorrencia clinica\nTeve vomitos por apenas um dia e nao fez uso de medicamentos.");
+        parametros.put("ATIVIDADES", "- Conversas frente a frente\n- Passeio com palavras\n- Sequencia de faz de conta");
         return parametros;
-    }
-
-    private List<ResumoConsultaPdfService.SecaoRelatorio> secoesDeExemplo() {
-        return List.of(
-                new ResumoConsultaPdfService.SecaoRelatorio("CRESCIMENTO - ÚLTIMAS MEDIDAS E REFERÊNCIA", "10/07/2026 - Peso 6,2 kg  Comp. 61 cm  PC 40,5 cm\nReferência: OMS\nPESO IDADE P48 Z -0,05 | COMPRIMENTO IDADE P52 Z 0,04\n\n15/06/2026 - Peso 5,4 kg  Comp. 57 cm  PC 38,5 cm\nReferência: OMS\nPESO IDADE P46 Z -0,10 | COMPRIMENTO IDADE P50 Z 0,00"),
-                new ResumoConsultaPdfService.SecaoRelatorio("DESENVOLVIMENTO - PONTOS PARA CONVERSAR", "2 meses | Cognição\nPresta atenção a rostos - Ainda não\n\n2 meses | Cognição\nSegue objetos com o olhar por curtos períodos - Às vezes\n\n2 meses | Social emocional\nAcalma-se no colo ou com a voz de quem cuida - Às vezes\n\n2 meses | Social emocional\nSorri ao ver o rosto de alguém - Às vezes\n\n4 meses | Cognição\nObserva as próprias mãos com interesse - Às vezes"),
-                new ResumoConsultaPdfService.SecaoRelatorio("NEURODESENVOLVIMENTO - OBSERVAÇÕES RECENTES", "12/07/2026 | Primeira observação registrada\nAcalma-se no colo ou com a voz de quem cuida.\n\n12/07/2026 | Observado novamente\nSorri ao ver o rosto de alguém."),
-                new ResumoConsultaPdfService.SecaoRelatorio("RELATOS DA FAMÍLIA", "Preocupação da família\nTem acordado mais vezes durante a noite."),
-                new ResumoConsultaPdfService.SecaoRelatorio("SAÚDE E CUIDADOS", "Sem registros de saúde informados."),
-                new ResumoConsultaPdfService.SecaoRelatorio("ATIVIDADES EXPERIMENTADAS", "Conversas frente a frente\nReagiu sorrindo em alguns momentos.")
-        );
     }
 
     private void salvarPreviaQuandoSolicitado(byte[] pdf) throws Exception {

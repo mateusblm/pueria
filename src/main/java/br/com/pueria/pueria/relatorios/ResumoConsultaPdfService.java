@@ -1,5 +1,6 @@
 package br.com.pueria.pueria.relatorios;
 
+import br.com.pueria.pueria.alimentacao.aplicacao.ListarAlimentacaoUseCase;
 import br.com.pueria.pueria.crescimento.aplicacao.ListarAvaliacoesCurvaCrescimentoUseCase;
 import br.com.pueria.pueria.crescimento.dominio.MedidaCrescimentoRepositorio;
 import br.com.pueria.pueria.criancas.dominio.Crianca;
@@ -13,17 +14,20 @@ import br.com.pueria.pueria.desenvolvimento.dominio.StatusMarcoDesenvolvimento;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
 import br.com.pueria.pueria.saude.aplicacao.GerenciarRegistrosSaudeUseCase;
 import br.com.pueria.pueria.saude.dominio.TipoRegistroSaude;
+import br.com.pueria.pueria.sono.aplicacao.ListarSonoUseCase;
+import br.com.pueria.pueria.telas.aplicacao.ListarTelasUseCase;
+import br.com.pueria.pueria.transitointestinal.aplicacao.ListarTransitoIntestinalUseCase;
 import br.com.pueria.pueria.usuarios.dominio.UsuarioRepositorio;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -50,6 +54,10 @@ public class ResumoConsultaPdfService {
     private final HistoricoRespostaMarcoDesenvolvimentoRepositorio historico;
     private final MarcoDesenvolvimentoRepositorio catalogoMarcos;
     private final GerenciarRegistrosSaudeUseCase saude;
+    private final ListarAlimentacaoUseCase alimentacao;
+    private final ListarSonoUseCase sono;
+    private final ListarTelasUseCase telas;
+    private final ListarTransitoIntestinalUseCase transitoIntestinal;
 
     public ResumoConsultaPdfService(
             CriancaRepositorio criancas,
@@ -62,7 +70,11 @@ public class ResumoConsultaPdfService {
             MedidaCrescimentoRepositorio medidas,
             HistoricoRespostaMarcoDesenvolvimentoRepositorio historico,
             MarcoDesenvolvimentoRepositorio catalogoMarcos,
-            GerenciarRegistrosSaudeUseCase saude
+            GerenciarRegistrosSaudeUseCase saude,
+            ListarAlimentacaoUseCase alimentacao,
+            ListarSonoUseCase sono,
+            ListarTelasUseCase telas,
+            ListarTransitoIntestinalUseCase transitoIntestinal
     ) {
         this.criancas = criancas;
         this.usuarios = usuarios;
@@ -75,64 +87,136 @@ public class ResumoConsultaPdfService {
         this.historico = historico;
         this.catalogoMarcos = catalogoMarcos;
         this.saude = saude;
+        this.alimentacao = alimentacao;
+        this.sono = sono;
+        this.telas = telas;
+        this.transitoIntestinal = transitoIntestinal;
     }
 
     public byte[] gerar(UUID criancaId, String email) {
         Crianca crianca = validar(criancaId, email);
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("IDENTIFICACAO", identificacao(crianca));
-        parametros.put("GERADO_EM", "Gerado em " + LocalDate.now().format(DATA));
-
-        List<SecaoRelatorio> secoes = List.of(
-                new SecaoRelatorio("CRESCIMENTO - ÚLTIMAS MEDIDAS E REFERÊNCIA", crescimento(criancaId, email)),
-                new SecaoRelatorio("DESENVOLVIMENTO - PONTOS PARA CONVERSAR", desenvolvimento(criancaId, email)),
-                new SecaoRelatorio("NEURODESENVOLVIMENTO - OBSERVAÇÕES RECENTES", trajetoria(criancaId)),
-                new SecaoRelatorio("RELATOS DA FAMÍLIA", contexto(criancaId, email)),
-                new SecaoRelatorio("SAÚDE E CUIDADOS", saude(criancaId, email)),
-                new SecaoRelatorio("ATIVIDADES EXPERIMENTADAS", atividades(criancaId, email))
-        );
+        Map<String, Object> parametros = parametros(crianca, criancaId, email);
 
         try (InputStream in = new ClassPathResource("relatorios/resumo-consulta.jrxml").getInputStream()) {
             JasperReport report = JasperCompileManager.compileReport(in);
             return JasperExportManager.exportReportToPdf(
-                    JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(secoes))
+                    JasperFillManager.fillReport(report, parametros, new JREmptyDataSource())
             );
         } catch (Exception erro) {
             throw new IllegalStateException("Não foi possível gerar o relatório para consulta.", erro);
         }
     }
 
+    private Map<String, Object> parametros(Crianca crianca, UUID criancaId, String email) {
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("NOME_CRIANCA", crianca.getNome());
+        parametros.put("IDENTIFICACAO", identificacao(crianca));
+        parametros.put("GERADO_EM", "Gerado em " + LocalDate.now().format(DATA));
+
+        preencherCrescimento(parametros, criancaId, email);
+        parametros.put("ALIMENTACAO", resumoAlimentacao(criancaId, email));
+        parametros.put("SONO", resumoSono(criancaId, email));
+        parametros.put("TRANSITO", resumoTransito(criancaId, email));
+        parametros.put("TELAS", resumoTelas(criancaId, email));
+        parametros.put("PONTOS_DESENVOLVIMENTO", desenvolvimento(criancaId, email));
+        parametros.put("OBSERVACOES", trajetoria(criancaId));
+        parametros.put("RELATOS_FAMILIA", contexto(criancaId, email));
+        parametros.put("SAUDE_CUIDADOS", registrosSaude(criancaId, email));
+        parametros.put("ATIVIDADES", atividades(criancaId, email));
+        return parametros;
+    }
+
     private String identificacao(Crianca crianca) {
-        String texto = crianca.getNome()
-                + "\nNascimento: " + crianca.getDataNascimento().format(DATA)
-                + " | Sexo: " + crianca.getSexo();
+        String texto = "Nascimento " + crianca.getDataNascimento().format(DATA)
+                + " · Sexo " + rotuloSexo(crianca.getSexo().name());
         return crianca.isPrematura()
-                ? texto + "\nPrematuridade: " + crianca.getSemanasGestacionais() + " semanas e " + crianca.getDiasGestacionais() + " dias"
+                ? texto + " · Prematuridade: " + crianca.getSemanasGestacionais() + " semanas e "
+                + crianca.getDiasGestacionais() + " dias"
                 : texto;
     }
 
-    private String crescimento(UUID criancaId, String email) {
+    private void preencherCrescimento(Map<String, Object> parametros, UUID criancaId, String email) {
         var avaliacoes = crescimento.executar(criancaId, email).stream()
                 .collect(Collectors.toMap(avaliacao -> avaliacao.medidaId(), avaliacao -> avaliacao));
+        var ultima = medidas.listarPorCrianca(criancaId).stream()
+                .max(Comparator.comparing(medida -> medida.getDataMedicao()));
 
-        String texto = medidas.listarPorCrianca(criancaId).stream()
-                .sorted(Comparator.comparing(medida -> medida.getDataMedicao(), Comparator.reverseOrder()))
-                .limit(3)
-                .map(medida -> {
-                    String valores = (medida.getPesoKg() == null ? "" : "Peso " + medida.getPesoKg() + " kg  ")
-                            + (medida.getComprimentoCm() == null ? "" : "Comp. " + medida.getComprimentoCm() + " cm  ")
-                            + (medida.getPerimetroCefalicoCm() == null ? "" : "PC " + medida.getPerimetroCefalicoCm() + " cm");
-                    var avaliacao = avaliacoes.get(medida.getId());
-                    String curva = avaliacao == null ? "" : avaliacao.resultados().stream()
-                            .map(resultado -> resultado.indicador().name().replace('_', ' ')
-                                    + " P" + Math.round(resultado.percentil())
-                                    + " Z " + String.format(Locale.US, "%.2f", resultado.zScore()))
-                            .collect(Collectors.joining(" | "));
-                    return medida.getDataMedicao().format(DATA) + " - " + valores
-                            + (avaliacao == null ? "" : "\nReferência: " + avaliacao.criterioIdade() + "\n" + curva);
+        if (ultima.isEmpty()) {
+            parametros.put("CRESCIMENTO_DATA", "Ainda sem medidas registradas");
+            parametros.put("PESO", "Não informado");
+            parametros.put("COMPRIMENTO", "Não informado");
+            parametros.put("PERIMETRO", "Não informado");
+            parametros.put("CRESCIMENTO_TABELA", "Quando houver uma medida registrada, os índices de referência aparecerão aqui.");
+            return;
+        }
+
+        var medida = ultima.get();
+        parametros.put("CRESCIMENTO_DATA", "Aferido em " + medida.getDataMedicao().format(DATA));
+        parametros.put("PESO", formatarMedida(medida.getPesoKg(), "kg"));
+        parametros.put("COMPRIMENTO", formatarMedida(medida.getComprimentoCm(), "cm"));
+        parametros.put("PERIMETRO", formatarMedida(medida.getPerimetroCefalicoCm(), "cm"));
+
+        var avaliacao = avaliacoes.get(medida.getId());
+        String tabela = avaliacao == null ? "A referência para esta medida ainda não está disponível." : avaliacao.resultados().stream()
+                .map(resultado -> rotuloIndicador(resultado.indicador().name())
+                        + " · P" + Math.round(resultado.percentil())
+                        + " · escore-z " + String.format(Locale.forLanguageTag("pt-BR"), "%.2f", resultado.zScore())
+                        + " · " + rotuloClassificacao(resultado.classificacao().name()))
+                .collect(Collectors.joining("\n"));
+        parametros.put("CRESCIMENTO_TABELA", tabela);
+    }
+
+    private String resumoAlimentacao(UUID criancaId, String email) {
+        return alimentacao.executar(criancaId, email).stream().findFirst()
+                .map(detalhado -> {
+                    var registro = detalhado.registro();
+                    List<String> itens = new java.util.ArrayList<>();
+                    if (registro.getTipoLeite() != null) itens.add(rotuloEnum(registro.getTipoLeite().name()));
+                    if (registro.getRefeicoesPorDia() != null) itens.add(registro.getRefeicoesPorDia() + " refeições/dia");
+                    if (Boolean.TRUE.equals(registro.getConsomeFrutas())) itens.add("frutas");
+                    if (Boolean.TRUE.equals(registro.getConsomeLegumesVerduras())) itens.add("legumes e verduras");
+                    return resumoComData(registro.getDataRegistro(), itens, "Registro alimentar salvo.");
                 })
-                .collect(Collectors.joining("\n\n"));
-        return texto.isBlank() ? "Sem medidas registradas." : texto;
+                .orElse("Ainda sem registro alimentar.");
+    }
+
+    private String resumoSono(UUID criancaId, String email) {
+        return sono.executar(criancaId, email).stream().findFirst()
+                .map(detalhado -> {
+                    var registro = detalhado.registro();
+                    List<String> itens = new java.util.ArrayList<>();
+                    if (registro.getHorarioDormiu() != null && registro.getHorarioAcordou() != null) {
+                        itens.add("dorme " + registro.getHorarioDormiu() + " e acorda " + registro.getHorarioAcordou());
+                    }
+                    if (registro.getQuantidadeCochilos() != null) itens.add(registro.getQuantidadeCochilos() + " cochilos");
+                    if (registro.getDespertaresNoturnos() != null) itens.add(registro.getDespertaresNoturnos() + " despertares noturnos");
+                    return resumoComData(registro.getDataRegistro(), itens, "Registro de sono salvo.");
+                })
+                .orElse("Ainda sem registro de sono.");
+    }
+
+    private String resumoTransito(UUID criancaId, String email) {
+        return transitoIntestinal.executar(criancaId, email).stream().findFirst()
+                .map(detalhado -> {
+                    var registro = detalhado.registro();
+                    List<String> itens = new java.util.ArrayList<>();
+                    if (registro.getTipoFezes() != null) itens.add("tipo " + registro.getTipoFezes().name().replace("TIPO_", ""));
+                    if (registro.getEvacuacoesPorDia() != null) itens.add(registro.getEvacuacoesPorDia() + " evacuações/dia");
+                    return resumoComData(registro.getDataRegistro(), itens, "Registro intestinal salvo.");
+                })
+                .orElse("Ainda sem registro intestinal.");
+    }
+
+    private String resumoTelas(UUID criancaId, String email) {
+        return telas.executar(criancaId, email).stream().findFirst()
+                .map(detalhado -> {
+                    var registro = detalhado.registro();
+                    List<String> itens = new java.util.ArrayList<>();
+                    if (registro.getMinutosDiaSemana() != null) itens.add(formatarMinutos(registro.getMinutosDiaSemana()) + " em dias de semana");
+                    if (registro.getTipoConteudoPredominante() != null) itens.add(rotuloEnum(registro.getTipoConteudoPredominante().name()));
+                    return resumoComData(registro.getDataRegistro(), itens, "Registro de telas salvo.");
+                })
+                .orElse("Ainda sem registro de telas.");
     }
 
     private String desenvolvimento(UUID criancaId, String email) {
@@ -140,11 +224,11 @@ public class ResumoConsultaPdfService {
                 .filter(marco -> marco.status() == StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO
                         || marco.status() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA)
                 .limit(8)
-                .map(marco -> marco.idadeMeses() + " meses | " + marco.area().name().replace('_', ' ')
-                        + "\n" + marco.descricao() + " - "
+                .map(marco -> marco.idadeMeses() + " meses · " + rotuloEnum(marco.area().name())
+                        + "\n" + marco.descricao() + " · "
                         + (marco.status() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA ? "Às vezes" : "Ainda não"))
                 .collect(Collectors.joining("\n\n"));
-        return texto.isBlank() ? "Sem pontos registrados nesta seção." : texto;
+        return texto.isBlank() ? "Nenhum ponto de desenvolvimento em observação nesta avaliação." : texto;
     }
 
     private String trajetoria(UUID criancaId) {
@@ -154,53 +238,89 @@ public class ResumoConsultaPdfService {
                 .limit(6)
                 .map(evento -> catalogoMarcos.buscarPorId(evento.marcoId())
                         .map(marco -> evento.registradoEm().toLocalDate().format(DATA)
-                                + " | " + rotuloTrajetoria(evento.statusAnterior())
-                                + "\n" + marco.getDescricao())
+                                + " · " + rotuloTrajetoria(evento.statusAnterior()) + "\n" + marco.getDescricao())
                         .orElse(""))
                 .filter(textoEvento -> !textoEvento.isBlank())
                 .collect(Collectors.joining("\n\n"));
-        return texto.isBlank() ? "Ainda não há observações de marcos nesta seção." : texto;
+        return texto.isBlank() ? "Ainda não há observações recentes de marcos registradas." : texto;
     }
 
     private String contexto(UUID criancaId, String email) {
         String texto = relatos.listar(criancaId, email).stream()
-                .limit(5)
+                .limit(4)
                 .map(relato -> rotuloRelato(relato.getTipo().name()) + "\n" + relato.getDescricao())
                 .collect(Collectors.joining("\n\n"));
-        return texto.isBlank() ? "Sem relatos familiares registrados." : texto;
+        return texto.isBlank() ? "Sem relatos familiares no período." : texto;
     }
 
-    private String saude(UUID criancaId, String email) {
+    private String registrosSaude(UUID criancaId, String email) {
         String texto = saude.listar(criancaId, email).stream()
-                .limit(6)
-                .map(registro -> registro.getDataRegistro().format(DATA) + " | "
+                .limit(5)
+                .map(registro -> registro.getDataRegistro().format(DATA) + " · "
                         + (registro.getTipo() == TipoRegistroSaude.MEDICAMENTO_SUPLEMENTO
-                        ? "Suplementos e medicamentos de uso diário"
-                        : "Intercorrência clínica")
-                        + "\n" + registro.getDescricao())
+                        ? "Uso diário" : "Intercorrência clínica") + "\n" + registro.getDescricao())
                 .collect(Collectors.joining("\n\n"));
-        return texto.isBlank() ? "Sem registros de saúde informados." : texto;
+        return texto.isBlank() ? "Sem registros de saúde e cuidados no período." : texto;
     }
 
     private String atividades(UUID criancaId, String email) {
         String texto = estimulos.listarHistorico(criancaId, email).stream()
-                .limit(5)
-                .map(estimulo -> estimulo.titulo() + (estimulo.observacao() == null ? "" : "\n" + estimulo.observacao()))
-                .collect(Collectors.joining("\n\n"));
+                .limit(6)
+                .map(estimulo -> "• " + estimulo.titulo()
+                        + (estimulo.observacao() == null || estimulo.observacao().isBlank() ? "" : " — " + estimulo.observacao()))
+                .collect(Collectors.joining("\n"));
         return texto.isBlank() ? "Sem atividades marcadas como experimentadas." : texto;
     }
 
+    private String resumoComData(LocalDate data, List<String> itens, String padrao) {
+        return data.format(DATA) + "\n" + (itens.isEmpty() ? padrao : String.join(" · ", itens));
+    }
+
+    private String formatarMedida(BigDecimal valor, String unidade) {
+        return valor == null ? "Não informado" : valor.stripTrailingZeros().toPlainString().replace('.', ',') + " " + unidade;
+    }
+
+    private String formatarMinutos(Integer minutos) {
+        int horas = minutos / 60;
+        int restante = minutos % 60;
+        return horas > 0 ? horas + "h" + (restante > 0 ? " " + restante + "min" : "") : restante + " min";
+    }
+
+    private String rotuloSexo(String sexo) {
+        return "MASCULINO".equals(sexo) ? "masculino" : "feminino";
+    }
+
+    private String rotuloIndicador(String indicador) {
+        return switch (indicador) {
+            case "PESO_POR_IDADE" -> "Peso por idade";
+            case "COMPRIMENTO_POR_IDADE" -> "Comprimento por idade";
+            case "PERIMETRO_CEFALICO_POR_IDADE" -> "Perímetro cefálico por idade";
+            case "PESO_POR_COMPRIMENTO" -> "Peso por comprimento";
+            case "IMC_POR_IDADE" -> "IMC por idade";
+            default -> rotuloEnum(indicador);
+        };
+    }
+
+    private String rotuloClassificacao(String classificacao) {
+        return switch (classificacao) {
+            case "DENTRO_DA_FAIXA_ESPERADA" -> "faixa esperada";
+            case "FORA_DA_FAIXA_ESPERADA" -> "conversar na consulta";
+            default -> rotuloEnum(classificacao);
+        };
+    }
+
+    private String rotuloEnum(String valor) {
+        String texto = valor.toLowerCase(Locale.ROOT).replace('_', ' ');
+        return Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
+    }
+
     private String rotuloTrajetoria(StatusMarcoDesenvolvimento anterior) {
-        if (anterior == null) {
-            return "Primeira observação registrada";
-        }
-        return anterior == StatusMarcoDesenvolvimento.OBSERVADO
-                ? "Observado novamente"
-                : "Passou a ser observado";
+        if (anterior == null) return "Primeira observação registrada";
+        return anterior == StatusMarcoDesenvolvimento.OBSERVADO ? "Observado novamente" : "Passou a ser observado";
     }
 
     private String rotuloRelato(String tipo) {
-        return "PERDA_HABILIDADE".equals(tipo) ? "Perda de habilidade relatada pela família" : "Preocupação da família";
+        return "PERDA_HABILIDADE".equals(tipo) ? "Perda de habilidade relatada" : "Preocupação da família";
     }
 
     private Crianca validar(UUID criancaId, String email) {
@@ -209,23 +329,5 @@ public class ResumoConsultaPdfService {
             throw new IllegalArgumentException("Criança não encontrada.");
         }
         return criancas.buscarPorId(criancaId).orElseThrow();
-    }
-
-    public static final class SecaoRelatorio {
-        private final String titulo;
-        private final String conteudo;
-
-        public SecaoRelatorio(String titulo, String conteudo) {
-            this.titulo = titulo;
-            this.conteudo = conteudo;
-        }
-
-        public String getTitulo() {
-            return titulo;
-        }
-
-        public String getConteudo() {
-            return conteudo;
-        }
     }
 }
