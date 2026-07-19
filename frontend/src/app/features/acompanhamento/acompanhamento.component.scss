@@ -741,6 +741,29 @@
 @media (max-width: 640px) {
   .acompanhamento-page {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .acompanhamento-home,
+  .acompanhamento-modulos,
+  .acompanhamento-prioridades,
+  .modulo-cuidado {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .acompanhamento-modulos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .modulo-cuidado,
+  .modulo-cuidado__texto,
+  .prioridade__conteudo {
+    min-width: 0;
   }
 
   .acompanhamento-destaque__conteudo h1,
