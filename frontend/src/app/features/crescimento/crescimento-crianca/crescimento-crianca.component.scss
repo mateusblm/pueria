@@ -172,11 +172,6 @@
   border-radius: var(--pueria-raio-menor);
 }
 
-.crescimento-page__grid {
-  grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.62fr);
-  align-items: start;
-}
-
 .crescimento-atualizacao {
   border: 1px solid #e8ddd5;
   border-radius: var(--pueria-raio);
@@ -184,8 +179,9 @@
   padding: 12px;
 }
 
-.crescimento-page__grid > app-registro-rapido {
-  display: contents;
+.crescimento-side {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
 }
 
 .crescimento-atualizacao__abrir {
@@ -280,10 +276,6 @@
 }
 
 @media (max-width: 860px) {
-  .crescimento-page__grid {
-    grid-template-columns: 1fr;
-  }
-
   .crescimento-side {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
