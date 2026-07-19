@@ -58,7 +58,8 @@ export class AppLayoutComponent implements OnInit {
     localStorage.setItem('pueria.criancaEmFocoId', crianca.id);
     this.fecharSeletorCrianca();
     this.fecharMenu();
-    void this.router.navigateByUrl(this.rotaDaCriancaSelecionada(crianca.id));
+    // Cada módulo lê a criança ao ser iniciado. Recriar a rota evita manter dados da criança anterior em memória.
+    window.location.assign(this.rotaDaCriancaSelecionada(crianca.id));
   }
 
   idadeDaCrianca(crianca: Crianca): string {
