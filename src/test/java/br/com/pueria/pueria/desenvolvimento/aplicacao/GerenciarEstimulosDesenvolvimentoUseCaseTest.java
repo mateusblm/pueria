@@ -100,14 +100,17 @@ class GerenciarEstimulosDesenvolvimentoUseCaseTest {
         when(marcos.buscarPorId(marcoDaFaixaId)).thenReturn(Optional.of(marcoDaFaixa));
         when(marcos.buscarPorId(marcoDeOutraFaixaId)).thenReturn(Optional.of(marcoDeOutraFaixa));
         when(marcos.buscarPorId(marcoClinicoId)).thenReturn(Optional.of(marcoClinico));
+        when(marcos.listarAtivosAteIdadeMeses(4)).thenReturn(List.of(marcoDaFaixa));
         when(estimulos.buscarAtivoParaMarco(marcoDaFaixaId)).thenReturn(Optional.of(estimulo));
 
         GerenciarEstimulosDesenvolvimentoUseCase useCase = new GerenciarEstimulosDesenvolvimentoUseCase(
                 criancas, usuarios, vinculos, estimulos, registrosEstimulos, registrosMarcos, marcos);
 
         List<EstimuloDesenvolvimentoResumo> resultado = useCase.listarRecomendacoes(criancaId, "responsavel@teste.com", 4);
+        List<EstimuloDesenvolvimentoResumo> resultadoDaFaseAtual = useCase.listarRecomendacoes(criancaId, "responsavel@teste.com", null);
 
         assertEquals(List.of(estimuloId), resultado.stream().map(EstimuloDesenvolvimentoResumo::id).toList());
+        assertEquals(List.of(estimuloId), resultadoDaFaseAtual.stream().map(EstimuloDesenvolvimentoResumo::id).toList());
     }
 
     private MarcoDesenvolvimento marco(UUID id, int idadeMeses, PapelClinicoMarcoDesenvolvimento papelClinico) {

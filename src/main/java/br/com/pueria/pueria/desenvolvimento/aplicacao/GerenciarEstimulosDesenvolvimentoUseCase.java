@@ -80,7 +80,7 @@ public class GerenciarEstimulosDesenvolvimentoUseCase {
     public List<EstimuloDesenvolvimentoResumo> listarRecomendacoes(UUID criancaId, String email, Integer idadeMesesSolicitada) {
         Crianca crianca = validarAcesso(criancaId, email);
         int idadeMeses = idadeMesesSolicitada == null
-                ? IdadeReferenciaDesenvolvimento.mesesParaCheckpoints(crianca, LocalDate.now())
+                ? faseMaisRecentePara(IdadeReferenciaDesenvolvimento.mesesParaCheckpoints(crianca, LocalDate.now()))
                 : idadeMesesSolicitada;
         Map<UUID, RegistroEstimuloDesenvolvimento> registros = registrosEstimulos.listarPorCrianca(criancaId).stream()
                 .collect(Collectors.toMap(RegistroEstimuloDesenvolvimento::estimuloId, Function.identity()));
@@ -101,6 +101,13 @@ public class GerenciarEstimulosDesenvolvimentoUseCase {
                 .filter(item -> !item.experimentado())
                 .collect(Collectors.collectingAndThen(Collectors.toMap(EstimuloDesenvolvimentoResumo::id, Function.identity(), (primeiro, ignorar) -> primeiro, LinkedHashMap::new),
                         itens -> itens.values().stream().toList()));
+    }
+
+    private int faseMaisRecentePara(int idadeMeses) {
+        return marcos.listarAtivosAteIdadeMeses(idadeMeses).stream()
+                .mapToInt(MarcoDesenvolvimento::getIdadeMeses)
+                .max()
+                .orElse(idadeMeses);
     }
 
     @Transactional
