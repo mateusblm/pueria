@@ -31,6 +31,97 @@
   font-size: 1.1rem;
 }
 
+.app-shell__child-switcher {
+  align-items: center;
+  border: 1px solid var(--pueria-borda);
+  border-radius: 12px;
+  background: #fffdf9;
+  color: var(--pueria-texto);
+  display: flex;
+  gap: 9px;
+  min-width: 0;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.app-shell__child-switcher > span:not(.app-shell__child-avatar) {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.app-shell__child-switcher strong,
+.app-shell__child-switcher small,
+.app-shell__child-switcher em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-shell__child-switcher strong { font-size: .86rem; }
+.app-shell__child-switcher small,
+.app-shell__child-switcher em { color: var(--pueria-texto-suave); font-size: .73rem; font-style: normal; font-weight: 600; }
+.app-shell__child-switcher > app-icon { color: var(--pueria-vermelho-flor); flex: 0 0 auto; transform: rotate(90deg); }
+
+.app-shell__child-switcher--mobile { flex: 1; max-width: 240px; }
+.app-shell__child-switcher--sidebar { width: 100%; }
+.app-shell__child-switcher--sidebar > span:not(.app-shell__child-avatar) { flex: 1; }
+
+.app-shell__child-avatar {
+  align-items: center;
+  background: var(--pueria-folha-clara);
+  border-radius: 50%;
+  color: var(--pueria-folha-escura);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+.app-shell__child-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  border: 0;
+  background: transparent;
+}
+
+.app-shell__child-picker {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  left: 16px;
+  z-index: 21;
+  display: grid;
+  gap: 10px;
+  max-width: 340px;
+  border: 1px solid var(--pueria-borda);
+  border-radius: var(--pueria-raio);
+  background: #fffdf9;
+  padding: 18px;
+  box-shadow: 0 18px 42px rgba(82, 50, 46, .18);
+}
+
+.app-shell__child-picker h2 { font-size: 1.16rem; }
+.app-shell__child-picker-list { display: grid; gap: 5px; }
+.app-shell__child-picker-list button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--pueria-texto);
+  display: flex;
+  gap: 9px;
+  padding: 9px;
+  text-align: left;
+}
+.app-shell__child-picker-list button > span:nth-child(2) { display: grid; flex: 1; gap: 2px; }
+.app-shell__child-picker-list small { color: var(--pueria-texto-suave); font-size: .76rem; }
+.app-shell__child-picker-active { border-color: rgba(217, 45, 74, .2) !important; background: var(--pueria-rosa-nevoa) !important; }
+.app-shell__child-check { color: var(--pueria-vermelho-flor); font-size: .72rem; font-weight: 850; }
+.app-shell__child-picker > a { color: var(--pueria-vermelho-profundo); font-size: .85rem; font-weight: 800; padding: 7px 9px 0; }
+
 .app-shell__close {
   width: 40px;
   height: 40px;
@@ -189,5 +280,14 @@
 
   .app-shell__content {
     padding: 40px clamp(32px, 6vw, 80px);
+  }
+
+  .app-shell__child-switcher--mobile { display: none; }
+
+  .app-shell__child-picker {
+    top: 132px;
+    right: auto;
+    left: 20px;
+    width: 220px;
   }
 }

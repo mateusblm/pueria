@@ -1,6 +1,14 @@
 <div class="app-shell">
   <header class="app-shell__topbar">
-    <app-brand-mark></app-brand-mark>
+    @if (criancaEmFoco(); as crianca) {
+      <button type="button" class="app-shell__child-switcher app-shell__child-switcher--mobile" (click)="alternarSeletorCrianca()" [attr.aria-expanded]="seletorCriancaAberto()">
+        <span class="app-shell__child-avatar"><app-icon name="baby" [size]="17" /></span>
+        <span><strong>{{ crianca.nome }}</strong><small>{{ idadeDaCrianca(crianca) }}</small></span>
+        <app-icon name="chevronRight" [size]="16" />
+      </button>
+    } @else {
+      <app-brand-mark></app-brand-mark>
+    }
     <button type="button" class="app-shell__menu-button" (click)="abrirMenu()" aria-label="Abrir menu" title="Abrir menu">
       <app-icon name="menu" [size]="20" />
     </button>
@@ -15,6 +23,14 @@
       <app-brand-mark></app-brand-mark>
       <button type="button" class="app-shell__close" (click)="fecharMenu()" aria-label="Fechar menu"><app-icon name="close" [size]="21" /></button>
     </div>
+
+    @if (criancaEmFoco(); as crianca) {
+      <button type="button" class="app-shell__child-switcher app-shell__child-switcher--sidebar" (click)="alternarSeletorCrianca()" [attr.aria-expanded]="seletorCriancaAberto()">
+        <span class="app-shell__child-avatar"><app-icon name="baby" [size]="18" /></span>
+        <span><small>Criança acompanhada</small><strong>{{ crianca.nome }}</strong><em>{{ idadeDaCrianca(crianca) }}</em></span>
+        <app-icon name="chevronRight" [size]="17" />
+      </button>
+    }
 
     <nav class="app-shell__nav" aria-label="Navegação principal">
       <a routerLink="/acompanhamento" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">
@@ -40,6 +56,24 @@
       Sair da conta
     </button>
   </aside>
+
+  @if (seletorCriancaAberto()) {
+    <button type="button" class="app-shell__child-backdrop" aria-label="Fechar seletor de criança" (click)="fecharSeletorCrianca()"></button>
+    <section class="app-shell__child-picker" aria-label="Trocar criança acompanhada">
+      <p class="pueria-eyebrow">Família</p>
+      <h2>Trocar criança</h2>
+      <div class="app-shell__child-picker-list">
+        @for (crianca of criancas(); track crianca.id) {
+          <button type="button" [class.app-shell__child-picker-active]="crianca.id === criancaEmFoco()?.id" (click)="selecionarCrianca(crianca)">
+            <span class="app-shell__child-avatar"><app-icon name="baby" [size]="17" /></span>
+            <span><strong>{{ crianca.nome }}</strong><small>{{ idadeDaCrianca(crianca) }}</small></span>
+            @if (crianca.id === criancaEmFoco()?.id) { <span class="app-shell__child-check">Atual</span> }
+          </button>
+        }
+      </div>
+      <a routerLink="/criancas" (click)="fecharSeletorCrianca()">Gerenciar crianças</a>
+    </section>
+  }
 
   <main class="app-shell__content">
     <router-outlet></router-outlet>

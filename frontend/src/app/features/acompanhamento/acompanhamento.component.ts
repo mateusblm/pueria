@@ -54,10 +54,6 @@ export class AcompanhamentoComponent implements OnInit {
     const id = this.criancaEmFocoId();
     return (resumos.find((resumo) => resumo.crianca.id === id) ?? this.escolherResumoInicial(resumos)) as ResumoCrianca;
   });
-  readonly outrasCriancas = computed(() => {
-    const foco = this.criancaEmFoco();
-    return this.resumos().filter((resumo) => resumo.crianca.id !== foco?.crianca.id);
-  });
   readonly dataMaximaNascimento = this.formatarDataInput(new Date());
   readonly dataMinimaNascimento = this.calcularDataMinimaNascimento();
 
@@ -159,11 +155,6 @@ export class AcompanhamentoComponent implements OnInit {
   voltarCadastro(): void {
     this.erroCadastro.set('');
     this.etapaCadastro.update((etapa) => Math.max(etapa - 1, 1));
-  }
-
-  selecionarCriancaEmFoco(resumo: ResumoCrianca): void {
-    this.criancaEmFocoId.set(resumo.crianca.id);
-    localStorage.setItem('pueria.criancaEmFocoId', resumo.crianca.id);
   }
 
   formatarDataNascimento(evento: Event): void {

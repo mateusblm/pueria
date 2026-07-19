@@ -46,37 +46,7 @@
           <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
           <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
         </div>
-        <a routerLink="/criancas" class="acompanhamento-home__perfil">Gerenciar crianças</a>
       </header>
-
-      @if (outrasCriancas().length > 0) {
-        <section class="acompanhamento-troca" aria-label="Trocar criança acompanhada">
-          <div>
-            <p class="pueria-eyebrow">Família</p>
-            <h2>Trocar criança</h2>
-          </div>
-          <div class="acompanhamento-troca__lista">
-            @for (resumo of outrasCriancas(); track resumo.crianca.id) {
-              @let progressoResumo = progresso(resumo.marcos);
-              <button type="button" class="acompanhamento-troca__crianca" (click)="selecionarCriancaEmFoco(resumo)">
-                <span class="acompanhamento-troca__avatar"><app-icon name="baby" [size]="18" /></span>
-                <span class="acompanhamento-troca__texto">
-                  <strong>{{ resumo.crianca.nome }}</strong>
-                  <span>{{ calcularIdade(resumo.crianca.dataNascimento) }}</span>
-                  <small>
-                    @if (progressoResumo.total === 0) {
-                      Perfil pronto para começar
-                    } @else {
-                      {{ progressoResumo.respondidos }} de {{ progressoResumo.total }} marcos registrados
-                    }
-                  </small>
-                </span>
-                <app-icon name="chevronRight" [size]="18" />
-              </button>
-            }
-          </div>
-        </section>
-      }
 
       @if (progressoAtual.respondidos === 0) {
         <section class="pueria-card inicio-primeiros-passos">
