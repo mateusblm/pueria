@@ -30,6 +30,19 @@
   text-decoration: none;
 }
 
+.auth-form__inicio {
+  justify-self: center;
+  color: var(--pueria-texto-suave);
+  font-size: 0.86rem;
+  text-decoration: none;
+}
+
+.auth-form__inicio:hover,
+.auth-form__inicio:focus-visible {
+  color: var(--pueria-coral-escuro);
+  text-decoration: underline;
+}
+
 .auth-form__forgot {
   color: var(--pueria-coral-escuro);
   display: block;
