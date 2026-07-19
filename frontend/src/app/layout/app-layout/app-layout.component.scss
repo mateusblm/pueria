@@ -285,9 +285,9 @@
   .app-shell__child-switcher--mobile { display: none; }
 
   .app-shell__child-picker {
-    top: 132px;
+    top: 116px;
     right: auto;
-    left: 20px;
-    width: 220px;
+    left: 280px;
+    width: min(300px, calc(100vw - 304px));
   }
 }
