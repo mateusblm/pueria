@@ -97,6 +97,18 @@
 .resumo-consulta__numeros strong { color: var(--pueria-vermelho-profundo); font-size: 1.35rem; }
 .resumo-consulta__numeros span, .resumo-consulta__acao p { color: var(--pueria-texto-suave); font-size: 0.9rem; }
 .resumo-consulta__acao { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.resumo-consulta__botoes { display: flex; flex-wrap: wrap; gap: 10px; }
+.consulta-vazia { display: grid; gap: 8px; padding: 24px; }
+.consulta-vazia h2, .consulta-vazia p, .consulta-pontos__cabecalho h2, .consulta-contexto h2, .consulta-contexto p { margin: 0; }
+.consulta-vazia p, .consulta-pontos__cabecalho p:not(.pueria-eyebrow), .consulta-contexto > p:not(.pueria-eyebrow) { color: var(--pueria-texto-suave); line-height: 1.5; }
+.consulta-pontos { display: grid; gap: 12px; }
+.consulta-pontos__cabecalho { display: grid; gap: 5px; }
+.consulta-area { border-left: 4px solid var(--area-cor, #47688f); display: grid; gap: 14px; padding: 18px; }
+.consulta-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.consulta-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.consulta-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.consulta-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
+.consulta-area header { align-items: center; display: flex; gap: 10px; }.consulta-area__icone { align-items:center; background:var(--area-fundo); border-radius:50%; color:var(--area-cor); display:inline-flex; height:38px; justify-content:center; width:38px; }.consulta-area h3, .consulta-area p { margin:0; }.consulta-area p { color:var(--pueria-texto-suave); font-size:.88rem; margin-top:2px; }
+.consulta-area ul { display:grid; gap:8px; list-style:none; margin:0; padding:0; }.consulta-area li { border-top:1px solid var(--pueria-borda); display:grid; gap:4px; padding-top:10px; }.consulta-area li span { font-weight:720; }.consulta-area li small { color:var(--pueria-texto-suave); }
+.consulta-contexto { display:grid; gap:14px; padding:22px; }.consulta-contexto__lista { display:grid; gap:9px; }.consulta-contexto__lista article { border:1px solid var(--pueria-borda); border-left:3px solid #d6a84f; display:grid; gap:4px; padding:12px; }.consulta-contexto__lista span { color:var(--pueria-texto-suave); font-size:.88rem; }.consulta-contexto__lista p { color:var(--pueria-texto); }.consulta-contexto__item--prioritario { border-left-width:5px !important; border-left-color:#c52845 !important; }
+.consulta-adicionar-contexto { padding:0; }.consulta-adicionar-contexto summary { cursor:pointer; font-weight:750; padding:18px 22px; }.relato-desenvolvimento__conteudo { display:grid; gap:14px; padding:0 22px 22px; }.relato-desenvolvimento__conteudo > p { color:var(--pueria-texto-suave); line-height:1.5; margin:0; }
 
 .resultado-areas { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
 .resultado-area { border-top: 4px solid var(--area-cor, #76507d); display: grid; gap: 12px; padding: 18px; }.resultado-area__header { align-items: center; display: flex; gap: 8px; }.resultado-area__header .pueria-eyebrow { margin: 0; }.resultado-area__icone { align-items: center; background: var(--area-fundo, #eee3f4); border-radius: 50%; color: var(--area-cor, #76507d); display: inline-flex; height: 38px; justify-content: center; width: 38px; }
@@ -143,6 +155,7 @@
   .marcos-page__hero, .etapa-card__body, .apoio-card, .relato-desenvolvimento { padding: 18px; }
   .relato-desenvolvimento__tipos { width: 100%; }.relato-desenvolvimento__tipos button { flex: 1 1 10rem; }
   .marco-card__actions, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
+  .resumo-consulta__acao { align-items: stretch; }.resumo-consulta__botoes { display:grid; width:100%; }.resumo-consulta__botoes .pueria-button { width:100%; }
   .estimulos-card { padding:18px; }.estimulos-card__lista article { grid-template-columns:auto minmax(0,1fr); }.estimulos-card__lista .pueria-button, .estimulos-card__feito { grid-column:2; justify-self:start; }
   .etapa-nav { align-items: stretch; flex-direction: column; }
   .historico-lista article { grid-template-columns: 1fr; }

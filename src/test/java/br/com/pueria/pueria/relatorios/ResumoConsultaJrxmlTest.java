@@ -31,6 +31,20 @@ class ResumoConsultaJrxmlTest {
         }
     }
 
+    @Test
+    void compilaEGeraResumoBreve() {
+        try (var in = new ClassPathResource("relatorios/resumo-consulta-breve.jrxml").getInputStream()) {
+            var report = JasperCompileManager.compileReport(in);
+            var print = JasperFillManager.fillReport(report, parametrosDeExemplo(), new JREmptyDataSource());
+            byte[] pdf = JasperExportManager.exportReportToPdf(print);
+
+            assertTrue(pdf.length > 100);
+            assertTrue(print.getPages().size() >= 1);
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
+    }
+
     private Map<String, Object> parametrosDeExemplo() {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("NOME_CRIANCA", "Helena Martins");

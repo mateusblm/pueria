@@ -65,5 +65,9 @@ export class DesenvolvimentoService {
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 
-  gerarResumoConsulta(criancaId: string): Observable<Blob> { return this.http.get(`/api/criancas/${criancaId}/relatorio-consulta`, { responseType: 'blob' }).pipe(timeout({ first: this.tempoLimiteRequisicaoMs })); }
+  gerarResumoConsulta(criancaId: string, detalhado = false): Observable<Blob> {
+    const params = detalhado ? new HttpParams().set('detalhado', 'true') : undefined;
+    return this.http.get(`/api/criancas/${criancaId}/relatorio-consulta`, { params, responseType: 'blob' })
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
 }

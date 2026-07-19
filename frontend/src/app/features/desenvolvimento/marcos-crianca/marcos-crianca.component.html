@@ -233,170 +233,80 @@
         <section class="pueria-card resumo-consulta">
           <div>
             <p class="pueria-eyebrow">Resumo para consulta</p>
-            <h2>{{ tituloIdadeSelecionada() }}</h2>
+            <h2>Resumo do que merece conversa</h2>
             <p>
-              Registro familiar de vigilância do desenvolvimento em {{ dataResumo() }}.
-              Este resumo organiza observações da rotina e não substitui avaliação profissional.
+              São observações da família para dar contexto à consulta. Elas não representam um diagnóstico.
             </p>
           </div>
 
           <div class="resumo-consulta__numeros">
             <article>
-              <strong>{{ progresso().respondidos }}/{{ progresso().total }}</strong>
-              <span>respondidos</span>
+              <strong>{{ totalPontosConsulta() }}</strong>
+              <span>{{ totalPontosConsulta() === 1 ? 'ponto para conversar' : 'pontos para conversar' }}</span>
             </article>
             <article>
-              <strong>{{ pontosDeAtencao().length }}</strong>
-              <span>dúvidas para a consulta</span>
+              <strong>{{ pontosConsultaPorArea().length }}</strong>
+              <span>{{ pontosConsultaPorArea().length === 1 ? 'área com observações' : 'áreas com observações' }}</span>
             </article>
             <article>
-              <strong>{{ marcosComObservacao().length }}</strong>
-              <span>observações</span>
+              <strong>{{ relatos().length }}</strong>
+              <span>{{ relatos().length === 1 ? 'relato da família' : 'relatos da família' }}</span>
             </article>
           </div>
 
           <div class="resumo-consulta__acao">
             <p>{{ textoConduta() }}</p>
-            <button type="button" class="pueria-button" (click)="imprimirResumo()">Mostrar na consulta</button>
+            <div class="resumo-consulta__botoes">
+              <button type="button" class="pueria-button" (click)="imprimirResumo()">Gerar resumo para a consulta</button>
+              <button type="button" class="pueria-button pueria-button--secondary" (click)="imprimirResumo(true)">Versão detalhada</button>
+            </div>
           </div>
         </section>
 
-        <section class="resultado-areas" aria-label="Resultado por área">
-          @for (area of resultadoPorArea(); track area.area) {
-            <article class="pueria-card resultado-area" [attr.data-tema]="temaArea(area.area)">
-              <div class="resultado-area__header"><span class="resultado-area__icone"><app-icon [name]="iconeArea(area.area)" [size]="21" /></span><p class="pueria-eyebrow">{{ area.label }}</p></div>
-              <div class="resultado-area__grade">
-                <span><strong>{{ area.observados }}</strong> Sim, sempre</span>
-                <span><strong>{{ area.duvidas }}</strong> Às vezes</span>
-                <span><strong>{{ area.aindaNao }}</strong> Ainda não</span>
-                <span><strong>{{ area.pendentes }}</strong> Sem resposta</span>
-              </div>
-            </article>
-          }
-        </section>
-
-        @if (trajetoriaPorArea().length > 0) {
-          <section class="pueria-card trajetoria-card">
-            <div>
-              <p class="pueria-eyebrow">Visão ao longo do tempo</p>
-              <h2>Observações para olhar em conjunto</h2>
-              <p>Estas respostas aparecem em mais de uma fase. Elas ajudam a contar a história da criança na consulta, mas não representam um diagnóstico.</p>
-            </div>
-            <div class="trajetoria-card__lista">
-              @for (trajetoria of trajetoriaPorArea(); track trajetoria.area) {
-                <article [attr.data-tema]="temaArea(trajetoria.area)">
-                  <span class="trajetoria-card__icone"><app-icon [name]="iconeArea(trajetoria.area)" [size]="19" /></span>
-                  <div>
-                    <strong>{{ trajetoria.label }}</strong>
-                    <span>{{ trajetoria.total }} respostas em {{ trajetoria.idades.join(', ') }}</span>
-                  </div>
-                </article>
-              }
-            </div>
+        @if (totalPontosConsulta() === 0) {
+          <section class="pueria-card consulta-vazia">
+            <h2>Nenhum ponto de atenção registrado</h2>
+            <p>Quando surgir uma dúvida, uma preocupação ou uma mudança de habilidade, ela poderá aparecer aqui para ajudar na consulta.</p>
           </section>
-        }
-
-        <section class="pueria-card relato-desenvolvimento">
-          <div>
-            <p class="pueria-eyebrow">Contexto da família</p>
-            <h2>Há algo importante para registrar?</h2>
-            <p>Este espaço ajuda a organizar o que foi percebido para conversar com o pediatra. Não representa diagnóstico.</p>
-          </div>
-
-          <div class="relato-desenvolvimento__tipos" role="group" aria-label="Tipo de relato">
-            <button type="button" [class.relato-desenvolvimento__tipo--ativo]="tipoRelato() === 'PREOCUPACAO_FAMILIA'" (click)="tipoRelato.set('PREOCUPACAO_FAMILIA')">Preocupação da família</button>
-            <button type="button" [class.relato-desenvolvimento__tipo--ativo]="tipoRelato() === 'PERDA_HABILIDADE'" (click)="tipoRelato.set('PERDA_HABILIDADE')">Perda de habilidade</button>
-          </div>
-
-          <label>
-            <span>O que você percebeu?</span>
-            <textarea rows="3" maxlength="500" [ngModel]="descricaoRelato()" (ngModelChange)="descricaoRelato.set($event)" placeholder="Ex.: fazia um gesto e parou de fazer nas últimas semanas."></textarea>
-          </label>
-          <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoRelato()" (click)="registrarRelato()">Registrar contexto</button>
-
-          @if (relatos().length > 0) {
-            <div class="relato-desenvolvimento__lista">
-              @for (relato of relatos(); track relato.id) {
-                <article [class.relato-desenvolvimento__item--prioritario]="relato.tipo === 'PERDA_HABILIDADE'">
-                  <div><strong>{{ labelTipoRelato(relato.tipo) }}</strong><span>{{ relato.registradoEm | date:'dd/MM/yyyy' }}</span><p>{{ relato.descricao }}</p></div>
-                  <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoRelato()" (click)="removerRelato(relato)">Remover</button>
-                </article>
-              }
-            </div>
-          }
-        </section>
-
-        <section class="pueria-card apoio-card apoio-card--alerta">
-          <p class="pueria-eyebrow">Quando conversar</p>
-          @if (pontosDeAtencao().length === 0) {
-            <h2>Sem pontos para conversar nesta faixa</h2>
-            <p>Continue acompanhando a rotina e registre quando surgir uma dúvida.</p>
-          } @else {
-            <h2>Leve estas respostas para a consulta</h2>
-            <p>
-              Estes são marcos desta faixa que foram marcados como “Ainda não” ou “Às vezes”.
-              Isso não é diagnóstico; serve para orientar a conversa e decidir se é preciso acompanhar mais de perto.
-            </p>
-            <ul>
-              @for (ponto of pontosDeAtencao(); track ponto.id) {
-                <li><strong>{{ labelStatus(ponto.status) }}:</strong> {{ ponto.descricao }}</li>
-              }
-            </ul>
-          }
-        </section>
-
-        @if (marcosComObservacao().length > 0) {
-          <section class="pueria-card apoio-card">
-            <p class="pueria-eyebrow">Observações da família</p>
-            <ul>
-              @for (marco of marcosComObservacao(); track marco.id) {
-                <li><strong>{{ labelArea(marco.area) }}:</strong> {{ marco.observacao }}</li>
-              }
-            </ul>
-          </section>
-        }
-
-        <section class="pueria-card historico-card">
-          <p class="pueria-eyebrow">Histórico por faixa</p>
-          <div class="historico-lista">
-            @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
-              <article [class.historico-lista__atual]="grupo.idadeMeses === idadeSelecionada()">
-                <strong>{{ grupo.titulo }}</strong>
-                <span>{{ grupo.respondidos }}/{{ grupo.total }} respondidos</span>
-                <small>{{ labelPontosAtencao(grupo.pontosAtencao) }}</small>
+        } @else {
+          <section class="consulta-pontos" aria-label="Pontos para conversar por área">
+            <div class="consulta-pontos__cabecalho"><p class="pueria-eyebrow">Pontos por área</p><h2>O que vale levar para a conversa</h2></div>
+            @for (grupo of pontosConsultaPorArea(); track grupo.area) {
+              <article class="pueria-card consulta-area" [attr.data-tema]="temaArea(grupo.area)">
+                <header><span class="consulta-area__icone"><app-icon [name]="iconeArea(grupo.area)" [size]="20" /></span><div><h3>{{ grupo.label }}</h3><p>{{ grupo.pontos.length }} {{ grupo.pontos.length === 1 ? 'observação' : 'observações' }}</p></div></header>
+                <ul>
+                  @for (ponto of grupo.pontos; track ponto.id) {
+                    <li><span>{{ ponto.descricao }}</span><small>{{ labelStatus(ponto.status) }} · {{ tituloIdade(ponto.idadeMeses) }}</small></li>
+                  }
+                </ul>
               </article>
             }
+          </section>
+        }
+
+        @if (relatos().length > 0) {
+          <section class="pueria-card consulta-contexto">
+            <p class="pueria-eyebrow">Contexto relevante</p><h2>Relatos da família</h2>
+            <div class="consulta-contexto__lista">
+              @for (relato of relatos(); track relato.id) {
+                <article [class.consulta-contexto__item--prioritario]="relato.tipo === 'PERDA_HABILIDADE'"><strong>{{ labelTipoRelato(relato.tipo) }}</strong><span>{{ relato.registradoEm | date:'dd/MM/yyyy' }}</span><p>{{ relato.descricao }}</p></article>
+              }
+            </div>
+          </section>
+        }
+
+        <details class="pueria-card relato-desenvolvimento consulta-adicionar-contexto">
+          <summary>Adicionar preocupação ou perda de habilidade</summary>
+          <div class="relato-desenvolvimento__conteudo">
+            <p>Registre apenas o que pode ajudar a contextualizar uma conversa com a pediatra.</p>
+            <div class="relato-desenvolvimento__tipos" role="group" aria-label="Tipo de relato">
+              <button type="button" [class.relato-desenvolvimento__tipo--ativo]="tipoRelato() === 'PREOCUPACAO_FAMILIA'" (click)="tipoRelato.set('PREOCUPACAO_FAMILIA')">Preocupação da família</button>
+              <button type="button" [class.relato-desenvolvimento__tipo--ativo]="tipoRelato() === 'PERDA_HABILIDADE'" (click)="tipoRelato.set('PERDA_HABILIDADE')">Perda de habilidade</button>
+            </div>
+            <label><span>O que você percebeu?</span><textarea rows="3" maxlength="500" [ngModel]="descricaoRelato()" (ngModelChange)="descricaoRelato.set($event)" placeholder="Ex.: fazia um gesto e parou de fazer nas últimas semanas."></textarea></label>
+            <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvandoRelato()" (click)="registrarRelato()">Salvar contexto</button>
           </div>
-        </section>
-
-        <section class="pueria-card apoio-card">
-          <p class="pueria-eyebrow">Próximos passos em casa</p>
-          @if (pontosDeAtencao().length === 0) {
-            <p>Continue oferecendo conversa, brincadeira, movimento livre seguro, sono adequado e rotina responsiva. Registre novas dúvidas quando aparecerem.</p>
-          } @else {
-            <p>Priorize interações simples e frequentes ligadas às áreas com dúvida. Observe se há evolução nas próximas semanas e leve os exemplos anotados para o pediatra.</p>
-          }
-        </section>
-
-        <section class="marco-lista" aria-label="Respostas da idade atual">
-          @for (marco of marcosDaIdade(); track marco.id) {
-            <article class="marco-card">
-              <div>
-                <span class="marco-area" [attr.data-tema]="temaArea(marco.area)"><app-icon [name]="iconeArea(marco.area)" [size]="15" />{{ labelArea(marco.area) }}</span>
-                <h3>{{ marco.descricao }}</h3>
-                @if (marco.observacao) {
-                  <p>{{ marco.observacao }}</p>
-                }
-                <details class="marco-fonte">
-                  <summary>Fonte e contexto</summary>
-                  <p><strong>Fonte:</strong> {{ textoFonteMarco(marco) }}</p>
-                  <p>{{ textoOrientacaoMarco(marco) }}</p>
-                </details>
-              </div>
-              <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
-            </article>
-          }
-        </section>
+        </details>
       </div>
     } @else {
       <section class="pueria-card estimulos-card estimulos-card--pagina">

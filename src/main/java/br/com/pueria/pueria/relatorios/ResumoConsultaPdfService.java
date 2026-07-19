@@ -93,11 +93,12 @@ public class ResumoConsultaPdfService {
         this.transitoIntestinal = transitoIntestinal;
     }
 
-    public byte[] gerar(UUID criancaId, String email) {
+    public byte[] gerar(UUID criancaId, String email, boolean detalhado) {
         Crianca crianca = validar(criancaId, email);
         Map<String, Object> parametros = parametros(crianca, criancaId, email);
 
-        try (InputStream in = new ClassPathResource("relatorios/resumo-consulta.jrxml").getInputStream()) {
+        String modelo = detalhado ? "relatorios/resumo-consulta.jrxml" : "relatorios/resumo-consulta-breve.jrxml";
+        try (InputStream in = new ClassPathResource(modelo).getInputStream()) {
             JasperReport report = JasperCompileManager.compileReport(in);
             return JasperExportManager.exportReportToPdf(
                     JasperFillManager.fillReport(report, parametros, new JREmptyDataSource())

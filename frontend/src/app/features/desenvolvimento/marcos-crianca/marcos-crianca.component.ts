@@ -38,6 +38,12 @@ type TrajetoriaArea = {
   total: number;
 };
 
+type PontosConsultaPorArea = {
+  area: AreaDesenvolvimento;
+  label: string;
+  pontos: MarcoDesenvolvimento[];
+};
+
 type ModoTela = 'visao' | 'responder' | 'resultados' | 'experimentos';
 
 @Component({
@@ -140,6 +146,17 @@ export class MarcosCriancaComponent implements OnInit {
   readonly pontosDeAtencao = computed(() => this.marcosDaIdade().filter((marco) =>
     marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'
   ));
+
+  readonly pontosConsultaPorArea = computed<PontosConsultaPorArea[]>(() => this.areas.map((area) => {
+    const pontos = this.marcos().filter((marco) => marco.area === area &&
+      (marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'));
+    return { area, label: this.labelArea(area), pontos };
+  }).filter((grupo) => grupo.pontos.length > 0));
+
+  readonly totalPontosConsulta = computed(() =>
+    this.pontosConsultaPorArea().reduce((total, grupo) => total + grupo.pontos.length, 0)
+      + this.relatos().length
+  );
 
   readonly marcosComObservacao = computed(() => this.marcosDaIdade().filter((marco) => !!marco.observacao));
 
@@ -331,8 +348,11 @@ export class MarcosCriancaComponent implements OnInit {
     this.carregarEstimuloParaMarcoAtual();
   }
 
-  imprimirResumo(): void {
-    this.desenvolvimentoService.gerarResumoConsulta(this.criancaId()).subscribe({ next: (pdf) => window.open(URL.createObjectURL(pdf), '_blank'), error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro)) });
+  imprimirResumo(detalhado = false): void {
+    this.desenvolvimentoService.gerarResumoConsulta(this.criancaId(), detalhado).subscribe({
+      next: (pdf) => window.open(URL.createObjectURL(pdf), '_blank'),
+      error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+    });
   }
 
   registrarRelato(): void {

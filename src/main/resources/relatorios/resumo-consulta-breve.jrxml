@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo-consulta-breve" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="38">
+    <parameter name="NOME_CRIANCA" class="java.lang.String"/>
+    <parameter name="IDENTIFICACAO" class="java.lang.String"/>
+    <parameter name="GERADO_EM" class="java.lang.String"/>
+    <parameter name="PONTOS_DESENVOLVIMENTO" class="java.lang.String"/>
+    <parameter name="RELATOS_FAMILIA" class="java.lang.String"/>
+
+    <title>
+        <band height="172" splitType="Stretch">
+            <staticText><reportElement x="0" y="0" width="120" height="20" forecolor="#2C2624"/><textElement><font size="15" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Pueria]]></text></staticText>
+            <staticText><reportElement x="365" y="4" width="150" height="13" forecolor="#8A706A"/><textElement textAlignment="Right"><font size="8" isBold="true"/></textElement><text><![CDATA[RESUMO PARA CONSULTA]]></text></staticText>
+            <line><reportElement x="0" y="28" width="515" height="1" forecolor="#E7DDD7"/></line>
+            <rectangle><reportElement x="0" y="45" width="515" height="110" backcolor="#FBEFF0" mode="Opaque"/><graphicElement><pen lineColor="#F3D5D8"/></graphicElement></rectangle>
+            <staticText><reportElement x="18" y="62" width="300" height="12" forecolor="#C52845"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[RESUMO BREVE PARA CONSULTA]]></text></staticText>
+            <textField><reportElement x="18" y="80" width="380" height="30" forecolor="#2C2624"/><textElement><font size="23" isBold="true" fontName="Serif"/></textElement><textFieldExpression><![CDATA[$P{NOME_CRIANCA}]]></textFieldExpression></textField>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="18" y="115" width="400" height="22" forecolor="#665954"/><textElement><font size="9"/></textElement><textFieldExpression><![CDATA[$P{IDENTIFICACAO}]]></textFieldExpression></textField>
+            <textField><reportElement x="350" y="62" width="145" height="12" forecolor="#8A706A"/><textElement textAlignment="Right"><font size="8"/></textElement><textFieldExpression><![CDATA[$P{GERADO_EM}]]></textFieldExpression></textField>
+        </band>
+    </title>
+
+    <detail>
+        <band height="400" splitType="Stretch">
+            <staticText><reportElement x="0" y="0" width="515" height="12" forecolor="#7052A3"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[DESENVOLVIMENTO]]></text></staticText>
+            <staticText><reportElement x="0" y="17" width="430" height="25" forecolor="#2C2624"/><textElement><font size="18" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Pontos que merecem conversa]]></text></staticText>
+            <staticText><reportElement x="0" y="48" width="500" height="24" forecolor="#665954"/><textElement><font size="9"/></textElement><text><![CDATA[Registros da família para apoiar a conversa com a pediatra. Não representam um diagnóstico.]]></text></staticText>
+            <rectangle><reportElement x="0" y="83" width="515" height="148" backcolor="#FBF9FD" mode="Opaque"/><graphicElement><pen lineColor="#E5DDEA"/></graphicElement></rectangle>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="15" y="98" width="485" height="118" forecolor="#392F3F"/><textElement><font size="10"/><paragraph spacingBefore="3" spacingAfter="6"/></textElement><textFieldExpression><![CDATA[$P{PONTOS_DESENVOLVIMENTO}]]></textFieldExpression></textField>
+
+            <staticText><reportElement positionType="Float" x="0" y="252" width="515" height="12" forecolor="#C52845"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[CONTEXTO RELEVANTE]]></text></staticText>
+            <staticText><reportElement positionType="Float" x="0" y="269" width="430" height="25" forecolor="#2C2624"/><textElement><font size="18" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Relatos da família]]></text></staticText>
+            <rectangle><reportElement positionType="Float" x="0" y="302" width="515" height="80" backcolor="#FFFDFC" mode="Opaque"/><graphicElement><pen lineColor="#E9DDD7"/></graphicElement></rectangle>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="15" y="315" width="485" height="55" forecolor="#514540"/><textElement><font size="10"/><paragraph spacingBefore="3" spacingAfter="6"/></textElement><textFieldExpression><![CDATA[$P{RELATOS_FAMILIA}]]></textFieldExpression></textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="20"><line><reportElement x="0" y="0" width="515" height="1" forecolor="#E7DDD7"/></line><staticText><reportElement x="0" y="7" width="515" height="10" forecolor="#8A706A"/><textElement textAlignment="Center"><font size="7"/></textElement><text><![CDATA[Use este resumo como apoio à consulta. Ele não substitui avaliação profissional.]]></text></staticText></band>
+    </pageFooter>
+</jasperReport>
