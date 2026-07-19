@@ -869,16 +869,20 @@
 .sono-entenda__cabecalho h2 { margin: 0; }
 
 .sono-entenda__imagem {
+  align-items: center;
   background: #eff3fc;
   border: 1px solid #dce5f0;
   border-radius: 14px;
+  display: flex;
+  justify-content: center;
   overflow: hidden;
+  padding: .3rem;
 }
 
 .sono-entenda__imagem img {
   display: block;
   height: min(15rem, 37vw);
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   width: 100%;
 }
