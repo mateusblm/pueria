@@ -60,6 +60,7 @@ export class SonoCriancaComponent implements OnInit {
   });
   readonly editandoId = signal('');
   readonly registroAberto = signal(false);
+  readonly registroDetalhadoId = signal<string | null>(null);
   readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -115,6 +116,10 @@ export class SonoCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
+  readonly registroDetalhado = computed(() => {
+    const registroId = this.registroDetalhadoId();
+    return registroId ? this.registros().find((registro) => registro.id === registroId) ?? null : null;
+  });
   readonly barrasSono = computed<BarraSono[]>(() =>
     [...this.registros()]
       .filter((registro): registro is RegistroSono & { minutosSonoTotal24h: number } => registro.minutosSonoTotal24h !== null && registro.minutosSonoTotal24h !== undefined)
@@ -129,7 +134,7 @@ export class SonoCriancaComponent implements OnInit {
         classificacao: registro.analise.classificacaoDuracao
       }))
   );
-  readonly exibirHistoricoVisual = computed(() => this.barrasSono().length >= 2);
+  readonly exibirHistoricoVisual = computed(() => this.barrasSono().length > 0);
 
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });
@@ -299,6 +304,23 @@ export class SonoCriancaComponent implements OnInit {
     this.cancelarEdicao();
   }
 
+  abrirDetalhe(registroId: string): void {
+    this.registroDetalhadoId.set(registroId);
+  }
+
+  fecharDetalhe(): void {
+    this.registroDetalhadoId.set(null);
+  }
+
+  editarDetalhe(): void {
+    const registro = this.registroDetalhado();
+    if (!registro) {
+      return;
+    }
+    this.fecharDetalhe();
+    this.editar(registro);
+  }
+
   formatarData(data: string): string {
     return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`));
   }
@@ -466,7 +488,7 @@ export class SonoCriancaComponent implements OnInit {
     return valor === null || valor === undefined ? '' : String(valor);
   }
 
-  private formatarHora(valor?: string | null): string {
+  formatarHora(valor?: string | null): string {
     return valor?.slice(0, 5) ?? '';
   }
 
