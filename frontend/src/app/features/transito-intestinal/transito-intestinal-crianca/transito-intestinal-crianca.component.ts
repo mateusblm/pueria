@@ -299,6 +299,10 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     return this.tiposBristol.find((opcao) => opcao.valor === valor)?.titulo ?? 'Não informado';
   }
 
+  textoFrequencia(valor: number | null | undefined): string {
+    return valor === null || valor === undefined ? 'Não informado' : `${valor}x`;
+  }
+
   labelFacilidade(valor: FacilidadeLimpezaFezes): string {
     return this.facilidadesLimpeza.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
   }

@@ -30,8 +30,8 @@
             <div class="intestinal-padrao__linha">
               <span>{{ formatarData(registro.dataRegistro) }}</span>
               <div class="intestinal-padrao__trilho"><i [style.width.%]="(registro.evacuacoesPorDia ?? 0) / maiorFrequenciaRecente() * 100"></i></div>
-              <strong>{{ registro.evacuacoesPorDia ?? 0 }}x</strong>
-              <small>Tipo {{ registro.tipoFezes }}</small>
+              <strong>{{ textoFrequencia(registro.evacuacoesPorDia) }}</strong>
+              <small>{{ labelTipoFezes(registro.tipoFezes) }}</small>
             </div>
           }
         </div>
