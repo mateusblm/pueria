@@ -266,23 +266,9 @@
       </app-registro-rapido>
 
       <aside class="crescimento-side">
-        <section class="pueria-card crescimento-resumo">
-          <p class="pueria-eyebrow">Último registro</p>
-          @if (ultimaMedida(); as ultima) {
-            <h2>{{ formatarData(ultima.dataMedicao) }}</h2>
-            <div class="crescimento-resumo__metricas">
-              <span><strong>{{ formatarNumero(ultima.pesoKg, ' kg') }}</strong>Peso</span>
-              <span><strong>{{ formatarNumero(ultima.comprimentoCm, ' cm') }}</strong>Comprimento</span>
-              <span><strong>{{ formatarNumero(ultima.perimetroCefalicoCm, ' cm') }}</strong>Perímetro cefálico</span>
-            </div>
-          } @else {
-            <h2>Sem medidas registradas</h2>
-            <p>Inclua a primeira medida para começar o histórico.</p>
-          }
-        </section>
-
         <section class="pueria-card crescimento-tendencia">
-          <p class="pueria-eyebrow">Tendência</p>
+          <p class="pueria-eyebrow">Evolução recente</p>
+          <h2>Mudanças desde a medida anterior</h2>
           <ul>
             <li><strong>Peso</strong><span>{{ comparar('pesoKg', ' kg') }}</span></li>
             <li><strong>Comprimento</strong><span>{{ comparar('comprimentoCm', ' cm') }}</span></li>
@@ -292,7 +278,7 @@
 
         <section class="pueria-card crescimento-curvas">
           <p class="pueria-eyebrow">Curvas OMS</p>
-          <h2>Como está nas curvas</h2>
+          <h2>Leitura das curvas</h2>
           @if (ultimaAvaliacaoCurva(); as avaliacao) {
             @if (avaliacao.resultados.length > 0) {
               <div class="crescimento-curva__lista">

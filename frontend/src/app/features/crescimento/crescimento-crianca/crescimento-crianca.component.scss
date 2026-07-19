@@ -16,7 +16,7 @@
 .crescimento-orbita--tres { background: #dce5f5; bottom: 8px; color: #3d5779; right: 25px; }
 
 .crescimento-page__grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.28fr) minmax(18rem, .72fr); }
-.crescimento-form, .crescimento-resumo, .crescimento-tendencia, .crescimento-curvas, .crescimento-graficos, .crescimento-historico { padding: 1.35rem; }
+.crescimento-form, .crescimento-tendencia, .crescimento-curvas, .crescimento-graficos, .crescimento-historico { padding: 1.35rem; }
 .crescimento-form { border-top: 4px solid #d9a84f; }
 .crescimento-form form, .crescimento-side { display: grid; gap: 1rem; }
 .crescimento-form label { color: var(--pueria-texto); display: grid; font-weight: 750; gap: .45rem; }
@@ -27,11 +27,7 @@
 .crescimento-form__actions, .crescimento-medida__actions, .crescimento-medida__confirm, .crescimento-historico__header { align-items: center; display: flex; flex-wrap: wrap; gap: .7rem; justify-content: space-between; }
 .crescimento-form__aviso { background: #fff5d9; border-left: 3px solid #d6a84f; color: #715819; margin: 0; padding: .8rem .9rem; }
 
-.crescimento-resumo { background: #f4faf5; border-top: 4px solid var(--pueria-folha); }
-.crescimento-resumo h2, .crescimento-curvas h2, .crescimento-historico h2 { margin: 0; }
-.crescimento-resumo__metricas { display: grid; gap: .65rem; margin-top: 1rem; }
-.crescimento-resumo__metricas span { background: #fff; border: 1px solid #d7e7da; color: var(--pueria-texto-suave); display: grid; gap: .1rem; padding: .78rem; }
-.crescimento-resumo__metricas strong { color: var(--pueria-texto); font-size: 1.18rem; }
+.crescimento-tendencia h2, .crescimento-curvas h2, .crescimento-historico h2 { margin: 0; }
 .crescimento-tendencia { border-top: 4px solid #6f87af; }
 .crescimento-tendencia ul { display: grid; gap: .75rem; list-style: none; margin: 0; padding: 0; }
 .crescimento-tendencia li { border-bottom: 1px solid #eee4df; display: grid; gap: .2rem; padding-bottom: .7rem; }
@@ -235,7 +231,7 @@
 }
 
 .crescimento-side {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   width: 100%;
 }
 
@@ -309,35 +305,14 @@
   background: transparent;
 }
 
-.crescimento-resumo,
 .crescimento-tendencia,
 .crescimento-curvas {
   border-top-width: 1px;
   border-radius: var(--pueria-raio-menor);
 }
 
-.crescimento-resumo__metricas {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.crescimento-resumo__metricas span {
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.crescimento-resumo__metricas strong {
-  font-size: 0.96rem;
-}
-
 @media (max-width: 860px) {
-  .crescimento-side {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .crescimento-curvas {
-    grid-column: 1 / -1;
-  }
+  .crescimento-side { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -350,8 +325,7 @@
     display: none;
   }
 
-  .crescimento-side,
-  .crescimento-resumo__metricas {
+  .crescimento-side {
     grid-template-columns: 1fr;
   }
 
