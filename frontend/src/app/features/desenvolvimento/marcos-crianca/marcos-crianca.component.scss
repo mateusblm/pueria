@@ -481,9 +481,10 @@
 }
 
 .marcos-entenda img {
-  aspect-ratio: 16 / 7;
   display: block;
-  object-fit: cover;
+  height: auto;
+  max-height: 15rem;
+  object-fit: contain;
   width: 100%;
 }
 

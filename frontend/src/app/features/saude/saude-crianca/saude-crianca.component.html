@@ -117,8 +117,10 @@
         </header>
         <div class="saude-entenda__imagem"><img src="/assets/ilustracoes/saude-acolhedora.png" alt="Responsável e criança consultando juntos uma caderneta de saúde." loading="lazy" /></div>
         <div class="saude-entenda__conteudo">
-          <p>Este espaço ajuda a guardar informações que podem ser úteis para {{ crianca()?.nome ?? 'a criança' }}, para lembrar em casa e compartilhar em consultas.</p>
-          <ul><li>Registre apenas informações que façam sentido para a rotina.</li><li>Anote mudanças ou dúvidas para conversar com quem acompanha a criança.</li><li>Não altere nem inicie tratamentos sem orientação profissional.</li></ul>
+          <section class="saude-entenda__bloco"><h3>Para que serve este espaço?</h3><p>Ele ajuda a guardar informações úteis sobre {{ crianca()?.nome ?? 'a criança' }}, para lembrar em casa e compartilhar em consultas.</p></section>
+          <section class="saude-entenda__bloco"><h3>O que registrar</h3><ul><li>Uso diário de medicamento ou suplemento já orientado por um profissional.</li><li>Intercorrências e informações que a família queira recordar depois.</li><li>Perguntas ou mudanças que possam ser úteis na próxima consulta.</li></ul></section>
+          <section class="saude-entenda__bloco"><h3>Como usar bem</h3><p>Escreva do jeito que fizer sentido para sua família: uma descrição curta, a data e o contexto já tornam o histórico mais fácil de conversar.</p></section>
+          <section class="saude-entenda__bloco saude-entenda__bloco--destaque"><h3>Importante</h3><p>Este registro não substitui prescrição, avaliação ou orientação profissional.</p></section>
           <p class="saude-entenda__nota">O Pueria organiza registros familiares e não substitui orientação de um profissional de saúde.</p>
         </div>
         <button type="button" class="pueria-button saude-entenda__acao" (click)="fecharEntenda()">Entendi</button>

@@ -172,7 +172,7 @@
 .crescimento-entenda__cabecalho { align-items: flex-start; display: flex; gap: 1rem; justify-content: space-between; }
 .crescimento-entenda__cabecalho h2 { margin: 0; }
 .crescimento-entenda__imagem { background: #edf5ee; border: 1px solid #d8e8dc; border-radius: 14px; overflow: hidden; }
-.crescimento-entenda__imagem img { display: block; height: min(15rem, 37vw); object-fit: cover; object-position: center; width: 100%; }
+.crescimento-entenda__imagem img { display: block; height: auto; max-height: 15rem; object-fit: contain; object-position: center; width: 100%; }
 .crescimento-entenda__conteudo { color: var(--pueria-texto-suave); }
 .crescimento-entenda__conteudo p { margin: 0; }
 .crescimento-entenda__conteudo ul { display: grid; gap: .4rem; margin: .9rem 0; padding-left: 1.15rem; }
@@ -335,6 +335,6 @@
 
   .crescimento-entenda__fundo { align-items: flex-end; padding: 0; }
   .crescimento-entenda { border-bottom-left-radius: 0; border-bottom-right-radius: 0; max-height: 88vh; padding: 1.2rem 1rem calc(1.2rem + env(safe-area-inset-bottom)); }
-  .crescimento-entenda__imagem img { height: 11rem; }
+  .crescimento-entenda__imagem img { max-height: none; }
   .crescimento-entenda__acao { justify-self: stretch; }
 }
