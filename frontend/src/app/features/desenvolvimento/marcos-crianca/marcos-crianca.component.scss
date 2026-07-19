@@ -44,7 +44,7 @@
 .areas-resumo { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }.area-resumo { align-items: center; background: #fff; border: 1px solid #e9dfda; border-top: 3px solid var(--area-cor, #76507d); display: flex; gap: 10px; min-height: 78px; padding: 11px; }.area-resumo__icone { align-items: center; background: var(--area-fundo, #eee3f4); border-radius: 50%; color: var(--area-cor, #76507d); display: inline-flex; height: 38px; justify-content: center; width: 38px; }.area-resumo div { display: grid; gap: 3px; }.area-resumo span:not(.area-resumo__icone) { color: var(--pueria-texto-suave); font-size: .8rem; }.area-resumo[data-tema='social'], .resultado-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.area-resumo[data-tema='linguagem'], .resultado-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.area-resumo[data-tema='cognicao'], .resultado-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.area-resumo[data-tema='movimento'], .resultado-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
 
 .etapa-card { border-top: 4px solid #76507d; overflow: hidden; padding: 0; }
-.etapa-card__media img { display: block; width: 100%; max-height: 310px; object-fit: cover; }
+.etapa-card__media img { display: block; width: 100%; max-height: 310px; object-fit: contain; }
 .etapa-card__body { display: grid; gap: 18px; padding: 22px; }
 .etapa-card__meta, .etapa-nav, .marco-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .etapa-card h2 { color: var(--pueria-texto); font-size: clamp(1.35rem, 2vw, 1.85rem); line-height: 1.25; }

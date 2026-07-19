@@ -77,7 +77,7 @@
       @if (marcoAtual(); as marco) {
         <article class="pueria-card etapa-card">
           <div class="etapa-card__media">
-            <img [src]="imagemArea(marco.area)" [alt]="'Exemplo visual da área ' + labelArea(marco.area)" />
+            <img [src]="imagemMarco(marco)" [alt]="'Ilustração do marco: ' + marco.descricao" />
           </div>
 
           <div class="etapa-card__body">

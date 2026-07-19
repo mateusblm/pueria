@@ -483,7 +483,30 @@ export class MarcosCriancaComponent implements OnInit {
     return `marco-status marco-status--${status.toLowerCase().replaceAll('_', '-')}`;
   }
 
-  imagemArea(area: AreaDesenvolvimento): string {
+  imagemMarco(marco: MarcoDesenvolvimento): string {
+    const primeiroNumeroPorIdade: Partial<Record<number, number>> = {
+      2: 1,
+      4: 9,
+      6: 17,
+      9: 24,
+      12: 32,
+      15: 41,
+      18: 49,
+      24: 57
+    };
+    const primeiroNumero = primeiroNumeroPorIdade[marco.idadeMeses];
+    const sufixoDoId = Number(marco.id.slice(-4));
+    const posicaoNaIdade = sufixoDoId - marco.idadeMeses * 100;
+    const numeroDaIlustracao = primeiroNumero === undefined ? NaN : primeiroNumero + posicaoNaIdade - 1;
+
+    if (Number.isInteger(numeroDaIlustracao) && numeroDaIlustracao >= 1 && numeroDaIlustracao <= 65) {
+      return `/assets/desenvolvimento/marcos/${String(numeroDaIlustracao).padStart(2, '0')}.png`;
+    }
+
+    return this.imagemArea(marco.area);
+  }
+
+  private imagemArea(area: AreaDesenvolvimento): string {
     const imagens: Record<AreaDesenvolvimento, string> = {
       SOCIAL_EMOCIONAL: '/assets/desenvolvimento/social.svg',
       LINGUAGEM_COMUNICACAO: '/assets/desenvolvimento/linguagem.svg',
