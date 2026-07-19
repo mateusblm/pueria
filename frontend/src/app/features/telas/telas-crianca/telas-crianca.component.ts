@@ -52,6 +52,7 @@ export class TelasCriancaComponent implements OnInit {
   });
   readonly editandoId = signal('');
   readonly registroAberto = signal(false);
+  readonly entendaAberto = signal(false);
   readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -104,6 +105,14 @@ export class TelasCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
+
+  abrirEntenda(): void {
+    this.entendaAberto.set(true);
+  }
+
+  fecharEntenda(): void {
+    this.entendaAberto.set(false);
+  }
 
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });

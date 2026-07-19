@@ -15,6 +15,7 @@
         <div class="telas-page__identidade"><span><app-icon name="smartphone" [size]="28" /></span><h1 class="pueria-title">Telas na rotina</h1></div>
         <p class="pueria-subtitle">Observe os momentos de uso de {{ crianca.nome }} e encontre pequenos ajustes possíveis na rotina.</p>
       </div>
+      <button type="button" class="telas-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento de telas" title="Entenda as telas"><app-icon name="help" [size]="20" /></button>
     </div>
 
     @if (ultimoRegistro(); as registro) {
@@ -243,6 +244,49 @@
           </div>
         }
       </aside>
+    </div>
+  }
+
+  @if (entendaAberto()) {
+    <div class="telas-entenda__fundo" role="presentation" (click)="fecharEntenda()">
+      <section class="telas-entenda" role="dialog" aria-modal="true" aria-labelledby="telas-entenda-titulo" (click)="$event.stopPropagation()">
+        <header class="telas-entenda__cabecalho">
+          <div>
+            <p class="pueria-eyebrow">Entenda as telas</p>
+            <h2 id="telas-entenda-titulo">Equilíbrio se constrói na rotina</h2>
+          </div>
+          <button type="button" class="telas-entenda__fechar" aria-label="Fechar orientações" (click)="fecharEntenda()"><app-icon name="close" [size]="18" /></button>
+        </header>
+
+        <div class="telas-entenda__imagem">
+          <img src="/assets/ilustracoes/telas-acolhedora.png" alt="Cuidadora e criança assistindo juntas a um conteúdo em um tablet." loading="lazy" />
+        </div>
+
+        <div class="telas-entenda__conteudo">
+          <section class="telas-entenda__bloco">
+            <h3>Para que serve?</h3>
+            <p>Este espaço ajuda a observar como as telas aparecem na rotina de {{ crianca()?.nome ?? 'sua criança' }}, sem culpa e sem julgamento.</p>
+          </section>
+
+          <section class="telas-entenda__bloco">
+            <h3>O que vale registrar</h3>
+            <ul>
+              <li>Momentos e duração aproximada de uso.</li>
+              <li>O tipo de conteúdo e se havia companhia de um adulto.</li>
+              <li>Como esse momento se encaixou na rotina da família.</li>
+            </ul>
+          </section>
+
+          <section class="telas-entenda__bloco telas-entenda__bloco--destaque">
+            <h3>Como usar o histórico</h3>
+            <p>Procure padrões e pequenos ajustes possíveis. Quando houver dúvidas persistentes, leve os exemplos para conversar com quem acompanha a criança.</p>
+          </section>
+
+          <p class="telas-entenda__nota">O Pueria organiza observações da família e não substitui orientação de um profissional de saúde.</p>
+        </div>
+
+        <button type="button" class="pueria-button telas-entenda__acao" (click)="fecharEntenda()">Entendi</button>
+      </section>
     </div>
   }
 </section>
