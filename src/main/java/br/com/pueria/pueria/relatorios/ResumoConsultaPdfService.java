@@ -200,7 +200,7 @@ public class ResumoConsultaPdfService {
                 .map(detalhado -> {
                     var registro = detalhado.registro();
                     List<String> itens = new java.util.ArrayList<>();
-                    if (registro.getTipoFezes() != null) itens.add("tipo " + registro.getTipoFezes().name().replace("TIPO_", ""));
+                    if (registro.getTipoFezes() != null) itens.add(registro.getTipoFezes().descricaoParaResumo());
                     if (registro.getEvacuacoesPorDia() != null) itens.add(registro.getEvacuacoesPorDia() + " evacuações/dia");
                     return resumoComData(registro.getDataRegistro(), itens, "Registro intestinal salvo.");
                 })
