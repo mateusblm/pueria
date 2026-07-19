@@ -361,6 +361,8 @@
 .modulo-cuidado[data-tema='sono'] { --modulo-fundo: #dce7f5; --modulo-cor: #3e5879; }
 .modulo-cuidado[data-tema='telas'] { --modulo-fundo: #dcebed; --modulo-cor: #356069; }
 .modulo-cuidado[data-tema='saude'] { --modulo-fundo: #f6dfe4; --modulo-cor: #914657; }
+.modulo-cuidado[data-tema='humor'] { --modulo-fundo: #f4e2ee; --modulo-cor: #934d72; }
+.modulo-cuidado[data-tema='observacoes'] { --modulo-fundo: #e6edf6; --modulo-cor: #506a8d; }
 
 .modulo-cuidado span {
   color: var(--modulo-cor, var(--pueria-vermelho-profundo));

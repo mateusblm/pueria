@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { ClassificacaoFezes, FacilidadeLimpezaFezes, RegistroTransitoIntestinal, SalvarRegistroTransitoIntestinalRequest, TipoFezesBristol } from '../../../shared/models/transito-intestinal.model';
+import { AspectoUrina, CheiroUrina, ClassificacaoFezes, CorUrina, FacilidadeLimpezaFezes, RegistroTransitoIntestinal, SalvarRegistroTransitoIntestinalRequest, TipoFezesBristol } from '../../../shared/models/transito-intestinal.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { TransitoIntestinalService } from '../transito-intestinal.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
@@ -78,11 +78,25 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     { valor: 'FACIL', label: 'Fácil de limpar' },
     { valor: 'DIFICIL', label: 'Difícil de limpar' }
   ];
+  readonly coresUrina: Opcao<CorUrina>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Não informar' }, { valor: 'CLARA', label: 'Clara' }, { valor: 'AMARELO_CLARO', label: 'Amarelo claro' }, { valor: 'AMARELO_INTENSO', label: 'Amarelo intenso' }, { valor: 'TURVA', label: 'Turva' }
+  ];
+  readonly aspectosUrina: Opcao<AspectoUrina>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Não informar' }, { valor: 'SEM_ALTERACOES', label: 'Sem alterações percebidas' }, { valor: 'ESPUMA', label: 'Com espuma' }, { valor: 'PARTICULAS', label: 'Com partículas' }
+  ];
+  readonly cheirosUrina: Opcao<CheiroUrina>[] = [
+    { valor: 'NAO_INFORMADO', label: 'Não informar' }, { valor: 'NORMAL', label: 'Cheiro habitual' }, { valor: 'DESAGRADAVEL', label: 'Cheiro desagradável' }
+  ];
 
   readonly form = this.fb.group({
     dataRegistro: ['', Validators.required],
     tipoFezes: this.fb.nonNullable.control<TipoFezesBristol>('NAO_INFORMADO', Validators.required),
     evacuacoesPorDia: [''],
+    intervaloDiureseHoras: [''],
+    corUrina: this.fb.nonNullable.control<CorUrina>('NAO_INFORMADO', Validators.required),
+    aspectoUrina: this.fb.nonNullable.control<AspectoUrina>('NAO_INFORMADO', Validators.required),
+    cheiroUrina: this.fb.nonNullable.control<CheiroUrina>('NAO_INFORMADO', Validators.required),
+    diureseSemAlteracoes: [false],
     facilidadeLimpeza: this.fb.nonNullable.control<FacilidadeLimpezaFezes>('NAO_INFORMADO', Validators.required),
     muco: [false],
     restosAlimentares: [false],
@@ -212,6 +226,11 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
       dataRegistro: this.formatarEntradaData(registro.dataRegistro),
       tipoFezes: registro.tipoFezes,
       evacuacoesPorDia: this.formatarInteiro(registro.evacuacoesPorDia),
+      intervaloDiureseHoras: this.formatarInteiro(registro.intervaloDiureseHoras),
+      corUrina: registro.corUrina ?? 'NAO_INFORMADO',
+      aspectoUrina: registro.aspectoUrina ?? 'NAO_INFORMADO',
+      cheiroUrina: registro.cheiroUrina ?? 'NAO_INFORMADO',
+      diureseSemAlteracoes: !!registro.diureseSemAlteracoes,
       facilidadeLimpeza: registro.facilidadeLimpeza,
       muco: !!registro.muco,
       restosAlimentares: !!registro.restosAlimentares,
@@ -235,6 +254,11 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
       dataRegistro: this.formatarEntradaData(this.dataMaximaIso),
       tipoFezes: 'NAO_INFORMADO',
       evacuacoesPorDia: '',
+      intervaloDiureseHoras: '',
+      corUrina: 'NAO_INFORMADO',
+      aspectoUrina: 'NAO_INFORMADO',
+      cheiroUrina: 'NAO_INFORMADO',
+      diureseSemAlteracoes: false,
       facilidadeLimpeza: 'NAO_INFORMADO',
       muco: false,
       restosAlimentares: false,
@@ -307,6 +331,11 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
       dataRegistro: this.lerData(valor.dataRegistro),
       tipoFezes: valor.tipoFezes,
       evacuacoesPorDia: this.lerInteiro(valor.evacuacoesPorDia, 'evacuações por dia', 0, 30),
+      intervaloDiureseHoras: this.lerInteiro(valor.intervaloDiureseHoras, 'intervalo aproximado de diurese', 0, 24),
+      corUrina: valor.corUrina,
+      aspectoUrina: valor.aspectoUrina,
+      cheiroUrina: valor.cheiroUrina,
+      diureseSemAlteracoes: valor.diureseSemAlteracoes,
       facilidadeLimpeza: valor.facilidadeLimpeza,
       muco: valor.muco,
       restosAlimentares: valor.restosAlimentares,

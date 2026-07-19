@@ -3,6 +3,9 @@ package br.com.pueria.pueria.transitointestinal.infraestrutura.web;
 import br.com.pueria.pueria.transitointestinal.aplicacao.AtualizarRegistroTransitoIntestinalComando;
 import br.com.pueria.pueria.transitointestinal.aplicacao.RegistroTransitoIntestinalComando;
 import br.com.pueria.pueria.transitointestinal.dominio.DadosTransitoIntestinal;
+import br.com.pueria.pueria.transitointestinal.dominio.AspectoUrina;
+import br.com.pueria.pueria.transitointestinal.dominio.CheiroUrina;
+import br.com.pueria.pueria.transitointestinal.dominio.CorUrina;
 import br.com.pueria.pueria.transitointestinal.dominio.FacilidadeLimpezaFezes;
 import br.com.pueria.pueria.transitointestinal.dominio.TipoFezesBristol;
 import jakarta.validation.constraints.Max;
@@ -17,6 +20,11 @@ public record TransitoIntestinalRequest(
         @NotNull LocalDate dataRegistro,
         TipoFezesBristol tipoFezes,
         @Min(0) @Max(30) Integer evacuacoesPorDia,
+        @Min(0) @Max(24) Integer intervaloDiureseHoras,
+        CorUrina corUrina,
+        AspectoUrina aspectoUrina,
+        CheiroUrina cheiroUrina,
+        Boolean diureseSemAlteracoes,
         FacilidadeLimpezaFezes facilidadeLimpeza,
         Boolean muco,
         Boolean restosAlimentares,
@@ -44,6 +52,11 @@ public record TransitoIntestinalRequest(
                 dataRegistro,
                 tipoFezes,
                 evacuacoesPorDia,
+                intervaloDiureseHoras,
+                corUrina,
+                aspectoUrina,
+                cheiroUrina,
+                diureseSemAlteracoes,
                 facilidadeLimpeza,
                 muco,
                 restosAlimentares,

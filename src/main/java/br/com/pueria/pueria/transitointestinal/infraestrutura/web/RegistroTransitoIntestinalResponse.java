@@ -1,6 +1,9 @@
 package br.com.pueria.pueria.transitointestinal.infraestrutura.web;
 
 import br.com.pueria.pueria.transitointestinal.aplicacao.RegistroTransitoIntestinalDetalhado;
+import br.com.pueria.pueria.transitointestinal.dominio.AspectoUrina;
+import br.com.pueria.pueria.transitointestinal.dominio.CheiroUrina;
+import br.com.pueria.pueria.transitointestinal.dominio.CorUrina;
 import br.com.pueria.pueria.transitointestinal.dominio.FacilidadeLimpezaFezes;
 import br.com.pueria.pueria.transitointestinal.dominio.RegistroTransitoIntestinal;
 import br.com.pueria.pueria.transitointestinal.dominio.TipoFezesBristol;
@@ -15,6 +18,11 @@ public record RegistroTransitoIntestinalResponse(
         LocalDate dataRegistro,
         TipoFezesBristol tipoFezes,
         Integer evacuacoesPorDia,
+        Integer intervaloDiureseHoras,
+        CorUrina corUrina,
+        AspectoUrina aspectoUrina,
+        CheiroUrina cheiroUrina,
+        Boolean diureseSemAlteracoes,
         FacilidadeLimpezaFezes facilidadeLimpeza,
         Boolean muco,
         Boolean restosAlimentares,
@@ -40,6 +48,11 @@ public record RegistroTransitoIntestinalResponse(
                 registro.getDataRegistro(),
                 registro.getTipoFezes(),
                 registro.getEvacuacoesPorDia(),
+                registro.getIntervaloDiureseHoras(),
+                registro.getCorUrina(),
+                registro.getAspectoUrina(),
+                registro.getCheiroUrina(),
+                registro.getDiureseSemAlteracoes(),
                 registro.getFacilidadeLimpeza(),
                 registro.getMuco(),
                 registro.getRestosAlimentares(),

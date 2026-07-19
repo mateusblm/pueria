@@ -1,0 +1,17 @@
+<section class="contexto-page">
+  <a [routerLink]="rotaRetorno()" class="contexto-page__back">← {{ textoRetorno() }}</a>
+  @if (carregando()) { <div class="pueria-card">Carregando...</div> } @else if (crianca(); as crianca) {
+    <header class="contexto-page__hero"><div><p class="pueria-eyebrow">Contexto da família</p><h1 class="pueria-title">{{ titulo }}</h1><p class="pueria-subtitle">{{ descricao }}</p></div><span><app-icon [name]="contexto === 'humor' ? 'heartPulse' : 'message'" [size]="28" /></span></header>
+    <div class="contexto-page__layout">
+      <form class="pueria-card contexto-form" [formGroup]="form" (ngSubmit)="salvar()">
+        <div><p class="pueria-eyebrow">{{ editandoId() ? 'Editar registro' : 'Novo registro' }}</p><h2>{{ contexto === 'humor' ? 'Como foi o período?' : 'O que vale guardar?' }}</h2></div>
+        <label><span>Data</span><input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" /></label>
+        @if (contexto === 'humor') { <p class="contexto-form__guia">Você pode contar sobre humor, choro, facilidade para se acalmar, interesse em brincar ou interação. Escreva somente o que fez sentido observar.</p> }
+        <label><span>{{ contexto === 'humor' ? 'Observação do período' : 'Observação ou evento' }}</span><textarea formControlName="descricao" rows="7" [placeholder]="contexto === 'humor' ? 'Ex.: esteve mais bem-humorado pela manhã e buscou mais colo no fim do dia.' : 'Ex.: começou na creche, recebeu visita de familiares ou houve uma mudança na rotina.'"></textarea></label>
+        @if (erro()) { <p class="pueria-message pueria-message--erro">{{ erro() }}</p> }
+        <div class="contexto-form__acoes">@if (editandoId()) { <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar</button> }<button type="submit" class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar observação' }}</button></div>
+      </form>
+      <aside class="pueria-card contexto-historico"><p class="pueria-eyebrow">Linha do tempo</p><h2>Registros</h2>@if (registrosOrdenados().length === 0) { <p>Ainda não há registros neste espaço.</p> } @else { @for (registro of registrosOrdenados(); track registro.id) { <article><time>{{ formatarData(registro.dataRegistro) }}</time><p>{{ registro.descricao }}</p><button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button></article> } }</aside>
+    </div>
+  }
+</section>

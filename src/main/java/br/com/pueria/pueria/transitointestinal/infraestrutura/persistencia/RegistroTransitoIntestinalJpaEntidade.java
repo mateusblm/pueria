@@ -1,5 +1,8 @@
 package br.com.pueria.pueria.transitointestinal.infraestrutura.persistencia;
 
+import br.com.pueria.pueria.transitointestinal.dominio.AspectoUrina;
+import br.com.pueria.pueria.transitointestinal.dominio.CheiroUrina;
+import br.com.pueria.pueria.transitointestinal.dominio.CorUrina;
 import br.com.pueria.pueria.transitointestinal.dominio.FacilidadeLimpezaFezes;
 import br.com.pueria.pueria.transitointestinal.dominio.TipoFezesBristol;
 import jakarta.persistence.*;
@@ -28,6 +31,24 @@ public class RegistroTransitoIntestinalJpaEntidade {
     @Column(name = "evacuacoes_por_dia")
     private Integer evacuacoesPorDia;
 
+    @Column(name = "intervalo_diurese_horas")
+    private Integer intervaloDiureseHoras;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cor_urina", length = 24)
+    private CorUrina corUrina;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "aspecto_urina", length = 24)
+    private AspectoUrina aspectoUrina;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cheiro_urina", length = 24)
+    private CheiroUrina cheiroUrina;
+
+    @Column(name = "diurese_sem_alteracoes")
+    private Boolean diureseSemAlteracoes;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "facilidade_limpeza", nullable = false, length = 20)
     private FacilidadeLimpezaFezes facilidadeLimpeza;
@@ -55,12 +76,17 @@ public class RegistroTransitoIntestinalJpaEntidade {
 
     protected RegistroTransitoIntestinalJpaEntidade() {}
 
-    public RegistroTransitoIntestinalJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoFezesBristol tipoFezes, Integer evacuacoesPorDia, FacilidadeLimpezaFezes facilidadeLimpeza, Boolean muco, Boolean restosAlimentares, Boolean raiasSangue, Boolean constipacao, Boolean diarreia, Boolean dorEvacuar, Boolean escapeFecal, Boolean assaduraFrequente, Boolean assaduraVermelhidao, Boolean assaduraPontosVermelhos, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public RegistroTransitoIntestinalJpaEntidade(UUID id, UUID criancaId, LocalDate dataRegistro, TipoFezesBristol tipoFezes, Integer evacuacoesPorDia, Integer intervaloDiureseHoras, CorUrina corUrina, AspectoUrina aspectoUrina, CheiroUrina cheiroUrina, Boolean diureseSemAlteracoes, FacilidadeLimpezaFezes facilidadeLimpeza, Boolean muco, Boolean restosAlimentares, Boolean raiasSangue, Boolean constipacao, Boolean diarreia, Boolean dorEvacuar, Boolean escapeFecal, Boolean assaduraFrequente, Boolean assaduraVermelhidao, Boolean assaduraPontosVermelhos, Boolean preocupacaoFamilia, String observacao, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
         this.id = id;
         this.criancaId = criancaId;
         this.dataRegistro = dataRegistro;
         this.tipoFezes = tipoFezes;
         this.evacuacoesPorDia = evacuacoesPorDia;
+        this.intervaloDiureseHoras = intervaloDiureseHoras;
+        this.corUrina = corUrina;
+        this.aspectoUrina = aspectoUrina;
+        this.cheiroUrina = cheiroUrina;
+        this.diureseSemAlteracoes = diureseSemAlteracoes;
         this.facilidadeLimpeza = facilidadeLimpeza;
         this.muco = muco;
         this.restosAlimentares = restosAlimentares;
@@ -83,6 +109,11 @@ public class RegistroTransitoIntestinalJpaEntidade {
     public LocalDate getDataRegistro() { return dataRegistro; }
     public TipoFezesBristol getTipoFezes() { return tipoFezes; }
     public Integer getEvacuacoesPorDia() { return evacuacoesPorDia; }
+    public Integer getIntervaloDiureseHoras() { return intervaloDiureseHoras; }
+    public CorUrina getCorUrina() { return corUrina; }
+    public AspectoUrina getAspectoUrina() { return aspectoUrina; }
+    public CheiroUrina getCheiroUrina() { return cheiroUrina; }
+    public Boolean getDiureseSemAlteracoes() { return diureseSemAlteracoes; }
     public FacilidadeLimpezaFezes getFacilidadeLimpeza() { return facilidadeLimpeza; }
     public Boolean getMuco() { return muco; }
     public Boolean getRestosAlimentares() { return restosAlimentares; }

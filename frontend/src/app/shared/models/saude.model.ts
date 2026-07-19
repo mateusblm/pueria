@@ -1,4 +1,4 @@
-export type TipoRegistroSaude = 'MEDICAMENTO_SUPLEMENTO' | 'INTERCORRENCIA_CLINICA';
+export type TipoRegistroSaude = 'MEDICAMENTO_SUPLEMENTO' | 'INTERCORRENCIA_CLINICA' | 'HUMOR_COMPORTAMENTO' | 'OBSERVACAO_EVENTO_MARCANTE';
 
 export interface RegistroSaude {
   id: string;

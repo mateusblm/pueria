@@ -11,9 +11,9 @@
   } @else if (crianca(); as crianca) {
     <div class="intestinal-page__hero">
       <div>
-        <p class="pueria-eyebrow">Trânsito intestinal</p>
-        <div class="intestinal-page__identidade"><span><app-icon name="toilet" [size]="28" /></span><h1 class="pueria-title">Trânsito intestinal</h1></div>
-        <p class="pueria-subtitle">Observe a rotina de {{ crianca.nome }} ao longo dos dias, sem tirar conclusões a partir de um registro isolado.</p>
+        <p class="pueria-eyebrow">Eliminações fisiológicas</p>
+        <div class="intestinal-page__identidade"><span><app-icon name="toilet" [size]="28" /></span><h1 class="pueria-title">Eliminações fisiológicas</h1></div>
+        <p class="pueria-subtitle">Observe fezes e diurese de {{ crianca.nome }} ao longo dos dias, sem tirar conclusões a partir de um registro isolado.</p>
       </div>
       <button type="button" class="intestinal-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento do trânsito intestinal" title="Entenda o trânsito intestinal"><app-icon name="help" [size]="20" /></button>
     </div>
@@ -69,6 +69,16 @@
             </select>
           </label>
         </div>
+        <section class="intestinal-form__bloco">
+          <div><p class="pueria-eyebrow">Diurese</p><h3>Como foi o xixi no período?</h3><p>Preencha somente o que observou. Um padrão habitual também é uma informação útil.</p></div>
+          <div class="intestinal-form__grid">
+            <label><span>Maior intervalo aproximado (horas)</span><input type="text" formControlName="intervaloDiureseHoras" placeholder="Ex.: 3" inputmode="numeric" /></label>
+            <label><span>Cor</span><select formControlName="corUrina">@for (opcao of coresUrina; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }</select></label>
+            <label><span>Aspecto</span><select formControlName="aspectoUrina">@for (opcao of aspectosUrina; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }</select></label>
+            <label><span>Cheiro</span><select formControlName="cheiroUrina">@for (opcao of cheirosUrina; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }</select></label>
+          </div>
+          <label class="intestinal-checks"><input type="checkbox" formControlName="diureseSemAlteracoes" /> Padrão habitual, sem alterações relevantes</label>
+        </section>
         <button type="button" class="pueria-button" (click)="avancarEtapa()">Continuar</button>
         <small class="intestinal-etapas__tempo">Leva menos de 1 minuto</small>
         } @else {

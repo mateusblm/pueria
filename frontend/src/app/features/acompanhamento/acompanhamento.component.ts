@@ -418,11 +418,25 @@ export class AcompanhamentoComponent implements OnInit {
         tema: 'alimentacao'
       },
       {
-        titulo: 'Trânsito intestinal',
-        detalhe: 'Registre aspecto das fezes, frequência, assaduras e sinais que merecem observação.',
+        titulo: 'Eliminações fisiológicas',
+        detalhe: 'Registre fezes, diurese, assaduras e sinais que merecem observação.',
         rota: ['/criancas', resumo.crianca.id, 'transito-intestinal'],
         icone: 'toilet',
         tema: 'intestinal'
+      },
+      {
+        titulo: 'Humor e comportamento',
+        detalhe: 'Guarde uma visão gentil do humor, choro, interação e interesse em brincar.',
+        rota: ['/criancas', resumo.crianca.id, 'humor-comportamento'],
+        icone: 'heartPulse',
+        tema: 'humor'
+      },
+      {
+        titulo: 'Observações e eventos',
+        detalhe: 'Registre mudanças e acontecimentos importantes para dar contexto à rotina.',
+        rota: ['/criancas', resumo.crianca.id, 'observacoes-eventos'],
+        icone: 'message',
+        tema: 'observacoes'
       },
       {
         titulo: 'Sono',

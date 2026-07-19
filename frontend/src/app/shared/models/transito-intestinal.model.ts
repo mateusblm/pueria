@@ -1,5 +1,8 @@
 export type TipoFezesBristol = 'TIPO_1' | 'TIPO_2' | 'TIPO_3' | 'TIPO_4' | 'TIPO_5' | 'TIPO_6' | 'TIPO_7' | 'NAO_INFORMADO';
 export type FacilidadeLimpezaFezes = 'FACIL' | 'DIFICIL' | 'NAO_INFORMADO';
+export type CorUrina = 'CLARA' | 'AMARELO_CLARO' | 'AMARELO_INTENSO' | 'TURVA' | 'NAO_INFORMADO';
+export type AspectoUrina = 'SEM_ALTERACOES' | 'ESPUMA' | 'PARTICULAS' | 'NAO_INFORMADO';
+export type CheiroUrina = 'NORMAL' | 'DESAGRADAVEL' | 'NAO_INFORMADO';
 export type ClassificacaoFezes = 'ENDURECIDA' | 'ESPERADA' | 'MAIS_MACIA' | 'LIQUIDA' | 'SEM_DADOS';
 
 export interface AnaliseTransitoIntestinal {
@@ -17,6 +20,11 @@ export interface RegistroTransitoIntestinal {
   dataRegistro: string;
   tipoFezes: TipoFezesBristol;
   evacuacoesPorDia?: number | null;
+  intervaloDiureseHoras?: number | null;
+  corUrina?: CorUrina | null;
+  aspectoUrina?: AspectoUrina | null;
+  cheiroUrina?: CheiroUrina | null;
+  diureseSemAlteracoes?: boolean | null;
   facilidadeLimpeza: FacilidadeLimpezaFezes;
   muco?: boolean | null;
   restosAlimentares?: boolean | null;
@@ -39,6 +47,11 @@ export interface SalvarRegistroTransitoIntestinalRequest {
   dataRegistro: string;
   tipoFezes: TipoFezesBristol;
   evacuacoesPorDia?: number | null;
+  intervaloDiureseHoras?: number | null;
+  corUrina?: CorUrina | null;
+  aspectoUrina?: AspectoUrina | null;
+  cheiroUrina?: CheiroUrina | null;
+  diureseSemAlteracoes?: boolean | null;
   facilidadeLimpeza: FacilidadeLimpezaFezes;
   muco?: boolean | null;
   restosAlimentares?: boolean | null;

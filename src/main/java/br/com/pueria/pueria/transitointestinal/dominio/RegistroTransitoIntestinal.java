@@ -14,6 +14,11 @@ public class RegistroTransitoIntestinal {
     private final LocalDate dataRegistro;
     private final TipoFezesBristol tipoFezes;
     private final Integer evacuacoesPorDia;
+    private final Integer intervaloDiureseHoras;
+    private final CorUrina corUrina;
+    private final AspectoUrina aspectoUrina;
+    private final CheiroUrina cheiroUrina;
+    private final Boolean diureseSemAlteracoes;
     private final FacilidadeLimpezaFezes facilidadeLimpeza;
     private final Boolean muco;
     private final Boolean restosAlimentares;
@@ -36,6 +41,11 @@ public class RegistroTransitoIntestinal {
         this.dataRegistro = validarData(dados.dataRegistro());
         this.tipoFezes = dados.tipoFezes() == null ? TipoFezesBristol.NAO_INFORMADO : dados.tipoFezes();
         this.evacuacoesPorDia = validarInteiro(dados.evacuacoesPorDia(), 0, 30, "evacuacoes por dia");
+        this.intervaloDiureseHoras = validarInteiro(dados.intervaloDiureseHoras(), 0, 24, "intervalo de diurese");
+        this.corUrina = dados.corUrina() == null ? CorUrina.NAO_INFORMADO : dados.corUrina();
+        this.aspectoUrina = dados.aspectoUrina() == null ? AspectoUrina.NAO_INFORMADO : dados.aspectoUrina();
+        this.cheiroUrina = dados.cheiroUrina() == null ? CheiroUrina.NAO_INFORMADO : dados.cheiroUrina();
+        this.diureseSemAlteracoes = dados.diureseSemAlteracoes();
         this.facilidadeLimpeza = dados.facilidadeLimpeza() == null ? FacilidadeLimpezaFezes.NAO_INFORMADO : dados.facilidadeLimpeza();
         this.muco = dados.muco();
         this.restosAlimentares = dados.restosAlimentares();
@@ -101,6 +111,11 @@ public class RegistroTransitoIntestinal {
     public LocalDate getDataRegistro() { return dataRegistro; }
     public TipoFezesBristol getTipoFezes() { return tipoFezes; }
     public Integer getEvacuacoesPorDia() { return evacuacoesPorDia; }
+    public Integer getIntervaloDiureseHoras() { return intervaloDiureseHoras; }
+    public CorUrina getCorUrina() { return corUrina; }
+    public AspectoUrina getAspectoUrina() { return aspectoUrina; }
+    public CheiroUrina getCheiroUrina() { return cheiroUrina; }
+    public Boolean getDiureseSemAlteracoes() { return diureseSemAlteracoes; }
     public FacilidadeLimpezaFezes getFacilidadeLimpeza() { return facilidadeLimpeza; }
     public Boolean getMuco() { return muco; }
     public Boolean getRestosAlimentares() { return restosAlimentares; }

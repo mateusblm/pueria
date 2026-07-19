@@ -46,10 +46,10 @@ Documento de execução baseado em `APRIMORAMENTOS.docx`, recebido em 18/07/2026
 
 ## Fase 2 - Eliminações fisiológicas e rotina emocional
 
-- [ ] APR-20 Renomear o módulo `Trânsito intestinal` para `Eliminações fisiológicas`.
-- [ ] APR-21 Manter o registro de fezes e adicionar diurese: intervalo aproximado, cor, aspecto e cheiro, com opção de padrão habitual/sem alterações relevantes.
-- [ ] APR-22 Criar o módulo `Humor e comportamento`, com observações mensais de humor, choro, consolabilidade, interesse por brincar e interação.
-- [ ] APR-23 Criar `Observações livres e eventos marcantes`, com texto livre, data e possibilidade de aparecer na linha do tempo e no relatório.
+- [x] APR-20 Renomear o módulo `Trânsito intestinal` para `Eliminações fisiológicas`.
+- [x] APR-21 Manter o registro de fezes e adicionar diurese: intervalo aproximado, cor, aspecto e cheiro, com opção de padrão habitual/sem alterações relevantes.
+- [x] APR-22 Criar o módulo `Humor e comportamento`, com observações mensais de humor, choro, consolabilidade, interesse por brincar e interação.
+- [~] APR-23 Criar `Observações livres e eventos marcantes`, com texto livre, data e possibilidade de aparecer na linha do tempo e no relatório. A tela e o histórico próprio foram criados; a linha do tempo unificada e o relatório são entregas da Fase 5.
 
 **Aceite:** a família consegue registrar o período sem excesso de campos; eventos podem contextualizar outros registros sem sugerir causalidade.
 
