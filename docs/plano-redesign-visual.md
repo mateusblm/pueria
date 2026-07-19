@@ -33,6 +33,10 @@ O redesign toma como referência o handoff visual recebido e seus protótipos, m
 - Cabeçalhos de módulo curtos, com ícone e cor de domínio.
 - Formulários longos apresentados em grupos e etapas quando fizer sentido, preservando o registro completo.
 
+## Pendência de descoberta pública
+
+- [ ] Criar o fluxo público "Descobrir por onde começar": entrada sem conta, perguntas breves sobre a fase da criança e o foco de acompanhamento, devolutiva acolhedora e não diagnóstica, captura opcional de nome e e-mail com consentimento e convite para criar uma conta para salvar e continuar.
+
 ## Fora deste recorte
 
 Novas demandas clínicas da médica permanecem pausadas durante este redesign. Ajustes necessários para manter um fluxo existente funcional e seguro continuam permitidos.
