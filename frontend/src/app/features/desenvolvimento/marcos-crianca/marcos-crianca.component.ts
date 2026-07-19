@@ -38,7 +38,7 @@ type TrajetoriaArea = {
   total: number;
 };
 
-type ModoTela = 'responder' | 'resultados';
+type ModoTela = 'visao' | 'responder' | 'resultados';
 
 @Component({
   selector: 'app-marcos-crianca',
@@ -74,7 +74,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly erro = signal('');
   readonly idadeSelecionada = signal<number | null>(null);
   readonly indiceEtapa = signal(0);
-  readonly modo = signal<ModoTela>('responder');
+  readonly modo = signal<ModoTela>('visao');
   readonly tipoRelato = signal<TipoRelatoDesenvolvimento>('PREOCUPACAO_FAMILIA');
   readonly descricaoRelato = signal('');
   readonly salvandoRelato = signal(false);
@@ -208,9 +208,12 @@ export class MarcosCriancaComponent implements OnInit {
           this.idadeSelecionada.set(idadeAtual);
           if (this.route.snapshot.queryParamMap.get('modo') === 'resultados') {
             this.modo.set('resultados');
-          } else {
+          } else if (this.route.snapshot.queryParamMap.get('modo') === 'responder') {
+            this.modo.set('responder');
             this.posicionarPrimeiraPendente();
             this.carregarEstimuloParaMarcoAtual();
+          } else {
+            this.modo.set('visao');
           }
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -280,6 +283,10 @@ export class MarcosCriancaComponent implements OnInit {
     if (this.progresso().respondidos < this.progresso().total) {
       this.posicionarPrimeiraPendente();
     }
+  }
+
+  abrirVisao(): void {
+    this.modo.set('visao');
   }
 
   abrirEntenda(): void {

@@ -9,7 +9,7 @@
           <app-icon name="help" [size]="20" />
         </button>
       </div>
-      <h1 class="pueria-title">Descobertas de cada fase</h1>
+      <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
       <p class="pueria-subtitle">
         Observe a rotina com calma. Cada etapa mostra uma habilidade por vez, sem misturar idades futuras.
       </p>
@@ -69,11 +69,66 @@
     </section>
 
     <div class="modo-tabs" role="tablist" aria-label="Modo de acompanhamento">
+      <button type="button" [class.modo-tabs__active]="modo() === 'visao'" (click)="abrirVisao()">Visão geral</button>
       <button type="button" [class.modo-tabs__active]="modo() === 'responder'" (click)="abrirResponder()">Responder etapas</button>
       <button type="button" [class.modo-tabs__active]="modo() === 'resultados'" (click)="abrirResultados()">Ver resultados</button>
     </div>
 
-    @if (modo() === 'responder') {
+    @if (modo() === 'visao') {
+      <section class="marcos-visao" aria-label="Visão geral dos marcos">
+        <article class="pueria-card marcos-visao__destaque">
+          <div>
+            <p class="pueria-eyebrow">Visão da fase</p>
+            <h2>{{ tituloIdadeSelecionada() }}</h2>
+            @if (progresso().respondidos === 0) {
+              <p>Comece pelas habilidades que fazem parte da rotina. Você pode responder no seu tempo e voltar quando quiser.</p>
+            } @else if (progresso().respondidos < progresso().total) {
+              <p>Você já registrou {{ progresso().respondidos }} de {{ progresso().total }} habilidades desta fase. Retome de onde parou quando fizer sentido.</p>
+            } @else {
+              <p>Esta fase já foi registrada. Você pode revisar as respostas, conhecer os resultados e acompanhar as próximas etapas.</p>
+            }
+          </div>
+          <div class="marcos-visao__progresso" aria-label="Progresso da fase">
+            <strong>{{ progresso().percentual }}%</strong>
+            <span>{{ progresso().respondidos }} de {{ progresso().total }} respondidos</span>
+            <div class="progresso" aria-hidden="true"><span [style.width.%]="progresso().percentual"></span></div>
+          </div>
+          <div class="marcos-visao__acoes">
+            <button type="button" class="pueria-button" (click)="abrirResponder()">{{ progresso().respondidos === 0 ? 'Começar avaliação' : 'Continuar avaliação' }}</button>
+            @if (progresso().respondidos > 0) {
+              <button type="button" class="pueria-button pueria-button--secondary" (click)="abrirResultados()">Ver resultados</button>
+            }
+          </div>
+        </article>
+
+        <section class="marcos-visao__areas">
+          <div class="marcos-visao__cabecalho">
+            <div><p class="pueria-eyebrow">Por área</p><h2>O que esta fase observa</h2></div>
+            <p>As áreas ajudam a organizar a conversa; uma resposta isolada não define o desenvolvimento.</p>
+          </div>
+          <div class="areas-resumo">
+            @for (area of areasResumo(); track area.area) {
+              <article class="area-resumo" [attr.data-tema]="temaArea(area.area)">
+                <span class="area-resumo__icone"><app-icon [name]="iconeArea(area.area)" [size]="20" /></span>
+                <div><strong>{{ area.label }}</strong><span>{{ area.total - area.pendentes }} de {{ area.total }} registradas</span></div>
+              </article>
+            }
+          </div>
+        </section>
+
+        @if (pontosDeAtencao().length > 0 || relatos().length > 0) {
+          <aside class="marcos-visao__consulta">
+            <span><app-icon name="stethoscope" [size]="20" /></span>
+            <div>
+              <p class="pueria-eyebrow">Para a consulta</p>
+              <strong>{{ pontosDeAtencao().length > 0 ? labelPontosAtencao(pontosDeAtencao().length) : 'Há um contexto registrado pela família' }}</strong>
+              <p>Essas informações ficam organizadas nos resultados e podem ajudar a orientar a conversa com o pediatra.</p>
+            </div>
+            <button type="button" class="pueria-button pueria-button--secondary" (click)="abrirResultados()">Abrir resultados</button>
+          </aside>
+        }
+      </section>
+    } @else if (modo() === 'responder') {
       @if (marcoAtual(); as marco) {
         <article class="pueria-card etapa-card">
           <picture class="etapa-card__media">
