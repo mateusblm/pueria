@@ -559,6 +559,99 @@
   gap: 10px;
 }
 
+.tutorial-primeiro-acompanhamento__panel {
+  max-width: 620px;
+}
+
+.tutorial-primeiro-acompanhamento__cabecalho {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.tutorial-primeiro-acompanhamento__cabecalho > span,
+.tutorial-primeiro-acompanhamento__passos > article > span {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.tutorial-primeiro-acompanhamento__cabecalho > span {
+  width: 48px;
+  height: 48px;
+  background: #f7e4eb;
+  color: #934d72;
+}
+
+.tutorial-primeiro-acompanhamento__cabecalho h2,
+.tutorial-primeiro-acompanhamento__cabecalho p,
+.tutorial-primeiro-acompanhamento__passos p,
+.tutorial-primeiro-acompanhamento__fechamento {
+  margin: 0;
+}
+
+.tutorial-primeiro-acompanhamento__cabecalho h2 {
+  color: var(--pueria-texto);
+  font-family: var(--pueria-fonte-titulo);
+  font-size: clamp(1.55rem, 3vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+.tutorial-primeiro-acompanhamento__introducao,
+.tutorial-primeiro-acompanhamento__fechamento,
+.tutorial-primeiro-acompanhamento__passos p {
+  color: var(--pueria-texto-suave);
+  line-height: 1.5;
+}
+
+.tutorial-primeiro-acompanhamento__passos {
+  display: grid;
+  gap: 10px;
+}
+
+.tutorial-primeiro-acompanhamento__passos > article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  border: 1px solid var(--pueria-borda);
+  border-radius: var(--pueria-raio-menor);
+  background: #fffdf9;
+  padding: 14px;
+}
+
+.tutorial-primeiro-acompanhamento__passos > article > span {
+  width: 40px;
+  height: 40px;
+  background: #eee3f4;
+  color: #76507d;
+}
+
+.tutorial-primeiro-acompanhamento__passos > article:nth-child(2) > span {
+  background: #e6edf6;
+  color: #506a8d;
+}
+
+.tutorial-primeiro-acompanhamento__passos > article > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.tutorial-primeiro-acompanhamento__passos strong {
+  color: var(--pueria-texto);
+}
+
+.tutorial-primeiro-acompanhamento__fechamento {
+  padding: 0 2px;
+  font-size: .9rem;
+}
+
+.tutorial-primeiro-acompanhamento__acoes a {
+  display: inline-flex;
+}
+
 @media (min-width: 1200px) {
   .acompanhamento-home {
     grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.75fr);

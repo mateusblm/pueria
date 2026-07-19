@@ -43,6 +43,8 @@ export class AcompanhamentoComponent implements OnInit {
   readonly carregando = signal(true);
   readonly salvandoCrianca = signal(false);
   readonly cadastroInicialAberto = signal(false);
+  readonly tutorialPrimeiroAcompanhamentoAberto = signal(false);
+  readonly criancaDoPrimeiroAcompanhamento = signal<Crianca | null>(null);
   readonly etapaCadastro = signal(1);
   readonly erro = signal('');
   readonly erroCadastro = signal('');
@@ -141,6 +143,10 @@ export class AcompanhamentoComponent implements OnInit {
     this.erroCadastro.set('');
   }
 
+  fecharTutorialPrimeiroAcompanhamento(): void {
+    this.tutorialPrimeiroAcompanhamentoAberto.set(false);
+  }
+
   avancarCadastro(): void {
     const erro = this.validarEtapa(this.etapaCadastro());
     if (erro) {
@@ -233,8 +239,12 @@ export class AcompanhamentoComponent implements OnInit {
     })
       .pipe(finalize(() => this.salvandoCrianca.set(false)))
       .subscribe({
-        next: () => {
+        next: (crianca) => {
           this.cadastroInicialAberto.set(false);
+          this.criancaEmFocoId.set(crianca.id);
+          localStorage.setItem('pueria.criancaEmFocoId', crianca.id);
+          this.criancaDoPrimeiroAcompanhamento.set(crianca);
+          this.tutorialPrimeiroAcompanhamentoAberto.set(true);
           this.carregar();
         },
         error: (erro: HttpErrorResponse) => this.erroCadastro.set(this.extrairMensagemErro(erro))

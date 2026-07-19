@@ -216,4 +216,38 @@
       </form>
     </div>
   }
+
+  @if (tutorialPrimeiroAcompanhamentoAberto() && criancaDoPrimeiroAcompanhamento(); as crianca) {
+    <div class="cadastro-modal tutorial-primeiro-acompanhamento" role="dialog" aria-modal="true" aria-labelledby="tutorial-primeiro-acompanhamento-titulo">
+      <section class="cadastro-modal__panel tutorial-primeiro-acompanhamento__panel">
+        <div class="tutorial-primeiro-acompanhamento__cabecalho">
+          <span><app-icon name="sparkles" [size]="24" /></span>
+          <div>
+            <p class="pueria-eyebrow">Primeiros passos</p>
+            <h2 id="tutorial-primeiro-acompanhamento-titulo">O acompanhamento de {{ crianca.nome }} está pronto</h2>
+          </div>
+        </div>
+
+        <p class="tutorial-primeiro-acompanhamento__introducao">Você não precisa preencher tudo nem registrar todos os dias. Comece pelo que já observa na rotina.</p>
+
+        <div class="tutorial-primeiro-acompanhamento__passos">
+          <article>
+            <span><app-icon name="brain" [size]="22" /></span>
+            <div><strong>Comece pelos marcos</strong><p>Responda no seu ritmo sobre as habilidades que {{ crianca.nome }} já demonstra.</p></div>
+          </article>
+          <article>
+            <span><app-icon name="message" [size]="22" /></span>
+            <div><strong>Registre quando fizer sentido</strong><p>Sono, alimentação, saúde e acontecimentos ficam disponíveis quando você quiser guardar uma observação.</p></div>
+          </article>
+        </div>
+
+        <p class="tutorial-primeiro-acompanhamento__fechamento">Com o tempo, os registros úteis ficam organizados para você consultar quando precisar.</p>
+
+        <div class="cadastro-modal__actions tutorial-primeiro-acompanhamento__acoes">
+          <button type="button" class="pueria-button pueria-button--secondary" (click)="fecharTutorialPrimeiroAcompanhamento()">Explorar o app</button>
+          <a [routerLink]="['/criancas', crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'primeiro-acompanhamento', modo: 'responder' }" class="pueria-button" (click)="fecharTutorialPrimeiroAcompanhamento()">Conhecer os marcos</a>
+        </div>
+      </section>
+    </div>
+  }
 </section>
