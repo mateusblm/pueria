@@ -11,6 +11,8 @@
 .contexto-form textarea { line-height:1.45; min-height:10.5rem; resize:vertical; }
 .contexto-form input::placeholder,.contexto-form textarea::placeholder { color:#9d8580; opacity:1; }
 .contexto-form input:focus,.contexto-form textarea:focus { border-color:#b75b74; box-shadow:0 0 0 3px rgba(183, 91, 116, .14); outline:0; }
+.contexto-form__data input { appearance:none; border-color:#dfc7bf; height:2.9rem; line-height:1.2; }
+.contexto-form__data input:focus { border-color:#b75b74; }
 .contexto-form__guia { background:#f7f1eb; border-left:3px solid #b8795b; margin:0; padding:.8rem; }
 .contexto-form__acoes { display:flex; flex-wrap:wrap; gap:.65rem; justify-content:flex-end; }
 .contexto-historico article { border-top:1px solid #eee2da; display:grid; gap:.45rem; padding:1rem 0; }

@@ -5,7 +5,7 @@
     <div class="contexto-page__layout">
       <form class="pueria-card contexto-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div><p class="pueria-eyebrow">{{ editandoId() ? 'Editar registro' : 'Novo registro' }}</p><h2>{{ contexto === 'humor' ? 'Como foi o período?' : 'O que vale guardar?' }}</h2></div>
-        <label><span>Data</span><input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" /></label>
+        <label class="contexto-form__data"><span>Data</span><input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" /></label>
         @if (contexto === 'humor') { <p class="contexto-form__guia">Você pode contar sobre humor, choro, facilidade para se acalmar, interesse em brincar ou interação. Escreva somente o que fez sentido observar.</p> }
         <label><span>{{ contexto === 'humor' ? 'Observação do período' : 'Observação ou evento' }}</span><textarea formControlName="descricao" rows="7" [placeholder]="contexto === 'humor' ? 'Ex.: esteve mais bem-humorado pela manhã e buscou mais colo no fim do dia.' : 'Ex.: começou na creche, recebeu visita de familiares ou houve uma mudança na rotina.'"></textarea></label>
         @if (erro()) { <p class="pueria-message pueria-message--erro">{{ erro() }}</p> }
