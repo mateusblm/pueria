@@ -3,7 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { publicOnlyGuard } from './core/guards/public-only.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'acompanhamento' },
+  { path: '', pathMatch: 'full', loadComponent: () => import('./features/inicio/pagina-inicial/pagina-inicial.component').then((m) => m.PaginaInicialComponent) },
   {
     path: '',
     canActivate: [publicOnlyGuard],

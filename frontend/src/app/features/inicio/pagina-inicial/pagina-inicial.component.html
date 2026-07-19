@@ -1,0 +1,128 @@
+<main class="inicio-publico">
+  <header class="inicio-publico__cabecalho">
+    <a class="inicio-publico__marca" routerLink="/" aria-label="Pueria, página inicial">
+      <app-brand-mark />
+    </a>
+
+    <nav aria-label="Acesso à conta">
+      <a class="inicio-publico__entrar" routerLink="/login">Entrar</a>
+      <a class="pueria-button inicio-publico__criar" routerLink="/cadastro">Criar conta</a>
+    </nav>
+  </header>
+
+  <section class="inicio-publico__hero" aria-labelledby="inicio-titulo">
+    <div class="hero__conteudo">
+      <p class="pueria-eyebrow">Para famílias nos primeiros anos</p>
+      <h1 id="inicio-titulo">Um lugar tranquilo para acompanhar cada fase da <em>sua criança.</em></h1>
+      <p class="hero__texto">
+        Do desenvolvimento ao crescimento, da rotina ao que vale levar para a consulta. O Pueria organiza os registros da família com clareza, cuidado e referências de saúde.
+      </p>
+
+      <div class="hero__acoes">
+        <a class="pueria-button" routerLink="/cadastro">Começar agora <app-icon name="chevronRight" [size]="18" /></a>
+        <a class="hero__link" href="#como-funciona">Conhecer como funciona</a>
+      </div>
+
+      <p class="hero__aviso"><app-icon name="heart" [size]="17" /> Acompanhamento informativo. Não substitui avaliação profissional.</p>
+    </div>
+
+    <div class="hero__produto" aria-label="Exemplo de acompanhamento no Pueria">
+      <div class="produto-cartao produto-cartao--principal">
+        <div class="produto-cartao__crianca">
+          <span class="produto-avatar">L</span>
+          <div><strong>Laura</strong><small>1 ano e 4 meses</small></div>
+          <span class="produto-status">Hoje</span>
+        </div>
+
+        <section class="produto-crescimento">
+          <span>Crescimento</span>
+          <div class="produto-crescimento__cabecalho"><strong>76 cm</strong><b>Trajetória acompanhada</b></div>
+          <svg viewBox="0 0 280 80" role="img" aria-label="Exemplo de trajetória de crescimento">
+            <path class="produto-crescimento__faixa" d="M12 66C70 53 117 39 165 29C208 20 244 15 268 10V35C231 39 205 46 162 53C108 62 62 70 12 75Z" />
+            <path class="produto-crescimento__linha" d="M12 70C62 61 112 48 164 37C207 28 239 23 268 18" />
+            <circle cx="94" cy="55" r="4" /><circle cx="169" cy="37" r="4" /><circle cx="268" cy="18" r="4" />
+          </svg>
+        </section>
+
+        <div class="produto-cartao__resumo">
+          <div><span>Último sono</span><strong>11h 20m</strong></div>
+          <div><span>Próximo marco</span><strong>Novas descobertas</strong></div>
+        </div>
+      </div>
+
+      <div class="produto-flutuante produto-flutuante--marcos"><app-icon name="brain" [size]="21" /><span>Marcos por idade</span></div>
+      <div class="produto-flutuante produto-flutuante--consulta"><app-icon name="stethoscope" [size]="21" /><span>Resumo para consulta</span></div>
+    </div>
+  </section>
+
+  <section class="inicio-publico__provas" aria-label="Destaques do Pueria">
+    <span><app-icon name="chart" [size]="19" /> Curvas de referência da OMS</span>
+    <span><app-icon name="brain" [size]="19" /> Marcos por faixa etária</span>
+    <span><app-icon name="stethoscope" [size]="19" /> Resumo em PDF para a consulta</span>
+    <span><app-icon name="users" [size]="19" /> Perfis para toda a família</span>
+  </section>
+
+  <section class="inicio-publico__modulos" aria-labelledby="modulos-titulo">
+    <p class="pueria-eyebrow">Acompanhamento integrado</p>
+    <h2 id="modulos-titulo">Tudo que faz parte da rotina, conectado com o que importa.</h2>
+    <p class="inicio-publico__introducao">Registros breves ajudam a enxergar a evolução ao longo do tempo, sem transformar o cuidado em uma lista de obrigações.</p>
+
+    <div class="modulos-grid">
+      @for (modulo of modulos; track modulo.titulo) {
+        <article [class]="'modulo ' + modulo.classe">
+          <span class="modulo__icone"><app-icon [name]="modulo.icone" [size]="25" /></span>
+          <h3>{{ modulo.titulo }}</h3>
+          <p>{{ modulo.descricao }}</p>
+        </article>
+      }
+      <article class="modulo modulo--familia">
+        <span class="modulo__icone"><app-icon name="users" [size]="25" /></span>
+        <h3>Mais de uma criança</h3>
+        <p>Um perfil para cada criança, com histórico separado e troca simples entre os acompanhamentos.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="inicio-publico__consulta" aria-labelledby="consulta-titulo">
+    <div>
+      <p class="pueria-eyebrow">Para a consulta</p>
+      <h2 id="consulta-titulo">Menos memória de última hora. Mais contexto para conversar.</h2>
+      <p>O Pueria reúne o que foi registrado em um resumo claro para compartilhar na consulta, sem substituir a avaliação clínica.</p>
+      <ul>
+        <li><app-icon name="chart" [size]="18" /> Evolução das medidas e curvas</li>
+        <li><app-icon name="brain" [size]="18" /> Marcos, observações e contexto da família</li>
+        <li><app-icon name="moon" [size]="18" /> Rotina de sono, alimentação e cuidados</li>
+      </ul>
+    </div>
+
+    <div class="consulta-preview" aria-hidden="true">
+      <div class="consulta-preview__topo"><strong>Resumo da criança</strong><span>PDF</span></div>
+      <div class="consulta-preview__linha consulta-preview__linha--longa"></div>
+      <div class="consulta-preview__linha"></div>
+      <div class="consulta-preview__grafico"><span></span><span></span><span></span><i></i></div>
+      <div class="consulta-preview__itens"><b></b><b></b><b></b></div>
+    </div>
+  </section>
+
+  <section class="inicio-publico__passos" id="como-funciona" aria-labelledby="passos-titulo">
+    <p class="pueria-eyebrow">Começar é simples</p>
+    <h2 id="passos-titulo">Em três passos, a rotina já fica mais organizada.</h2>
+    <ol>
+      <li><span>1</span><h3>Crie sua conta</h3><p>Seu acesso é o ponto de partida para acompanhar com tranquilidade.</p></li>
+      <li><span>2</span><h3>Adicione a criança</h3><p>Com a data de nascimento, o Pueria apresenta a fase correspondente.</p></li>
+      <li><span>3</span><h3>Registre aos poucos</h3><p>Escolha o que faz sentido na rotina e tenha tudo organizado para a consulta.</p></li>
+    </ol>
+  </section>
+
+  <section class="inicio-publico__cta" aria-labelledby="cta-titulo">
+    <p class="pueria-eyebrow">Pueria para famílias</p>
+    <h2 id="cta-titulo">Cada fase merece atenção, sem pesar na rotina.</h2>
+    <p>Comece a organizar o acompanhamento da sua criança hoje.</p>
+    <a class="pueria-button" routerLink="/cadastro">Criar conta</a>
+  </section>
+
+  <footer class="inicio-publico__rodape">
+    <app-brand-mark />
+    <span>© 2026 Pueria. Feito para famílias.</span>
+  </footer>
+</main>
