@@ -513,7 +513,7 @@ export class MarcosCriancaComponent implements OnInit {
     const numeroDaIlustracao = primeiroNumero === undefined ? NaN : primeiroNumero + posicaoNaIdade - 1;
 
     if (Number.isInteger(numeroDaIlustracao) && numeroDaIlustracao >= 1 && numeroDaIlustracao <= 65) {
-      return `/assets/desenvolvimento/marcos/${variante}/${String(numeroDaIlustracao).padStart(2, '0')}.jpg`;
+      return `/assets/desenvolvimento/marcos/${variante}/${String(numeroDaIlustracao).padStart(2, '0')}.webp`;
     }
 
     return this.imagemArea(marco.area);
