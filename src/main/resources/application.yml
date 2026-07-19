@@ -35,6 +35,7 @@ seguranca:
   refresh-token:
     expiracao-dias: ${PUERIA_REFRESH_TOKEN_EXPIRACAO_DIAS:30}
     cookie-secure: ${PUERIA_REFRESH_TOKEN_COOKIE_SECURE:true}
+    cookie-partitioned: ${PUERIA_REFRESH_TOKEN_COOKIE_PARTITIONED:true}
 
 pueria:
   cors:

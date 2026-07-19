@@ -95,6 +95,7 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string("Set-Cookie", org.hamcrest.Matchers.containsString("pueria_refresh=")))
                 .andExpect(header().string("Set-Cookie", org.hamcrest.Matchers.containsString("HttpOnly")))
+                .andExpect(header().string("Set-Cookie", org.hamcrest.Matchers.containsString("Partitioned")))
                 .andExpect(jsonPath("$.tipo").value("Bearer"))
                 .andExpect(jsonPath("$.token", not(blankOrNullString())))
                 .andExpect(jsonPath("$.expiraEmSegundos").value(3600));

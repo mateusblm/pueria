@@ -41,12 +41,14 @@ public class AuthController {
     private final UsuarioRepositorio usuarioRepositorio;
     private final SessaoAutenticacaoService sessaoAutenticacaoService;
     private final boolean cookieSeguro;
+    private final boolean cookieParticionado;
 
     public AuthController(CadastrarUsuarioUseCase cadastrarUsuarioUseCase, AutenticarUsuarioUseCase autenticarUsuarioUseCase,
             SolicitarRedefinicaoSenhaUseCase solicitarRedefinicaoSenhaUseCase, RedefinirSenhaUseCase redefinirSenhaUseCase,
             RateLimitService rateLimitService, IdentificadorCliente identificadorCliente, UsuarioRepositorio usuarioRepositorio,
             SessaoAutenticacaoService sessaoAutenticacaoService,
-            @Value("${seguranca.refresh-token.cookie-secure:true}") boolean cookieSeguro) {
+            @Value("${seguranca.refresh-token.cookie-secure:true}") boolean cookieSeguro,
+            @Value("${seguranca.refresh-token.cookie-partitioned:true}") boolean cookieParticionado) {
         this.cadastrarUsuarioUseCase = cadastrarUsuarioUseCase;
         this.autenticarUsuarioUseCase = autenticarUsuarioUseCase;
         this.solicitarRedefinicaoSenhaUseCase = solicitarRedefinicaoSenhaUseCase;
@@ -56,6 +58,7 @@ public class AuthController {
         this.usuarioRepositorio = usuarioRepositorio;
         this.sessaoAutenticacaoService = sessaoAutenticacaoService;
         this.cookieSeguro = cookieSeguro;
+        this.cookieParticionado = cookieParticionado;
     }
 
     @PostMapping("/cadastro")
@@ -120,6 +123,7 @@ public class AuthController {
         return ResponseCookie.from("pueria_refresh", valor)
                 .httpOnly(true)
                 .secure(cookieSeguro)
+                .partitioned(cookieSeguro && cookieParticionado)
                 .sameSite(cookieSeguro ? "None" : "Lax")
                 .path("/api/auth")
                 .maxAge(maxAgeSegundos)
