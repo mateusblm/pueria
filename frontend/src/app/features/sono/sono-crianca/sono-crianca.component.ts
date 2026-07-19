@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { AmbienteSono, RegistroSono, SalvarRegistroSonoRequest, SuperficieSono, TipoDespertarNoturno } from '../../../shared/models/sono.model';
+import { AmbienteSono, ClassificacaoDuracaoSono, RegistroSono, SalvarRegistroSonoRequest, SuperficieSono, TipoDespertarNoturno } from '../../../shared/models/sono.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { SonoService } from '../sono.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
@@ -12,6 +12,14 @@ import { ToastService } from '../../../core/toast/toast.service';
 import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
+type BarraSono = {
+  id: string;
+  data: string;
+  minutos: number;
+  altura: number;
+  duracao: string;
+  classificacao: ClassificacaoDuracaoSono;
+};
 
 @Component({
   selector: 'app-sono-crianca',
@@ -107,6 +115,21 @@ export class SonoCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
+  readonly barrasSono = computed<BarraSono[]>(() =>
+    [...this.registros()]
+      .filter((registro): registro is RegistroSono & { minutosSonoTotal24h: number } => registro.minutosSonoTotal24h !== null && registro.minutosSonoTotal24h !== undefined)
+      .sort((a, b) => a.dataRegistro.localeCompare(b.dataRegistro))
+      .slice(-7)
+      .map((registro) => ({
+        id: registro.id,
+        data: this.formatarDataCurta(registro.dataRegistro),
+        minutos: registro.minutosSonoTotal24h,
+        altura: Math.max(6, Math.min(100, (registro.minutosSonoTotal24h / 1440) * 100)),
+        duracao: this.formatarDuracao(registro.minutosSonoTotal24h),
+        classificacao: registro.analise.classificacaoDuracao
+      }))
+  );
+  readonly exibirHistoricoVisual = computed(() => this.barrasSono().length >= 2);
 
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });
@@ -278,6 +301,12 @@ export class SonoCriancaComponent implements OnInit {
 
   formatarData(data: string): string {
     return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`));
+  }
+
+  formatarDataCurta(data: string): string {
+    return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', timeZone: 'UTC' })
+      .format(new Date(`${data}T00:00:00Z`))
+      .replace('.', '');
   }
 
   labelSuperficieSono(valor: SuperficieSono): string {

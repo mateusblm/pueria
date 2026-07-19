@@ -94,6 +94,39 @@
       </section>
     }
 
+    @if (exibirHistoricoVisual()) {
+      <section class="pueria-card sono-grafico" aria-labelledby="sono-grafico-titulo">
+        <div class="sono-grafico__cabecalho">
+          <div>
+            <p class="pueria-eyebrow">Histórico de sono</p>
+            <h2 id="sono-grafico-titulo">Duração ao longo dos registros</h2>
+            <p>Cada barra mostra o sono total em 24 horas em um dia registrado.</p>
+          </div>
+          <div class="sono-grafico__legenda" aria-label="Legenda do gráfico">
+            <span><i class="sono-grafico__ponto--esperado"></i>Faixa esperada</span>
+            <span><i class="sono-grafico__ponto--acompanhar"></i>Acompanhar</span>
+          </div>
+        </div>
+
+        <div class="sono-grafico__plotagem" role="img" aria-label="Gráfico de barras com a duração total de sono nos últimos registros">
+          <div class="sono-grafico__eixo" aria-hidden="true"><span>24h</span><span>12h</span><span>0h</span></div>
+          <div class="sono-grafico__barras">
+            @for (barra of barrasSono(); track barra.id) {
+              <div class="sono-grafico__coluna">
+                <div class="sono-grafico__trilho">
+                  <div class="sono-grafico__barra" [class.sono-grafico__barra--esperado]="barra.classificacao === 'FAIXA_ESPERADA'" [style.height.%]="barra.altura" [attr.title]="barra.data + ': ' + barra.duracao">
+                    <span>{{ barra.duracao }}</span>
+                  </div>
+                </div>
+                <strong>{{ barra.data }}</strong>
+              </div>
+            }
+          </div>
+        </div>
+        <p class="sono-grafico__nota">A faixa é analisada em cada registro conforme a idade da criança naquele dia.</p>
+      </section>
+    }
+
     <section class="sono-atualizacao">
       <button type="button" class="sono-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="20" />{{ ultimoRegistro() ? 'Registrar sono' : 'Registrar o primeiro sono' }}</button>
     </section>
