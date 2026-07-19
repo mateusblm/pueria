@@ -358,6 +358,10 @@
   grid-template-columns: minmax(0, 1fr) minmax(15.5rem, .38fr);
 }
 
+.intestinal-layout > app-registro-rapido {
+  display: contents;
+}
+
 .intestinal-atualizacao {
   align-self: start;
   min-width: 0;
@@ -365,6 +369,14 @@
   border-radius: 14px;
   background: #fff;
   overflow: hidden;
+}
+
+.intestinal-atualizacao__abrir {
+  align-items: center;
+  display: inline-flex;
+  gap: 9px;
+  justify-content: center;
+  width: 100%;
 }
 
 .intestinal-atualizacao > summary {

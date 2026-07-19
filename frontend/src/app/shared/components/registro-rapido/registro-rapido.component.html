@@ -1,0 +1,24 @@
+@if (aberto()) {
+  <div class="registro-rapido" role="presentation" (click)="fecharAoClicarNoFundo($event)">
+    <section class="registro-rapido__painel" role="dialog" aria-modal="true" [attr.aria-label]="titulo()">
+      <header class="registro-rapido__cabecalho">
+        <div>
+          <p class="pueria-eyebrow">Registro rápido</p>
+          <h2>{{ titulo() }}</h2>
+          @if (descricao()) { <p>{{ descricao() }}</p> }
+        </div>
+        <button type="button" class="registro-rapido__fechar" aria-label="Fechar registro" (click)="fechar.emit()">×</button>
+      </header>
+
+      @if (totalEtapas() > 1) {
+        <div class="registro-rapido__progresso" [attr.aria-label]="'Etapa ' + etapa() + ' de ' + totalEtapas()">
+          @for (passo of passos(); track passo) {
+            <span [class.registro-rapido__passo--ativo]="passo <= etapa()"></span>
+          }
+        </div>
+      }
+
+      <div class="registro-rapido__conteudo"><ng-content /></div>
+    </section>
+  </div>
+}

@@ -181,6 +181,19 @@
   border: 1px solid #e8ddd5;
   border-radius: var(--pueria-raio);
   background: #fffdfb;
+  padding: 12px;
+}
+
+.crescimento-page__grid > app-registro-rapido {
+  display: contents;
+}
+
+.crescimento-atualizacao__abrir {
+  align-items: center;
+  display: inline-flex;
+  gap: 9px;
+  justify-content: center;
+  width: 100%;
 }
 
 .crescimento-atualizacao > summary {

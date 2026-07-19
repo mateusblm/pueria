@@ -95,29 +95,11 @@
     }
 
     <div class="sono-layout">
-      <details class="sono-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
-        <summary>
-          <span class="sono-atualizacao__icone"><app-icon name="moon" [size]="21" /></span>
-          <span>
-            <strong>{{ editandoId() ? 'Editar rotina de sono' : 'Registrar rotina de sono' }}</strong>
-            <small>{{ ultimoRegistro() ? 'Registre um novo dia quando quiser observar a rotina.' : 'Conte apenas o que conseguiu perceber hoje.' }}</small>
-          </span>
-        </summary>
-      <form class="pueria-card sono-form" [formGroup]="form" (ngSubmit)="salvar()">
-        <div class="sono-form__header">
-          <div>
-            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
-            <h2>Rotina de sono</h2>
-          </div>
-          @if (editandoId()) {
-            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
-          }
-        </div>
-
-        <div class="sono-etapas" aria-label="Etapas do registro">
-          <span [class.sono-etapas__passo--ativo]="etapaRegistro() === 1">1. Descanso</span>
-          <span [class.sono-etapas__passo--ativo]="etapaRegistro() === 2">2. Rotina e sinais</span>
-        </div>
+      <section class="sono-atualizacao">
+        <button type="button" class="sono-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="20" />{{ ultimoRegistro() ? 'Registrar sono' : 'Registrar o primeiro sono' }}</button>
+      </section>
+      <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar rotina de sono' : 'Rotina de sono'" descricao="Registre só o que conseguiu observar hoje." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
+      <form class="sono-form" [formGroup]="form" (ngSubmit)="salvar()">
 
         @if (etapaRegistro() === 1) {
         <div class="sono-form__grid">
@@ -216,7 +198,7 @@
         <small class="sono-etapas__tempo">Você pode registrar somente o que observou hoje.</small>
         }
       </form>
-      </details>
+      </app-registro-rapido>
 
       <aside class="pueria-card sono-historico">
         <p class="pueria-eyebrow">Histórico</p>

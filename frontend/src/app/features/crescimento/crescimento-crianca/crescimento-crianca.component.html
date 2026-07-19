@@ -170,40 +170,30 @@
     }
 
     <div class="crescimento-page__grid">
-      <details class="crescimento-atualizacao" [open]="medidasOrdenadas().length === 0 || editandoId() !== null">
-        <summary>
-          <span class="crescimento-atualizacao__icone"><app-icon name="chart" [size]="20" /></span>
-          <span>
-            <strong>{{ editandoId() ? 'Editar medida' : 'Registrar nova medida' }}</strong>
-            <small>{{ medidasOrdenadas().length === 0 ? 'Comece o histórico com a primeira medida.' : 'Atualize peso, comprimento ou perímetro cefálico.' }}</small>
-          </span>
-        </summary>
-        <section class="pueria-card crescimento-form" aria-labelledby="crescimento-form-titulo">
-          <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar medida' : 'Nova medida' }}</p>
-          <h2 id="crescimento-form-titulo">{{ editandoId() ? 'Editar registro' : 'Registrar crescimento' }}</h2>
+      <section class="crescimento-atualizacao">
+        <button type="button" class="crescimento-atualizacao__abrir pueria-button" (click)="abrirRegistro()">
+          <app-icon name="chart" [size]="20" />
+          {{ medidasOrdenadas().length === 0 ? 'Registrar a primeira medida' : 'Registrar nova medida' }}
+        </button>
+      </section>
+      <app-registro-rapido
+        [aberto]="registroAberto()"
+        [titulo]="editandoId() ? 'Editar medida' : 'Registrar crescimento'"
+        descricao="Registre somente as medidas disponíveis hoje."
+        [etapa]="etapaRegistro()"
+        [totalEtapas]="2"
+        (fechar)="fecharRegistro()"
+      >
+        <section class="crescimento-form" aria-labelledby="crescimento-form-titulo">
 
           <form [formGroup]="form" (ngSubmit)="salvar()">
+          @if (etapaRegistro() === 1) {
           <label>
             Data da medição
             <input type="text" inputmode="numeric" autocomplete="off" formControlName="dataMedicao" placeholder="dd/mm/aaaa" />
           </label>
 
           <div class="crescimento-form__linha">
-            <label>
-              Peso (kg)
-              <input type="text" inputmode="decimal" autocomplete="off" formControlName="pesoKg" placeholder="Ex.: 7,35" />
-            </label>
-            <label>
-              Comprimento ou estatura (cm)
-              <input type="text" inputmode="decimal" autocomplete="off" formControlName="comprimentoCm" placeholder="Ex.: 68,5" />
-            </label>
-          </div>
-
-          <div class="crescimento-form__linha">
-            <label>
-              Perímetro cefálico (cm)
-              <input type="text" inputmode="decimal" autocomplete="off" formControlName="perimetroCefalicoCm" placeholder="Ex.: 43,2" />
-            </label>
             <label>
               Onde foi medido
               <select formControlName="origem">
@@ -229,6 +219,24 @@
           @if (form.controls.origem.value === 'CASA') {
             <p class="crescimento-form__aviso">Medidas feitas em casa podem variar mais. Registrar a forma como foi medida ajuda a comparar a evolução com mais cuidado.</p>
           }
+          <button type="button" class="pueria-button" (click)="avancarEtapa()">Continuar</button>
+          } @else {
+          <div class="crescimento-form__linha">
+            <label>
+              Peso (kg)
+              <input type="text" inputmode="decimal" autocomplete="off" formControlName="pesoKg" placeholder="Ex.: 7,35" />
+            </label>
+            <label>
+              Comprimento ou estatura (cm)
+              <input type="text" inputmode="decimal" autocomplete="off" formControlName="comprimentoCm" placeholder="Ex.: 68,5" />
+            </label>
+          </div>
+          <div class="crescimento-form__linha">
+            <label>
+              Perímetro cefálico (cm)
+              <input type="text" inputmode="decimal" autocomplete="off" formControlName="perimetroCefalicoCm" placeholder="Ex.: 43,2" />
+            </label>
+          </div>
 
           <label>
             Observações
@@ -236,18 +244,15 @@
           </label>
 
           <div class="crescimento-form__actions">
-            @if (editandoId()) {
-              <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvando()" (click)="cancelarEdicao()">
-                Cancelar edição
-              </button>
-            }
+            <button type="button" class="pueria-button pueria-button--secondary" [disabled]="salvando()" (click)="voltarEtapa()">Voltar</button>
             <button type="submit" class="pueria-button" [disabled]="salvando()">
               {{ salvando() ? 'Salvando...' : 'Salvar medida' }}
             </button>
           </div>
+          }
           </form>
         </section>
-      </details>
+      </app-registro-rapido>
 
       <aside class="crescimento-side">
         <section class="pueria-card crescimento-resumo">

@@ -9,6 +9,7 @@ import { CriancasService } from '../../criancas/criancas.service';
 import { TransitoIntestinalService } from '../transito-intestinal.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { ToastService } from '../../../core/toast/toast.service';
+import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
 type BristolOpcao = {
@@ -21,7 +22,7 @@ type BristolOpcao = {
 
 @Component({
   selector: 'app-transito-intestinal-crianca',
-  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent, RegistroRapidoComponent],
   templateUrl: './transito-intestinal-crianca.component.html',
   styleUrl: './transito-intestinal-crianca.component.scss'
 })
@@ -57,6 +58,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly editandoId = signal('');
+  readonly registroAberto = signal(false);
   readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -182,6 +184,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
             return [...semAtual, registro];
           });
           this.cancelarEdicao();
+          this.registroAberto.set(false);
           this.aviso.set('Registro intestinal salvo.');
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -193,6 +196,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     this.etapaRegistro.set(1);
     this.erro.set('');
     this.aviso.set('');
+    this.registroAberto.set(true);
     this.form.patchValue({
       dataRegistro: this.formatarEntradaData(registro.dataRegistro),
       tipoFezes: registro.tipoFezes,
@@ -234,6 +238,18 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
       preocupacaoFamilia: false,
       observacao: ''
     });
+  }
+
+  abrirRegistro(): void {
+    this.erro.set('');
+    this.aviso.set('');
+    this.etapaRegistro.set(1);
+    this.registroAberto.set(true);
+  }
+
+  fecharRegistro(): void {
+    this.registroAberto.set(false);
+    this.cancelarEdicao();
   }
 
   tipoSelecionado(): TipoFezesBristol {

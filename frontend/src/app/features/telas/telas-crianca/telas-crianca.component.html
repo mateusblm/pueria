@@ -93,29 +93,11 @@
     }
 
     <div class="telas-layout">
-      <details class="telas-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
-        <summary>
-          <span class="telas-atualizacao__icone"><app-icon name="smartphone" [size]="21" /></span>
-          <span>
-            <strong>{{ editandoId() ? 'Editar registro de telas' : 'Registrar telas na rotina' }}</strong>
-            <small>{{ ultimoRegistro() ? 'Registre um novo retrato da rotina quando ela mudar.' : 'Comece por uma estimativa de um dia comum.' }}</small>
-          </span>
-        </summary>
-      <form class="pueria-card telas-form" [formGroup]="form" (ngSubmit)="salvar()">
-        <div class="telas-form__header">
-          <div>
-            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
-            <h2>Mapa da rotina com telas</h2>
-          </div>
-          @if (editandoId()) {
-            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
-          }
-        </div>
-
-        <div class="telas-etapas" aria-label="Etapas do registro">
-          <span [class.telas-etapas__passo--ativo]="etapaRegistro() === 1">1. Tempo e aparelhos</span>
-          <span [class.telas-etapas__passo--ativo]="etapaRegistro() === 2">2. Contexto e apoio</span>
-        </div>
+      <section class="telas-atualizacao">
+        <button type="button" class="telas-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="20" />{{ ultimoRegistro() ? 'Registrar telas' : 'Registrar a rotina com telas' }}</button>
+      </section>
+      <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro de telas' : 'Telas na rotina'" descricao="Uma estimativa de um dia comum já ajuda." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
+      <form class="telas-form" [formGroup]="form" (ngSubmit)="salvar()">
 
         @if (etapaRegistro() === 1) {
         <section class="telas-form__bloco telas-form__tempo">
@@ -241,7 +223,7 @@
         <small class="telas-etapas__tempo">Você pode registrar somente o que observou na rotina.</small>
         }
       </form>
-      </details>
+      </app-registro-rapido>
 
       <aside class="pueria-card telas-historico">
         <p class="pueria-eyebrow">Histórico</p>

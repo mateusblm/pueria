@@ -9,6 +9,7 @@ import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, 
 import { CrescimentoService } from '../crescimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 import { ToastService } from '../../../core/toast/toast.service';
+import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type PontoGraficoCrescimento = {
   label: string;
@@ -50,7 +51,7 @@ type DetalheIndicadorCrescimento = {
 
 @Component({
   selector: 'app-crescimento-crianca',
-  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent, RegistroRapidoComponent],
   templateUrl: './crescimento-crianca.component.html',
   styleUrl: './crescimento-crianca.component.scss'
 })
@@ -79,6 +80,8 @@ export class CrescimentoCriancaComponent implements OnInit {
   readonly removendoId = signal('');
   readonly confirmandoRemocaoId = signal('');
   readonly editandoId = signal('');
+  readonly registroAberto = signal(false);
+  readonly etapaRegistro = signal<1 | 2>(1);
   readonly erro = signal('');
   readonly aviso = signal('');
   private readonly notificarErro = effect(() => {
@@ -193,6 +196,7 @@ export class CrescimentoCriancaComponent implements OnInit {
           });
           this.recarregarCurvas();
           this.cancelarEdicao();
+          this.registroAberto.set(false);
           this.aviso.set('Medida salva no histórico de crescimento.');
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -204,6 +208,8 @@ export class CrescimentoCriancaComponent implements OnInit {
     this.confirmandoRemocaoId.set('');
     this.aviso.set('');
     this.erro.set('');
+    this.etapaRegistro.set(1);
+    this.registroAberto.set(true);
     this.form.patchValue({
       dataMedicao: this.formatarEntradaData(medida.dataMedicao),
       pesoKg: this.formatarEntradaDecimal(medida.pesoKg),
@@ -226,6 +232,32 @@ export class CrescimentoCriancaComponent implements OnInit {
       responsavelMedicao: 'NAO_INFORMADO',
       observacao: ''
     });
+  }
+
+  abrirRegistro(): void {
+    this.erro.set('');
+    this.aviso.set('');
+    this.etapaRegistro.set(1);
+    this.registroAberto.set(true);
+  }
+
+  fecharRegistro(): void {
+    this.registroAberto.set(false);
+    this.cancelarEdicao();
+  }
+
+  avancarEtapa(): void {
+    try {
+      this.lerDataMedicao(this.form.controls.dataMedicao.value);
+      this.erro.set('');
+      this.etapaRegistro.set(2);
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise a data da medição.');
+    }
+  }
+
+  voltarEtapa(): void {
+    this.etapaRegistro.set(1);
   }
 
   pedirRemocao(medidaId: string): void {

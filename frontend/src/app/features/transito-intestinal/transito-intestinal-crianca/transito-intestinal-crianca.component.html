@@ -90,29 +90,11 @@
     }
 
     <div class="intestinal-layout">
-      <details class="intestinal-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
-        <summary>
-          <span class="intestinal-atualizacao__icone"><app-icon name="toilet" [size]="21" /></span>
-          <span>
-            <strong>{{ editandoId() ? 'Editar registro do dia' : 'Registrar um dia' }}</strong>
-            <small>{{ ultimoRegistro() ? 'Acrescente um novo dia quando fizer sentido observar o padrão.' : 'Comece por um dia comum, sem precisar preencher tudo.' }}</small>
-          </span>
-        </summary>
-      <form class="pueria-card intestinal-form" [formGroup]="form" (ngSubmit)="salvar()">
-        <div class="intestinal-form__header">
-          <div>
-            <p class="pueria-eyebrow">{{ editandoId() ? 'Atualizar registro' : 'Novo registro' }}</p>
-            <h2>Registro do dia</h2>
-          </div>
-          @if (editandoId()) {
-            <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar edição</button>
-          }
-        </div>
-
-        <div class="intestinal-etapas" aria-label="Etapas do registro">
-          <span [class.intestinal-etapas__passo--ativo]="etapaRegistro() === 1">1. Dia</span>
-          <span [class.intestinal-etapas__passo--ativo]="etapaRegistro() === 2">2. Aspecto e sinais</span>
-        </div>
+      <section class="intestinal-atualizacao">
+        <button type="button" class="intestinal-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="toilet" [size]="20" />{{ ultimoRegistro() ? 'Registrar um novo dia' : 'Registrar o primeiro dia' }}</button>
+      </section>
+      <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro intestinal' : 'Registro intestinal'" descricao="Comece pelo que observou hoje; não precisa preencher tudo." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
+      <form class="intestinal-form" [formGroup]="form" (ngSubmit)="salvar()">
 
         @if (etapaRegistro() === 1) {
         <div class="intestinal-form__grid">
@@ -207,7 +189,7 @@
         <small class="intestinal-etapas__tempo">Você pode registrar somente o que observou hoje.</small>
         }
       </form>
-      </details>
+      </app-registro-rapido>
 
       <aside class="pueria-card intestinal-historico">
         <p class="pueria-eyebrow">Histórico</p>

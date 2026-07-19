@@ -9,12 +9,13 @@ import { CriancasService } from '../../criancas/criancas.service';
 import { SonoService } from '../sono.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { ToastService } from '../../../core/toast/toast.service';
+import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
 
 @Component({
   selector: 'app-sono-crianca',
-  imports: [ReactiveFormsModule, RouterLink, AppIconComponent],
+  imports: [ReactiveFormsModule, RouterLink, AppIconComponent, RegistroRapidoComponent],
   templateUrl: './sono-crianca.component.html',
   styleUrl: './sono-crianca.component.scss'
 })
@@ -50,6 +51,7 @@ export class SonoCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly editandoId = signal('');
+  readonly registroAberto = signal(false);
   readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -192,6 +194,7 @@ export class SonoCriancaComponent implements OnInit {
             return [...semAtual, registro];
           });
           this.cancelarEdicao();
+          this.registroAberto.set(false);
           this.aviso.set('Registro de sono salvo.');
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -203,6 +206,7 @@ export class SonoCriancaComponent implements OnInit {
     this.etapaRegistro.set(1);
     this.erro.set('');
     this.aviso.set('');
+    this.registroAberto.set(true);
     this.form.patchValue({
       dataRegistro: this.formatarEntradaData(registro.dataRegistro),
       horarioDormiu: this.formatarHora(registro.horarioDormiu),
@@ -258,6 +262,18 @@ export class SonoCriancaComponent implements OnInit {
       preocupacaoFamilia: false,
       observacao: ''
     });
+  }
+
+  abrirRegistro(): void {
+    this.erro.set('');
+    this.aviso.set('');
+    this.etapaRegistro.set(1);
+    this.registroAberto.set(true);
+  }
+
+  fecharRegistro(): void {
+    this.registroAberto.set(false);
+    this.cancelarEdicao();
   }
 
   formatarData(data: string): string {
