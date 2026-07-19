@@ -34,7 +34,6 @@ type GraficoCrescimento = {
   dataInicial: string;
   valorAtual: string;
   dataAtual: string;
-  marcador: number;
   pontos: PontoGraficoCrescimento[];
   linhaTrajetoria: string;
   ariaGrafico: string;
@@ -510,30 +509,34 @@ export class CrescimentoCriancaComponent implements OnInit {
 
     const zMin = -3.5;
     const zMax = 3.5;
-    const larguraGrafico = 320;
-    const alturaGrafico = 160;
-    const margemGrafico = 22;
-    const posicaoPorZ = (zScore: number) => ((Math.max(zMin, Math.min(zMax, zScore)) - zMin) / (zMax - zMin)) * 100;
+    const larguraGrafico = 360;
+    const alturaGrafico = 220;
+    const margemEsquerda = 40;
+    const margemDireita = 20;
+    const margemSuperior = 18;
+    const margemInferior = 42;
     const yPorZ = (zScore: number) => {
       const zLimitado = Math.max(zMin, Math.min(zMax, zScore));
-      const areaUtil = alturaGrafico - margemGrafico * 2;
-      return margemGrafico + ((zMax - zLimitado) / (zMax - zMin)) * areaUtil;
+      const areaUtil = alturaGrafico - margemSuperior - margemInferior;
+      return margemSuperior + ((zMax - zLimitado) / (zMax - zMin)) * areaUtil;
     };
-    const xPorIndice = (indice: number, total: number) => {
-      if (total === 1) {
-        return larguraGrafico / 2;
+    const idadeInicial = resultados[0]?.avaliacao.idadeDias ?? 0;
+    const idadeFinal = resultados.at(-1)?.avaliacao.idadeDias ?? idadeInicial;
+    const xPorIdade = (idadeDias: number) => {
+      if (idadeInicial === idadeFinal) {
+        return (margemEsquerda + larguraGrafico - margemDireita) / 2;
       }
-      const areaUtil = larguraGrafico - margemGrafico * 2;
-      return margemGrafico + (indice / (total - 1)) * areaUtil;
+      const areaUtil = larguraGrafico - margemEsquerda - margemDireita;
+      return margemEsquerda + ((idadeDias - idadeInicial) / (idadeFinal - idadeInicial)) * areaUtil;
     };
 
-    const pontos = resultados.map(({ avaliacao, resultado }, indice) => {
+    const pontos = resultados.map(({ avaliacao, resultado }) => {
       return {
         label: this.formatarData(avaliacao.dataMedicao),
         valor: `${this.formatarNumero(resultado.valor, ` ${resultado.unidade}`)}`,
         zScore: resultado.zScore,
         percentil: resultado.percentil,
-        x: Number(xPorIndice(indice, resultados.length).toFixed(2)),
+        x: Number(xPorIdade(avaliacao.idadeDias).toFixed(2)),
         y: Number(yPorZ(resultado.zScore).toFixed(2)),
         cor: this.corSituacao(resultado.classificacao)
       };
@@ -557,10 +560,9 @@ export class CrescimentoCriancaComponent implements OnInit {
       dataInicial: pontos[0]?.label ?? '',
       valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,
       dataAtual: pontos.at(-1)?.label ?? '',
-      marcador: Number(posicaoPorZ(recente.zScore).toFixed(2)),
       pontos,
       linhaTrajetoria: pontos.map((ponto) => `${ponto.x},${ponto.y}`).join(' '),
-      ariaGrafico: `Trajetória de ${this.tituloIndicador(indicador)} na curva OMS com ${pontos.length} medida${pontos.length === 1 ? '' : 's'}.`,
+      ariaGrafico: `Trajetória de ${this.tituloIndicador(indicador)} na referência OMS, com ${pontos.length} medida${pontos.length === 1 ? '' : 's'} ao longo do tempo. A faixa esperada vai de menos dois a mais dois desvios-padrão.`,
       tecnico: {
         percentil: this.formatarPercentil(recente.percentil),
         zScore: this.formatarZScore(recente.zScore),

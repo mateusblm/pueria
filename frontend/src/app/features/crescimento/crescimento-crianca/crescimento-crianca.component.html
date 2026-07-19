@@ -73,17 +73,27 @@
                 </button>
               </div>
 
-                <div class="crescimento-linha" role="img" [attr.aria-label]="grafico.ariaGrafico">
-                  <svg viewBox="0 0 320 160" preserveAspectRatio="none" aria-hidden="true">
-                    <rect x="22" y="48.86" width="276" height="62.28" rx="8" fill="#dff3e5"></rect>
-                    <line x1="22" y1="80" x2="298" y2="80" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
-                    <line x1="22" y1="48.86" x2="298" y2="48.86" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
-                    <line x1="22" y1="111.14" x2="298" y2="111.14" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
+                <figure class="crescimento-linha" role="img" [attr.aria-label]="grafico.ariaGrafico">
+                  <svg viewBox="0 0 360 220" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                    <rect x="40" y="52.29" width="300" height="91.42" rx="10" fill="#e4f3e7"></rect>
+                    <line x1="40" y1="29.43" x2="340" y2="29.43" stroke="#eee3dc" stroke-dasharray="4 5"></line>
+                    <line x1="40" y1="52.29" x2="340" y2="52.29" stroke="#b7d5be" stroke-dasharray="4 5"></line>
+                    <line x1="40" y1="98" x2="340" y2="98" stroke="#91b99a" stroke-width="1.4"></line>
+                    <line x1="40" y1="143.71" x2="340" y2="143.71" stroke="#b7d5be" stroke-dasharray="4 5"></line>
+                    <line x1="40" y1="166.57" x2="340" y2="166.57" stroke="#eee3dc" stroke-dasharray="4 5"></line>
+                    <line x1="40" y1="178" x2="340" y2="178" stroke="#c7bdb6" stroke-width="1.2"></line>
+                    <text x="8" y="33" fill="#81746e" font-size="10">+3</text>
+                    <text x="8" y="56" fill="#587862" font-size="10">+2</text>
+                    <text x="14" y="102" fill="#587862" font-size="10">0</text>
+                    <text x="8" y="148" fill="#587862" font-size="10">−2</text>
+                    <text x="8" y="171" fill="#81746e" font-size="10">−3</text>
+                    <text x="40" y="204" fill="#81746e" font-size="10">{{ grafico.dataInicial }}</text>
+                    <text x="340" y="204" fill="#81746e" font-size="10" text-anchor="end">{{ grafico.dataAtual }}</text>
                     @if (grafico.pontos.length > 1) {
-                      <polyline [attr.points]="grafico.linhaTrajetoria" fill="none" [attr.stroke]="grafico.corTrajetoria" stroke-linecap="round" stroke-width="3"></polyline>
+                      <polyline [attr.points]="grafico.linhaTrajetoria" fill="none" [attr.stroke]="grafico.corTrajetoria" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"></polyline>
                     }
                     @for (ponto of grafico.pontos; track ponto.label) {
-                      <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="4.5" [attr.fill]="ponto.cor" stroke="#fff" stroke-width="2">
+                      <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="5.5" [attr.fill]="ponto.cor" stroke="#fffdfb" stroke-width="2.5">
                         <title>{{ ponto.label }} - {{ ponto.valor }}</title>
                       </circle>
                     }
@@ -98,25 +108,10 @@
                       <span>Primeira medida: {{ grafico.valorAtual }} em {{ grafico.dataAtual }}</span>
                     </div>
                   }
-                </div>
+                  <figcaption>A área verde mostra a faixa esperada na referência. Cada ponto é uma medida; a linha mostra a trajetória.</figcaption>
+                </figure>
 
-                <div class="crescimento-regua" role="img" [attr.aria-label]="'Posição de ' + grafico.titulo + ' na curva OMS: ' + grafico.resumo">
-                  <div class="crescimento-regua__labels">
-                    <span>Abaixo</span>
-                    <span>Faixa esperada</span>
-                    <span>Acima</span>
-                  </div>
-                  <div class="crescimento-regua__trilho">
-                    <span class="crescimento-regua__baixo"></span>
-                    <span class="crescimento-regua__esperado"></span>
-                    <span class="crescimento-regua__alto"></span>
-                    <span class="crescimento-regua__marcador" [class]="'crescimento-regua__marcador crescimento-regua__marcador--' + grafico.situacao" [style.left.%]="grafico.marcador"></span>
-                  </div>
-                  <div class="crescimento-regua__valor" [style.left.%]="grafico.marcador">
-                    {{ grafico.valorAtual }}
-                  </div>
-                  <span [class]="grafico.classe">{{ grafico.resumo }}</span>
-                </div>
+                <span [class]="grafico.classe">{{ grafico.resumo }}</span>
 
               <div class="crescimento-grafico__legenda">
                   <span>Última medida: {{ grafico.dataAtual }}</span>
