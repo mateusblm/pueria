@@ -498,7 +498,7 @@ export class MarcosCriancaComponent implements OnInit {
     return `marco-status marco-status--${status.toLowerCase().replaceAll('_', '-')}`;
   }
 
-  imagemMarco(marco: MarcoDesenvolvimento): string {
+  imagemMarco(marco: MarcoDesenvolvimento, variante: 'desktop' | 'mobile'): string {
     const primeiroNumeroPorIdade: Partial<Record<number, number>> = {
       2: 1,
       4: 9,
@@ -515,7 +515,7 @@ export class MarcosCriancaComponent implements OnInit {
     const numeroDaIlustracao = primeiroNumero === undefined ? NaN : primeiroNumero + posicaoNaIdade - 1;
 
     if (Number.isInteger(numeroDaIlustracao) && numeroDaIlustracao >= 1 && numeroDaIlustracao <= 65) {
-      return `/assets/desenvolvimento/marcos/${String(numeroDaIlustracao).padStart(2, '0')}.png`;
+      return `/assets/desenvolvimento/marcos/${variante}/${String(numeroDaIlustracao).padStart(2, '0')}.webp`;
     }
 
     return this.imagemArea(marco.area);
