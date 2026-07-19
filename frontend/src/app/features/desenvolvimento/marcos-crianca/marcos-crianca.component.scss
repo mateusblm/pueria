@@ -317,9 +317,14 @@
 .etapa-card__media {
   min-height: 100%;
   background: #f6f0f8;
+  overflow: hidden;
 }
 
 .etapa-card__media img {
+  position: relative;
+  left: -11%;
+  width: 111%;
+  max-width: none;
   height: 100%;
   min-height: 300px;
   max-height: none;

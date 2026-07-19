@@ -76,9 +76,10 @@
     @if (modo() === 'responder') {
       @if (marcoAtual(); as marco) {
         <article class="pueria-card etapa-card">
-          <div class="etapa-card__media">
-            <img [src]="imagemMarco(marco)" [alt]="'Ilustração do marco: ' + marco.descricao" />
-          </div>
+          <picture class="etapa-card__media">
+            <source media="(max-width: 700px)" [srcset]="imagemMarco(marco, 'mobile')" />
+            <img [src]="imagemMarco(marco, 'desktop')" [alt]="'Ilustração do marco: ' + marco.descricao" />
+          </picture>
 
           <div class="etapa-card__body">
             <div class="etapa-card__meta">
