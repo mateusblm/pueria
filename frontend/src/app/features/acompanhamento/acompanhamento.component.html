@@ -38,14 +38,13 @@
     @let foco = criancaEmFoco();
     @let progressoAtual = progresso(foco.marcos);
     @let pontos = pontosAtencao(foco.marcos);
-    @let proximoPasso = proximosPassos(foco).at(0);
 
     <section class="acompanhamento-home">
       <header class="acompanhamento-home__saudacao">
         <div>
           <p class="pueria-eyebrow">Início</p>
-          <h1>{{ foco.crianca.nome }} tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-          <p>Um lugar para escolher o próximo passo com calma.</p>
+          <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+          <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
         </div>
         <a routerLink="/criancas" class="acompanhamento-home__perfil">Gerenciar crianças</a>
       </header>
@@ -79,16 +78,29 @@
         </section>
       }
 
-      @if (proximoPasso; as passo) {
-        <article class="pueria-card inicio-proximo-passo">
-          <span class="inicio-proximo-passo__icone"><app-icon [name]="passo.icone" [size]="25" /></span>
-          <div>
-            <p class="pueria-eyebrow">Próximo passo</p>
-            <h2>{{ passo.titulo }}</h2>
-            <p>{{ passo.detalhe }}</p>
+      @if (progressoAtual.respondidos === 0) {
+        <section class="pueria-card inicio-primeiros-passos">
+          <div><p class="pueria-eyebrow">Comece por aqui</p><h2>Vamos montar a primeira visão de {{ foco.crianca.nome }}</h2><p>Não é preciso preencher tudo. Comece pelos marcos desta fase e acrescente observações apenas quando forem úteis.</p></div>
+          <div class="inicio-primeiros-passos__etapas">
+            <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }"><span>1</span><div><strong>Conhecer os marcos da fase</strong><small>Responda no seu ritmo, a partir do que observa na rotina.</small></div><app-icon name="chevronRight" [size]="18" /></a>
+            <a [routerLink]="['/criancas', foco.crianca.id, 'observacoes']"><span>2</span><div><strong>Guardar uma observação, se fizer sentido</strong><small>Sono, alimentação, saúde e contexto ficam disponíveis quando você precisar.</small></div><app-icon name="chevronRight" [size]="18" /></a>
           </div>
-          <a [routerLink]="passo.rota" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-button">Abrir <app-icon name="chevronRight" [size]="18" /></a>
-        </article>
+        </section>
+      } @else if (experimentosRecomendados(foco).length > 0) {
+        <section class="pueria-card inicio-experimentos">
+          <div class="inicio-experimentos__cabecalho"><div><p class="pueria-eyebrow">Para a rotina</p><h2>Experimentos recomendados</h2><p>Ideias simples escolhidas a partir das respostas dos marcos. Use apenas o que combinar com o momento de vocês.</p></div><a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }">Ver todos</a></div>
+          <div class="inicio-experimentos__lista">
+            @for (estimulo of experimentosRecomendados(foco); track estimulo.id) {
+              <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }">
+                <span class="inicio-experimentos__icone"><app-icon name="sparkles" [size]="19" /></span>
+                <span><strong>{{ estimulo.titulo }}</strong><small>{{ estimulo.descricao }}</small></span>
+                <app-icon name="chevronRight" [size]="18" />
+              </a>
+            }
+          </div>
+        </section>
+      } @else {
+        <section class="pueria-card inicio-primeiros-passos"><div><p class="pueria-eyebrow">Neurodesenvolvimento</p><h2>Que tal revisitar os marcos?</h2><p>As respostas da fase atual já foram registradas. Você pode rever os resultados ou guardar novas observações da rotina quando precisar.</p></div><a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }" class="pueria-button">Ver resultados</a></section>
       }
 
       <section class="inicio-destinos" aria-label="Áreas principais">

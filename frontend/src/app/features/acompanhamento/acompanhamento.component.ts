@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { Crianca, Parentesco, Sexo, TipoParto } from '../../shared/models/crianca.model';
-import { EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
+import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
 import { CriancasService } from '../criancas/criancas.service';
 import { DesenvolvimentoService } from '../desenvolvimento/desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
@@ -12,6 +12,7 @@ import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/
 type ResumoCrianca = {
   crianca: Crianca;
   marcos: MarcoDesenvolvimento[];
+  estimulos: EstimuloDesenvolvimento[];
   relatos: RelatoDesenvolvimento[];
   trajetoria: EventoTrajetoriaDesenvolvimento[];
   erro?: string;
@@ -111,11 +112,12 @@ export class AcompanhamentoComponent implements OnInit {
           return forkJoin(criancas.map((crianca) =>
             forkJoin({
               marcos: this.desenvolvimentoService.listarMarcos(crianca.id),
+              estimulos: this.desenvolvimentoService.listarEstimulos(crianca.id).pipe(catchError(() => of([]))),
               relatos: this.desenvolvimentoService.listarRelatos(crianca.id).pipe(catchError(() => of([]))),
               trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([])))
             }).pipe(
-              map(({ marcos, relatos, trajetoria }) => ({ crianca, marcos, relatos, trajetoria })),
-              catchError(() => of({ crianca, marcos: [], relatos: [], trajetoria: [], erro: 'Não foi possível carregar o desenvolvimento agora.' }))
+              map(({ marcos, estimulos, relatos, trajetoria }) => ({ crianca, marcos, estimulos, relatos, trajetoria })),
+              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
         }),
@@ -270,6 +272,10 @@ export class AcompanhamentoComponent implements OnInit {
     return marcos.filter((marco) =>
       marco.idadeMeses === idade && (marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA')
     ).length;
+  }
+
+  experimentosRecomendados(resumo: ResumoCrianca): EstimuloDesenvolvimento[] {
+    return resumo.estimulos.filter((estimulo) => !estimulo.experimentado).slice(0, 3);
   }
 
   labelPontosAtencao(total: number): string {
