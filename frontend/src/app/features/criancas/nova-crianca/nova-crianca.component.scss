@@ -103,8 +103,26 @@
 }
 
 @media (max-width: 719px) {
+  .crianca-form-page {
+    padding-bottom: 174px;
+  }
+
   .crianca-form__erro-desktop {
     display: none;
+  }
+
+  .crianca-form__actions {
+    position: fixed;
+    right: 14px;
+    bottom: calc(74px + env(safe-area-inset-bottom));
+    left: 14px;
+    z-index: 16;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    padding: 10px;
+    border: 1px solid #eedbd2;
+    border-radius: var(--pueria-raio-menor);
+    background: rgba(255, 253, 250, .98);
+    box-shadow: 0 14px 32px rgba(70, 45, 34, .16);
   }
 }
 
@@ -147,8 +165,6 @@
 }
 
 .crianca-form__actions {
-  position: sticky;
-  bottom: 14px;
   padding: 12px;
   border: 1px solid #eedbd2;
   border-radius: var(--pueria-raio-menor);

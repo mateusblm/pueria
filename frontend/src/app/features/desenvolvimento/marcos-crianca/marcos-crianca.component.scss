@@ -171,8 +171,16 @@
 /* Fluxo principal: uma descoberta por vez, com detalhes disponíveis só quando desejados. */
 .marcos-page {
   width: min(100%, 880px);
+  max-width: 100%;
   margin: 0 auto;
   gap: 16px;
+}
+
+.marcos-page > *,
+.marcos-page__hero > div,
+.painel-idade__header > div,
+.etapa-card__meta > * {
+  min-width: 0;
 }
 
 .marcos-page__hero {
@@ -391,6 +399,10 @@
 }
 
 @media (max-width: 480px) {
+  .marcos-page__hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .marcos-page__hero-visual {
     display: none;
   }

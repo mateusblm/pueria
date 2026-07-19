@@ -310,22 +310,23 @@
           <button type="button" class="alimentacao-modal__fechar" aria-label="Fechar seleção de alimentos" (click)="fecharModalAlimentos()">×</button>
         </div>
 
-        <label class="alimentacao-modal__busca">
-          <span>Buscar alimento</span>
-          <input type="search" [value]="buscaAlimento()" (input)="alterarBuscaAlimento($event)" placeholder="Ex.: banana, cenoura, feijão" />
-        </label>
+        <div class="alimentacao-modal__conteudo">
+          <label class="alimentacao-modal__busca">
+            <span>Buscar alimento</span>
+            <input type="search" [value]="buscaAlimento()" (input)="alterarBuscaAlimento($event)" placeholder="Ex.: banana, cenoura, feijão" />
+          </label>
 
-        <div class="alimentacao-modal__grupos" aria-label="Grupos de alimentos">
-          @for (grupo of gruposAlimentos; track grupo.valor) {
-            <button
-              type="button"
-              [class.alimentacao-modal__grupo--ativo]="grupoAlimentoAtivo() === grupo.valor"
-              (click)="selecionarGrupoAlimento(grupo.valor)"
-            >
-              {{ grupo.label }}
-            </button>
-          }
-        </div>
+          <div class="alimentacao-modal__grupos" aria-label="Grupos de alimentos">
+            @for (grupo of gruposAlimentos; track grupo.valor) {
+              <button
+                type="button"
+                [class.alimentacao-modal__grupo--ativo]="grupoAlimentoAtivo() === grupo.valor"
+                (click)="selecionarGrupoAlimento(grupo.valor)"
+              >
+                {{ grupo.label }}
+              </button>
+            }
+          </div>
 
         @if (orientacaoGrupoAtivo()) {
           <p class="alimentacao-modal__orientacao">{{ orientacaoGrupoAtivo() }}</p>
@@ -455,6 +456,7 @@
             }
           </div>
         }
+        </div>
 
         <div class="alimentacao-modal__rodape">
           <span>{{ alimentosSelecionados().length }} alimento(s) marcado(s)</span>

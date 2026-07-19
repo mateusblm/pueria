@@ -326,15 +326,26 @@
 
 .alimentacao-modal__painel {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 1rem;
   width: min(860px, 100%);
   max-height: min(92vh, 820px);
-  overflow: auto;
+  overflow: hidden;
   border: 1px solid rgba(202, 45, 65, 0.14);
   border-radius: 18px;
   background: #fffaf7;
   box-shadow: 0 28px 80px rgba(64, 40, 43, 0.28);
   padding: 1.35rem;
+}
+
+.alimentacao-modal__conteudo {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-right: .15rem;
 }
 
 .alimentacao-modal__topo {
@@ -612,6 +623,86 @@
   gap: 0.75rem;
   border-top: 1px solid rgba(147, 43, 57, 0.12);
   padding-top: 1rem;
+}
+
+@media (max-width: 560px) {
+  .alimentacao-modal {
+    place-items: stretch;
+    padding: 0;
+  }
+
+  .alimentacao-modal__painel {
+    width: 100%;
+    max-height: none;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .alimentacao-modal__topo {
+    align-items: center;
+  }
+
+  .alimentacao-modal__topo .pueria-eyebrow,
+  .alimentacao-modal__topo p:not(.pueria-eyebrow) {
+    display: none;
+  }
+
+  .alimentacao-modal__topo h2 {
+    font-size: 1.25rem;
+  }
+
+  .alimentacao-modal__conteudo {
+    gap: .85rem;
+    margin: 0 -1rem;
+    padding: 0 1rem .25rem;
+  }
+
+  .alimentacao-modal__busca > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .alimentacao-modal__grupos {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: .25rem;
+  }
+
+  .alimentacao-modal__grupos button {
+    flex: 0 0 auto;
+  }
+
+  .alimentacao-modal__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+  }
+
+  .alimentacao-modal__alimento {
+    min-height: 68px;
+    padding: .7rem;
+  }
+
+  .alimentacao-modal__rodape {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    border-top: 1px solid rgba(147, 43, 57, .16);
+    background: #fffaf7;
+    box-shadow: 0 -10px 20px rgba(64, 40, 43, .06);
+    margin: 0 -1rem -1rem;
+    padding: .85rem 1rem calc(.85rem + env(safe-area-inset-bottom));
+  }
+
+  .alimentacao-modal__rodape .pueria-button {
+    min-height: 46px;
+    white-space: nowrap;
+  }
 }
 
 /* A leitura da rotina vem antes do preenchimento: editar continua acessível, sem dominar a página. */
