@@ -306,9 +306,12 @@ export class MarcosCriancaComponent implements OnInit {
   }
 
   selecionarIdade(idadeMeses: number): void {
+    const modoAtual = this.modo();
     this.idadeSelecionada.set(idadeMeses);
-    this.modo.set('visao');
     this.indiceEtapa.set(0);
+    if (modoAtual === 'responder') {
+      this.posicionarPrimeiraPendente();
+    }
     this.carregarEstimuloParaMarcoAtual();
     this.carregarExperimentosDaFaixa();
   }
