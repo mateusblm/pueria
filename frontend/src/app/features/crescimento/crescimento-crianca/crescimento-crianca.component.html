@@ -58,7 +58,7 @@
         } @else {
           <div class="crescimento-graficos__grid">
             @for (grafico of graficosCurva(); track grafico.indicador) {
-              <article class="crescimento-grafico" [attr.data-tema]="grafico.tema">
+              <article class="crescimento-grafico" [attr.data-tema]="grafico.tema" [attr.data-situacao]="grafico.situacao">
               <div class="crescimento-grafico__header">
                 <div>
                   <div class="crescimento-grafico__titulo"><span class="crescimento-grafico__icone"><app-icon [name]="grafico.icone" [size]="22" /></span><h3>{{ grafico.titulo }}</h3></div>
@@ -80,10 +80,10 @@
                     <line x1="22" y1="48.86" x2="298" y2="48.86" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
                     <line x1="22" y1="111.14" x2="298" y2="111.14" stroke="#d9c7c1" stroke-dasharray="5 5"></line>
                     @if (grafico.pontos.length > 1) {
-                      <polyline [attr.points]="grafico.linhaTrajetoria" fill="none" stroke="#b63d4a" stroke-linecap="round" stroke-width="3"></polyline>
+                      <polyline [attr.points]="grafico.linhaTrajetoria" fill="none" [attr.stroke]="grafico.corTrajetoria" stroke-linecap="round" stroke-width="3"></polyline>
                     }
                     @for (ponto of grafico.pontos; track ponto.label) {
-                      <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="4.5" fill="#b63d4a" stroke="#fff" stroke-width="2">
+                      <circle [attr.cx]="ponto.x" [attr.cy]="ponto.y" r="4.5" [attr.fill]="ponto.cor" stroke="#fff" stroke-width="2">
                         <title>{{ ponto.label }} - {{ ponto.valor }}</title>
                       </circle>
                     }
@@ -100,7 +100,7 @@
                   }
                 </div>
 
-                <div class="crescimento-regua" role="img" [attr.aria-label]="'Posição de ' + grafico.titulo + ' na curva OMS'">
+                <div class="crescimento-regua" role="img" [attr.aria-label]="'Posição de ' + grafico.titulo + ' na curva OMS: ' + grafico.resumo">
                   <div class="crescimento-regua__labels">
                     <span>Abaixo</span>
                     <span>Faixa esperada</span>
@@ -110,11 +110,12 @@
                     <span class="crescimento-regua__baixo"></span>
                     <span class="crescimento-regua__esperado"></span>
                     <span class="crescimento-regua__alto"></span>
-                    <span class="crescimento-regua__marcador" [style.left.%]="grafico.marcador"></span>
+                    <span class="crescimento-regua__marcador" [class]="'crescimento-regua__marcador crescimento-regua__marcador--' + grafico.situacao" [style.left.%]="grafico.marcador"></span>
                   </div>
                   <div class="crescimento-regua__valor" [style.left.%]="grafico.marcador">
                     {{ grafico.valorAtual }}
                   </div>
+                  <span [class]="grafico.classe">{{ grafico.resumo }}</span>
                 </div>
 
               <div class="crescimento-grafico__legenda">
@@ -174,6 +175,10 @@
             <div>
               <dt>Fonte</dt>
               <dd>{{ grafico.tecnico.fonte }}</dd>
+            </div>
+            <div>
+              <dt>Critério de idade</dt>
+              <dd>{{ grafico.tecnico.criterioIdade }}</dd>
             </div>
           </dl>
         </section>

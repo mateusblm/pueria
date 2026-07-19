@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { CriancasService } from '../../criancas/criancas.service';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { AvaliacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResponsavelMedicaoCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
+import { AvaliacaoCurvaCrescimento, ClassificacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResponsavelMedicaoCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 import { ToastService } from '../../../core/toast/toast.service';
@@ -18,6 +18,7 @@ type PontoGraficoCrescimento = {
   percentil: number;
   x: number;
   y: number;
+  cor: string;
 };
 
 type GraficoCrescimento = {
@@ -27,6 +28,8 @@ type GraficoCrescimento = {
   titulo: string;
   resumo: string;
   classe: string;
+  situacao: SituacaoCurva;
+  corTrajetoria: string;
   valorInicial: string;
   dataInicial: string;
   valorAtual: string;
@@ -40,8 +43,11 @@ type GraficoCrescimento = {
     zScore: string;
     classificacao: string;
     fonte: string;
+    criterioIdade: string;
   };
 };
+
+type SituacaoCurva = 'esperada' | 'abaixo' | 'acima';
 
 type DetalheIndicadorCrescimento = {
   acompanha: string;
@@ -299,7 +305,7 @@ export class CrescimentoCriancaComponent implements OnInit {
   }
 
   classeResultado(resultado: ResultadoCurvaCrescimento): string {
-    return resultado.classificacao === 'FAIXA_ESPERADA' ? 'crescimento-curva__badge--ok' : 'crescimento-curva__badge--atencao';
+    return `crescimento-curva__badge--${this.situacaoCurva(resultado.classificacao)}`;
   }
 
   formatarZScore(valor: number): string {
@@ -373,6 +379,22 @@ export class CrescimentoCriancaComponent implements OnInit {
       return `Ficou abaixo da faixa esperada ${referencia}.`;
     }
     return `Ficou acima da faixa esperada ${referencia}.`;
+  }
+
+  private situacaoCurva(classificacao: ClassificacaoCurvaCrescimento): SituacaoCurva {
+    if (classificacao === 'FAIXA_ESPERADA') {
+      return 'esperada';
+    }
+    return classificacao === 'ABAIXO' || classificacao === 'MUITO_ABAIXO' ? 'abaixo' : 'acima';
+  }
+
+  private corSituacao(classificacao: ClassificacaoCurvaCrescimento): string {
+    const cores: Record<SituacaoCurva, string> = {
+      esperada: '#3d794d',
+      abaixo: '#9a631d',
+      acima: '#a63d5a'
+    };
+    return cores[this.situacaoCurva(classificacao)];
   }
 
   textoContextoIdade(avaliacao: AvaliacaoCurvaCrescimento | null): string {
@@ -512,7 +534,8 @@ export class CrescimentoCriancaComponent implements OnInit {
         zScore: resultado.zScore,
         percentil: resultado.percentil,
         x: Number(xPorIndice(indice, resultados.length).toFixed(2)),
-        y: Number(yPorZ(resultado.zScore).toFixed(2))
+        y: Number(yPorZ(resultado.zScore).toFixed(2)),
+        cor: this.corSituacao(resultado.classificacao)
       };
     });
 
@@ -528,6 +551,8 @@ export class CrescimentoCriancaComponent implements OnInit {
       titulo: this.tituloIndicador(indicador),
       resumo: this.textoFamilia(recente),
       classe: this.classeResultado(recente),
+      situacao: this.situacaoCurva(recente.classificacao),
+      corTrajetoria: this.corSituacao(recente.classificacao),
       valorInicial: pontos[0]?.valor ?? '',
       dataInicial: pontos[0]?.label ?? '',
       valorAtual: `${this.formatarNumero(recente.valor, ` ${recente.unidade}`)}`,
@@ -540,9 +565,15 @@ export class CrescimentoCriancaComponent implements OnInit {
         percentil: this.formatarPercentil(recente.percentil),
         zScore: this.formatarZScore(recente.zScore),
         classificacao: recente.classificacaoTitulo,
-        fonte: recente.fonte
+        fonte: recente.fonte,
+        criterioIdade: this.textoCriterioIdade(itemRecente.avaliacao)
       }
     };
+  }
+
+  private textoCriterioIdade(avaliacao: AvaliacaoCurvaCrescimento): string {
+    const contexto = this.textoContextoIdade(avaliacao);
+    return contexto || 'Idade cronológica na data da medição.';
   }
 
   private tituloIndicador(indicador: string): string {

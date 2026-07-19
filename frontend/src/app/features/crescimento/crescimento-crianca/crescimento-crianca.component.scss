@@ -37,9 +37,10 @@
 .crescimento-curva__lista, .crescimento-medida__curvas { display: grid; gap: .65rem; }
 .crescimento-curva__resultado { border-left: 3px solid #b596ba; display: grid; gap: .35rem; padding: .6rem .75rem; }
 .crescimento-curva__resultado small { color: var(--pueria-texto-suave); }
-.crescimento-curva__badge--ok, .crescimento-curva__badge--atencao { border-radius: 4px; display: inline-flex; font-weight: 750; padding: .3rem .5rem; width: fit-content; }
-.crescimento-curva__badge--ok { background: #e5f4e8; color: #28623b; }
-.crescimento-curva__badge--atencao { background: #fff1d4; color: #825515; }
+.crescimento-curva__badge--esperada, .crescimento-curva__badge--abaixo, .crescimento-curva__badge--acima { border-radius: 4px; display: inline-flex; font-weight: 750; padding: .3rem .5rem; width: fit-content; }
+.crescimento-curva__badge--esperada { background: #e5f4e8; color: #28623b; }
+.crescimento-curva__badge--abaixo { background: #fff1d4; color: #825515; }
+.crescimento-curva__badge--acima { background: #fde5ec; color: #8c3150; }
 
 .crescimento-graficos--principal { border-top: 4px solid var(--pueria-folha); }
 .crescimento-referencia { align-items: center; background: #edf6ee; color: #356143; display: inline-flex; font-size: .82rem; font-weight: 700; gap: .35rem; padding: .45rem .6rem; }
@@ -66,6 +67,9 @@
 .crescimento-regua__trilho { display: grid; grid-template-columns: 21.4fr 57.2fr 21.4fr; height: .9rem; overflow: visible; position: relative; }
 .crescimento-regua__baixo { background: #f9e7c8; border-radius: 4px 0 0 4px; }.crescimento-regua__esperado { background: #dff1e3; border-left: 2px solid #fff; border-right: 2px solid #fff; }.crescimento-regua__alto { background: #f9e7c8; border-radius: 0 4px 4px 0; }
 .crescimento-regua__marcador { background: var(--grafico-cor, #b63d4a); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 .2rem .55rem rgba(71, 38, 44, .2); height: 1.2rem; position: absolute; top: 50%; transform: translate(-50%, -50%); width: 1.2rem; }
+.crescimento-regua__marcador--esperada { background: #3d794d; }
+.crescimento-regua__marcador--abaixo { background: #9a631d; }
+.crescimento-regua__marcador--acima { background: #a63d5a; }
 .crescimento-regua__valor { color: var(--pueria-texto); font-size: .88rem; font-weight: 800; position: relative; transform: translateX(-50%); width: fit-content; }
 
 .crescimento-lista { display: grid; gap: .8rem; margin-top: 1rem; }.crescimento-medida { border: 1px solid #ece1db; border-left: 4px solid #d8a34f; display: grid; gap: .75rem; padding: .9rem; }.crescimento-medida__main, .crescimento-medida__dados { display: flex; flex-wrap: wrap; gap: .65rem 1rem; }.crescimento-medida__main span { color: var(--pueria-vermelho-profundo); font-weight: 700; }.crescimento-medida__dados span { background: #fff7ed; color: #5a4549; padding: .35rem .5rem; }.crescimento-medida__curvas { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }.crescimento-medida__danger { background: #fff0f0; color: #9a3030; }.crescimento-medida__confirm { background: #fff7ed; padding: .75rem; }

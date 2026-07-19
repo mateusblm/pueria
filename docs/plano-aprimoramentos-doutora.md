@@ -55,9 +55,9 @@ Documento de execução baseado em `APRIMORAMENTOS.docx`, recebido em 18/07/2026
 
 ## Fase 3 - Crescimento e visualização evolutiva
 
-- [ ] APR-30 Diferenciar visualmente posições abaixo e acima da faixa esperada nas curvas de crescimento.
-- [ ] APR-31 Garantir que o gráfico mostre uma trajetória evolutiva conectada entre as medidas, com leitura compreensível para a família.
-- [ ] APR-32 Manter detalhes técnicos sob demanda, incluindo referência, percentil, escore-z e critério de idade.
+- [x] APR-30 Diferenciar visualmente posições abaixo e acima da faixa esperada nas curvas de crescimento.
+- [x] APR-31 Garantir que o gráfico mostre uma trajetória evolutiva conectada entre as medidas, com leitura compreensível para a família.
+- [x] APR-32 Manter detalhes técnicos sob demanda, incluindo referência, percentil, escore-z e critério de idade.
 
 **Aceite:** uma pessoa cuidadora entende a trajetória; o profissional consegue abrir os dados técnicos necessários.
 
