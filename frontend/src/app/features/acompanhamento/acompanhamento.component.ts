@@ -275,7 +275,7 @@ export class AcompanhamentoComponent implements OnInit {
   }
 
   experimentosRecomendados(resumo: ResumoCrianca): EstimuloDesenvolvimento[] {
-    return resumo.estimulos;
+    return resumo.estimulos.slice(0, 3);
   }
 
   labelPontosAtencao(total: number): string {

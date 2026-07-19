@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
 import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento, RegistrarMarcoDesenvolvimentoRequest, RegistrarRelatoDesenvolvimentoRequest } from '../../shared/models/desenvolvimento.model';
@@ -44,8 +44,9 @@ export class DesenvolvimentoService {
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 
-  listarRecomendacoes(criancaId: string): Observable<EstimuloDesenvolvimento[]> {
-    return this.http.get<EstimuloDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/estimulos/recomendacoes`)
+  listarRecomendacoes(criancaId: string, idadeMeses?: number): Observable<EstimuloDesenvolvimento[]> {
+    const params = idadeMeses === undefined ? undefined : new HttpParams().set('idadeMeses', idadeMeses);
+    return this.http.get<EstimuloDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/estimulos/recomendacoes`, { params })
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 

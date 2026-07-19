@@ -12,6 +12,8 @@ import br.com.pueria.pueria.desenvolvimento.dominio.RegistroEstimuloDesenvolvime
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroMarcoDesenvolvimentoRepositorio;
 import br.com.pueria.pueria.desenvolvimento.dominio.RegistroMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.MarcoDesenvolvimentoRepositorio;
+import br.com.pueria.pueria.desenvolvimento.dominio.MarcoDesenvolvimento;
+import br.com.pueria.pueria.desenvolvimento.dominio.PapelClinicoMarcoDesenvolvimento;
 import br.com.pueria.pueria.desenvolvimento.dominio.StatusMarcoDesenvolvimento;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
 import br.com.pueria.pueria.usuarios.dominio.Usuario;
@@ -75,23 +77,30 @@ public class GerenciarEstimulosDesenvolvimentoUseCase {
     }
 
     @Transactional(readOnly = true)
-    public List<EstimuloDesenvolvimentoResumo> listarRecomendacoes(UUID criancaId, String email) {
-        validarAcesso(criancaId, email);
+    public List<EstimuloDesenvolvimentoResumo> listarRecomendacoes(UUID criancaId, String email, Integer idadeMesesSolicitada) {
+        Crianca crianca = validarAcesso(criancaId, email);
+        int idadeMeses = idadeMesesSolicitada == null
+                ? IdadeReferenciaDesenvolvimento.mesesParaCheckpoints(crianca, LocalDate.now())
+                : idadeMesesSolicitada;
         Map<UUID, RegistroEstimuloDesenvolvimento> registros = registrosEstimulos.listarPorCrianca(criancaId).stream()
                 .collect(Collectors.toMap(RegistroEstimuloDesenvolvimento::estimuloId, Function.identity()));
 
         return registrosMarcos.listarPorCrianca(criancaId).stream()
                 .filter(registro -> registro.getStatus() == StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO
                         || registro.getStatus() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA)
-                .sorted(Comparator.comparing((RegistroMarcoDesenvolvimento registro) ->
-                        registro.getStatus() != StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO)
-                        .thenComparing(RegistroMarcoDesenvolvimento::getRegistradoEm))
-                .map(registro -> estimulos.buscarAtivoParaMarco(registro.getMarcoId()).orElse(null))
+                .map(registro -> marcos.buscarPorId(registro.getMarcoId())
+                        .map(marco -> Map.entry(registro, marco)).orElse(null))
+                .filter(item -> item != null && item.getValue().getIdadeMeses() == idadeMeses
+                        && item.getValue().getPapelClinico() != PapelClinicoMarcoDesenvolvimento.ALTA_RELEVANCIA)
+                .sorted(Comparator.comparing((Map.Entry<RegistroMarcoDesenvolvimento, MarcoDesenvolvimento> item) ->
+                        item.getKey().getStatus() != StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO)
+                        .thenComparing(item -> item.getKey().getRegistradoEm()))
+                .map(item -> estimulos.buscarAtivoParaMarco(item.getKey().getMarcoId()).orElse(null))
                 .filter(item -> item != null)
                 .map(item -> paraResumo(item, registros.get(item.id())))
                 .filter(item -> !item.experimentado())
                 .collect(Collectors.collectingAndThen(Collectors.toMap(EstimuloDesenvolvimentoResumo::id, Function.identity(), (primeiro, ignorar) -> primeiro, LinkedHashMap::new),
-                        itens -> itens.values().stream().limit(3).toList()));
+                        itens -> itens.values().stream().toList()));
     }
 
     @Transactional

@@ -217,6 +217,7 @@ export class MarcosCriancaComponent implements OnInit {
           } else {
             this.modo.set('visao');
           }
+          this.carregarExperimentosDaFaixa();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -226,10 +227,6 @@ export class MarcosCriancaComponent implements OnInit {
       error: () => this.erro.set('Não foi possível carregar os relatos de desenvolvimento agora.')
     });
 
-    this.desenvolvimentoService.listarRecomendacoes(this.criancaId()).subscribe({
-      next: (estimulos) => this.estimulos.set(estimulos),
-      error: () => this.erro.set('Não foi possível preparar as sugestões de atividades agora.')
-    });
     this.desenvolvimentoService.listarHistoricoEstimulos(this.criancaId()).subscribe({ next: (itens) => this.historicoEstimulos.set(itens) });
 
     this.criancasService.buscarPorId(this.criancaId()).subscribe({
@@ -253,6 +250,7 @@ export class MarcosCriancaComponent implements OnInit {
             : 'ACOMPANHAMENTO_ATUAL';
           this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, status, modalidade } : item));
           this.carregarEstimuloParaMarco({ ...marco, status, modalidade });
+          this.carregarExperimentosDaFaixa();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -309,9 +307,12 @@ export class MarcosCriancaComponent implements OnInit {
 
   selecionarIdade(idadeMeses: number): void {
     this.idadeSelecionada.set(idadeMeses);
-    this.modo.set('responder');
+    if (this.modo() !== 'experimentos') {
+      this.modo.set('responder');
+    }
     this.posicionarPrimeiraPendente();
     this.carregarEstimuloParaMarcoAtual();
+    this.carregarExperimentosDaFaixa();
   }
 
   etapaAnterior(): void {
@@ -372,6 +373,7 @@ export class MarcosCriancaComponent implements OnInit {
           this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? atualizado : item));
           this.estimuloParaMarco.update((item) => item?.id === estimulo.id ? atualizado : item);
           this.historicoEstimulos.update((itens) => [atualizado, ...itens.filter((item) => item.id !== estimulo.id)]);
+          this.carregarExperimentosDaFaixa();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -580,6 +582,18 @@ export class MarcosCriancaComponent implements OnInit {
       return;
     }
     this.carregarEstimuloParaMarco(marco);
+  }
+
+  private carregarExperimentosDaFaixa(): void {
+    const idadeMeses = this.idadeSelecionada();
+    if (idadeMeses === null) {
+      this.estimulos.set([]);
+      return;
+    }
+    this.desenvolvimentoService.listarRecomendacoes(this.criancaId(), idadeMeses).subscribe({
+      next: (estimulos) => this.estimulos.set(estimulos),
+      error: () => this.estimulos.set([])
+    });
   }
 
   private carregarEstimuloParaMarco(marco: MarcoDesenvolvimento): void {
