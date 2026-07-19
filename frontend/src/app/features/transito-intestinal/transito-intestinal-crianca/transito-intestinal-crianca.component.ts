@@ -102,6 +102,8 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
+  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 7).reverse());
+  readonly maiorFrequenciaRecente = computed(() => Math.max(...this.registrosRecentes().map((registro) => registro.evacuacoesPorDia ?? 0), 1));
 
   abrirEntenda(): void {
     this.entendaAberto.set(true);

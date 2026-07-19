@@ -20,82 +20,22 @@
       </button>
     </div>
 
-    @if (ultimoRegistro(); as registro) {
-      <section class="pueria-card alimentacao-sintese">
-        <div class="alimentacao-sintese__header">
-          <div>
-            <p class="pueria-eyebrow">Último registro</p>
-            <h2>{{ registro.analise.titulo }}</h2>
-            <p>{{ registro.analise.resumo }}</p>
-          </div>
-          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+    @if (registrosRecentes().length > 0) {
+      <section class="pueria-card alimentacao-padrao" aria-labelledby="alimentacao-padrao-titulo">
+        <div>
+          <p class="pueria-eyebrow">Padrão recente</p>
+          <h2 id="alimentacao-padrao-titulo">Refeições na rotina registrada</h2>
+          <p>Uma leitura rápida dos últimos registros para enxergar a rotina ao longo do tempo.</p>
         </div>
-
-        <div class="alimentacao-sintese__grid">
-          <article>
-            <span><app-icon name="heartPulse" [size]="15" />Leite</span>
-            <strong>{{ labelTipoLeite(registro.tipoLeite) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="salad" [size]="15" />Fase alimentar</span>
-            <strong>{{ labelEstagio(registro.estagioAlimentar) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="sparkles" [size]="15" />Textura</span>
-            <strong>{{ labelTextura(registro.texturaPredominante) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="chart" [size]="15" />Data</span>
-            <strong>{{ formatarData(registro.dataRegistro) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="apple" [size]="15" />Alimentos marcados</span>
-            <strong>{{ registro.alimentosOferecidos.length }}</strong>
-          </article>
-          <article>
-            <span>Origem predominante</span>
-            <strong>{{ labelOrigemAlimento(registro.tipoOrigemAlimento) }}</strong>
-          </article>
-          <article>
-            <span>Preparo predominante</span>
-            <strong>{{ labelOrigemPreparo(registro.origemPreparoAlimento) }}</strong>
-          </article>
+        <div class="alimentacao-padrao__lista" aria-label="Quantidade de refeições por registro">
+          @for (registro of registrosRecentes(); track registro.id) {
+            <div class="alimentacao-padrao__linha">
+              <span>{{ formatarData(registro.dataRegistro) }}</span>
+              <div class="alimentacao-padrao__trilho"><i [style.width.%]="(registro.refeicoesPorDia ?? 0) / maiorQuantidadeRefeicoesRecente() * 100"></i></div>
+              <strong>{{ registro.refeicoesPorDia ?? 0 }} refeições</strong>
+            </div>
+          }
         </div>
-
-        @if (possuiAlgumaAnalise(registro)) {
-          <div class="alimentacao-analise">
-            @if (registro.analise.rotina.length > 0) {
-              <div>
-                <h3>Rotina registrada</h3>
-                <ul>
-                  @for (item of registro.analise.rotina; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            @if (registro.analise.conversaConsulta.length > 0) {
-              <div>
-                <h3>Para conversar na consulta</h3>
-                <ul>
-                  @for (item of registro.analise.conversaConsulta; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            @if (registro.analise.habitosApoio.length > 0) {
-              <div>
-                <h3>Hábitos da rotina</h3>
-                <ul>
-                  @for (item of registro.analise.habitosApoio; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-          </div>
-        }
       </section>
     } @else {
       <section class="pueria-card alimentacao-page__state">

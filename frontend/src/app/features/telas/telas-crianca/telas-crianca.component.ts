@@ -105,6 +105,8 @@ export class TelasCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
+  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6).reverse());
+  readonly maiorTempoRecente = computed(() => Math.max(...this.registrosRecentes().map((registro) => registro.minutosMediosDia ?? 0), 1));
 
   abrirEntenda(): void {
     this.entendaAberto.set(true);

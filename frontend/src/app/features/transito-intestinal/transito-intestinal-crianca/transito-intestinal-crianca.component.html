@@ -18,70 +18,23 @@
       <button type="button" class="intestinal-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento do trânsito intestinal" title="Entenda o trânsito intestinal"><app-icon name="help" [size]="20" /></button>
     </div>
 
-    @if (ultimoRegistro(); as registro) {
-      <section class="pueria-card intestinal-sintese">
-        <div class="intestinal-sintese__header">
-          <div>
-            <p class="pueria-eyebrow">Último registro</p>
-            <h2>{{ registro.analise.titulo }}</h2>
-            <p>{{ registro.analise.resumo }}</p>
-          </div>
-          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+    @if (registrosRecentes().length > 0) {
+      <section class="pueria-card intestinal-padrao" aria-labelledby="intestinal-padrao-titulo">
+        <div>
+          <p class="pueria-eyebrow">Padrão recente</p>
+          <h2 id="intestinal-padrao-titulo">Frequência nos últimos dias registrados</h2>
+          <p>Veja a sequência de dias. A repetição do padrão é mais útil do que uma observação isolada.</p>
         </div>
-
-        <div class="intestinal-sintese__grid">
-          <article>
-            <span><app-icon name="toilet" [size]="15" />Aspecto</span>
-            <strong>{{ labelTipoFezes(registro.tipoFezes) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="sparkles" [size]="15" />Classificação</span>
-            <strong>{{ labelClassificacaoFezes(registro.analise.classificacaoFezes) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="chart" [size]="15" />Evacuações</span>
-            <strong>{{ registro.evacuacoesPorDia ?? 'Não informado' }}</strong>
-          </article>
-          <article>
-            <span>Data</span>
-            <strong>{{ formatarData(registro.dataRegistro) }}</strong>
-          </article>
+        <div class="intestinal-padrao__lista" aria-label="Frequência de evacuações por registro">
+          @for (registro of registrosRecentes(); track registro.id) {
+            <div class="intestinal-padrao__linha">
+              <span>{{ formatarData(registro.dataRegistro) }}</span>
+              <div class="intestinal-padrao__trilho"><i [style.width.%]="(registro.evacuacoesPorDia ?? 0) / maiorFrequenciaRecente() * 100"></i></div>
+              <strong>{{ registro.evacuacoesPorDia ?? 0 }}x</strong>
+              <small>Tipo {{ registro.tipoFezes }}</small>
+            </div>
+          }
         </div>
-
-        @if (possuiAlgumaAnalise(registro)) {
-          <div class="intestinal-analise">
-            @if (registro.analise.rotina.length > 0) {
-              <div>
-                <h3>Rotina registrada</h3>
-                <ul>
-                  @for (item of registro.analise.rotina; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            @if (registro.analise.conversaConsulta.length > 0) {
-              <div>
-                <h3>Para conversar na consulta</h3>
-                <ul>
-                  @for (item of registro.analise.conversaConsulta; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            @if (registro.analise.habitosApoio.length > 0) {
-              <div>
-                <h3>Hábitos da rotina</h3>
-                <ul>
-                  @for (item of registro.analise.habitosApoio; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-          </div>
-        }
       </section>
     } @else {
       <section class="pueria-card intestinal-page__state">

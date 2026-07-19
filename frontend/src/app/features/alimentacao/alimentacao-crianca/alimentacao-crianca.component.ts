@@ -191,6 +191,8 @@ export class AlimentacaoCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
+  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6).reverse());
+  readonly maiorQuantidadeRefeicoesRecente = computed(() => Math.max(...this.registrosRecentes().map((registro) => registro.refeicoesPorDia ?? 0), 1));
   readonly alimentosFiltrados = computed(() => {
     const grupo = this.grupoAlimentoAtivo();
     const busca = this.normalizarTexto(this.buscaAlimento());

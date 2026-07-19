@@ -18,73 +18,22 @@
       <button type="button" class="telas-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento de telas" title="Entenda as telas"><app-icon name="help" [size]="20" /></button>
     </div>
 
-    @if (ultimoRegistro(); as registro) {
-      <section class="pueria-card telas-sintese">
-        <div class="telas-sintese__header">
-          <div>
-            <p class="pueria-eyebrow">Último registro</p>
-            <h2>{{ registro.analise.titulo }}</h2>
-            <p>{{ registro.analise.resumo }}</p>
-          </div>
-          <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar registro</button>
+    @if (registrosRecentes().length > 0) {
+      <section class="pueria-card telas-padrao" aria-labelledby="telas-padrao-titulo">
+        <div>
+          <p class="pueria-eyebrow">Padrão recente</p>
+          <h2 id="telas-padrao-titulo">Tempo de tela nos últimos registros</h2>
+          <p>Compare os dias com calma: o objetivo é perceber tendências, não buscar um número perfeito.</p>
         </div>
-
-        <div class="telas-sintese__grid">
-          <article class="telas-sintese__metric">
-            <span><app-icon name="smartphone" [size]="15" />Tempo médio</span>
-            <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
-            <small [class]="classeTempo(registro)">
-              {{ registro.analise.classificacaoTempo === 'DENTRO_DA_REFERENCIA' ? 'Dentro da referência' : 'Acompanhar' }}
-            </small>
-          </article>
-          <article>
-            <span><app-icon name="sparkles" [size]="15" />Referência por idade</span>
-            <strong>{{ textoReferencia(registro) }}</strong>
-          </article>
-          <article>
-            <span><app-icon name="message" [size]="15" />Conteúdo predominante</span>
-            <strong>{{ labelTipoConteudo(registro.tipoConteudoPredominante) }}</strong>
-          </article>
-          <article>
-            <span>Data</span>
-            <strong>{{ formatarData(registro.dataRegistro) }}</strong>
-          </article>
+        <div class="telas-padrao__lista" aria-label="Tempo médio de tela por registro">
+          @for (registro of registrosRecentes(); track registro.id) {
+            <div class="telas-padrao__linha">
+              <span>{{ formatarData(registro.dataRegistro) }}</span>
+              <div class="telas-padrao__trilho"><i [style.width.%]="(registro.minutosMediosDia ?? 0) / maiorTempoRecente() * 100"></i></div>
+              <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
+            </div>
+          }
         </div>
-
-        @if (possuiAlgumaAnalise(registro)) {
-          <div class="telas-analise">
-            @if (registro.analise.rotina.length > 0) {
-              <div>
-                <h3>Rotina observada</h3>
-                <ul>
-                  @for (item of registro.analise.rotina; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            @if (registro.analise.habitosApoio.length > 0) {
-              <div>
-                <h3>Ajustes possíveis</h3>
-                <ul>
-                  @for (item of registro.analise.habitosApoio; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            @if (registro.analise.conversaConsulta.length > 0) {
-              <div>
-                <h3>Para conversar na consulta</h3>
-                <ul>
-                  @for (item of registro.analise.conversaConsulta; track item) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              </div>
-            }
-          </div>
-        }
       </section>
     } @else {
       <section class="pueria-card telas-page__state">
