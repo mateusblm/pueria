@@ -15,6 +15,10 @@ type AreaResumo = {
   label: string;
   pendentes: number;
   total: number;
+  respondidos: number;
+  observados: number;
+  pontosAtencao: number;
+  percentualObservado: number;
 };
 
 type ResultadoArea = AreaResumo & {
@@ -129,13 +133,34 @@ export class MarcosCriancaComponent implements OnInit {
 
   readonly areasResumo = computed<AreaResumo[]>(() => this.areas.map((area) => {
     const marcos = this.marcosDaIdade().filter((marco) => marco.area === area);
+    const observados = marcos.filter((marco) => marco.status === 'OBSERVADO').length;
+    const pontosAtencao = marcos.filter((marco) =>
+      marco.status === 'AINDA_NAO_OBSERVADO' || marco.status === 'NAO_TENHO_CERTEZA'
+    ).length;
     return {
       area,
       label: this.labelArea(area),
       pendentes: marcos.filter((marco) => marco.status === 'NAO_AVALIADO').length,
-      total: marcos.length
+      total: marcos.length,
+      respondidos: marcos.filter((marco) => marco.status !== 'NAO_AVALIADO').length,
+      observados,
+      pontosAtencao,
+      percentualObservado: marcos.length === 0 ? 0 : Math.round((observados / marcos.length) * 100)
     };
   }).filter((resumo) => resumo.total > 0));
+
+  readonly conclusaoDaFase = computed(() => {
+    const progresso = this.progresso();
+    const pontos = this.pontosDeAtencao().length;
+    if (progresso.respondidos < progresso.total) {
+      const faltam = progresso.total - progresso.respondidos;
+      return `${faltam} ${faltam === 1 ? 'habilidade ainda precisa' : 'habilidades ainda precisam'} ser respondida${faltam === 1 ? '' : 's'} nesta fase.`;
+    }
+    if (pontos > 0) {
+      return `${pontos} ${pontos === 1 ? 'habilidade merece' : 'habilidades merecem'} ser acompanhada${pontos === 1 ? '' : 's'} com calma na rotina.`;
+    }
+    return 'Todas as habilidades desta fase foram registradas. Continue observando a rotina com leveza.';
+  });
 
   readonly progresso = computed(() => {
     const total = this.marcosDaIdade().length;
@@ -162,14 +187,21 @@ export class MarcosCriancaComponent implements OnInit {
 
   readonly resultadoPorArea = computed<ResultadoArea[]>(() => this.areas.map((area) => {
     const marcos = this.marcosDaIdade().filter((marco) => marco.area === area);
+    const observados = marcos.filter((marco) => marco.status === 'OBSERVADO').length;
+    const duvidas = marcos.filter((marco) => marco.status === 'NAO_TENHO_CERTEZA').length;
+    const aindaNao = marcos.filter((marco) => marco.status === 'AINDA_NAO_OBSERVADO').length;
+    const pendentes = marcos.filter((marco) => marco.status === 'NAO_AVALIADO').length;
     return {
       area,
       label: this.labelArea(area),
       total: marcos.length,
-      pendentes: marcos.filter((marco) => marco.status === 'NAO_AVALIADO').length,
-      observados: marcos.filter((marco) => marco.status === 'OBSERVADO').length,
-      duvidas: marcos.filter((marco) => marco.status === 'NAO_TENHO_CERTEZA').length,
-      aindaNao: marcos.filter((marco) => marco.status === 'AINDA_NAO_OBSERVADO').length
+      pendentes,
+      respondidos: marcos.length - pendentes,
+      observados,
+      pontosAtencao: duvidas + aindaNao,
+      percentualObservado: marcos.length === 0 ? 0 : Math.round((observados / marcos.length) * 100),
+      duvidas,
+      aindaNao
     };
   }).filter((resumo) => resumo.total > 0));
 

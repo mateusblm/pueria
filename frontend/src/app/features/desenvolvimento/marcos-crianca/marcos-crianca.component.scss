@@ -446,6 +446,27 @@
 .seletor-fases__lista button span { color: var(--pueria-texto-suave); font-size: .75rem; }
 .seletor-fases__fase--ativa { border-color: #76507d !important; background: #f4edf8 !important; box-shadow: inset 0 3px 0 #76507d; }
 
+/* Visão geral: leitura rápida da fase, sem repetir o resumo clínico. */
+.marcos-visao { display: grid; gap: 16px; }
+.marcos-visao__areas { display: grid; gap: 14px; }
+.marcos-visao__cabecalho { align-items: end; display: flex; gap: 1rem; justify-content: space-between; }
+.marcos-visao__cabecalho h2, .marcos-visao__cabecalho p { margin: 0; }
+.marcos-visao__cabecalho > p { color: var(--pueria-texto-suave); font-size: .86rem; max-width: 28rem; text-align: right; }
+.areas-resumo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.area-resumo { align-content: start; border: 1px solid var(--pueria-borda); border-left: 4px solid var(--area-cor, #76507d); border-top: 1px solid var(--pueria-borda); display: grid; gap: 12px; min-height: 0; padding: 16px; }
+.area-resumo header { align-items: center; display: flex; gap: 10px; min-width: 0; }
+.area-resumo header > div { display: grid; gap: 3px; min-width: 0; }
+.area-resumo header strong { font-size: 1rem; }
+.area-resumo header span:not(.area-resumo__icone) { color: var(--pueria-texto-suave); font-size: .82rem; line-height: 1.3; }
+.area-resumo__barra { background: var(--area-fundo, #eee3f4); border-radius: 999px; height: 9px; overflow: hidden; }
+.area-resumo__barra span { background: var(--area-cor, #76507d); border-radius: inherit; display: block; height: 100%; min-width: 4px; transition: width 180ms ease; }
+.area-resumo__situacao { border-top: 1px solid var(--pueria-borda); color: var(--pueria-texto-suave); font-size: .8rem; line-height: 1.35; margin: 0; padding-top: 10px; }
+.area-resumo__situacao--atencao { color: #9b5c16; font-weight: 720; }.area-resumo__situacao--concluida { color: var(--pueria-folha-escura); }
+.marcos-visao__conclusao { align-items: flex-start; background: #f2f9f4; border: 1px solid #cfe5d4; border-left: 4px solid var(--pueria-folha-escura); display: flex; gap: 12px; padding: 18px; }
+.marcos-visao__conclusao > span { align-items: center; background: #dceee0; border-radius: 50%; color: var(--pueria-folha-escura); display: inline-flex; flex: 0 0 42px; height: 42px; justify-content: center; }
+.marcos-visao__conclusao > div { display: grid; gap: 5px; }.marcos-visao__conclusao p, .marcos-visao__conclusao strong { margin: 0; }.marcos-visao__conclusao strong { font-size: 1.02rem; line-height: 1.35; }.marcos-visao__conclusao div > p:last-child { color: var(--pueria-texto-suave); font-size: .87rem; line-height: 1.45; }
+.marcos-visao__conclusao--atencao { background: #fff8ea; border-color: #e9cc8a; }.marcos-visao__conclusao--atencao > span { background: #f7e5bd; color: #8d5e12; }
+
 
 .marcos-entenda__fundo {
   align-items: center;
@@ -542,6 +563,8 @@
   .painel-etapa__progresso { text-align: left; }
   .painel-etapa__acoes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .painel-etapa__acoes button { align-items: flex-start; min-height: 70px; }
+  .marcos-visao__cabecalho { align-items: start; display: grid; }.marcos-visao__cabecalho > p { text-align: left; }
+  .areas-resumo { grid-template-columns: 1fr; }
 
   .marcos-entenda__acoes .pueria-button {
     width: 100%;

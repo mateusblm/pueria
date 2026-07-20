@@ -56,7 +56,7 @@
         </button>
         <button type="button" [class.painel-etapa__acao--ativa]="modo() === 'visao'" (click)="abrirVisao()">
           <app-icon name="chart" [size]="19" />
-          <span><strong>Ver resumo</strong><small>Por área do desenvolvimento</small></span>
+          <span><strong>Visão geral</strong><small>Como está esta fase</small></span>
         </button>
         <button type="button" [class.painel-etapa__acao--ativa]="modo() === 'experimentos'" (click)="abrirExperimentos()">
           <app-icon name="sparkles" [size]="19" />
@@ -85,29 +85,33 @@
       <section class="marcos-visao" aria-label="Visão geral dos marcos">
         <section class="marcos-visao__areas">
           <div class="marcos-visao__cabecalho">
-            <div><p class="pueria-eyebrow">Resumo da fase</p><h2>Registros por área</h2></div>
+            <div><p class="pueria-eyebrow">Visão geral da fase</p><h2>Como está o acompanhamento</h2></div>
             <p>Uma resposta isolada não define o desenvolvimento.</p>
           </div>
           <div class="areas-resumo">
             @for (area of areasResumo(); track area.area) {
               <article class="area-resumo" [attr.data-tema]="temaArea(area.area)">
-                <span class="area-resumo__icone"><app-icon [name]="iconeArea(area.area)" [size]="20" /></span>
-                <div><strong>{{ area.label }}</strong><span>{{ area.total - area.pendentes }} de {{ area.total }} registradas</span></div>
+                <header>
+                  <span class="area-resumo__icone"><app-icon [name]="iconeArea(area.area)" [size]="20" /></span>
+                  <div><strong>{{ area.label }}</strong><span>{{ area.observados }} de {{ area.total }} habilidades observadas</span></div>
+                </header>
+                <div class="area-resumo__barra" role="progressbar" [attr.aria-label]="area.label + ': ' + area.observados + ' de ' + area.total + ' habilidades observadas'" aria-valuemin="0" [attr.aria-valuenow]="area.observados" [attr.aria-valuemax]="area.total"><span [style.width.%]="area.percentualObservado"></span></div>
+                @if (area.pontosAtencao > 0) {
+                  <p class="area-resumo__situacao area-resumo__situacao--atencao">{{ area.pontosAtencao }} {{ area.pontosAtencao === 1 ? 'habilidade para acompanhar' : 'habilidades para acompanhar' }}</p>
+                } @else if (area.pendentes > 0) {
+                  <p class="area-resumo__situacao">{{ area.pendentes }} {{ area.pendentes === 1 ? 'habilidade ainda sem resposta' : 'habilidades ainda sem resposta' }}</p>
+                } @else {
+                  <p class="area-resumo__situacao area-resumo__situacao--concluida">Fase registrada nesta área</p>
+                }
               </article>
             }
           </div>
         </section>
 
-        @if (pontosDeAtencao().length > 0 || relatos().length > 0) {
-          <aside class="marcos-visao__consulta">
-            <span><app-icon name="stethoscope" [size]="20" /></span>
-            <div>
-              <p class="pueria-eyebrow">Para a consulta</p>
-              <strong>{{ pontosDeAtencao().length > 0 ? labelPontosAtencao(pontosDeAtencao().length) : 'Há um contexto registrado pela família' }}</strong>
-              <p>Leve estas observações para conversar com o pediatra.</p>
-            </div>
-          </aside>
-        }
+        <aside class="marcos-visao__conclusao" [class.marcos-visao__conclusao--atencao]="pontosDeAtencao().length > 0">
+          <span><app-icon [name]="pontosDeAtencao().length > 0 ? 'heartPulse' : 'heart'" [size]="23" /></span>
+          <div><p class="pueria-eyebrow">Conclusão da fase</p><strong>{{ conclusaoDaFase() }}</strong><p>Você pode revisar as habilidades ou escolher uma atividade para a rotina quando fizer sentido.</p></div>
+        </aside>
       </section>
     } @else if (modo() === 'responder') {
       @if (marcoAtual(); as marco) {
