@@ -588,19 +588,6 @@
   max-width: 24ch;
 }
 
-.etapa-card__resposta {
-  align-items: center;
-  color: var(--pueria-texto-suave);
-  display: inline-flex;
-  font-size: .82rem;
-  gap: 7px;
-}
-
-.etapa-card__resposta .marco-status {
-  border-radius: 999px;
-  font-weight: 750;
-}
-
 .marco-card__actions {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;

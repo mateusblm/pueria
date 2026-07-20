@@ -119,7 +119,6 @@
             <div class="etapa-card__meta">
               <span class="marco-area" [attr.data-tema]="temaArea(marco.area)"><app-icon [name]="iconeArea(marco.area)" [size]="15" />{{ labelArea(marco.area) }}</span>
               @if (marco.status !== 'NAO_AVALIADO') {
-                <span class="etapa-card__resposta">Sua resposta: <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span></span>
               }
             </div>
 
