@@ -110,7 +110,15 @@
 
         <aside class="marcos-visao__conclusao" [class.marcos-visao__conclusao--atencao]="pontosDeAtencao().length > 0">
           <span><app-icon [name]="pontosDeAtencao().length > 0 ? 'heartPulse' : 'heart'" [size]="23" /></span>
-          <div><p class="pueria-eyebrow">Conclusão da fase</p><strong>{{ conclusaoDaFase() }}</strong><p>Você pode revisar as habilidades ou escolher uma atividade para a rotina quando fizer sentido.</p></div>
+          <div>
+            <p class="pueria-eyebrow">Conclusão da fase</p>
+            <strong>{{ conclusaoDaFase() }}</strong>
+            @if (pontosDeAtencao().length > 0) {
+              <p>Escolha apenas as atividades que combinarem com a rotina. Observe de novo nas próximas semanas e, se a dúvida continuar ou houver perda de uma habilidade, leve exemplos para a consulta.</p>
+            } @else {
+              <p>Você pode revisar as habilidades ou escolher uma atividade para a rotina quando fizer sentido.</p>
+            }
+          </div>
         </aside>
       </section>
     } @else if (modo() === 'responder') {
@@ -197,9 +205,6 @@
                     <h3>{{ estimulo.titulo }}</h3>
                   </div>
                 </div>
-                @if (textoConviteEstimulo(marco.status); as convite) {
-                  <p>{{ convite }}</p>
-                }
                 <p class="estimulo-do-marco__descricao">{{ estimulo.descricao }}</p>
                 <details>
                   <summary>Cuidados e fonte</summary>

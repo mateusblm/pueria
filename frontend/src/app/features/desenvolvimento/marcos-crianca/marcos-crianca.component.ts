@@ -448,16 +448,6 @@ export class MarcosCriancaComponent implements OnInit {
     return tipo === 'PERDA_HABILIDADE' ? 'Perda de habilidade' : 'Preocupação da família';
   }
 
-  textoConviteEstimulo(status: StatusMarcoDesenvolvimento): string {
-    if (status === 'OBSERVADO') {
-      return '';
-    }
-    if (status === 'NAO_TENHO_CERTEZA') {
-      return 'Uma ideia simples para observar essa habilidade em um momento tranquilo. Você pode retomar a observação nas próximas 4 a 6 semanas, sem testar nem cobrar uma resposta.';
-    }
-    return 'Uma ideia leve para experimentar no ritmo da criança. Vale observar novamente nas próximas 4 a 6 semanas e levar essa observação à próxima consulta de rotina, especialmente se continuar.';
-  }
-
   textoOrientacaoMarco(marco: MarcoDesenvolvimento): string {
     if (marco.papelClinico === 'ALTA_RELEVANCIA') {
       return 'Este marco tem relevância especial para a vigilância do desenvolvimento. Quando houver dúvida persistente, leve exemplos da rotina para conversar com o pediatra.';
