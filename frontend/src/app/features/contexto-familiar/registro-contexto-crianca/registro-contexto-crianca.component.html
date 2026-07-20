@@ -79,6 +79,7 @@
         @if (registrosOrdenados().length === 0) {
           <p>Ainda não há registros neste espaço.</p>
         } @else {
+          <div class="contexto-historico__linha">
           @for (registro of registrosOrdenados(); track registro.id; let indice = $index) {
             @if (contextoHistoricoCompleto() || indice < 4) {
               <article [attr.data-evento]="contexto === 'observacoes' ? eventoDoRegistro(registro.descricao) : null">
@@ -91,6 +92,7 @@
               </article>
             }
           }
+          </div>
           @if (registrosOrdenados().length > 4) { <button type="button" class="contexto-historico__todos" (click)="contextoHistoricoCompleto.set(!contextoHistoricoCompleto())">{{ contextoHistoricoCompleto() ? 'Mostrar menos' : 'Ver todos os registros ›' }}</button> }
         }
       </aside>

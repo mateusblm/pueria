@@ -4,7 +4,7 @@
 .contexto-page__hero h1 { margin:.2rem 0; }
 .contexto-page__hero span { align-items:center; background:#f6e2e7; border-radius:50%; color:#9d4760; display:inline-flex; flex:0 0 3.2rem; height:3.2rem; justify-content:center; width:3.2rem; }
 .contexto-page__layout { display:grid; gap:1rem; grid-template-columns:minmax(0, 1fr) minmax(16rem, .48fr); }
-.contexto-form,.contexto-historico { display:grid; gap:1rem; padding:1.25rem; }
+.contexto-form,.contexto-historico { align-content:start; display:grid; gap:1rem; padding:1.25rem; }
 .contexto-form h2,.contexto-historico h2 { margin:0; }
 .contexto-form label { color:var(--pueria-texto); display:grid; font-weight:700; gap:.45rem; }
 .contexto-form input,.contexto-form textarea { background:#fffdfb; border:1px solid #dccbc3; border-radius:8px; box-sizing:border-box; color:var(--pueria-texto); font:inherit; min-height:2.75rem; padding:.75rem .85rem; transition:border-color .16s ease, box-shadow .16s ease; width:100%; }
@@ -15,7 +15,7 @@
 .contexto-form__data input:focus { border-color:#b75b74; }
 .contexto-form__guia { background:#f7f1eb; border-left:3px solid #b8795b; margin:0; padding:.8rem; }
 .contexto-form__acoes { display:flex; flex-wrap:wrap; gap:.65rem; justify-content:flex-end; }
-.contexto-historico article { border-top:1px solid #eee2da; display:grid; gap:.45rem; padding:1rem 0; }
+.contexto-historico article { border:0; display:grid; gap:.45rem; padding:0 0 1.15rem; position:relative; }
 .contexto-historico article p { margin:0; white-space:pre-wrap; }
 .contexto-historico time { color:var(--pueria-texto-suave); font-size:.85rem; }
 
@@ -29,5 +29,6 @@
 .evento-form__campo { border:0; margin:0; min-inline-size:0; padding:0; }.evento-form__campo legend { color:var(--pueria-texto); font-size:.9rem; font-weight:760; margin-bottom:8px; padding:0; }.evento-form__tipos { display:flex; flex-wrap:wrap; gap:8px; }.evento-form__tipos button { align-items:center; background:#fbf5f0; border:1px solid #eadad1; border-radius:999px; color:var(--pueria-texto-suave); cursor:pointer; display:inline-flex; font:inherit; font-size:.84rem; gap:6px; padding:7px 12px; }.evento-form__tipos button span { font-size:.9rem; }.evento-form__tipos .evento-form__tipo--selecionado { background:#eee5ff; border-color:#a58add; color:#6645b6; font-weight:760; }.evento-form__dica { background:#f7f1eb; border-radius:10px; color:var(--pueria-texto-suave); line-height:1.45; margin:0; padding:11px 13px; }
 .contexto-historico article { align-items:start; grid-template-columns:auto minmax(0, 1fr); }.contexto-historico article > div { display:grid; gap:5px; min-width:0; }.contexto-historico__marcador { align-items:center; background:#f9dfe5; border-radius:50%; display:inline-flex; font-size:.85rem; height:28px; justify-content:center; width:28px; }.contexto-historico__editar,.contexto-historico__todos { background:transparent; border:0; color:var(--pueria-vermelho-profundo); cursor:pointer; font:inherit; font-size:.82rem; font-weight:780; justify-self:start; padding:0; }.contexto-historico__todos { margin-top:4px; }
 .contexto-historico__cabecalho { align-items:center; display:flex; justify-content:space-between; gap:12px; }.contexto-historico__cabecalho p { margin:0; }.contexto-historico__cabecalho span { color:var(--pueria-texto-suave); font-size:.8rem; }.contexto-historico article[data-evento='ROTINA'] .contexto-historico__marcador { background:#eee5ff; color:#6645b6; }.contexto-historico article[data-evento='FAMILIA'] .contexto-historico__marcador { background:#f9dfe5; color:#aa4963; }.contexto-historico article[data-evento='SAUDE'] .contexto-historico__marcador { background:#dcebdc; color:#41734b; }.contexto-historico article[data-evento='VIAGEM'] .contexto-historico__marcador { background:#dce9f6; color:#47688f; }.contexto-historico article[data-evento='MARCO'] .contexto-historico__marcador { background:#f7e7b9; color:#966b1f; }
+.contexto-historico__linha { display:grid; position:relative; }.contexto-historico__linha::before { background:#ecd9cc; bottom:14px; content:''; left:13px; position:absolute; top:14px; width:2px; }.contexto-historico__linha article { grid-template-columns:auto minmax(0,1fr); }.contexto-historico__linha article:last-child { padding-bottom:0; }.contexto-historico__marcador { position:relative; z-index:1; }
 @media (max-width:760px) { .contexto-page { padding:1rem; }.contexto-page__layout { grid-template-columns:1fr; }.contexto-form__acoes .pueria-button { flex:1; }.contexto-page__hero { padding:1.1rem; } }
 @media (max-width:560px) { .humor-semana { padding:16px; }.humor-semana__dias { gap:6px; }.humor-dia { border-radius:9px; min-height:58px; padding:6px 3px; }.humor-dia small { font-size:.68rem; }.humor-form__humores { grid-template-columns:repeat(2, minmax(0, 1fr)); }.humor-form__humores button { min-height:60px; } }
