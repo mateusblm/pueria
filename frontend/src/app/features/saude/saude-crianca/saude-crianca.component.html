@@ -4,8 +4,8 @@
   <header class="saude-page__hero">
     <div>
       <p class="pueria-eyebrow">Saúde e cuidados</p>
-      <h1>{{ crianca()?.nome ?? 'Acompanhamento de saúde' }}</h1>
-      <p>Organize informações da rotina de cuidado para recordar e levar à consulta quando fizer sentido.</p>
+      <h1>Saúde e cuidados</h1>
+      <p>Registre informações que ajudam a lembrar do cuidado e preparar conversas com a equipe de saúde.</p>
     </div>
     <button type="button" class="saude-page__entenda" (click)="abrirEntenda()" aria-label="Entenda o acompanhamento de saúde" title="Entenda a saúde"><app-icon name="help" [size]="20" /></button>
     <span class="saude-page__hero-icon"><app-icon name="stethoscope" [size]="38" /></span>
@@ -21,6 +21,22 @@
   } @else if (erro() && !crianca()) {
     <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   } @else {
+    <section class="saude-painel" aria-label="Resumo dos registros de saúde">
+      <article><p>Uso diário</p><strong>{{ registrosMedicamentos().length }}</strong><small>itens contínuos</small></article>
+      <article><p>Intercorrências</p><strong>{{ intercorrencias().length }}</strong><small>@if (intercorrencias().length) { última em {{ formatarData(intercorrencias()[0].dataRegistro) }} } @else { nenhuma registrada }</small></article>
+      <article><p>Alergias e reações</p><strong>Não registradas</strong><small>registre uma intercorrência se houver algo a acompanhar</small></article>
+    </section>
+    <section class="saude-leitura">
+      <article class="pueria-card saude-uso"><p class="pueria-eyebrow">Uso diário</p>
+        @if (registrosMedicamentos().length) { @for (registro of registrosMedicamentos(); track registro.id) { <div><span><app-icon name="heart" [size]="17" /></span><p><strong>{{ registro.descricao.split('\n')[0] }}</strong><small>{{ formatarData(registro.dataRegistro) }} · conforme orientação recebida</small></p><button type="button" (click)="editar(registro)">Editar</button></div> } } @else { <p class="saude-leitura__vazio">Nenhum item de uso diário registrado.</p> }
+        <button type="button" class="saude-uso__adicionar" (click)="abrirFormulario()">+ Adicionar item de uso diário</button>
+      </article>
+      <article class="pueria-card saude-intercorrencias"><p class="pueria-eyebrow">Intercorrências</p>
+        @if (intercorrencias().length) { @for (registro of intercorrencias().slice(0, 2); track registro.id) { <div><time>{{ formatarData(registro.dataRegistro) }}</time><p><strong>{{ registro.descricao.split('\n')[0] }}</strong><small>{{ registro.descricao }}</small></p><button type="button" (click)="editar(registro)">Editar</button></div> } } @else { <p class="saude-leitura__vazio">Registre febres, viroses e outros episódios que possam ajudar na consulta.</p> }
+      </article>
+    </section>
+    <button type="button" class="pueria-button saude-novo" (click)="abrirFormulario()"><app-icon name="plus" [size]="18" />Novo registro</button>
+    @if (formularioAberto()) {
     <section class="saude-layout">
       <article class="pueria-card saude-formulario">
         <div>
@@ -68,6 +84,7 @@
         </article>
       </aside>
     </section>
+    }
 
     <section class="saude-historico">
       <div>

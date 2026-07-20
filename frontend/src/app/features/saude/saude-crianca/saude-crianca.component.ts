@@ -42,6 +42,7 @@ export class SaudeCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
+  readonly formularioAberto = signal(false);
 
   readonly form = this.fb.group({
     tipo: this.fb.nonNullable.control<TipoRegistroSaude>('MEDICAMENTO_SUPLEMENTO', Validators.required),
@@ -104,6 +105,7 @@ export class SaudeCriancaComponent implements OnInit {
       next: (registro) => {
         this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)].sort(this.ordenarRegistros));
         this.redefinirFormulario();
+        this.formularioAberto.set(false);
         this.aviso.set('Registro salvo.');
       },
       error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
@@ -111,6 +113,7 @@ export class SaudeCriancaComponent implements OnInit {
   }
 
   editar(registro: RegistroSaude): void {
+    this.formularioAberto.set(true);
     this.editandoId.set(registro.id);
     this.confirmandoRemocaoId.set('');
     this.erro.set('');
@@ -118,7 +121,9 @@ export class SaudeCriancaComponent implements OnInit {
     this.form.setValue({ tipo: registro.tipo, dataRegistro: this.formatarEntradaData(registro.dataRegistro), descricao: registro.descricao });
   }
 
-  cancelarEdicao(): void { this.redefinirFormulario(); }
+  cancelarEdicao(): void { this.redefinirFormulario(); this.formularioAberto.set(false); }
+
+  abrirFormulario(): void { this.formularioAberto.set(true); }
 
   confirmarRemocao(registroId: string): void { this.confirmandoRemocaoId.set(registroId); }
 
