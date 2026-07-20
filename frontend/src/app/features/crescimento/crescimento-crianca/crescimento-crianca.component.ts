@@ -8,7 +8,7 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { AvaliacaoCurvaCrescimento, ClassificacaoCurvaCrescimento, MedidaCrescimento, OrigemMedidaCrescimento, ResponsavelMedicaoCrescimento, ResultadoCurvaCrescimento, SalvarMedidaCrescimentoRequest } from '../../../shared/models/crescimento.model';
 import { CrescimentoService } from '../crescimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
-import { ToastService } from '../../../core/toast/toast.service';
+import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type PontoGraficoCrescimento = {
@@ -206,7 +206,7 @@ export class CrescimentoCriancaComponent implements OnInit {
           this.recarregarCurvas();
           this.cancelarEdicao();
           this.registroAberto.set(false);
-          this.aviso.set('Medida salva no histórico de crescimento.');
+          this.aviso.set(MENSAGEM_REGISTRO_SALVO);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });

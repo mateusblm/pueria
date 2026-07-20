@@ -8,6 +8,8 @@ export type Toast = {
   tipo: TipoToast;
 };
 
+export const MENSAGEM_REGISTRO_SALVO = 'Registro salvo. Isso ajuda a compreender melhor a rotina da criança.';
+
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   readonly notificacoes = signal<Toast[]>([]);

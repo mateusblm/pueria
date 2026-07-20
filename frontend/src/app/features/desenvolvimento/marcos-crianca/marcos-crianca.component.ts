@@ -9,6 +9,7 @@ import { DesenvolvimentoService } from '../desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../../shared/components/app-icon/app-icon.component';
 import { CriancasService } from '../../criancas/criancas.service';
 import { Crianca } from '../../../shared/models/crianca.model';
+import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 
 type AreaResumo = {
   area: AreaDesenvolvimento;
@@ -68,6 +69,7 @@ export class MarcosCriancaComponent implements OnInit {
   }
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
   private readonly criancasService = inject(CriancasService);
+  private readonly toast = inject(ToastService);
 
   readonly criancaId = signal('');
   readonly crianca = signal<Crianca | null>(null);
@@ -298,6 +300,7 @@ export class MarcosCriancaComponent implements OnInit {
           this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, status, modalidade } : item));
           this.carregarEstimuloParaMarco({ ...marco, status, modalidade });
           this.carregarExperimentosDaFaixa();
+          this.toast.sucesso(MENSAGEM_REGISTRO_SALVO);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -320,7 +323,7 @@ export class MarcosCriancaComponent implements OnInit {
     })
       .pipe(finalize(() => this.salvandoId.set(null)))
       .subscribe({
-        next: () => this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, observacao: valor } : item)),
+        next: () => { this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, observacao: valor } : item)); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }
@@ -399,6 +402,7 @@ export class MarcosCriancaComponent implements OnInit {
         next: (relato) => {
           this.relatos.update((itens) => [relato, ...itens]);
           this.descricaoRelato.set('');
+          this.toast.sucesso(MENSAGEM_REGISTRO_SALVO);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -425,6 +429,7 @@ export class MarcosCriancaComponent implements OnInit {
           this.estimuloParaMarco.update((item) => item?.id === estimulo.id ? atualizado : item);
           this.historicoEstimulos.update((itens) => [atualizado, ...itens.filter((item) => item.id !== estimulo.id)]);
           this.carregarExperimentosDaFaixa();
+          this.toast.sucesso(MENSAGEM_REGISTRO_SALVO);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -440,6 +445,7 @@ export class MarcosCriancaComponent implements OnInit {
         next: () => {
           this.estimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? { ...item, observacao: valor } : item));
           this.historicoEstimulos.update((itens) => itens.map((item) => item.id === estimulo.id ? { ...item, observacao: valor } : item));
+          this.toast.sucesso(MENSAGEM_REGISTRO_SALVO);
         }, error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
   }

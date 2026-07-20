@@ -8,6 +8,7 @@ import { RegistroSaude, SalvarRegistroSaudeRequest, TipoRegistroSaude } from '..
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { CriancasService } from '../../criancas/criancas.service';
 import { SaudeService } from '../../saude/saude.service';
+import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 
 type Contexto = 'humor' | 'observacoes';
 
@@ -22,6 +23,7 @@ export class RegistroContextoCriancaComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly saudeService = inject(SaudeService);
+  private readonly toast = inject(ToastService);
   readonly contexto = (this.route.snapshot.data['contexto'] as Contexto) ?? 'observacoes';
   readonly tipo = this.contexto === 'humor' ? 'HUMOR_COMPORTAMENTO' as const : 'OBSERVACAO_EVENTO_MARCANTE' as const;
   readonly crianca = signal<Crianca | null>(null);
@@ -58,7 +60,7 @@ export class RegistroContextoCriancaComponent implements OnInit {
     try { request = { tipo: this.tipo, dataRegistro: this.lerData(this.form.controls.dataRegistro.value), descricao: this.form.controls.descricao.value?.trim() ?? '' }; } catch (erro) { this.erro.set(erro instanceof Error ? erro.message : 'Revise o registro.'); return; }
     this.salvando.set(true);
     const operacao = this.editandoId() ? this.saudeService.atualizar(crianca.id, this.editandoId(), request) : this.saudeService.registrar(crianca.id, request);
-    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (registro) => { this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)]); this.redefinir(); }, error: (erro: HttpErrorResponse) => this.erro.set(this.mensagemErro(erro)) });
+    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (registro) => { this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)]); this.redefinir(); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); }, error: (erro: HttpErrorResponse) => this.erro.set(this.mensagemErro(erro)) });
   }
 
   editar(registro: RegistroSaude): void { this.editandoId.set(registro.id); this.form.setValue({ dataRegistro: this.paraEntrada(registro.dataRegistro), descricao: registro.descricao }); }

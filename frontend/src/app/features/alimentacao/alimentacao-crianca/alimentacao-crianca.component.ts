@@ -9,7 +9,7 @@ import { CriancasService } from '../../criancas/criancas.service';
 import { AlimentacaoService } from '../alimentacao.service';
 import { CATALOGO_ALIMENTOS, CatalogoAlimento, ORIENTACOES_GRUPOS } from './catalogo-alimentos';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
-import { ToastService } from '../../../core/toast/toast.service';
+import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 
 type Opcao<T extends string> = { valor: T; label: string };
 type FiltroCatalogo = GrupoAlimento | 'TODOS' | 'ALERGENICOS' | 'LEGUMES_E_FOLHAS' | 'GRAOS_E_LEGUMINOSAS' | 'FONTES_ANIMAIS';
@@ -295,7 +295,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
             return [...semAtual, registro];
           });
           this.cancelarEdicao();
-          this.aviso.set('Registro alimentar salvo.');
+          this.aviso.set(MENSAGEM_REGISTRO_SALVO);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });

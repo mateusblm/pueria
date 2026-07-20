@@ -8,7 +8,7 @@ import { AmbienteSono, ClassificacaoDuracaoSono, RegistroSono, SalvarRegistroSon
 import { CriancasService } from '../../criancas/criancas.service';
 import { SonoService } from '../sono.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
-import { ToastService } from '../../../core/toast/toast.service';
+import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
@@ -245,7 +245,7 @@ export class SonoCriancaComponent implements OnInit {
           });
           this.cancelarEdicao();
           this.registroAberto.set(false);
-          this.aviso.set('Registro de sono salvo.');
+          this.aviso.set(MENSAGEM_REGISTRO_SALVO);
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });

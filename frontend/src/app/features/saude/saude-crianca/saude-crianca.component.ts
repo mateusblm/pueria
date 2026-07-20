@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
-import { ToastService } from '../../../core/toast/toast.service';
+import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { RegistroSaude, SalvarRegistroSaudeRequest, TipoRegistroSaude } from '../../../shared/models/saude.model';
 import { CriancasService } from '../../criancas/criancas.service';
@@ -106,7 +106,7 @@ export class SaudeCriancaComponent implements OnInit {
         this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)].sort(this.ordenarRegistros));
         this.redefinirFormulario();
         this.formularioAberto.set(false);
-        this.aviso.set('Registro salvo.');
+        this.aviso.set(MENSAGEM_REGISTRO_SALVO);
       },
       error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
     });
