@@ -283,7 +283,7 @@
   }
 
   .app-shell__content {
-    padding: 40px clamp(32px, 6vw, 80px);
+    padding: 40px clamp(32px, 3vw, 48px);
   }
 
   .app-shell__child-switcher--mobile { display: none; }
