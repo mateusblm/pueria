@@ -51,14 +51,14 @@
         <span class="intestinal-page__state-icon"><app-icon name="toilet" [size]="34" /></span>
         <h2>Ainda não há registros por aqui</h2>
         <p>Anote como foram as evacuações, o aspecto das fezes e a diurese ao longo dos dias. Não precisa registrar todos os dias — um panorama já ajuda na consulta.</p>
-        <button type="button" class="pueria-button" (click)="abrirRegistro()"><app-icon name="toilet" [size]="18" />Registrar o primeiro dia</button>
+        <button type="button" class="pueria-button mobile-register-fab--empty" (click)="abrirRegistro()"><app-icon name="toilet" [size]="18" />Registrar o primeiro dia</button>
         <small>Leva menos de 1 minuto</small>
       </section>
     }
 
     <div class="intestinal-layout">
       <section class="intestinal-atualizacao">
-        <button type="button" class="intestinal-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="toilet" [size]="20" />{{ ultimoRegistro() ? 'Registrar um novo dia' : 'Registrar o primeiro dia' }}</button>
+        <button type="button" class="intestinal-atualizacao__abrir pueria-button mobile-register-fab" (click)="abrirRegistro()"><app-icon name="toilet" [size]="20" />{{ ultimoRegistro() ? 'Registrar um novo dia' : 'Registrar o primeiro dia' }}</button>
       </section>
       <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro intestinal' : 'Registro intestinal'" descricao="Comece pelo que observou hoje; não precisa preencher tudo." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
       <form class="intestinal-form" [formGroup]="form" (ngSubmit)="salvar()">

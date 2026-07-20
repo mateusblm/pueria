@@ -35,7 +35,7 @@
         @if (intercorrencias().length) { @for (registro of intercorrencias().slice(0, 2); track registro.id) { <div><time>{{ formatarData(registro.dataRegistro) }}</time><p><strong>{{ registro.descricao.split('\n')[0] }}</strong><small>{{ registro.descricao }}</small></p><button type="button" (click)="editar(registro)">Editar</button></div> } } @else { <p class="saude-leitura__vazio">Registre febres, viroses e outros episódios que possam ajudar na consulta.</p> }
       </article>
     </section>
-    <button type="button" class="pueria-button saude-novo" (click)="abrirFormulario()"><app-icon name="plus" [size]="18" />Novo registro</button>
+    <button type="button" class="pueria-button saude-novo mobile-register-fab" (click)="abrirFormulario()"><app-icon name="plus" [size]="18" />Novo registro</button>
     @if (formularioAberto()) {
     <section class="saude-layout">
       <article class="pueria-card saude-formulario">

@@ -101,7 +101,7 @@
         <span class="sono-page__state-icon"><app-icon name="moon" [size]="34" /></span>
         <h2>Ainda não há registros por aqui</h2>
         <p>Registre um dia comum de sono, incluindo o descanso, os cochilos e os pequenos hábitos que fazem parte da rotina.</p>
-        <button type="button" class="pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="18" />Registrar o primeiro sono</button>
+        <button type="button" class="pueria-button mobile-register-fab--empty" (click)="abrirRegistro()"><app-icon name="moon" [size]="18" />Registrar o primeiro sono</button>
         <small>Leva menos de 1 minuto</small>
       </section>
     }
@@ -149,7 +149,7 @@
     }
 
     <section class="sono-atualizacao">
-      <button type="button" class="sono-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="20" />{{ ultimoRegistro() ? 'Registrar sono' : 'Registrar o primeiro sono' }}</button>
+      <button type="button" class="sono-atualizacao__abrir pueria-button mobile-register-fab" (click)="abrirRegistro()"><app-icon name="moon" [size]="20" />{{ ultimoRegistro() ? 'Registrar sono' : 'Registrar o primeiro sono' }}</button>
     </section>
     <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar rotina de sono' : 'Rotina de sono'" descricao="Registre só o que conseguiu observar hoje." tema="sono" [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
       <form class="sono-form" [formGroup]="form" (ngSubmit)="salvar()">

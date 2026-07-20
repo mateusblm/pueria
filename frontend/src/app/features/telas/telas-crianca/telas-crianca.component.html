@@ -58,14 +58,14 @@
         <span class="telas-page__state-icon"><app-icon name="smartphone" [size]="34" /></span>
         <h2>Ainda não há registros por aqui</h2>
         <p>Uma estimativa de um dia comum já ajuda a olhar os momentos de uso com calma — não só a quantidade de minutos.</p>
-        <button type="button" class="pueria-button" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="18" />Registrar a rotina com telas</button>
+        <button type="button" class="pueria-button mobile-register-fab--empty" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="18" />Registrar a rotina com telas</button>
         <small>Leva menos de 1 minuto</small>
       </section>
     }
 
     <div class="telas-layout">
       <section class="telas-atualizacao">
-        <button type="button" class="telas-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="20" />{{ ultimoRegistro() ? 'Registrar telas' : 'Registrar a rotina com telas' }}</button>
+        <button type="button" class="telas-atualizacao__abrir pueria-button mobile-register-fab" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="20" />{{ ultimoRegistro() ? 'Registrar telas' : 'Registrar a rotina com telas' }}</button>
       </section>
       @if (registrosRecentes().length > 0) { <p class="telas-contexto"><app-icon name="help" [size]="16" />Momentos como “para acalmar” ou “nas refeições” ajudam mais na conversa do que o total de horas isolado.</p> }
       <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro de telas' : 'Telas na rotina'" descricao="Uma estimativa de um dia comum já ajuda." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">

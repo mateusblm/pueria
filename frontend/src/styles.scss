@@ -80,6 +80,46 @@ button {
   cursor: pointer;
 }
 
+@media (max-width: 979px) {
+  .mobile-register-fab {
+    position: fixed;
+    right: 20px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    z-index: 13;
+    display: grid !important;
+    width: 56px !important;
+    min-width: 56px;
+    height: 56px;
+    min-height: 56px !important;
+    padding: 0 !important;
+    border: 0;
+    border-radius: 50% !important;
+    background: var(--pueria-vermelho-flor) !important;
+    box-shadow: 0 12px 28px rgba(190, 43, 73, .32);
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0;
+    place-items: center;
+  }
+
+  .mobile-register-fab app-icon {
+    display: none;
+  }
+
+  .mobile-register-fab::after {
+    color: #fff;
+    content: '+';
+    font-family: var(--pueria-fonte);
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .mobile-register-fab--empty {
+    display: none !important;
+  }
+}
+
 .pueria-page {
   min-height: 100vh;
   padding: 28px clamp(18px, 4vw, 48px);

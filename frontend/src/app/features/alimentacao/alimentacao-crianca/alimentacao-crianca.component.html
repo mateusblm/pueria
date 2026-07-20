@@ -42,13 +42,13 @@
       <section class="pueria-card alimentacao-registros-recentes"><header><h2>Registros recentes</h2><span>{{ registrosOrdenados().length }} registros</span></header>
         @for (item of registrosOrdenados().slice(0, 2); track item.id) { <article><time>{{ formatarData(item.dataRegistro) }}</time><strong>{{ labelEstagio(item.estagioAlimentar) }}</strong><span>{{ item.refeicoesPorDia ?? '—' }} refeições</span><span>{{ (item.alimentosOferecidos ?? []).length }} alimento(s) novo(s)</span><button type="button" (click)="editar(item)">Editar</button></article> }
       </section>
-      <button type="button" class="pueria-button alimentacao-novo" (click)="abrirFormulario()"><app-icon name="apple" [size]="18" />Adicionar rotina alimentar</button>
+      <button type="button" class="pueria-button alimentacao-novo mobile-register-fab" (click)="abrirFormulario()"><app-icon name="apple" [size]="18" />Adicionar rotina alimentar</button>
     } @else {
       <section class="pueria-card alimentacao-page__state alimentacao-page__state--vazio">
         <span class="alimentacao-page__state-icon"><app-icon name="apple" [size]="34" /></span>
         <h2>Ainda não há registros por aqui</h2>
         <p>Comece por uma refeição comum. Alimentos, reações e mudanças de rotina podem ajudar a organizar a conversa na consulta.</p>
-        <button type="button" class="pueria-button" (click)="abrirFormulario()"><app-icon name="apple" [size]="18" />Registrar a primeira rotina</button>
+        <button type="button" class="pueria-button mobile-register-fab--empty" (click)="abrirFormulario()"><app-icon name="apple" [size]="18" />Registrar a primeira rotina</button>
         <small>Leva menos de 1 minuto</small>
       </section>
     }
