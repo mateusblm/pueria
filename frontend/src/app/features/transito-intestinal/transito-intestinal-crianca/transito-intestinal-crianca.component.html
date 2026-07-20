@@ -81,7 +81,7 @@
             <label><span>Aspecto</span><select formControlName="aspectoUrina">@for (opcao of aspectosUrina; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }</select></label>
             <label><span>Cheiro</span><select formControlName="cheiroUrina">@for (opcao of cheirosUrina; track opcao.valor) { <option [value]="opcao.valor">{{ opcao.label }}</option> }</select></label>
           </div>
-          <label class="intestinal-checks"><input type="checkbox" formControlName="diureseSemAlteracoes" /> Padrão habitual, sem alterações relevantes</label>
+          <label class="intestinal-check intestinal-check--habitual"><input type="checkbox" formControlName="diureseSemAlteracoes" /><span>Padrão habitual, sem alterações relevantes</span></label>
         </section>
         <button type="button" class="pueria-button" (click)="avancarEtapa()">Continuar</button>
         <small class="intestinal-etapas__tempo">Leva menos de 1 minuto</small>
