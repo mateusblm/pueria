@@ -167,6 +167,55 @@
   padding: 18px;
 }
 
+/* Estados da nova home: atenção, acompanhamento tranquilo e primeiro acesso. */
+.inicio-home-alertas { display: none; }
+.inicio-home-vazio { display: none; }
+.inicio-home-atencao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  overflow: hidden;
+  border: 1px solid #f2cdd1;
+  border-radius: 18px;
+  background: #fff0f1;
+}
+.inicio-home-atencao__conteudo { padding: 24px 28px; }
+.inicio-home-atencao h2,
+.inicio-home-tranquilo h2 {
+  margin: 0;
+  color: var(--pueria-texto);
+  font-family: var(--pueria-fonte-titulo);
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.inicio-home-atencao__conteudo > p:not(.pueria-eyebrow),
+.inicio-home-tranquilo p:last-child { margin: 8px 0 0; color: #805b63; line-height: 1.45; }
+.inicio-home-atencao__acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.inicio-home-atencao__acoes .pueria-button { min-height: 42px; }
+.inicio-home-atencao__imagem { width: 100%; height: 100%; min-height: 190px; object-fit: cover; object-position: center; }
+.inicio-home-tranquilo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 24px 28px;
+  border: 1px solid #c9e2cd;
+  border-radius: 18px;
+  background: #edf8ef;
+}
+.inicio-home-tranquilo__icone { display: grid; width: 54px; height: 54px; place-items: center; border-radius: 15px; background: #d5ecd9; color: #397a54; }
+.inicio-home-tranquilo .pueria-eyebrow { color: #397a54; }
+.acompanhamento-home__saudacao strong { color: #397a54; }
+
+@media (max-width: 640px) {
+  .inicio-home-atencao { grid-template-columns: 1fr; }
+  .inicio-home-atencao__imagem { max-height: 170px; order: -1; }
+  .inicio-home-atencao__conteudo { padding: 20px; }
+  .inicio-home-atencao__acoes { flex-direction: column; }
+  .inicio-home-atencao__acoes .pueria-button { width: 100%; }
+  .inicio-home-tranquilo { padding: 20px; }
+}
+
 .acompanhamento-destaque__painel div:first-child {
   display: flex;
   align-items: baseline;

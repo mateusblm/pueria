@@ -46,7 +46,13 @@
         <div>
           <p class="pueria-eyebrow">Início</p>
           <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-          <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
+          @if (progressoAtual.respondidos === 0) {
+            <p>Aos poucos você monta o retrato dele. Não precisa preencher tudo hoje — comece pelo que fizer sentido agora.</p>
+          } @else if (existePerdaHabilidade(foco.relatos) || pontos > 0) {
+            <p>Há uma observação que vale acompanhar com mais calma.</p>
+          } @else {
+            <p>Está tudo tranquilo por aqui. <strong>Nenhum ponto pede atenção agora</strong> — continue acompanhando no seu ritmo.</p>
+          }
         </div>
       </header>
 
@@ -84,6 +90,26 @@
             </div>
           </section>
         }
+      }
+
+      @if (progressoAtual.respondidos > 0 && (existePerdaHabilidade(foco.relatos) || pontos > 0)) {
+        <section class="inicio-home-atencao" aria-label="Vale a sua atenção">
+          <div class="inicio-home-atencao__conteudo">
+            <p class="pueria-eyebrow">Vale a sua atenção</p>
+            <h2>Que tal preparar uma conversa com o pediatra?</h2>
+            <p>Você registrou uma habilidade que merece ser observada com calma. Isso nem sempre é preocupante, mas é o tipo de observação que ajuda o pediatra.</p>
+            <div class="inicio-home-atencao__acoes">
+              <a class="pueria-button" [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']">Abrir resumo para a consulta</a>
+              <a class="pueria-button pueria-button--secondary" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }">Ver o que foi registrado</a>
+            </div>
+          </div>
+          <img class="inicio-home-atencao__imagem" src="assets/inicio/inicio-acolhedora.png" alt="Mãe e criança conversando em casa" />
+        </section>
+      } @else if (progressoAtual.respondidos > 0) {
+        <section class="inicio-home-tranquilo" aria-label="Acompanhamento tranquilo">
+          <span class="inicio-home-tranquilo__icone"><app-icon name="heart" [size]="24" /></span>
+          <div><p class="pueria-eyebrow">Tudo em dia</p><h2>O desenvolvimento de {{ foco.crianca.nome }} segue bem.</h2><p>As áreas que você acompanha estão dentro do esperado. Registros pontuais bastam para manter o retrato atualizado.</p></div>
+        </section>
       }
 
       <section class="inicio-home-resumo" aria-label="Resumo do acompanhamento">
