@@ -20,18 +20,23 @@
     @if (registrosRecentes().length > 0) {
       <section class="pueria-card intestinal-padrao" aria-labelledby="intestinal-padrao-titulo">
         <div>
-          <p class="pueria-eyebrow">Padrão recente</p>
-          <h2 id="intestinal-padrao-titulo">Frequência nos últimos dias registrados</h2>
-          <p>Veja a sequência de dias. A repetição do padrão é mais útil do que uma observação isolada.</p>
+          <p class="pueria-eyebrow">Últimos registros</p>
+          <h2 id="intestinal-padrao-titulo">Como foram os últimos dias?</h2>
+          <p>Observe evacuações, aspecto das fezes e diurese em conjunto. Um dia isolado não define um padrão.</p>
         </div>
-        <div class="intestinal-padrao__lista" aria-label="Frequência de evacuações por registro">
+        <div class="intestinal-padrao__lista" aria-label="Resumo dos últimos registros intestinais">
           @for (registro of registrosRecentes(); track registro.id) {
-            <div class="intestinal-padrao__linha">
-              <span>{{ formatarData(registro.dataRegistro) }}</span>
-              <div class="intestinal-padrao__trilho"><i [style.width.%]="(registro.evacuacoesPorDia ?? 0) / maiorFrequenciaRecente() * 100"></i></div>
-              <strong>{{ textoFrequencia(registro.evacuacoesPorDia) }}</strong>
-              <small>{{ labelTipoFezes(registro.tipoFezes) }}</small>
-            </div>
+            <article class="intestinal-padrao__dia">
+              <time [attr.datetime]="registro.dataRegistro">{{ formatarData(registro.dataRegistro) }}</time>
+              <div class="intestinal-padrao__sinal intestinal-padrao__sinal--evacuacoes">
+                <span class="intestinal-padrao__icone"><app-icon name="toilet" [size]="18" /></span>
+                <div><strong>{{ textoFrequencia(registro.evacuacoesPorDia) }}</strong><small>evacuações</small></div>
+              </div>
+              <div class="intestinal-padrao__detalhes">
+                <span class="intestinal-padrao__chip"><span aria-hidden="true">●</span>{{ labelTipoFezes(registro.tipoFezes) }}</span>
+                <span class="intestinal-padrao__chip intestinal-padrao__chip--urina"><app-icon name="heart" [size]="14" />{{ resumoDiurese(registro) }}</span>
+              </div>
+            </article>
           }
         </div>
       </section>

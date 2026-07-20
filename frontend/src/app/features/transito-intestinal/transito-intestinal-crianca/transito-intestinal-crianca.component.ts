@@ -117,7 +117,6 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
   readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 7).reverse());
-  readonly maiorFrequenciaRecente = computed(() => Math.max(...this.registrosRecentes().map((registro) => registro.evacuacoesPorDia ?? 0), 1));
 
   abrirEntenda(): void {
     this.entendaAberto.set(true);
@@ -301,6 +300,21 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   textoFrequencia(valor: number | null | undefined): string {
     return valor === null || valor === undefined ? 'Não informado' : `${valor}x`;
+  }
+
+  resumoDiurese(registro: RegistroTransitoIntestinal): string {
+    if (registro.diureseSemAlteracoes) {
+      return 'xixi sem alterações';
+    }
+
+    const detalhes: string[] = [];
+    if (registro.intervaloDiureseHoras !== null && registro.intervaloDiureseHoras !== undefined) {
+      detalhes.push(`intervalo até ${registro.intervaloDiureseHoras}h`);
+    }
+    if (registro.corUrina && registro.corUrina !== 'NAO_INFORMADO') {
+      detalhes.push(this.coresUrina.find((opcao) => opcao.valor === registro.corUrina)?.label.toLowerCase() ?? 'cor observada');
+    }
+    return detalhes.join(' · ') || 'diurese não informada';
   }
 
   labelFacilidade(valor: FacilidadeLimpezaFezes): string {

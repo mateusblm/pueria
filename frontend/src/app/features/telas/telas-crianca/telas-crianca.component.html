@@ -21,17 +21,24 @@
     @if (registrosRecentes().length > 0) {
       <section class="pueria-card telas-padrao" aria-labelledby="telas-padrao-titulo">
         <div>
-          <p class="pueria-eyebrow">Padrão recente</p>
-          <h2 id="telas-padrao-titulo">Tempo de tela nos últimos registros</h2>
-          <p>Compare os dias com calma: o objetivo é perceber tendências, não buscar um número perfeito.</p>
+          <p class="pueria-eyebrow">Uso recente</p>
+          <h2 id="telas-padrao-titulo">Quando as telas apareceram?</h2>
+          <p>O tempo é só uma parte da rotina. Veja também os momentos e os apoios marcados em cada registro.</p>
         </div>
-        <div class="telas-padrao__lista" aria-label="Tempo médio de tela por registro">
+        <div class="telas-padrao__lista" aria-label="Tempo e contexto de tela por registro">
           @for (registro of registrosRecentes(); track registro.id) {
-            <div class="telas-padrao__linha">
-              <span>{{ formatarData(registro.dataRegistro) }}</span>
-              <div class="telas-padrao__trilho"><i [style.width.%]="(registro.minutosMediosDia ?? 0) / maiorTempoRecente() * 100"></i></div>
-              <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
-            </div>
+            <article class="telas-padrao__dia">
+              <time [attr.datetime]="registro.dataRegistro">{{ formatarData(registro.dataRegistro) }}</time>
+              <div class="telas-padrao__duracao">
+                <span class="telas-padrao__icone"><app-icon name="smartphone" [size]="18" /></span>
+                <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
+              </div>
+              <div class="telas-padrao__contextos">
+                @for (contexto of contextosRecentes(registro); track contexto) {
+                  <span>{{ contexto }}</span>
+                }
+              </div>
+            </article>
           }
         </div>
       </section>

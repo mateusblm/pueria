@@ -106,7 +106,6 @@ export class TelasCriancaComponent implements OnInit {
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
   readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6).reverse());
-  readonly maiorTempoRecente = computed(() => Math.max(...this.registrosRecentes().map((registro) => registro.minutosMediosDia ?? 0), 1));
 
   abrirEntenda(): void {
     this.entendaAberto.set(true);
@@ -302,6 +301,17 @@ export class TelasCriancaComponent implements OnInit {
     const horas = Math.floor(minutos / 60);
     const resto = minutos % 60;
     return resto === 0 ? `${horas}h` : `${horas}h${resto.toString().padStart(2, '0')}`;
+  }
+
+  contextosRecentes(registro: RegistroTelas): string[] {
+    const contextos: string[] = [];
+    if (registro.telaDuranteRefeicoes) contextos.push('nas refeições');
+    if (registro.telaAntesDormir) contextos.push('antes de dormir');
+    if (registro.telaParaAcalmar) contextos.push('para acalmar');
+    if (registro.telaAoAcordar) contextos.push('ao acordar');
+    if (registro.usoAcompanhadoAdulto) contextos.push('com adulto');
+    if (registro.videochamadaFamilia) contextos.push('videochamada');
+    return contextos.length ? contextos.slice(0, 3) : ['sem momento marcado'];
   }
 
   classeTempo(registro: RegistroTelas): string {
