@@ -3,28 +3,14 @@
 
   <div class="marcos-page__hero">
     <div>
-      <div class="marcos-page__hero-cabecalho">
-        <p class="pueria-eyebrow">Neurodesenvolvimento</p>
-        <button type="button" class="marcos-page__entenda" (click)="abrirEntenda()" aria-label="Entenda como acompanhar os marcos" title="Como funciona">
-          <app-icon name="help" [size]="20" />
-        </button>
-      </div>
+      <p class="pueria-eyebrow">Neurodesenvolvimento</p>
       <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
-      <p class="pueria-subtitle">
-        Observe a rotina com calma. Cada etapa mostra uma habilidade por vez, sem misturar idades futuras.
-      </p>
+      <p class="pueria-subtitle">Uma habilidade por vez, sem misturar idades futuras.</p>
     </div>
-    <div class="marcos-page__hero-visual" aria-hidden="true">
-      <span class="marcos-orbita marcos-orbita--um"><app-icon name="brain" [size]="25" /></span>
-      <span class="marcos-orbita marcos-orbita--dois"><app-icon name="message" [size]="24" /></span>
-      <span class="marcos-orbita marcos-orbita--tres"><app-icon name="footprints" [size]="25" /></span>
-    </div>
+    <button type="button" class="marcos-page__entenda" (click)="abrirEntenda()" aria-label="Entenda como acompanhar os marcos" title="Como funciona">
+      <app-icon name="brain" [size]="22" />
+    </button>
   </div>
-
-  <aside class="aviso-acompanhamento" aria-label="Como usar este acompanhamento">
-    <app-icon name="heart" [size]="18" />
-    <span>Este acompanhamento organiza observações da família e apoia a conversa com o pediatra. Ele não substitui uma avaliação profissional.</span>
-  </aside>
 
   @if (carregando()) {
     <div class="pueria-card marcos-page__state">Preparando os marcos da criança...</div>
@@ -44,7 +30,7 @@
           <h2>O que {{ crianca()?.nome ?? 'a criança' }} já faz aos {{ tituloIdadeSelecionada() }}?</h2>
           <p>Responda olhando para o dia a dia. Não é uma prova e você pode voltar quando quiser.</p>
         </div>
-        <span class="painel-etapa__progresso"><strong>{{ progresso().respondidos }}</strong> de {{ progresso().total }} respondidas</span>
+        <span class="painel-etapa__progresso">Etapa <strong>{{ indiceEtapa() + 1 }}</strong> de {{ progresso().total }}</span>
       </div>
       <div class="progresso" aria-hidden="true"><span [style.width.%]="progresso().percentual"></span></div>
       @if (textoIdadeReferencia()) { <p class="painel-etapa__referencia">{{ textoIdadeReferencia() }}</p> }
@@ -75,7 +61,7 @@
         @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
           <button type="button" [class.seletor-fases__fase--ativa]="grupo.idadeMeses === idadeSelecionada()" (click)="selecionarIdade(grupo.idadeMeses)">
             <strong>{{ grupo.titulo }}</strong>
-            <span>{{ grupo.respondidos === grupo.total ? 'Concluída' : grupo.respondidos + ' de ' + grupo.total }}</span>
+            <span>{{ grupo.respondidos === grupo.total ? '✓ Concluída' : grupo.respondidos + ' de ' + grupo.total }}</span>
           </button>
         }
       </div>
@@ -132,7 +118,9 @@
           <div class="etapa-card__body">
             <div class="etapa-card__meta">
               <span class="marco-area" [attr.data-tema]="temaArea(marco.area)"><app-icon [name]="iconeArea(marco.area)" [size]="15" />{{ labelArea(marco.area) }}</span>
-              <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span>
+              @if (marco.status !== 'NAO_AVALIADO') {
+                <span class="etapa-card__resposta">Sua resposta: <span [class]="classeStatus(marco.status)">{{ labelStatus(marco.status) }}</span></span>
+              }
             </div>
 
             <h2>{{ marco.descricao }}</h2>

@@ -3,15 +3,6 @@
 .marcos-page__back {
   width: fit-content; color: var(--pueria-vermelho-profundo); font-weight: 780; text-decoration: none;
 }
-.aviso-acompanhamento { align-items: flex-start; border-left: 3px solid #47688f; color: var(--pueria-texto-suave); display: flex; gap: 9px; line-height: 1.45; padding: 4px 0 4px 12px; }
-.aviso-acompanhamento app-icon { color: #47688f; flex: 0 0 auto; margin-top: 2px; }
-
-.marcos-page__hero {
-  align-items: center; background: #fff; border: 1px solid rgba(118, 80, 125, .16); border-left: 5px solid #76507d; border-radius: 8px; display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) 170px; min-height: 190px; overflow: hidden; padding: 26px;
-}
-.marcos-page__hero-visual { background: #eee3f4; border-radius: 49% 51% 44% 56%; height: 138px; justify-self: end; position: relative; width: 150px; }
-.marcos-orbita { align-items: center; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 7px 18px rgba(69, 45, 76, .12); display: flex; height: 54px; justify-content: center; position: absolute; width: 54px; }.marcos-orbita--um { background: #f5dce0; color: #8e4050; left: 15px; top: 26px; }.marcos-orbita--dois { background: #dce9f6; color: #405f86; right: 7px; top: 11px; }.marcos-orbita--tres { background: #dcebdc; bottom: 10px; color: #396246; right: 27px; }
-
 .marcos-page__hero h1, .marcos-page__hero p,
 .etapa-card h2, .apoio-card h2, .apoio-card p, .marco-card h3, .marco-card p,
 .resumo-consulta h2, .resumo-consulta p, .resultado-area p, .historico-card p { margin: 0; }
@@ -28,11 +19,7 @@
 
 .areas-resumo { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }.area-resumo { align-items: center; background: #fff; border: 1px solid #e9dfda; border-top: 3px solid var(--area-cor, #76507d); display: flex; gap: 10px; min-height: 78px; padding: 11px; }.area-resumo__icone { align-items: center; background: var(--area-fundo, #eee3f4); border-radius: 50%; color: var(--area-cor, #76507d); display: inline-flex; height: 38px; justify-content: center; width: 38px; }.area-resumo div { display: grid; gap: 3px; }.area-resumo span:not(.area-resumo__icone) { color: var(--pueria-texto-suave); font-size: .8rem; }.area-resumo[data-tema='social'], .resultado-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.area-resumo[data-tema='linguagem'], .resultado-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.area-resumo[data-tema='cognicao'], .resultado-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.area-resumo[data-tema='movimento'], .resultado-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
 
-.etapa-card { border-top: 4px solid #76507d; overflow: hidden; padding: 0; }
-.etapa-card__media img { display: block; width: 100%; max-height: 310px; object-fit: contain; }
-.etapa-card__body { display: grid; gap: 18px; padding: 22px; }
 .etapa-card__meta, .etapa-nav, .marco-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.etapa-card h2 { color: var(--pueria-texto); font-size: clamp(1.35rem, 2vw, 1.85rem); line-height: 1.25; }
 
 .marco-area, .marco-status {
   align-items: center; display: inline-flex; gap: 5px; width: fit-content; border-radius: 4px; font-size: 0.78rem; font-weight: 850; padding: 7px 10px;
@@ -40,7 +27,6 @@
 .marco-area { background: var(--area-fundo, var(--pueria-folha-clara)); color: var(--area-cor, var(--pueria-folha-escura)); }.marco-area[data-tema='social'] { --area-fundo:#f6dfe4; --area-cor:#914657; }.marco-area[data-tema='linguagem'] { --area-fundo:#dce9f6; --area-cor:#47688f; }.marco-area[data-tema='cognicao'] { --area-fundo:#eee3f4; --area-cor:#76507d; }.marco-area[data-tema='movimento'] { --area-fundo:#dcebdc; --area-cor:#416c4b; }
 .marco-status { background: var(--pueria-rosa-bruma); color: var(--pueria-texto-suave); }
 
-.marco-card__actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
 .etapa-card__contexto { margin: 0; color: var(--pueria-texto-suave); }
 .resposta--nao-lembro { background: #f4f2ef; color: #5f5651; }
 
@@ -151,7 +137,6 @@
 .marco-card p { color: var(--pueria-texto-suave); font-size: 0.9rem; }
 
 @media (max-width: 620px) {
-  .marcos-page__hero { grid-template-columns: 1fr 98px; min-height: 164px; padding: 18px; }.marcos-page__hero-visual { height: 96px; width: 98px; }.marcos-orbita { border-width: 3px; height: 38px; width: 38px; }.marcos-orbita--um { left: 2px; top: 21px; }.marcos-orbita--dois { right: 1px; top: 2px; }.marcos-orbita--tres { bottom: 1px; right: 13px; }
   .marcos-page__hero, .etapa-card__body, .apoio-card, .relato-desenvolvimento { padding: 18px; }
   .relato-desenvolvimento__tipos { width: 100%; }.relato-desenvolvimento__tipos button { flex: 1 1 10rem; }
   .marco-card__actions, .resumo-consulta__numeros, .resultado-area__grade { grid-template-columns: 1fr; }
@@ -180,108 +165,12 @@
   min-width: 0;
 }
 
-.marcos-page__hero {
-  min-height: 0;
-  grid-template-columns: minmax(0, 1fr) auto;
-  padding: 24px;
-  border-width: 1px;
-  border-color: #e5d8ef;
-  border-radius: var(--pueria-raio);
-  background: #fbf7fc;
-}
-
-.marcos-page__hero .pueria-title {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 2.8rem);
-}
-
-.marcos-page__hero-visual {
-  width: 62px;
-  height: 62px;
-  border-radius: 18px;
-  background: #eee3f6;
-}
-
-.marcos-orbita {
-  display: none;
-}
-
-.marcos-orbita--um {
-  display: grid;
-  inset: 0;
-  width: auto;
-  height: auto;
-  border: 0;
-  border-radius: inherit;
-  box-shadow: none;
-  background: transparent;
-  color: #71479d;
-}
-
-.aviso-acompanhamento {
-  padding: 11px 13px;
-  border: 1px solid #cee6d6;
-  border-left: 1px solid #cee6d6;
-  border-radius: var(--pueria-raio-menor);
-  background: #f1f9f3;
-  color: #316645;
-  font-size: 0.82rem;
-}
-
-.aviso-acompanhamento app-icon {
-  color: #316645;
-}
-
 .nota-marco summary {
   width: fit-content;
   cursor: pointer;
   color: var(--pueria-vermelho-profundo);
   font-size: 0.86rem;
   font-weight: 700;
-}
-
-.etapa-card {
-  display: grid;
-  grid-template-columns: minmax(210px, 0.62fr) minmax(0, 1fr);
-  align-items: start;
-  border-top-width: 1px;
-  border-color: #e4d8ec;
-  border-radius: var(--pueria-raio);
-}
-
-.etapa-card__media {
-  display: block;
-  align-self: start;
-  min-height: 100%;
-  background: #f6f0f8;
-}
-
-.etapa-card__media img {
-  width: 100%;
-  height: auto;
-  min-height: 0;
-  max-height: none;
-}
-
-.etapa-card__body {
-  align-content: start;
-  gap: 15px;
-  padding: 24px;
-}
-
-.etapa-card__meta {
-  justify-content: flex-start;
-}
-
-.etapa-card h2 {
-  max-width: 28ch;
-  font-family: var(--pueria-fonte-titulo);
-  font-size: clamp(1.55rem, 2.6vw, 2rem);
-  font-weight: 600;
-}
-
-.marco-card__actions {
-  gap: 8px;
 }
 
 .resposta {
@@ -351,13 +240,6 @@
     grid-template-columns: 1fr;
   }
 
-}
-
-.marcos-page__hero-cabecalho {
-  align-items: center;
-  display: flex;
-  gap: .75rem;
-  justify-content: space-between;
 }
 
 .marcos-page__entenda,
@@ -558,15 +440,300 @@
     font-size: 1.38rem;
   }
 
-  .painel-etapa { padding: 18px; }
-  .painel-etapa__intro { display: grid; gap: 10px; }
-  .painel-etapa__progresso { text-align: left; }
-  .painel-etapa__acoes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .painel-etapa__acoes button { align-items: flex-start; min-height: 70px; }
-  .marcos-visao__cabecalho { align-items: start; display: grid; }.marcos-visao__cabecalho > p { text-align: left; }
-  .areas-resumo { grid-template-columns: 1fr; }
-
   .marcos-entenda__acoes .pueria-button {
     width: 100%;
+  }
+}
+
+.marcos-page__hero {
+  align-items: center;
+  background: #fbf8fc;
+  border: 1px solid #dfcef1;
+  border-left-width: 1px;
+  border-radius: 18px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  display: grid;
+  gap: 14px;
+  min-height: 0;
+  padding: 18px 22px;
+}
+
+.marcos-page__hero .pueria-title {
+  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+  line-height: 1.08;
+}
+
+.marcos-page__entenda {
+  background: #eadffd;
+  border: 0;
+  border-radius: 14px;
+  color: #6744ba;
+  height: 46px;
+  width: 46px;
+}
+
+.painel-etapa {
+  background: #fff;
+  border: 1px solid #e6dcd5;
+  border-top: 3px solid #6b45c9;
+  border-radius: 16px;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.painel-etapa__intro h2 {
+  font-family: var(--pueria-fonte-titulo);
+  font-size: clamp(1.3rem, 2vw, 1.65rem);
+}
+
+.painel-etapa__progresso {
+  color: #7151bf;
+  font-weight: 650;
+}
+
+.painel-etapa__progresso strong {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.progresso {
+  background: #ede7df;
+  height: 6px;
+}
+
+.progresso span {
+  background: #397a54;
+}
+
+.painel-etapa__acoes {
+  gap: 9px;
+}
+
+.painel-etapa__acoes button {
+  border-radius: 12px;
+  min-height: 56px;
+  padding: 10px 12px;
+}
+
+.painel-etapa__acao--ativa {
+  background: #f0eafe !important;
+  border-color: #7047d4 !important;
+  box-shadow: none;
+}
+
+.seletor-fases {
+  gap: 8px;
+}
+
+.seletor-fases__lista {
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.seletor-fases__lista button {
+  background: #fff;
+  border-radius: 12px;
+  flex-basis: 136px;
+  min-height: 55px;
+}
+
+.seletor-fases__lista button span {
+  color: #397a54;
+}
+
+.seletor-fases__fase--ativa {
+  background: #f0eafe !important;
+  border-color: #7047d4 !important;
+  box-shadow: none;
+}
+
+.etapa-card {
+  background: #fff;
+  border: 1px solid #e6dcd5;
+  border-radius: 18px;
+  display: grid;
+  grid-template-columns: minmax(260px, .92fr) minmax(0, 1.08fr);
+  min-height: 470px;
+}
+
+.etapa-card__media {
+  align-items: center;
+  align-self: stretch;
+  background: #f1edf8;
+  border-right: 1px dashed #c7b9d9;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.etapa-card__media img {
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  padding: clamp(18px, 3vw, 46px);
+}
+
+.etapa-card__body {
+  align-content: start;
+  display: grid;
+  gap: 14px;
+  padding: clamp(20px, 2.5vw, 30px);
+}
+
+.etapa-card h2 {
+  color: var(--pueria-texto);
+  font-family: var(--pueria-fonte-titulo);
+  font-size: clamp(1.7rem, 2.5vw, 2.35rem);
+  max-width: 24ch;
+}
+
+.etapa-card__resposta {
+  align-items: center;
+  color: var(--pueria-texto-suave);
+  display: inline-flex;
+  font-size: .82rem;
+  gap: 7px;
+}
+
+.etapa-card__resposta .marco-status {
+  border-radius: 999px;
+  font-weight: 750;
+}
+
+.marco-card__actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.resposta {
+  border-radius: 12px;
+  min-height: 54px;
+}
+
+.estimulo-do-marco {
+  background: color-mix(in srgb, var(--area-fundo) 42%, white);
+  border-radius: 12px;
+  gap: 11px;
+}
+
+.estimulo-do-marco .pueria-button {
+  background: var(--pueria-vermelho);
+  border-color: var(--pueria-vermelho);
+  color: #fff;
+}
+
+.etapa-nav {
+  align-items: center;
+  margin-top: auto;
+}
+
+.etapa-nav .pueria-button:last-child {
+  background: #6842c2;
+  border-color: #6842c2;
+  color: #fff;
+}
+
+.marcos-visao__cabecalho h2,
+.estimulos-card h2,
+.resumo-consulta h2,
+.consulta-pontos__cabecalho h2 {
+  font-family: var(--pueria-fonte-titulo);
+}
+
+.area-resumo {
+  border-radius: 14px;
+  min-height: 132px;
+  padding: 17px;
+}
+
+.estimulos-card {
+  background: transparent;
+  border: 0;
+  border-top: 0;
+  padding: 0;
+}
+
+.estimulos-card__lista article {
+  background: #fff;
+  border-radius: 14px;
+  min-height: 118px;
+  padding: 16px 18px;
+}
+
+.resumo-consulta {
+  background: transparent;
+  border: 0;
+  border-top: 0;
+  padding: 0;
+}
+
+.resumo-consulta__numeros article,
+.consulta-area {
+  border-radius: 14px;
+}
+
+@media (max-width: 760px) {
+  .marcos-page__hero,
+  .painel-etapa {
+    padding: 16px;
+  }
+
+  .painel-etapa__intro {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .painel-etapa__acoes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .etapa-card {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .etapa-card__media {
+    border-bottom: 1px dashed #c7b9d9;
+    border-right: 0;
+    min-height: 220px;
+  }
+
+  .etapa-card__media img {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .marcos-page__hero {
+    padding: 16px;
+  }
+
+  .marcos-page__hero .pueria-title {
+    font-size: 1.65rem;
+  }
+
+  .painel-etapa__acoes,
+  .marco-card__actions,
+  .areas-resumo {
+    grid-template-columns: 1fr;
+  }
+
+  .painel-etapa__acoes button {
+    min-height: 50px;
+  }
+
+  .etapa-card__body {
+    padding: 18px;
+  }
+
+  .etapa-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .etapa-nav span {
+    grid-column: 1 / -1;
+    grid-row: 1;
   }
 }
