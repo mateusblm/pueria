@@ -574,6 +574,20 @@
   padding: clamp(18px, 3vw, 46px);
 }
 
+@media (min-width: 701px) {
+  .etapa-card {
+    height: clamp(470px, 48vw, 620px);
+    min-height: 0;
+  }
+
+  .etapa-card__media img {
+    height: 100%;
+    object-fit: cover;
+    padding: 0;
+    width: 100%;
+  }
+}
+
 .etapa-card__body {
   align-content: start;
   display: grid;
