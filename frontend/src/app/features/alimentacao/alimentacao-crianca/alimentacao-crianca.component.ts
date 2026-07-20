@@ -196,6 +196,11 @@ export class AlimentacaoCriancaComponent implements OnInit {
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
   readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6).reverse());
   readonly maiorQuantidadeRefeicoesRecente = computed(() => Math.max(...this.registrosRecentes().map((registro) => registro.refeicoesPorDia ?? 0), 1));
+  readonly alimentosDaRotina = computed(() => this.ultimoRegistro()?.alimentosOferecidos ?? []);
+  readonly variedadeDaRotina = computed(() => this.resumirAlimentos(this.alimentosDaRotina()));
+  readonly alimentosAceitos = computed(() => this.alimentosDaRotina().filter((alimento) => alimento.aceitacao === 'BOA'));
+  readonly alimentosEmAdaptacao = computed(() => this.alimentosDaRotina().filter((alimento) => alimento.aceitacao !== 'BOA'));
+  readonly gruposDaRotina = computed(() => new Set(this.alimentosDaRotina().map((alimento) => alimento.grupo)).size);
   readonly alimentosFiltrados = computed(() => {
     const grupo = this.grupoAlimentoAtivo();
     const busca = this.normalizarTexto(this.buscaAlimento());
@@ -346,6 +351,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
 
   cancelarEdicao(): void {
     this.editandoId.set('');
+    this.formularioAberto.set(false);
     this.alimentosSelecionados.set([]);
     this.fecharModalAlimentos();
     this.form.reset({

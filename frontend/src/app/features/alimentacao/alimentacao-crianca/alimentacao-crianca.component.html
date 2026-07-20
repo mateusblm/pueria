@@ -12,50 +12,50 @@
     <div class="alimentacao-page__hero">
       <div>
         <p class="pueria-eyebrow">Alimentação</p>
-        <div class="alimentacao-page__identidade"><span><app-icon name="salad" [size]="29" /></span><h1 class="pueria-title">Rotina alimentar</h1></div>
-        <p class="pueria-subtitle">Uma visão gentil da rotina, da variedade e das descobertas à mesa de {{ crianca.nome }}.</p>
+        <div class="alimentacao-page__identidade"><span><app-icon name="apple" [size]="29" /></span><h1 class="pueria-title">Rotina alimentar</h1></div>
       </div>
       <button type="button" class="alimentacao-page__entenda" (click)="abrirEntenda()" aria-label="Entenda como acompanhar a alimentação" title="Como funciona">
         <app-icon name="help" [size]="20" />
       </button>
     </div>
 
-    @if (registrosRecentes().length > 0) {
-      <section class="pueria-card alimentacao-padrao" aria-labelledby="alimentacao-padrao-titulo">
-        <div>
-          <p class="pueria-eyebrow">Padrão recente</p>
-          <h2 id="alimentacao-padrao-titulo">Refeições na rotina registrada</h2>
-          <p>Uma leitura rápida dos últimos registros para enxergar a rotina ao longo do tempo.</p>
-        </div>
-        <div class="alimentacao-padrao__lista" aria-label="Quantidade de refeições por registro">
-          @for (registro of registrosRecentes(); track registro.id) {
-            <div class="alimentacao-padrao__linha">
-              <span>{{ formatarData(registro.dataRegistro) }}</span>
-              <div class="alimentacao-padrao__trilho"><i [style.width.%]="(registro.refeicoesPorDia ?? 0) / maiorQuantidadeRefeicoesRecente() * 100"></i></div>
-              <strong>{{ registro.refeicoesPorDia ?? 0 }} refeições</strong>
-            </div>
-          }
-        </div>
+    @if (ultimoRegistro(); as registro) {
+      <section class="alimentacao-painel" aria-label="Resumo da rotina alimentar">
+        <article><p>Fase alimentar</p><strong>{{ labelEstagio(registro.estagioAlimentar) }}</strong><small>textura: {{ labelTextura(registro.texturaPredominante) }}</small></article>
+        <article><p>Refeições por dia</p><strong>{{ registro.refeicoesPorDia ?? '—' }}</strong><small>no último registro</small></article>
+        <article><p>Alimentos na rotina</p><strong>{{ alimentosDaRotina().length }}</strong><small>em {{ gruposDaRotina() }} grupos</small></article>
       </section>
+
+      <section class="alimentacao-leitura">
+        <article class="pueria-card alimentacao-variedade-painel"><p class="pueria-eyebrow">Variedade por grupo</p>
+          @for (grupo of [{ nome: 'Frutas', quantidade: variedadeDaRotina().FRUTA }, { nome: 'Legumes e verduras', quantidade: variedadeDaRotina().LEGUME_HORTALICA_FRUTO + variedadeDaRotina().VERDURA_FOLHA }, { nome: 'Cereais e massas', quantidade: variedadeDaRotina().CEREAL_GRAO_MASSA + variedadeDaRotina().PSEUDOCEREAL_GRAO_ESPECIAL }, { nome: 'Carnes e aves', quantidade: variedadeDaRotina().CARNE_AVE + variedadeDaRotina().PEIXE_FRUTO_MAR + variedadeDaRotina().OVO }, { nome: 'Leguminosas', quantidade: variedadeDaRotina().LEGUMINOSA }]; track grupo.nome) {
+            <div><span>{{ grupo.nome }}</span><small>{{ grupo.quantidade }}</small><i><b [style.width.%]="alimentosDaRotina().length ? grupo.quantidade / alimentosDaRotina().length * 100 : 0"></b></i></div>
+          }
+        </article>
+        <article class="pueria-card alimentacao-aceitacao"><p class="pueria-eyebrow">Aceitação</p>
+          <strong>Aceitos com facilidade</strong><div class="alimentacao-chips alimentacao-chips--aceitos">@for (alimento of alimentosAceitos(); track alimento.codigo) { <span>{{ alimento.nome }}</span> } @empty { <small>Sem aceitação registrada.</small> }</div>
+          <strong>Ainda em adaptação</strong><div class="alimentacao-chips alimentacao-chips--adaptacao">@for (alimento of alimentosEmAdaptacao(); track alimento.codigo) { <span>{{ alimento.nome }}</span> } @empty { <small>Nenhum alimento em adaptação registrado.</small> }</div>
+          <p class="alimentacao-aceitacao__nota">Recusar um alimento novo é esperado — costuma levar várias ofertas até aceitar.</p>
+        </article>
+      </section>
+
+      <section class="pueria-card alimentacao-registros-recentes"><header><h2>Registros recentes</h2><span>{{ registrosOrdenados().length }} registros</span></header>
+        @for (item of registrosOrdenados().slice(0, 2); track item.id) { <article><time>{{ formatarData(item.dataRegistro) }}</time><strong>{{ labelEstagio(item.estagioAlimentar) }}</strong><span>{{ item.refeicoesPorDia ?? '—' }} refeições</span><span>{{ (item.alimentosOferecidos ?? []).length }} alimento(s) novo(s)</span><button type="button" (click)="editar(item)">Editar</button></article> }
+      </section>
+      <button type="button" class="pueria-button alimentacao-novo" (click)="abrirFormulario()"><app-icon name="apple" [size]="18" />Adicionar rotina alimentar</button>
     } @else {
       <section class="pueria-card alimentacao-page__state alimentacao-page__state--vazio">
-        <span class="alimentacao-page__state-icon"><app-icon name="salad" [size]="34" /></span>
+        <span class="alimentacao-page__state-icon"><app-icon name="apple" [size]="34" /></span>
         <h2>Ainda não há registros por aqui</h2>
         <p>Comece por uma refeição comum. Alimentos, reações e mudanças de rotina podem ajudar a organizar a conversa na consulta.</p>
-        <button type="button" class="pueria-button" (click)="abrirFormulario()"><app-icon name="salad" [size]="18" />Registrar a primeira rotina</button>
+        <button type="button" class="pueria-button" (click)="abrirFormulario()"><app-icon name="apple" [size]="18" />Registrar a primeira rotina</button>
         <small>Leva menos de 1 minuto</small>
       </section>
     }
 
+    @if (formularioAberto() || editandoId()) {
     <div class="alimentacao-layout">
-      <details class="alimentacao-atualizacao" [open]="formularioAberto() || editandoId() !== ''">
-        <summary>
-          <span class="alimentacao-atualizacao__icone"><app-icon name="salad" [size]="21" /></span>
-          <span>
-            <strong>{{ editandoId() ? 'Editar rotina alimentar' : 'Atualizar rotina alimentar' }}</strong>
-            <small>{{ ultimoRegistro() ? 'Registre mudanças, alimentos novos ou observações.' : 'Comece com o que faz parte da rotina hoje.' }}</small>
-          </span>
-        </summary>
+      <section class="alimentacao-atualizacao">
       <form class="pueria-card alimentacao-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div class="alimentacao-form__header">
           <div>
@@ -219,7 +219,7 @@
           {{ salvando() ? 'Salvando...' : 'Salvar alimentação' }}
         </button>
       </form>
-      </details>
+      </section>
 
       <aside class="pueria-card alimentacao-historico">
         <p class="pueria-eyebrow">Histórico</p>
@@ -239,6 +239,7 @@
         }
       </aside>
     </div>
+    }
   }
 
   @if (modalAlimentosAberta()) {
