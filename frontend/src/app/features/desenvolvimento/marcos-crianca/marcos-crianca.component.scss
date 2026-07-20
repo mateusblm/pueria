@@ -554,6 +554,7 @@
   display: grid;
   grid-template-columns: minmax(260px, .92fr) minmax(0, 1.08fr);
   min-height: 470px;
+  overflow: hidden;
 }
 
 .etapa-card__media {
@@ -576,8 +577,10 @@
 
 @media (min-width: 701px) {
   .etapa-card {
-    height: clamp(470px, 48vw, 620px);
-    min-height: 0;
+    /* O conteúdo define a altura do cartão; assim, a navegação nunca escapa
+       quando uma atividade ou uma resposta ocupa mais de uma linha. */
+    height: auto;
+    min-height: 500px;
   }
 
   .etapa-card__media img {
@@ -592,6 +595,7 @@
   align-content: start;
   display: grid;
   gap: 14px;
+  min-height: 0;
   padding: clamp(20px, 2.5vw, 30px);
 }
 
@@ -626,8 +630,14 @@
 
 .etapa-nav {
   align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   margin-top: auto;
+  width: 100%;
 }
+
+.etapa-nav .pueria-button:first-child { justify-self: start; }
+.etapa-nav .pueria-button:last-child { justify-self: end; }
 
 .etapa-nav .pueria-button:last-child {
   background: #6842c2;
