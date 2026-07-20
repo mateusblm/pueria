@@ -51,6 +51,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
     if (mensagem) this.toast.sucesso(mensagem);
   });
   readonly editandoId = signal('');
+  readonly formularioAberto = signal(false);
   readonly entendaAberto = signal(false);
   readonly modalAlimentosAberta = signal(false);
   readonly buscaAlimento = signal('');
@@ -59,6 +60,10 @@ export class AlimentacaoCriancaComponent implements OnInit {
   readonly alimentoEmDetalhe = signal<string | null>(null);
   readonly novaDataReexposicao = signal('');
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
+
+  abrirFormulario(): void {
+    this.formularioAberto.set(true);
+  }
 
   readonly gruposAlimentos: GrupoCatalogo[] = [
     { valor: 'TODOS', label: 'Todos' },

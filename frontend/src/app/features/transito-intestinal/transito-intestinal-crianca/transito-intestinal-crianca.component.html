@@ -1,4 +1,4 @@
-<section class="intestinal-page">
+<section class="intestinal-page" [class.intestinal-page--vazio]="!carregando() && !!crianca() && registrosRecentes().length === 0">
   <a [routerLink]="rotaRetorno()" class="intestinal-page__back">← {{ textoRetorno() }}</a>
 
   @if (carregando()) {
@@ -41,9 +41,12 @@
         </div>
       </section>
     } @else {
-      <section class="pueria-card intestinal-page__state">
-        <h2>Nenhum registro intestinal ainda</h2>
-        <p>Comece por um dia comum. O mais útil é observar repetição do padrão, não um registro isolado.</p>
+      <section class="pueria-card intestinal-page__state intestinal-page__state--vazio">
+        <span class="intestinal-page__state-icon"><app-icon name="toilet" [size]="34" /></span>
+        <h2>Ainda não há registros por aqui</h2>
+        <p>Anote como foram as evacuações, o aspecto das fezes e a diurese ao longo dos dias. Não precisa registrar todos os dias — um panorama já ajuda na consulta.</p>
+        <button type="button" class="pueria-button" (click)="abrirRegistro()"><app-icon name="toilet" [size]="18" />Registrar o primeiro dia</button>
+        <small>Leva menos de 1 minuto</small>
       </section>
     }
 

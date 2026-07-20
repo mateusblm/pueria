@@ -216,6 +216,19 @@
   padding: 1.5rem;
 }
 
+.telas-page__state--vazio {
+  display: grid;
+  justify-items: center;
+  min-height: 28rem;
+  padding: clamp(2.5rem, 8vw, 5rem) 1.5rem;
+  text-align: center;
+}
+.telas-page__state--vazio h2 { font-family: var(--pueria-fonte-destaque); font-size: clamp(1.7rem, 3vw, 2.25rem); margin: 0; }
+.telas-page__state--vazio p { color: var(--pueria-texto-suave); line-height: 1.5; margin: .7rem 0 0; max-width: 34rem; }
+.telas-page__state--vazio small { color: var(--pueria-texto-suave); }
+.telas-page__state-icon { align-items: center; background: #dcebed; border-radius: 50%; color: #4f7c81; display: inline-flex; height: 6rem; justify-content: center; width: 6rem; }
+.telas-page--vazio .telas-atualizacao, .telas-page--vazio .telas-historico { display: none; }
+
 .telas-sintese,
 .telas-form,
 .telas-historico {

@@ -1,4 +1,4 @@
-<section class="sono-page">
+<section class="sono-page" [class.sono-page--vazio]="!carregando() && !!crianca() && !ultimoRegistro()">
   <a [routerLink]="rotaRetorno()" class="sono-page__back">← {{ textoRetorno() }}</a>
 
   @if (carregando()) {
@@ -97,9 +97,12 @@
         }
       </section>
     } @else {
-      <section class="pueria-card sono-page__state">
-        <h2>Nenhum registro de sono ainda</h2>
-        <p>Preencha o primeiro registro para acompanhar descanso, cochilos e hábitos antes de dormir.</p>
+      <section class="pueria-card sono-page__state sono-page__state--vazio">
+        <span class="sono-page__state-icon"><app-icon name="moon" [size]="34" /></span>
+        <h2>Ainda não há registros por aqui</h2>
+        <p>Registre um dia comum de sono, incluindo o descanso, os cochilos e os pequenos hábitos que fazem parte da rotina.</p>
+        <button type="button" class="pueria-button" (click)="abrirRegistro()"><app-icon name="moon" [size]="18" />Registrar o primeiro sono</button>
+        <small>Leva menos de 1 minuto</small>
       </section>
     }
 

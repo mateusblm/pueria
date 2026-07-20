@@ -32,6 +32,18 @@
   padding: 1.5rem;
 }
 
+.intestinal-page__state--vazio {
+  justify-items: center;
+  min-height: 28rem;
+  padding: clamp(2.5rem, 8vw, 5rem) 1.5rem;
+  text-align: center;
+}
+.intestinal-page__state--vazio h2 { font-family: var(--pueria-fonte-destaque); font-size: clamp(1.7rem, 3vw, 2.25rem); margin: 0; }
+.intestinal-page__state--vazio p { color: var(--pueria-texto-suave); line-height: 1.5; margin: 0; max-width: 34rem; }
+.intestinal-page__state--vazio small { color: var(--pueria-texto-suave); }
+.intestinal-page__state-icon { align-items: center; background: #f9e4d7; border-radius: 50%; color: #b66c32; display: inline-flex; height: 6rem; justify-content: center; width: 6rem; }
+.intestinal-page--vazio .intestinal-atualizacao, .intestinal-page--vazio .intestinal-historico { display: none; }
+
 .intestinal-layout {
   align-items: start;
   display: grid;

@@ -24,6 +24,19 @@
   padding: 1.5rem;
 }
 
+.sono-page__state--vazio {
+  display: grid;
+  justify-items: center;
+  min-height: 28rem;
+  padding: clamp(2.5rem, 8vw, 5rem) 1.5rem;
+  text-align: center;
+}
+.sono-page__state--vazio h2 { font-family: var(--pueria-fonte-destaque); font-size: clamp(1.7rem, 3vw, 2.25rem); margin: 0; }
+.sono-page__state--vazio p { color: var(--pueria-texto-suave); line-height: 1.5; margin: .7rem 0 0; max-width: 34rem; }
+.sono-page__state--vazio small { color: var(--pueria-texto-suave); }
+.sono-page__state-icon { align-items: center; background: #eadff2; border-radius: 50%; color: #76507d; display: inline-flex; height: 6rem; justify-content: center; width: 6rem; }
+.sono-page--vazio .sono-atualizacao, .sono-page--vazio .sono-historico { display: none; }
+
 .sono-page__hero .pueria-title {
   font-size: clamp(2.6rem, 5vw, 3.6rem);
   letter-spacing: 0;

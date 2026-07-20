@@ -1,4 +1,4 @@
-<section class="telas-page">
+<section class="telas-page" [class.telas-page--vazio]="!carregando() && !!crianca() && registrosRecentes().length === 0">
   <a [routerLink]="rotaRetorno()" class="telas-page__back">← {{ textoRetorno() }}</a>
 
   @if (carregando()) {
@@ -43,9 +43,12 @@
         </div>
       </section>
     } @else {
-      <section class="pueria-card telas-page__state">
-        <h2>Nenhum registro de telas ainda</h2>
-        <p>Comece por um dia comum. O Pueria vai olhar tempo, contexto e momentos da rotina, não apenas o número de minutos.</p>
+      <section class="pueria-card telas-page__state telas-page__state--vazio">
+        <span class="telas-page__state-icon"><app-icon name="smartphone" [size]="34" /></span>
+        <h2>Ainda não há registros por aqui</h2>
+        <p>Uma estimativa de um dia comum já ajuda a olhar os momentos de uso com calma — não só a quantidade de minutos.</p>
+        <button type="button" class="pueria-button" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="18" />Registrar a rotina com telas</button>
+        <small>Leva menos de 1 minuto</small>
       </section>
     }
 

@@ -1,4 +1,4 @@
-<section class="alimentacao-page">
+<section class="alimentacao-page" [class.alimentacao-page--vazio]="!carregando() && !!crianca() && registrosRecentes().length === 0 && !formularioAberto()">
   <a [routerLink]="rotaRetorno()" class="alimentacao-page__back">← {{ textoRetorno() }}</a>
 
   @if (carregando()) {
@@ -38,14 +38,17 @@
         </div>
       </section>
     } @else {
-      <section class="pueria-card alimentacao-page__state">
-        <h2>Nenhum registro alimentar ainda</h2>
-        <p>Preencha o primeiro registro para acompanhar a rotina alimentar junto do crescimento e do desenvolvimento.</p>
+      <section class="pueria-card alimentacao-page__state alimentacao-page__state--vazio">
+        <span class="alimentacao-page__state-icon"><app-icon name="salad" [size]="34" /></span>
+        <h2>Ainda não há registros por aqui</h2>
+        <p>Comece por uma refeição comum. Alimentos, reações e mudanças de rotina podem ajudar a organizar a conversa na consulta.</p>
+        <button type="button" class="pueria-button" (click)="abrirFormulario()"><app-icon name="salad" [size]="18" />Registrar a primeira rotina</button>
+        <small>Leva menos de 1 minuto</small>
       </section>
     }
 
     <div class="alimentacao-layout">
-      <details class="alimentacao-atualizacao" [open]="!ultimoRegistro() || editandoId() !== null">
+      <details class="alimentacao-atualizacao" [open]="formularioAberto() || editandoId() !== ''">
         <summary>
           <span class="alimentacao-atualizacao__icone"><app-icon name="salad" [size]="21" /></span>
           <span>
