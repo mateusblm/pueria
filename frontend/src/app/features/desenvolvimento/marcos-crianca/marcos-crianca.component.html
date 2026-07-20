@@ -268,13 +268,21 @@
           <section class="consulta-pontos" aria-label="Pontos para conversar por área">
             <div class="consulta-pontos__cabecalho"><p class="pueria-eyebrow">Pontos por área</p><h2>O que vale levar para a conversa</h2></div>
             @for (grupo of pontosConsultaPorArea(); track grupo.area) {
-              <article class="pueria-card consulta-area" [attr.data-tema]="temaArea(grupo.area)">
-                <header><span class="consulta-area__icone"><app-icon [name]="iconeArea(grupo.area)" [size]="20" /></span><div><h3>{{ grupo.label }}</h3><p>{{ grupo.pontos.length }} {{ grupo.pontos.length === 1 ? 'observação' : 'observações' }}</p></div></header>
-                <ul>
-                  @for (ponto of grupo.pontos; track ponto.id) {
-                    <li><span>{{ ponto.descricao }}</span><small>{{ labelStatus(ponto.status) }} · {{ tituloIdade(ponto.idadeMeses) }}</small></li>
-                  }
-                </ul>
+              <article class="pueria-card consulta-area" [class.consulta-area--aberta]="areaConsultaAberta() === grupo.area" [attr.data-tema]="temaArea(grupo.area)">
+                <button type="button" class="consulta-area__trigger" [attr.aria-expanded]="areaConsultaAberta() === grupo.area" (click)="alternarAreaConsulta(grupo.area)">
+                  <span class="consulta-area__icone"><app-icon [name]="iconeArea(grupo.area)" [size]="20" /></span>
+                  <span class="consulta-area__resumo"><strong>{{ grupo.label }}</strong><small>{{ grupo.pontos.length }} {{ grupo.pontos.length === 1 ? 'observação' : 'observações' }}</small></span>
+                  <app-icon class="consulta-area__seta" name="chevronRight" [size]="18" />
+                </button>
+                @if (areaConsultaAberta() === grupo.area) {
+                  <div class="consulta-area__conteudo">
+                    <ul>
+                      @for (ponto of grupo.pontos; track ponto.id) {
+                        <li><span>{{ ponto.descricao }}</span><small>{{ labelStatus(ponto.status) }} · {{ tituloIdade(ponto.idadeMeses) }}</small></li>
+                      }
+                    </ul>
+                  </div>
+                }
               </article>
             }
           </section>

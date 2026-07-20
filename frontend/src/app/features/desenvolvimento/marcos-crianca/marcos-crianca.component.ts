@@ -90,6 +90,7 @@ export class MarcosCriancaComponent implements OnInit {
   readonly salvandoRelato = signal(false);
   readonly salvandoEstimuloId = signal<string | null>(null);
   readonly entendaAberto = signal(false);
+  readonly areaConsultaAberta = signal<AreaDesenvolvimento | null>(null);
 
   readonly areas: AreaDesenvolvimento[] = ['SOCIAL_EMOCIONAL', 'LINGUAGEM_COMUNICACAO', 'COGNITIVO', 'MOTOR'];
 
@@ -349,6 +350,10 @@ export class MarcosCriancaComponent implements OnInit {
 
   abrirResultados(): void {
     this.modo.set('resultados');
+  }
+
+  alternarAreaConsulta(area: AreaDesenvolvimento): void {
+    this.areaConsultaAberta.update((areaAberta) => areaAberta === area ? null : area);
   }
 
   abrirExperimentos(): void {
