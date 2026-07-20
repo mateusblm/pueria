@@ -201,19 +201,26 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     }
 
     const resumo: Record<RegistroRapidoIntestinal, Partial<{
+      tipoFezes: TipoFezesBristol;
+      constipacao: boolean;
       diarreia: boolean;
       observacao: string;
     }>> = {
       HABITUAL: {
+        tipoFezes: 'TIPO_4',
         observacao: 'Registro rápido: padrão habitual percebido pela família.'
       },
       RESSECADO: {
+        tipoFezes: 'TIPO_2',
+        constipacao: true,
         observacao: 'Registro rápido: fezes mais ressecadas ou evacuação mais difícil.'
       },
       AMOLECIDO: {
+        tipoFezes: 'TIPO_6',
         observacao: 'Registro rápido: fezes mais amolecidas que o habitual.'
       },
       DIARREIA: {
+        tipoFezes: 'TIPO_7',
         diarreia: true,
         observacao: 'Registro rápido: fezes líquidas ou diarreia percebida pela família.'
       }
@@ -373,6 +380,18 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   textoFrequencia(valor: number | null | undefined): string {
     return valor === null || valor === undefined ? 'Não informado' : `${valor}x`;
+  }
+
+  textoPrincipalRegistro(registro: RegistroTransitoIntestinal): string {
+    return registro.evacuacoesPorDia === null || registro.evacuacoesPorDia === undefined
+      ? this.labelTipoFezes(registro.tipoFezes)
+      : this.textoFrequencia(registro.evacuacoesPorDia);
+  }
+
+  textoSecundarioRegistro(registro: RegistroTransitoIntestinal): string {
+    return registro.evacuacoesPorDia === null || registro.evacuacoesPorDia === undefined
+      ? 'consistência observada'
+      : 'evacuações';
   }
 
   resumoDiurese(registro: RegistroTransitoIntestinal): string {

@@ -43,7 +43,7 @@
               <time [attr.datetime]="registro.dataRegistro">{{ formatarData(registro.dataRegistro) }}</time>
               <div class="intestinal-padrao__sinal intestinal-padrao__sinal--evacuacoes">
                 <span class="intestinal-padrao__icone"><app-icon name="toilet" [size]="18" /></span>
-                <div><strong>{{ textoFrequencia(registro.evacuacoesPorDia) }}</strong><small>evacuações</small></div>
+                <div><strong>{{ textoPrincipalRegistro(registro) }}</strong><small>{{ textoSecundarioRegistro(registro) }}</small></div>
               </div>
               <div class="intestinal-padrao__detalhes">
                 <span class="intestinal-padrao__chip"><span aria-hidden="true">●</span>{{ labelTipoFezes(registro.tipoFezes) }}</span>
