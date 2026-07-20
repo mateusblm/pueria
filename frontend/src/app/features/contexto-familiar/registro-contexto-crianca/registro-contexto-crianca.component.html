@@ -73,12 +73,16 @@
         </div>
       </form>
 
-      <aside class="pueria-card contexto-historico">
+      <aside class="pueria-card contexto-historico" [class.contexto-historico--vazio]="registrosOrdenados().length === 0">
         <div class="contexto-historico__cabecalho"><p class="pueria-eyebrow">Linha do tempo</p><span>{{ registrosOrdenados().length }} {{ registrosOrdenados().length === 1 ? 'registro' : 'registros' }}</span></div>
-        <h2>{{ contexto === 'humor' ? 'Como foram os dias' : 'Eventos importantes' }}</h2>
         @if (registrosOrdenados().length === 0) {
-          <p>Ainda não há registros neste espaço.</p>
+          <div class="contexto-historico__vazio">
+            <span aria-hidden="true">{{ contexto === 'humor' ? '🙂' : '✦' }}</span>
+            <h2>{{ contexto === 'humor' ? 'Como foram os dias' : 'Eventos importantes' }}</h2>
+            <p>Quando você registrar alguns dias, esta visão ajudará a perceber o período com mais clareza.</p>
+          </div>
         } @else {
+          <h2>{{ contexto === 'humor' ? 'Como foram os dias' : 'Eventos importantes' }}</h2>
           <div class="contexto-historico__linha">
           @for (registro of registrosOrdenados(); track registro.id; let indice = $index) {
             @if (contextoHistoricoCompleto() || indice < 4) {
