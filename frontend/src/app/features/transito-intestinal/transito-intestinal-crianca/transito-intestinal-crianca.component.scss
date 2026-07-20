@@ -517,6 +517,105 @@
   grid-template-columns: auto minmax(0, 1fr);
 }
 
+.intestinal-rapido {
+  display: grid;
+  gap: 1rem;
+}
+
+.intestinal-rapido h3,
+.intestinal-rapido p {
+  margin: 0;
+}
+
+.intestinal-rapido h3 {
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.4rem;
+  margin-top: .2rem;
+}
+
+.intestinal-rapido p:not(.pueria-eyebrow) {
+  color: var(--pueria-texto-suave);
+  line-height: 1.5;
+  margin-top: .35rem;
+}
+
+.intestinal-rapido__data {
+  display: grid;
+  gap: .4rem;
+  max-width: 18rem;
+}
+
+.intestinal-rapido__data span {
+  color: var(--pueria-texto);
+  font-size: .9rem;
+  font-weight: 750;
+}
+
+.intestinal-rapido__opcoes {
+  display: grid;
+  gap: .65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.intestinal-rapido__opcoes button {
+  align-items: flex-start;
+  background: #fffaf7;
+  border: 1px solid #eddcd2;
+  border-radius: 13px;
+  color: var(--pueria-texto);
+  cursor: pointer;
+  display: grid;
+  gap: .7rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  min-height: 92px;
+  padding: .85rem;
+  text-align: left;
+}
+
+.intestinal-rapido__opcoes button:hover,
+.intestinal-rapido__opcoes button:focus-visible {
+  background: #fff4ed;
+  border-color: #bd765b;
+  outline: none;
+}
+
+.intestinal-rapido__opcoes app-icon {
+  align-items: center;
+  background: #f7e3d8;
+  border-radius: 10px;
+  color: #965a43;
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+.intestinal-rapido__opcoes span {
+  display: grid;
+  gap: .18rem;
+}
+
+.intestinal-rapido__opcoes strong {
+  font-size: .96rem;
+}
+
+.intestinal-rapido__opcoes small {
+  color: var(--pueria-texto-suave);
+  line-height: 1.35;
+}
+
+.intestinal-rapido__detalhes {
+  background: transparent;
+  border: 0;
+  color: var(--pueria-vermelho-profundo);
+  cursor: pointer;
+  font-weight: 800;
+  justify-self: start;
+  padding: .25rem 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .intestinal-scale {
   border-color: #ecdcd2;
   border-radius: 12px;
@@ -624,6 +723,10 @@
   }
 
   .intestinal-etapas__acoes {
+    grid-template-columns: 1fr;
+  }
+
+  .intestinal-rapido__opcoes {
     grid-template-columns: 1fr;
   }
 }

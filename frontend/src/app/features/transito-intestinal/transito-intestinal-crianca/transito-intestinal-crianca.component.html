@@ -68,10 +68,27 @@
       <section class="intestinal-atualizacao">
         <button type="button" class="intestinal-atualizacao__abrir pueria-button mobile-register-fab" (click)="abrirRegistro()"><app-icon name="toilet" [size]="20" />{{ ultimoRegistro() ? 'Registrar um novo dia' : 'Registrar o primeiro dia' }}</button>
       </section>
-      <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro intestinal' : 'Registro intestinal'" descricao="Comece pelo que observou hoje; não precisa preencher tudo." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
+      <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro intestinal' : modoRegistro() === 'rapido' ? 'Como foi o intestino hoje?' : 'Registro intestinal'" [descricao]="modoRegistro() === 'rapido' ? 'Comece pelo que pareceu mais próximo. Você pode registrar detalhes se quiser.' : 'Preencha somente o que conseguiu observar hoje.'" [etapa]="etapaRegistro()" [totalEtapas]="modoRegistro() === 'rapido' && !editandoId() ? 1 : 2" (fechar)="fecharRegistro()">
       <form class="intestinal-form" [formGroup]="form" (ngSubmit)="salvar()">
 
-        @if (etapaRegistro() === 1) {
+        @if (modoRegistro() === 'rapido' && !editandoId()) {
+        <section class="intestinal-rapido">
+          <label class="intestinal-rapido__data"><span>Data</span><input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" /></label>
+          <div>
+            <p class="pueria-eyebrow">Registro rápido</p>
+            <h3>O que mais se parece com o dia de hoje?</h3>
+            <p>Escolha uma opção simples. Isso organiza a observação, sem substituir a conversa com o profissional de saúde.</p>
+          </div>
+          <div class="intestinal-rapido__opcoes">
+            <button type="button" (click)="registrarResumoDia('HABITUAL')"><app-icon name="heart" [size]="19" /><span><strong>Pareceu habitual</strong><small>Sem mudança que tenha chamado atenção</small></span></button>
+            <button type="button" (click)="registrarResumoDia('RESSECADO')"><app-icon name="toilet" [size]="19" /><span><strong>Mais ressecado ou difícil</strong><small>Fezes mais duras ou esforço para evacuar</small></span></button>
+            <button type="button" (click)="registrarResumoDia('AMOLECIDO')"><app-icon name="toilet" [size]="19" /><span><strong>Mais mole que o habitual</strong><small>Sem precisar identificar a escala</small></span></button>
+            <button type="button" (click)="registrarResumoDia('DIARREIA')"><app-icon name="heartPulse" [size]="19" /><span><strong>Diarreia</strong><small>Fezes líquidas ou muito soltas</small></span></button>
+          </div>
+          <button type="button" class="intestinal-rapido__detalhes" (click)="abrirDetalhes()">Prefiro registrar em detalhes</button>
+          <small class="intestinal-etapas__tempo">Leva menos de 1 minuto</small>
+        </section>
+        } @else if (etapaRegistro() === 1) {
         <div class="intestinal-form__grid">
           <label>
             <span>Data</span>

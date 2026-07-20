@@ -20,6 +20,8 @@ type BristolOpcao = {
   pista: string;
 };
 
+type RegistroRapidoIntestinal = 'HABITUAL' | 'RESSECADO' | 'AMOLECIDO' | 'DIARREIA';
+
 @Component({
   selector: 'app-transito-intestinal-crianca',
   imports: [ReactiveFormsModule, RouterLink, AppIconComponent, RegistroRapidoComponent],
@@ -58,6 +60,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
   readonly editandoId = signal('');
   readonly registroAberto = signal(false);
   readonly entendaAberto = signal(false);
+  readonly modoRegistro = signal<'rapido' | 'detalhado'>('rapido');
   readonly etapaRegistro = signal<1 | 2>(1);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
 
@@ -179,6 +182,51 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     }
   }
 
+  abrirDetalhes(): void {
+    this.erro.set('');
+    this.modoRegistro.set('detalhado');
+    this.etapaRegistro.set(1);
+  }
+
+  registrarResumoDia(tipo: RegistroRapidoIntestinal): void {
+    this.erro.set('');
+    this.aviso.set('');
+    const dataRegistro = this.form.controls.dataRegistro.value;
+
+    try {
+      this.lerData(dataRegistro);
+    } catch (erro) {
+      this.erro.set(erro instanceof Error ? erro.message : 'Revise a data antes de registrar.');
+      return;
+    }
+
+    const resumo: Record<RegistroRapidoIntestinal, Partial<{
+      diarreia: boolean;
+      observacao: string;
+    }>> = {
+      HABITUAL: {
+        observacao: 'Registro rápido: padrão habitual percebido pela família.'
+      },
+      RESSECADO: {
+        observacao: 'Registro rápido: fezes mais ressecadas ou evacuação mais difícil.'
+      },
+      AMOLECIDO: {
+        observacao: 'Registro rápido: fezes mais amolecidas que o habitual.'
+      },
+      DIARREIA: {
+        diarreia: true,
+        observacao: 'Registro rápido: fezes líquidas ou diarreia percebida pela família.'
+      }
+    };
+
+    this.cancelarEdicao();
+    this.form.patchValue({
+      dataRegistro,
+      ...resumo[tipo]
+    });
+    this.salvar();
+  }
+
   voltarEtapa(): void {
     this.erro.set('');
     this.etapaRegistro.set(1);
@@ -232,6 +280,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   editar(registro: RegistroTransitoIntestinal): void {
     this.editandoId.set(registro.id);
+    this.modoRegistro.set('detalhado');
     this.etapaRegistro.set(1);
     this.erro.set('');
     this.aviso.set('');
@@ -263,6 +312,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   cancelarEdicao(): void {
     this.editandoId.set('');
+    this.modoRegistro.set('rapido');
     this.etapaRegistro.set(1);
     this.form.reset({
       dataRegistro: this.formatarEntradaData(this.dataMaximaIso),
@@ -292,6 +342,8 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
   abrirRegistro(): void {
     this.erro.set('');
     this.aviso.set('');
+    this.cancelarEdicao();
+    this.modoRegistro.set('rapido');
     this.etapaRegistro.set(1);
     this.registroAberto.set(true);
   }
