@@ -7,7 +7,7 @@
       <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
       <p class="pueria-subtitle">Uma habilidade por vez, sem misturar idades futuras.</p>
     </div>
-    @if (modo() === 'visao' || modo() === 'responder') {
+    @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos') {
       <label class="marcos-page__fase">
         <small>Fase</small>
         <select [value]="idadeSelecionada()" (change)="selecionarIdade(+$any($event.target).value)" aria-label="Escolher fase de desenvolvimento">
@@ -34,11 +34,11 @@
       <p>{{ textoSemMarcos() }}</p>
     </div>
   } @else {
-    @if (modo() === 'visao' || modo() === 'responder') {
+    @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos') {
       <section class="marcos-visao__navegacao" aria-label="Ações desta etapa">
         <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'responder'" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong>Revisar habilidades</strong><small>Uma habilidade por vez</small></span></button>
         <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'visao'" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong>Visão geral</strong><small>Como está esta fase</small></span></button>
-        <button type="button" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong>Atividades</strong><small>Ideias para a rotina</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'experimentos'" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong>Atividades</strong><small>Ideias para a rotina</small></span></button>
         <button type="button" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong>Para a consulta</strong><small>Resumo para conversar</small></span></button>
       </section>
     } @else {
@@ -338,16 +338,18 @@
       </div>
     } @else {
       <section class="pueria-card estimulos-card estimulos-card--pagina">
-        <div>
+        <div class="estimulos-card__cabecalho">
+          <div>
           <p class="pueria-eyebrow">Para a rotina</p>
-          <h2>Experimentos recomendados</h2>
-          <p>Estas ideias foram escolhidas porque alguns marcos foram marcados como “Ainda não” ou “Às vezes”. Escolha só o que combinar com o momento de vocês.</p>
+          <h2>Experimentos para a rotina</h2>
+          <p>Escolhidas a partir dos marcos marcados como “Ainda não” ou “Às vezes”. Pegue só o que combinar com o momento de vocês.</p>
+          </div>
+          <span class="estimulos-card__quantidade">{{ estimulos().length }} {{ estimulos().length === 1 ? 'sugestão' : 'sugestões' }}</span>
         </div>
         @if (estimulos().length > 0) {
           <div class="estimulos-card__lista">
             @for (estimulo of estimulos(); track estimulo.id) {
               <article [attr.data-tema]="temaArea(estimulo.area)">
-                <span class="estimulos-card__icone"><app-icon [name]="iconeArea(estimulo.area)" [size]="19" /></span>
                 <div>
                   <span class="marco-area" [attr.data-tema]="temaArea(estimulo.area)">{{ labelArea(estimulo.area) }}</span>
                   <h3>{{ estimulo.titulo }}</h3>
