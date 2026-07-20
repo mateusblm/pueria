@@ -786,7 +786,21 @@
   .sono-grafico__cabecalho { grid-template-columns: 1fr; }
   .sono-grafico__legenda, .sono-grafico__ultimo { grid-column: 1; grid-row: auto; }
   .sono-grafico__ultimo { width: 100%; }
-  .sono-grafico__plotagem--linha { min-height: 230px; }
+  .sono-grafico {
+    gap: .75rem;
+    padding: 1rem;
+  }
+  .sono-grafico__plotagem--linha {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    min-height: 208px;
+  }
+  .sono-grafico__plotagem--linha .sono-grafico__eixo {
+    font-size: .7rem;
+    padding: .9rem 0 1.65rem;
+  }
+  .sono-grafico__faixa { inset-inline: 4%; }
+  .sono-grafico__faixa span { font-size: .64rem; right: .25rem; }
+  .sono-grafico__ponto strong { font-size: .76rem; }
   .sono-grafico__datas { justify-content: space-between; }
   .sono-grafico__datas span { font-size: .66rem; }
 }
