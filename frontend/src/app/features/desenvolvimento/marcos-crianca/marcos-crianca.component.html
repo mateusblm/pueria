@@ -7,7 +7,7 @@
       <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
       <p class="pueria-subtitle">Uma habilidade por vez, sem misturar idades futuras.</p>
     </div>
-    @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos') {
+    @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos' || modo() === 'resultados') {
       <label class="marcos-page__fase">
         <small>Fase</small>
         <select [value]="idadeSelecionada()" (change)="selecionarIdade(+$any($event.target).value)" aria-label="Escolher fase de desenvolvimento">
@@ -34,12 +34,12 @@
       <p>{{ textoSemMarcos() }}</p>
     </div>
   } @else {
-    @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos') {
+    @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos' || modo() === 'resultados') {
       <section class="marcos-visao__navegacao" aria-label="Ações desta etapa">
         <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'responder'" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong>Revisar habilidades</strong><small>Uma habilidade por vez</small></span></button>
         <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'visao'" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong>Visão geral</strong><small>Como está esta fase</small></span></button>
         <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'experimentos'" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong>Atividades</strong><small>Ideias para a rotina</small></span></button>
-        <button type="button" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong>Para a consulta</strong><small>Resumo para conversar</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'resultados'" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong>Para a consulta</strong><small>Resumo para conversar</small></span></button>
       </section>
     } @else {
     <section class="pueria-card painel-etapa">
@@ -250,15 +250,10 @@
       }
     } @else if (modo() === 'resultados') {
       <div class="resultado-layout">
+        @if (relatos().some((relato) => relato.tipo === 'PERDA_HABILIDADE')) {
+          <section class="consulta-alerta" role="alert"><app-icon name="heartPulse" [size]="22" /><div><strong>Uma perda de habilidade foi registrada</strong><p>Vale conversar com o pediatra o quanto antes e levar este relato para contextualizar a consulta.</p></div></section>
+        }
         <section class="pueria-card resumo-consulta">
-          <div>
-            <p class="pueria-eyebrow">Resumo para consulta</p>
-            <h2>Resumo do que merece conversa</h2>
-            <p>
-              São observações da família para dar contexto à consulta. Elas não representam um diagnóstico.
-            </p>
-          </div>
-
           <div class="resumo-consulta__numeros">
             <article>
               <strong>{{ totalPontosConsulta() }}</strong>
@@ -273,11 +268,9 @@
               <span>{{ relatos().length === 1 ? 'relato da família' : 'relatos da família' }}</span>
             </article>
           </div>
-
           <div class="resumo-consulta__acao">
-            <p>{{ textoConduta() }}</p>
             <div class="resumo-consulta__botoes">
-              <button type="button" class="pueria-button" (click)="imprimirResumo()">Gerar resumo para a consulta</button>
+              <button type="button" class="pueria-button" (click)="imprimirResumo()">Gerar resumo</button>
               <button type="button" class="pueria-button pueria-button--secondary" (click)="imprimirResumo(true)">Versão detalhada</button>
             </div>
           </div>
@@ -290,7 +283,7 @@
           </section>
         } @else {
           <section class="consulta-pontos" aria-label="Pontos para conversar por área">
-            <div class="consulta-pontos__cabecalho"><p class="pueria-eyebrow">Pontos por área</p><h2>O que vale levar para a conversa</h2></div>
+            <div class="consulta-pontos__cabecalho"><h2>O que vale levar para a conversa</h2></div>
             @for (grupo of pontosConsultaPorArea(); track grupo.area) {
               <article class="pueria-card consulta-area" [class.consulta-area--aberta]="areaConsultaAberta() === grupo.area" [attr.data-tema]="temaArea(grupo.area)">
                 <button type="button" class="consulta-area__trigger" [attr.aria-expanded]="areaConsultaAberta() === grupo.area" (click)="alternarAreaConsulta(grupo.area)">
