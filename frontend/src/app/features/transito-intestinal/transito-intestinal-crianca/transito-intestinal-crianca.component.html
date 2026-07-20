@@ -192,25 +192,6 @@
         }
       </form>
       </app-registro-rapido>
-
-      <aside class="pueria-card intestinal-historico">
-        <p class="pueria-eyebrow">Histórico</p>
-        <h2>Registros</h2>
-        @if (registrosOrdenados().length === 0) {
-          <p>Nenhum registro salvo.</p>
-        } @else {
-          <div class="intestinal-historico__lista">
-            @for (registro of registrosOrdenados(); track registro.id) {
-              <article>
-                <strong>{{ formatarData(registro.dataRegistro) }}</strong>
-                <span>{{ labelTipoFezes(registro.tipoFezes) }}</span>
-                <small>{{ labelFacilidade(registro.facilidadeLimpeza) }}</small>
-                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
-              </article>
-            }
-          </div>
-        }
-      </aside>
     </div>
   }
 

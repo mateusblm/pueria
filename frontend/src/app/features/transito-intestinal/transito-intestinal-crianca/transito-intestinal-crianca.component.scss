@@ -44,19 +44,15 @@
 .intestinal-page__state--vazio p { color: var(--pueria-texto-suave); line-height: 1.5; margin: 0; max-width: 34rem; }
 .intestinal-page__state--vazio small { color: var(--pueria-texto-suave); }
 .intestinal-page__state-icon { align-items: center; background: #f9e4d7; border-radius: 50%; color: #b66c32; display: inline-flex; height: 6rem; justify-content: center; width: 6rem; }
-.intestinal-page--vazio .intestinal-atualizacao, .intestinal-page--vazio .intestinal-historico { display: none; }
+.intestinal-page--vazio .intestinal-atualizacao { display: none; }
 
 .intestinal-layout {
-  align-items: start;
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
+  display: block;
   width: 100%;
 }
 
 .intestinal-form,
-.intestinal-sintese,
-.intestinal-historico {
+.intestinal-sintese {
   display: grid;
   gap: 22px;
   min-width: 0;
@@ -303,29 +299,6 @@
   padding-left: 18px;
 }
 
-.intestinal-historico__lista {
-  display: grid;
-  gap: 12px;
-}
-
-.intestinal-historico {
-  position: sticky;
-  top: 1rem;
-}
-
-.intestinal-historico__lista article {
-  border: 1px solid #ecd5ce;
-  border-radius: 8px;
-  display: grid;
-  gap: 6px;
-  padding: 14px;
-}
-
-.intestinal-historico__lista small,
-.intestinal-historico__lista span {
-  color: var(--pueria-texto-suave);
-}
-
 /* Registro em duas etapas: primeiro o dia, depois o aspecto e os sinais observados. */
 .intestinal-page {
   gap: 1.15rem;
@@ -392,8 +365,7 @@
 }
 
 .intestinal-layout {
-  gap: 1rem;
-  grid-template-columns: minmax(0, 1fr) minmax(15.5rem, .38fr);
+  display: block;
 }
 
 .intestinal-layout > app-registro-rapido {
@@ -642,33 +614,7 @@
   width: min(100%, 120px);
 }
 
-.intestinal-historico {
-  align-self: start;
-  border: 1px solid #ebdfd8;
-  border-radius: 14px;
-  background: #fffdfb;
-  padding: 1.1rem;
-}
-
-.intestinal-historico h2 {
-  margin: .15rem 0 0;
-  font-size: 1.25rem;
-}
-
-.intestinal-historico__lista article {
-  border-color: #f0e2db;
-  border-radius: 10px;
-}
-
 @media (max-width: 1100px) {
-  .intestinal-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .intestinal-historico {
-    position: static;
-  }
-
   .intestinal-sintese__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
