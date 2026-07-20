@@ -60,13 +60,11 @@ export class MarcosCriancaComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   rotaRetorno(): string[] {
-    return this.route.snapshot.queryParamMap.get('origem') === 'perfil'
-      ? ['/criancas', this.route.snapshot.paramMap.get('id') ?? '']
-      : ['/acompanhamento'];
+    return ['/acompanhamento'];
   }
 
   textoRetorno(): string {
-    return this.route.snapshot.queryParamMap.get('origem') === 'perfil' ? 'Perfil' : 'Acompanhamento';
+    return 'Acompanhamento';
   }
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
   private readonly criancasService = inject(CriancasService);

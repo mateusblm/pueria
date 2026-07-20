@@ -46,8 +46,8 @@ export class RegistroContextoCriancaComponent implements OnInit {
       .subscribe({ next: ({ crianca, registros }) => { this.crianca.set(crianca); this.registros.set(registros.filter((registro) => registro.tipo === this.tipo)); }, error: (erro: HttpErrorResponse) => this.erro.set(this.mensagemErro(erro)) });
   }
 
-  rotaRetorno(): string[] { return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento' ? ['/acompanhamento'] : ['/criancas', this.route.snapshot.paramMap.get('id') ?? '']; }
-  textoRetorno(): string { return this.route.snapshot.queryParamMap.get('origem') === 'acompanhamento' ? 'Acompanhamento' : 'Perfil'; }
+  rotaRetorno(): string[] { return ['/acompanhamento']; }
+  textoRetorno(): string { return 'Acompanhamento'; }
   formatarData(data: string): string { return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(`${data}T00:00:00Z`)); }
 
   salvar(): void {
