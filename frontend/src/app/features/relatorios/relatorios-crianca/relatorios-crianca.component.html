@@ -1,1 +1,67 @@
-<section class="relatorios"><a [routerLink]="['/criancas',criancaId]">&larr; Perfil</a><p class="pueria-eyebrow">Para a consulta</p><h1 class="pueria-title">Documentos para a consulta</h1><p class="pueria-subtitle">Reúna informações da criança para compartilhar com o pediatra.</p>@if(erro()){<p class="pueria-message pueria-message--erro">{{erro()}}</p>}<article class="pueria-card"><div><p class="pueria-eyebrow">Resumo integrado</p><h2>Acompanhamento da criança</h2><p>Inclui crescimento, neurodesenvolvimento, contexto da família e atividades registradas.</p></div><button class="pueria-button" [disabled]="gerando()" (click)="gerar()">{{gerando()?'Gerando...':'Gerar PDF'}}</button></article><div class="proximos"><article><h2>Crescimento</h2><p>Curvas e medidas em detalhe.</p></article><article><h2>Neurodesenvolvimento</h2><p>Marcos e trajetória.</p></article><article><h2>Rotina</h2><p>Alimentação, sono e demais registros.</p></article></div></section>
+<section class="relatorios">
+  <a class="relatorios__voltar" [routerLink]="['/acompanhamento']">&larr; Acompanhamento</a>
+
+  <header class="relatorios__cabecalho">
+    <p class="pueria-eyebrow">Para a consulta</p>
+    <h1 class="pueria-title">Documentos para a consulta</h1>
+    <p class="pueria-subtitle">Reúna as informações da criança para compartilhar com o pediatra.</p>
+  </header>
+
+  @if (erro()) {
+    <p class="pueria-message pueria-message--erro">{{ erro() }}</p>
+  }
+
+  <div class="relatorios__grade">
+    <div class="relatorios__principal">
+      <article class="relatorios__resumo">
+        <div class="relatorios__resumo-texto">
+          <p class="pueria-eyebrow">Resumo integrado</p>
+          <h2>Acompanhamento da criança</h2>
+          <p>O documento organiza crescimento, marcos e registros relevantes da rotina em uma leitura objetiva.</p>
+        </div>
+        <button class="pueria-button relatorios__botao" [disabled]="gerando()" (click)="gerar()">
+          <app-icon name="stethoscope" [size]="18"></app-icon>
+          {{ gerando() ? 'Gerando...' : 'Gerar PDF' }}
+        </button>
+        <footer>
+          <span>Pronto para compartilhar na consulta</span>
+          <span>{{ secoesComRegistros() }} seções com informações</span>
+        </footer>
+      </article>
+
+      <article class="relatorios__previa">
+        <p class="pueria-eyebrow">Prévia do documento</p>
+        <div class="relatorios__folhas" aria-label="Prévia ilustrativa do resumo">
+          <div class="relatorios__folha relatorios__folha--crescimento">
+            <i></i><b></b><span></span><span></span><em></em><small>Crescimento</small>
+          </div>
+          <div class="relatorios__folha relatorios__folha--marcos">
+            <i></i><b></b><span></span><span></span><span></span><small>Marcos</small>
+          </div>
+          <div class="relatorios__folha relatorios__folha--rotina">
+            <i></i><b></b><div><span></span><span></span><span></span><span></span></div><small>Rotina</small>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="relatorios__inclui">
+      <p class="pueria-eyebrow">O que entra no PDF</p>
+      @if (carregando()) {
+        <p class="relatorios__carregando">Organizando as informações registradas...</p>
+      } @else {
+        <ul>
+          @for (secao of secoes(); track secao.nome) {
+            <li [class.relatorios__item--vazio]="!secao.quantidade">
+              <span class="relatorios__icone" [class]="'relatorios__icone--' + secao.tom">
+                <app-icon [name]="secao.icone" [size]="15"></app-icon>
+              </span>
+              <span class="relatorios__nome">{{ secao.nome }}</span>
+              <span class="relatorios__detalhe">{{ detalhe(secao) }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </aside>
+  </div>
+</section>
