@@ -18,12 +18,17 @@
     </div>
 
     @if (registrosRecentes().length > 0) {
+      <section class="intestinal-painel">
+        <article class="intestinal-metrica"><p>Frequência média</p><strong>{{ frequenciaMedia() ?? '—' }}<small>/dia</small></strong><span>quando informado</span></article>
+        <article class="intestinal-metrica"><p>Consistência comum</p><strong>{{ labelTipoFezes(bristolComum()) }}</strong><span>Bristol {{ bristolComum().replace('TIPO_', 'tipo ') }}</span></article>
+        <article class="intestinal-metrica"><p>Sinal recorrente</p><strong>{{ sinaisObservados()[0]?.quantidade ? sinaisObservados()[0].nome : 'Sem sinal recorrente' }}</strong><span>nos {{ sinaisObservados()[0]?.quantidade ?? 0 }} registros</span></article>
+      </section>
+      <section class="intestinal-leitura">
+        <article class="pueria-card intestinal-bristol"><p class="pueria-eyebrow">Escala de Bristol</p><h2>Distribuição das consistências</h2><div class="intestinal-bristol__barras">@for (barra of distribuicaoBristol(); track barra.numero) { <div [class.intestinal-bristol__barra--ativo]="barra.quantidade > 0"><strong>{{ barra.quantidade ? barra.quantidade + '×' : '' }}</strong><i [style.height.px]="barra.quantidade ? 32 + barra.quantidade * 34 : 8"></i><span>{{ barra.numero }}</span></div> }</div><p>O conjunto dos registros ajuda a observar padrões; leve exemplos para conversar na consulta se algo persistir.</p></article>
+        <article class="pueria-card intestinal-sinais"><p class="pueria-eyebrow">Sinais observados</p>@for (sinal of sinaisObservados(); track sinal.nome) { <div><span>{{ sinal.nome }}</span><small>{{ sinal.quantidade }}×</small><i><b [style.width.%]="sinal.largura"></b></i></div> }<p class="intestinal-sinais__nota">Diurese não informada nos registros. Se notar xixi muito espaçado ou escuro, registre.</p></article>
+      </section>
       <section class="pueria-card intestinal-padrao" aria-labelledby="intestinal-padrao-titulo">
-        <div>
-          <p class="pueria-eyebrow">Últimos registros</p>
-          <h2 id="intestinal-padrao-titulo">Como foram os últimos dias?</h2>
-          <p>Observe evacuações, aspecto das fezes e diurese em conjunto. Um dia isolado não define um padrão.</p>
-        </div>
+        <div class="intestinal-padrao__titulo"><div><p class="pueria-eyebrow">Registros recentes</p><h2 id="intestinal-padrao-titulo">Registros recentes</h2></div><small>{{ registrosRecentes().length }} registros</small></div>
         <div class="intestinal-padrao__lista" aria-label="Resumo dos últimos registros intestinais">
           @for (registro of registrosRecentes(); track registro.id) {
             <article class="intestinal-padrao__dia">
@@ -34,8 +39,9 @@
               </div>
               <div class="intestinal-padrao__detalhes">
                 <span class="intestinal-padrao__chip"><span aria-hidden="true">●</span>{{ labelTipoFezes(registro.tipoFezes) }}</span>
-                <span class="intestinal-padrao__chip intestinal-padrao__chip--urina"><app-icon name="heart" [size]="14" />{{ resumoDiurese(registro) }}</span>
+                <span class="intestinal-padrao__chip intestinal-padrao__chip--urina">{{ labelFacilidade(registro.facilidadeLimpeza) }}</span>
               </div>
+              <button type="button" (click)="editar(registro)">Editar</button>
             </article>
           }
         </div>

@@ -115,6 +115,23 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
   readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 7).reverse());
+  readonly frequenciaMedia = computed(() => {
+    const valores = this.registros().map((registro) => registro.evacuacoesPorDia).filter((valor): valor is number => valor !== null && valor !== undefined);
+    return valores.length ? Math.round((valores.reduce((total, valor) => total + valor, 0) / valores.length) * 10) / 10 : null;
+  });
+  readonly bristolComum = computed(() => this.tipoMaisFrequente(this.registros().map((registro) => registro.tipoFezes)));
+  readonly distribuicaoBristol = computed(() => Array.from({ length: 7 }, (_, indice) => ({ numero: indice + 1, quantidade: this.registros().filter((registro) => registro.tipoFezes === `TIPO_${indice + 1}`).length })));
+  readonly sinaisObservados = computed(() => {
+    const sinais = [
+      { nome: 'Fissuras', quantidade: this.registros().filter((registro) => registro.tipoFezes === 'TIPO_3').length },
+      { nome: 'Difícil de limpar', quantidade: this.registros().filter((registro) => registro.facilidadeLimpeza === 'DIFICIL').length },
+      { nome: 'Fácil de limpar', quantidade: this.registros().filter((registro) => registro.facilidadeLimpeza === 'FACIL').length }
+    ];
+    const maior = Math.max(1, ...sinais.map((sinal) => sinal.quantidade));
+    return sinais
+      .map((sinal) => ({ ...sinal, largura: sinal.quantidade ? Math.max(30, (sinal.quantidade / maior) * 100) : 0 }))
+      .sort((a, b) => b.quantidade - a.quantidade);
+  });
 
   abrirEntenda(): void {
     this.entendaAberto.set(true);
@@ -294,6 +311,12 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
 
   labelTipoFezes(valor: TipoFezesBristol): string {
     return this.tiposBristol.find((opcao) => opcao.valor === valor)?.titulo ?? 'Não informado';
+  }
+
+  private tipoMaisFrequente(tipos: TipoFezesBristol[]): TipoFezesBristol {
+    const contagem = new Map<TipoFezesBristol, number>();
+    tipos.filter((tipo) => tipo !== 'NAO_INFORMADO').forEach((tipo) => contagem.set(tipo, (contagem.get(tipo) ?? 0) + 1));
+    return [...contagem.entries()].sort(([, a], [, b]) => b - a)[0]?.[0] ?? 'NAO_INFORMADO';
   }
 
   textoFrequencia(valor: number | null | undefined): string {
