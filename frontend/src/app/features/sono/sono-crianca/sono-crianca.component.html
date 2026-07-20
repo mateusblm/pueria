@@ -112,7 +112,11 @@
           <div>
             <p class="pueria-eyebrow">Histórico de sono</p>
             <h2 id="sono-grafico-titulo">Duração ao longo dos registros</h2>
-            <p>Toque em uma barra para ver os detalhes daquele dia.</p>
+            <p>A faixa considera a idade da criança em cada data.</p>
+          </div>
+          <div class="sono-grafico__legenda" aria-label="Legenda do gráfico">
+            <span><i class="sono-grafico__ponto--esperado"></i>Faixa esperada</span>
+            <span><i class="sono-grafico__ponto--acompanhar"></i>Acompanhar</span>
           </div>
           @if (ultimoRegistro(); as registro) {
             <button type="button" class="sono-grafico__ultimo" (click)="abrirDetalhe(registro.id)">
@@ -121,28 +125,26 @@
               <small>{{ formatarData(registro.dataRegistro) }}</small>
             </button>
           }
-          <div class="sono-grafico__legenda" aria-label="Legenda do gráfico">
-            <span><i class="sono-grafico__ponto--esperado"></i>Faixa esperada</span>
-            <span><i class="sono-grafico__ponto--acompanhar"></i>Acompanhar</span>
-          </div>
         </div>
 
-        <div class="sono-grafico__plotagem" aria-label="Gráfico de barras com a duração total de sono nos últimos registros">
+        <div class="sono-grafico__plotagem sono-grafico__plotagem--linha" aria-label="Gráfico de linha com a duração total de sono nos últimos registros">
           <div class="sono-grafico__eixo" aria-hidden="true"><span>24h</span><span>12h</span><span>0h</span></div>
-          <div class="sono-grafico__barras">
-            @for (barra of barrasSono(); track barra.id) {
-              <div class="sono-grafico__coluna">
-                <div class="sono-grafico__trilho">
-                  <button type="button" class="sono-grafico__barra" [class.sono-grafico__barra--esperado]="barra.classificacao === 'FAIXA_ESPERADA'" [style.height.%]="barra.altura" [attr.aria-label]="'Ver detalhes de ' + barra.data + ': ' + barra.duracao" (click)="abrirDetalhe(barra.id)">
-                    <span>{{ barra.duracao }}</span>
-                  </button>
-                </div>
-                <strong>{{ barra.data }}</strong>
-              </div>
+          <div class="sono-grafico__area">
+            <div class="sono-grafico__faixa" [style.top.%]="faixaSono().topo" [style.height.%]="faixaSono().altura"><span>{{ faixaSono().legenda }}</span></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <polyline [attr.points]="caminhoSono()"></polyline>
+            </svg>
+            @for (ponto of pontosSono(); track ponto.id) {
+              <button type="button" class="sono-grafico__ponto" [class.sono-grafico__ponto--esperado]="ponto.classificacao === 'FAIXA_ESPERADA'" [style.left.%]="ponto.x" [style.top.%]="ponto.y" [attr.aria-label]="'Ver detalhes de ' + ponto.data + ': ' + ponto.duracao" (click)="abrirDetalhe(ponto.id)">
+                <strong>{{ ponto.duracao }}</strong>
+              </button>
             }
           </div>
+          <div class="sono-grafico__datas" aria-hidden="true">
+            @for (ponto of pontosSono(); track ponto.id) { <span>{{ ponto.data }}</span> }
+          </div>
         </div>
-        <p class="sono-grafico__nota">A faixa considera a idade da criança em cada data registrada.</p>
+        <p class="sono-grafico__nota"><app-icon name="help" [size]="15" />Ainda são poucos registros. A leitura fica mais clara com alguns dias seguidos — registre quando conseguir, sem pressão.</p>
       </section>
     }
 

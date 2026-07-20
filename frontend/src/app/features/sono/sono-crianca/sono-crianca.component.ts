@@ -21,6 +21,8 @@ type BarraSono = {
   classificacao: ClassificacaoDuracaoSono;
 };
 
+type PontoSono = BarraSono & { x: number; y: number };
+
 @Component({
   selector: 'app-sono-crianca',
   imports: [ReactiveFormsModule, RouterLink, AppIconComponent, RegistroRapidoComponent],
@@ -134,6 +136,27 @@ export class SonoCriancaComponent implements OnInit {
       }))
   );
   readonly exibirHistoricoVisual = computed(() => this.barrasSono().length > 0);
+  readonly pontosSono = computed<PontoSono[]>(() => {
+    const barras = this.barrasSono();
+    return barras.map((barra, indice) => ({
+      ...barra,
+      x: barras.length === 1 ? 50 : 12 + (indice * 76) / (barras.length - 1),
+      y: Math.max(10, Math.min(88, 90 - (barra.minutos / 1440) * 76))
+    }));
+  });
+  readonly caminhoSono = computed(() => this.pontosSono().map((ponto) => `${ponto.x},${ponto.y}`).join(' '));
+  readonly faixaSono = computed(() => {
+    const registro = this.ultimoRegistro();
+    if (!registro) return { topo: 45, altura: 10, legenda: 'Faixa esperada' };
+    const minimo = registro.analise.minutosSonoEsperadoMinimo;
+    const maximo = registro.analise.minutosSonoEsperadoMaximo;
+    const escala = 76 / 1440;
+    return {
+      topo: Math.max(8, Math.min(88, 90 - maximo * escala)),
+      altura: Math.max(4, (maximo - minimo) * escala),
+      legenda: `faixa esperada (~${this.formatarDuracao(minimo)}–${this.formatarDuracao(maximo)})`
+    };
+  });
 
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });
