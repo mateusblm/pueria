@@ -1,4 +1,4 @@
-.marcos-page, .resultado-layout, .marco-lista, .resultado-areas, .historico-lista { display: grid; gap: 18px; }
+.marcos-page, .resultado-layout, .marco-lista, .resultado-areas, .historico-lista { display: grid; gap: var(--pueria-layout-gap, 18px); }
 
 .marcos-page__back {
   width: fit-content; color: var(--pueria-vermelho-profundo); font-weight: 780; text-decoration: none;

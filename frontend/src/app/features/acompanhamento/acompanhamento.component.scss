@@ -1,6 +1,6 @@
 .acompanhamento-page {
   display: grid;
-  gap: 18px;
+  gap: var(--pueria-layout-gap, 18px);
 }
 
 .acompanhamento-page__hero {
@@ -94,7 +94,7 @@
 
 .acompanhamento-home {
   display: grid;
-  gap: 18px;
+  gap: var(--pueria-layout-gap, 18px);
 }
 
 .acompanhamento-destaque {

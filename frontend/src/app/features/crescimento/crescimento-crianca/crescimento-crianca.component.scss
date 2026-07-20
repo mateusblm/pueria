@@ -79,7 +79,7 @@
 .crescimento-page {
   width: min(100%, 1020px);
   margin: 0 auto;
-  gap: 18px;
+  gap: var(--pueria-layout-gap, 18px);
 }
 
 .crescimento-page__hero {

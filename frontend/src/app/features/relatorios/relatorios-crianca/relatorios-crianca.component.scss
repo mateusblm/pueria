@@ -1,6 +1,6 @@
 .relatorios {
   display: grid;
-  gap: 14px;
+  gap: var(--pueria-layout-gap, 14px);
   margin: 0;
   max-width: 1600px;
   width: 100%;

@@ -212,7 +212,14 @@
 
 .app-shell__content {
   min-width: 0;
-  padding: 24px 20px 92px;
+  padding: 24px clamp(20px, 4vw, 56px) 92px;
+}
+
+.app-shell__content-inner {
+  width: min(100%, 1100px);
+  min-width: 0;
+  margin-inline: auto;
+  --pueria-layout-gap: clamp(16px, 2.2vw, 28px);
 }
 
 .app-shell__mobile-nav {
@@ -283,7 +290,7 @@
   }
 
   .app-shell__content {
-    padding: 40px clamp(32px, 3vw, 48px);
+    padding: 40px clamp(32px, 4vw, 56px);
   }
 
   .app-shell__child-switcher--mobile { display: none; }
@@ -293,5 +300,17 @@
     right: auto;
     left: 280px;
     width: min(300px, calc(100vw - 304px));
+  }
+}
+
+@media (max-width: 639px) {
+  .app-shell__content {
+    padding-inline: 20px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .app-shell__content {
+    padding-inline: 32px;
   }
 }
