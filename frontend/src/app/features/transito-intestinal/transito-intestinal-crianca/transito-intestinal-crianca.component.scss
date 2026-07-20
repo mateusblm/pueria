@@ -24,6 +24,8 @@
   padding: 1.5rem;
   width: 100%;
 }
+
+@media (min-width: 981px) { .intestinal-page { margin-left:0; margin-right:0; max-width:1280px !important; } }
 .intestinal-page__identidade { align-items: center; color: #89533f; display: flex; gap: .55rem; }.intestinal-page__identidade > span { align-items: center; background: #f4dfd5; border-radius: 50%; display: inline-flex; height: 50px; justify-content: center; width: 50px; }
 
 .intestinal-page__state {
