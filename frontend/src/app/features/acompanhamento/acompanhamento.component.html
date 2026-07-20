@@ -38,6 +38,8 @@
     @let foco = criancaEmFoco();
     @let progressoAtual = progresso(foco.marcos);
     @let pontos = pontosAtencao(foco.marcos);
+    @let relatos = relatosParaConversa(foco.relatos);
+    @let experimentos = experimentosRecomendados(foco);
 
     <section class="acompanhamento-home">
       <header class="acompanhamento-home__saudacao">
@@ -47,6 +49,61 @@
           <p>Um passo de cada vez. Veja o que vale acompanhar hoje.</p>
         </div>
       </header>
+
+      @if (progressoAtual.respondidos === 0) {
+        <section class="inicio-home-roteiro">
+          <div class="inicio-home-roteiro__cabecalho">
+            <div>
+              <p class="pueria-eyebrow">Primeiros passos</p>
+              <h2>Complete quando puder</h2>
+              <p>Cada área ajuda a montar o retrato da criança. Comece pelas que fizerem sentido hoje.</p>
+            </div>
+            <span><strong>0</strong> de 6 áreas com registros</span>
+          </div>
+          <div class="inicio-home-roteiro__progresso"><span></span></div>
+          <div class="inicio-home-roteiro__lista">
+            <a [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><i><app-icon name="ruler" [size]="16" /></i><span><strong>Crescimento</strong><small>Registre uma medida quando tiver</small></span><b>Registrar ›</b></a>
+            <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }"><i><app-icon name="brain" [size]="16" /></i><span><strong>Marcos</strong><small>Ainda não iniciado</small></span><b>Responder ›</b></a>
+            <a [routerLink]="['/criancas', foco.crianca.id, 'sono']"><i><app-icon name="moon" [size]="16" /></i><span><strong>Sono</strong><small>Registre quando observar</small></span><b>Registrar ›</b></a>
+            <a [routerLink]="['/criancas', foco.crianca.id, 'alimentacao']"><i><app-icon name="salad" [size]="16" /></i><span><strong>Alimentação</strong><small>Sem registros</small></span><b>Registrar ›</b></a>
+            <a [routerLink]="['/criancas', foco.crianca.id, 'saude']"><i><app-icon name="heartPulse" [size]="16" /></i><span><strong>Saúde e cuidados</strong><small>Sem registros</small></span><b>Registrar ›</b></a>
+            <a [routerLink]="['/criancas', foco.crianca.id, 'telas']"><i><app-icon name="smartphone" [size]="16" /></i><span><strong>Telas</strong><small>Sem registros</small></span><b>Registrar ›</b></a>
+          </div>
+        </section>
+      } @else {
+        @if (existePerdaHabilidade(foco.relatos) || pontos > 0) {
+          <section class="inicio-home-alertas" aria-label="Vale atenção">
+            <p class="pueria-eyebrow">Vale atenção</p>
+            <div>
+              @if (existePerdaHabilidade(foco.relatos)) {
+                <a class="inicio-home-alerta inicio-home-alerta--urgente" [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']"><app-icon name="heartPulse" [size]="21" /><span><strong>Perda de habilidade registrada</strong><small>Vale conversar com o pediatra o quanto antes.</small><b>Ver resumo ›</b></span></a>
+              }
+              @if (pontos > 0) {
+                <a class="inicio-home-alerta inicio-home-alerta--acompanhar" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }"><app-icon name="brain" [size]="21" /><span><strong>{{ pontos }} habilidade{{ pontos === 1 ? '' : 's' }} para acompanhar</strong><small>Observe com calma e leve exemplos à consulta se a dúvida continuar.</small><b>Ver marcos ›</b></span></a>
+              }
+            </div>
+          </section>
+        }
+      }
+
+      <section class="inicio-home-resumo" aria-label="Resumo do acompanhamento">
+        <a [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><span class="inicio-home-resumo__icone inicio-home-resumo__icone--crescimento"><app-icon name="chart" [size]="17" /></span><div><p>Crescimento</p><h2>{{ progressoAtual.respondidos > 0 ? 'Acompanhar evolução' : 'Começar quando puder' }}</h2><small>Registre medidas para ver a trajetória.</small></div></a>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']"><span class="inicio-home-resumo__icone inicio-home-resumo__icone--marcos"><app-icon name="brain" [size]="17" /></span><div><p>Marcos</p><h2>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} respostas</h2><small>{{ pontos > 0 ? pontos + ' habilidades para acompanhar' : 'Fase atual em acompanhamento' }}</small></div></a>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']"><span class="inicio-home-resumo__icone inicio-home-resumo__icone--consulta"><app-icon name="stethoscope" [size]="17" /></span><div><p>Para a consulta</p><h2>{{ labelPontosAtencao(pontos) }}</h2><small>Resumo pronto quando precisar.</small></div></a>
+      </section>
+
+      @if (progressoAtual.respondidos === 0) {
+        <section class="inicio-home-vazio"><span><app-icon name="sparkles" [size]="25" /></span><h2>As ideias aparecem aqui</h2><p>Responda os marcos desta fase e o Pueria sugere experimentos sob medida, a partir do que você observou na rotina.</p><a class="pueria-button" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }">Responder marcos</a></section>
+      } @else if (experimentos.length > 0) {
+        <section class="inicio-home-experimentos">
+          <div class="inicio-home-experimentos__cabecalho"><div><p class="pueria-eyebrow">Para a rotina</p><h2>Experimentos recomendados</h2><p>Ideias simples escolhidas a partir das respostas dos marcos. Use apenas o que combinar com o momento de vocês.</p></div><a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'experimentos' }">Ver todos</a></div>
+          <div class="inicio-home-experimentos__lista">
+            @for (estimulo of experimentos; track estimulo.id) {
+              <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'experimentos' }"><span><app-icon name="sparkles" [size]="18" /></span><div><strong>{{ estimulo.titulo }}</strong><small>{{ estimulo.descricao }}</small></div><app-icon name="chevronRight" [size]="17" /></a>
+            }
+          </div>
+        </section>
+      }
 
       @if (progressoAtual.respondidos === 0) {
         <section class="pueria-card inicio-primeiros-passos">
@@ -84,6 +141,19 @@
           <div><p class="pueria-eyebrow">Acompanhamento</p><h2>Observações da rotina</h2><p>Registre apenas o que ajudar a entender um padrão ou preparar a consulta.</p></div>
           <app-icon name="chevronRight" [size]="19" />
         </a>
+      </section>
+
+      <section class="inicio-home-atividade">
+        <div class="inicio-home-atividade__cabecalho"><h2>{{ relatos.length ? 'Atividade recente' : 'Sua atividade aparece aqui' }}</h2>@if (relatos.length) { <a [routerLink]="['/criancas', foco.crianca.id, 'observacoes']">Ver histórico</a> }</div>
+        @if (relatos.length) {
+          <div class="inicio-home-atividade__lista">
+            @for (relato of relatos; track relato.id) {
+              <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }"><time>{{ formatarDataRegistro(relato.registradoEm) }}</time><span><app-icon name="message" [size]="17" /></span><strong>{{ tituloRelato(relato) }}</strong><small>Marcos</small></a>
+            }
+          </div>
+        } @else {
+          <p>Conforme você registra medidas, sono, alimentação e outros fatos, os últimos acontecimentos aparecem nesta lista para acompanhar de relance.</p>
+        }
       </section>
 
       @if (!foco.erro) {
