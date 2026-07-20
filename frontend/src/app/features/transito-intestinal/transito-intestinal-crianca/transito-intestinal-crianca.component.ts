@@ -117,7 +117,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
-  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 7).reverse());
+  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 7));
   readonly frequenciaMedia = computed(() => {
     const valores = this.registros().map((registro) => registro.evacuacoesPorDia).filter((valor): valor is number => valor !== null && valor !== undefined);
     return valores.length ? Math.round((valores.reduce((total, valor) => total + valor, 0) / valores.length) * 10) / 10 : null;
