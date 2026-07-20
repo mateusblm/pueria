@@ -64,6 +64,8 @@ class ResumoConsultaJrxmlTest {
         parametros.put("RELATOS_FAMILIA", "Preocupacao da familia\nTem acordado mais vezes durante a noite.");
         parametros.put("SAUDE_CUIDADOS", "12/07/2026 - Intercorrencia clinica\nTeve vomitos por apenas um dia e nao fez uso de medicamentos.");
         parametros.put("ATIVIDADES", "- Conversas frente a frente\n- Passeio com palavras\n- Sequencia de faz de conta");
+        parametros.put("RESUMO_EXECUTIVO", "Este documento organiza 2 medidas de crescimento, 2 pontos de desenvolvimento para conversar e 5 registros de rotina. Use como apoio na consulta.");
+        parametros.put("LINHA_DO_TEMPO", "12/07/2026 · Saúde — intercorrência registrada\n10/07/2026 · Sono — rotina de sono\n10/07/2026 · Crescimento — nova medida registrada");
         return parametros;
     }
 

@@ -19,10 +19,15 @@
           <h2>Acompanhamento da criança</h2>
           <p>O documento organiza crescimento, marcos e registros relevantes da rotina em uma leitura objetiva.</p>
         </div>
-        <button class="pueria-button relatorios__botao" [disabled]="gerando()" (click)="gerar()">
-          <app-icon name="stethoscope" [size]="18"></app-icon>
-          {{ gerando() ? 'Gerando...' : 'Gerar PDF' }}
-        </button>
+        <div class="relatorios__acoes">
+          <button class="pueria-button relatorios__botao" [disabled]="gerando()" (click)="gerar()">
+            <app-icon name="stethoscope" [size]="18"></app-icon>
+            {{ gerando() ? 'Gerando...' : 'Resumo breve' }}
+          </button>
+          <button class="relatorios__detalhado" [disabled]="gerando()" (click)="gerar(true)">
+            Versão detalhada
+          </button>
+        </div>
         <footer>
           <span>Pronto para compartilhar na consulta</span>
           <span>{{ secoesComRegistros() }} seções com informações</span>

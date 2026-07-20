@@ -5,9 +5,10 @@
     <parameter name="GERADO_EM" class="java.lang.String"/>
     <parameter name="PONTOS_DESENVOLVIMENTO" class="java.lang.String"/>
     <parameter name="RELATOS_FAMILIA" class="java.lang.String"/>
+    <parameter name="RESUMO_EXECUTIVO" class="java.lang.String"/>
 
     <title>
-        <band height="172" splitType="Stretch">
+        <band height="224" splitType="Stretch">
             <staticText><reportElement x="0" y="0" width="120" height="20" forecolor="#2C2624"/><textElement><font size="15" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Pueria]]></text></staticText>
             <staticText><reportElement x="365" y="4" width="150" height="13" forecolor="#8A706A"/><textElement textAlignment="Right"><font size="8" isBold="true"/></textElement><text><![CDATA[RESUMO PARA CONSULTA]]></text></staticText>
             <line><reportElement x="0" y="28" width="515" height="1" forecolor="#E7DDD7"/></line>
@@ -16,6 +17,9 @@
             <textField><reportElement x="18" y="80" width="380" height="30" forecolor="#2C2624"/><textElement><font size="23" isBold="true" fontName="Serif"/></textElement><textFieldExpression><![CDATA[$P{NOME_CRIANCA}]]></textFieldExpression></textField>
             <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="18" y="115" width="400" height="22" forecolor="#665954"/><textElement><font size="9"/></textElement><textFieldExpression><![CDATA[$P{IDENTIFICACAO}]]></textFieldExpression></textField>
             <textField><reportElement x="350" y="62" width="145" height="12" forecolor="#8A706A"/><textElement textAlignment="Right"><font size="8"/></textElement><textFieldExpression><![CDATA[$P{GERADO_EM}]]></textFieldExpression></textField>
+            <rectangle><reportElement x="0" y="166" width="515" height="46" backcolor="#F7F2EC" mode="Opaque"/><graphicElement><pen lineColor="#E7DDD7"/></graphicElement></rectangle>
+            <staticText><reportElement x="16" y="175" width="220" height="10" forecolor="#8A706A"/><textElement><font size="7" isBold="true"/></textElement><text><![CDATA[LEITURA PARA CONSULTA]]></text></staticText>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="16" y="189" width="483" height="17" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{RESUMO_EXECUTIVO}]]></textFieldExpression></textField>
         </band>
     </title>
 

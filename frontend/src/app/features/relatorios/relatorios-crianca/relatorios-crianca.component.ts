@@ -73,9 +73,9 @@ export class RelatoriosCriancaComponent implements OnInit {
     return `${secao.quantidade} ${unidade}`;
   }
 
-  gerar(): void {
+  gerar(detalhado = false): void {
     this.gerando.set(true);
-    this.desenvolvimento.gerarResumoConsulta(this.criancaId).subscribe({
+    this.desenvolvimento.gerarResumoConsulta(this.criancaId, detalhado).subscribe({
       next: (pdf) => {
         this.gerando.set(false);
         window.open(URL.createObjectURL(pdf), '_blank');

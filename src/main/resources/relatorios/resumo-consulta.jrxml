@@ -17,9 +17,11 @@
     <parameter name="RELATOS_FAMILIA" class="java.lang.String"/>
     <parameter name="SAUDE_CUIDADOS" class="java.lang.String"/>
     <parameter name="ATIVIDADES" class="java.lang.String"/>
+    <parameter name="RESUMO_EXECUTIVO" class="java.lang.String"/>
+    <parameter name="LINHA_DO_TEMPO" class="java.lang.String"/>
 
     <title>
-        <band height="160" splitType="Stretch">
+        <band height="222" splitType="Stretch">
             <staticText>
                 <reportElement x="0" y="0" width="120" height="20" forecolor="#2C2624"/>
                 <textElement><font size="15" isBold="true" fontName="Serif"/></textElement>
@@ -55,11 +57,25 @@
                 <textElement textAlignment="Right"><font size="8"/></textElement>
                 <textFieldExpression><![CDATA[$P{GERADO_EM}]]></textFieldExpression>
             </textField>
+            <rectangle>
+                <reportElement x="0" y="164" width="515" height="47" backcolor="#F7F2EC" mode="Opaque"/>
+                <graphicElement><pen lineColor="#E7DDD7"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="16" y="173" width="220" height="10" forecolor="#8A706A"/>
+                <textElement><font size="7" isBold="true"/></textElement>
+                <text><![CDATA[LEITURA PARA CONSULTA]]></text>
+            </staticText>
+            <textField textAdjust="StretchHeight">
+                <reportElement positionType="Float" x="16" y="187" width="483" height="17" forecolor="#514540"/>
+                <textElement><font size="8"/></textElement>
+                <textFieldExpression><![CDATA[$P{RESUMO_EXECUTIVO}]]></textFieldExpression>
+            </textField>
         </band>
     </title>
 
     <detail>
-        <band height="480" splitType="Stretch">
+        <band height="515" splitType="Stretch">
             <staticText>
                 <reportElement x="0" y="0" width="515" height="12" forecolor="#2C6C4E"/>
                 <textElement><font size="8" isBold="true"/></textElement>
@@ -93,37 +109,39 @@
             <staticText><reportElement x="0" y="242" width="515" height="12" forecolor="#B17A16"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[ROTINA DIÁRIA]]></text></staticText>
             <staticText><reportElement x="0" y="257" width="420" height="23" forecolor="#2C2624"/><textElement><font size="17" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Alimentação, sono e rotina]]></text></staticText>
 
-            <rectangle><reportElement x="0" y="290" width="250" height="82" backcolor="#FFFCF7" mode="Opaque"/><graphicElement><pen lineColor="#EEDFC2"/></graphicElement></rectangle>
-            <rectangle><reportElement x="265" y="290" width="250" height="82" backcolor="#F9FAFE" mode="Opaque"/><graphicElement><pen lineColor="#DCE3F1"/></graphicElement></rectangle>
-            <rectangle><reportElement x="0" y="384" width="250" height="82" backcolor="#FFFBF8" mode="Opaque"/><graphicElement><pen lineColor="#ECD9D0"/></graphicElement></rectangle>
-            <rectangle><reportElement x="265" y="384" width="250" height="82" backcolor="#F6FBFB" mode="Opaque"/><graphicElement><pen lineColor="#D2E7E8"/></graphicElement></rectangle>
+            <rectangle><reportElement x="0" y="290" width="250" height="100" backcolor="#FFFCF7" mode="Opaque"/><graphicElement><pen lineColor="#EEDFC2"/></graphicElement></rectangle>
+            <rectangle><reportElement x="265" y="290" width="250" height="100" backcolor="#F9FAFE" mode="Opaque"/><graphicElement><pen lineColor="#DCE3F1"/></graphicElement></rectangle>
+            <rectangle><reportElement x="0" y="402" width="250" height="100" backcolor="#FFFBF8" mode="Opaque"/><graphicElement><pen lineColor="#ECD9D0"/></graphicElement></rectangle>
+            <rectangle><reportElement x="265" y="402" width="250" height="100" backcolor="#F6FBFB" mode="Opaque"/><graphicElement><pen lineColor="#D2E7E8"/></graphicElement></rectangle>
             <staticText><reportElement x="13" y="302" width="210" height="14" forecolor="#A97614"/><textElement><font size="10" isBold="true"/></textElement><text><![CDATA[Alimentação]]></text></staticText>
             <staticText><reportElement x="278" y="302" width="210" height="14" forecolor="#4B638E"/><textElement><font size="10" isBold="true"/></textElement><text><![CDATA[Sono]]></text></staticText>
-            <staticText><reportElement x="13" y="396" width="210" height="14" forecolor="#9A6045"/><textElement><font size="10" isBold="true"/></textElement><text><![CDATA[Trânsito intestinal]]></text></staticText>
-            <staticText><reportElement x="278" y="396" width="210" height="14" forecolor="#28717A"/><textElement><font size="10" isBold="true"/></textElement><text><![CDATA[Telas]]></text></staticText>
-            <textField textAdjust="StretchHeight"><reportElement x="13" y="322" width="224" height="40" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{ALIMENTACAO}]]></textFieldExpression></textField>
-            <textField textAdjust="StretchHeight"><reportElement x="278" y="322" width="224" height="40" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{SONO}]]></textFieldExpression></textField>
-            <textField textAdjust="StretchHeight"><reportElement x="13" y="416" width="224" height="40" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{TRANSITO}]]></textFieldExpression></textField>
-            <textField textAdjust="StretchHeight"><reportElement x="278" y="416" width="224" height="40" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{TELAS}]]></textFieldExpression></textField>
+            <staticText><reportElement x="13" y="414" width="210" height="14" forecolor="#9A6045"/><textElement><font size="10" isBold="true"/></textElement><text><![CDATA[Trânsito intestinal]]></text></staticText>
+            <staticText><reportElement x="278" y="414" width="210" height="14" forecolor="#28717A"/><textElement><font size="10" isBold="true"/></textElement><text><![CDATA[Telas]]></text></staticText>
+            <textField textAdjust="StretchHeight"><reportElement x="13" y="322" width="224" height="58" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{ALIMENTACAO}]]></textFieldExpression></textField>
+            <textField textAdjust="StretchHeight"><reportElement x="278" y="322" width="224" height="58" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{SONO}]]></textFieldExpression></textField>
+            <textField textAdjust="StretchHeight"><reportElement x="13" y="434" width="224" height="58" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{TRANSITO}]]></textFieldExpression></textField>
+            <textField textAdjust="StretchHeight"><reportElement x="278" y="434" width="224" height="58" forecolor="#514540"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$P{TELAS}]]></textFieldExpression></textField>
 
         </band>
         <band height="610" splitType="Stretch">
             <staticText><reportElement x="0" y="0" width="515" height="12" forecolor="#7052A3"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[DESENVOLVIMENTO]]></text></staticText>
             <staticText><reportElement x="0" y="15" width="350" height="23" forecolor="#2C2624"/><textElement><font size="17" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Pontos para conversar]]></text></staticText>
-            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="45" width="515" height="112" backcolor="#FFFDFC" mode="Opaque" forecolor="#392F3F"/><textElement><font size="9"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="12" spacingAfter="10"/></textElement><textFieldExpression><![CDATA[$P{PONTOS_DESENVOLVIMENTO}]]></textFieldExpression></textField>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="45" width="515" height="90" backcolor="#FFFDFC" mode="Opaque" forecolor="#392F3F"/><textElement><font size="9"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="10" spacingAfter="8"/></textElement><textFieldExpression><![CDATA[$P{PONTOS_DESENVOLVIMENTO}]]></textFieldExpression></textField>
 
-            <staticText><reportElement positionType="Float" x="0" y="175" width="515" height="12" forecolor="#7052A3"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[NEURODESENVOLVIMENTO]]></text></staticText>
-            <staticText><reportElement positionType="Float" x="0" y="190" width="350" height="23" forecolor="#2C2624"/><textElement><font size="17" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Observações recentes]]></text></staticText>
-            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="220" width="515" height="100" backcolor="#FBF9FD" mode="Opaque" forecolor="#473952"/><textElement><font size="9"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="12" spacingAfter="10"/></textElement><textFieldExpression><![CDATA[$P{OBSERVACOES}]]></textFieldExpression></textField>
+            <staticText><reportElement positionType="Float" x="0" y="151" width="515" height="12" forecolor="#7052A3"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[NEURODESENVOLVIMENTO]]></text></staticText>
+            <staticText><reportElement positionType="Float" x="0" y="166" width="350" height="23" forecolor="#2C2624"/><textElement><font size="17" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Observações recentes]]></text></staticText>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="196" width="515" height="82" backcolor="#FBF9FD" mode="Opaque" forecolor="#473952"/><textElement><font size="9"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="10" spacingAfter="8"/></textElement><textFieldExpression><![CDATA[$P{OBSERVACOES}]]></textFieldExpression></textField>
 
-            <staticText><reportElement positionType="Float" x="0" y="342" width="235" height="12" forecolor="#C52845"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[RELATOS DA FAMÍLIA]]></text></staticText>
-            <staticText><reportElement positionType="Float" x="265" y="342" width="235" height="12" forecolor="#C52845"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[SAÚDE E CUIDADOS]]></text></staticText>
-            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="360" width="250" height="105" backcolor="#FFFCF9" mode="Opaque" forecolor="#493B36"/><textElement><font size="8"/><paragraph leftIndent="12" rightIndent="12" spacingBefore="10" spacingAfter="8"/></textElement><textFieldExpression><![CDATA[$P{RELATOS_FAMILIA}]]></textFieldExpression></textField>
-            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="265" y="360" width="250" height="105" backcolor="#FFFCF9" mode="Opaque" forecolor="#493B36"/><textElement><font size="8"/><paragraph leftIndent="12" rightIndent="12" spacingBefore="10" spacingAfter="8"/></textElement><textFieldExpression><![CDATA[$P{SAUDE_CUIDADOS}]]></textFieldExpression></textField>
+            <staticText><reportElement positionType="Float" x="0" y="298" width="220" height="12" forecolor="#C52845"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[RELATOS DA FAMÍLIA]]></text></staticText>
+            <staticText><reportElement positionType="Float" x="265" y="298" width="235" height="12" forecolor="#C52845"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[SAÚDE E CUIDADOS]]></text></staticText>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="316" width="250" height="80" backcolor="#FFFCF9" mode="Opaque" forecolor="#493B36"/><textElement><font size="8"/><paragraph leftIndent="12" rightIndent="12" spacingBefore="9" spacingAfter="7"/></textElement><textFieldExpression><![CDATA[$P{RELATOS_FAMILIA}]]></textFieldExpression></textField>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="265" y="316" width="250" height="80" backcolor="#FFFCF9" mode="Opaque" forecolor="#493B36"/><textElement><font size="8"/><paragraph leftIndent="12" rightIndent="12" spacingBefore="9" spacingAfter="7"/></textElement><textFieldExpression><![CDATA[$P{SAUDE_CUIDADOS}]]></textFieldExpression></textField>
 
-            <staticText><reportElement positionType="Float" x="0" y="485" width="515" height="12" forecolor="#B17A16"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[ESTIMULAÇÃO]]></text></staticText>
-            <staticText><reportElement positionType="Float" x="0" y="500" width="400" height="23" forecolor="#2C2624"/><textElement><font size="17" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Atividades experimentadas]]></text></staticText>
-            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="530" width="515" height="72" backcolor="#FFF8E8" mode="Opaque" forecolor="#58452A"/><textElement><font size="9"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="12" spacingAfter="10"/></textElement><textFieldExpression><![CDATA[$P{ATIVIDADES}]]></textFieldExpression></textField>
+            <staticText><reportElement positionType="Float" x="0" y="416" width="515" height="12" forecolor="#B17A16"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[ESTIMULAÇÃO]]></text></staticText>
+            <staticText><reportElement positionType="Float" x="0" y="431" width="400" height="21" forecolor="#2C2624"/><textElement><font size="15" isBold="true" fontName="Serif"/></textElement><text><![CDATA[Atividades experimentadas]]></text></staticText>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="458" width="515" height="48" backcolor="#FFF8E8" mode="Opaque" forecolor="#58452A"/><textElement><font size="8"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="8" spacingAfter="6"/></textElement><textFieldExpression><![CDATA[$P{ATIVIDADES}]]></textFieldExpression></textField>
+            <staticText><reportElement positionType="Float" x="0" y="522" width="515" height="12" forecolor="#28717A"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[LINHA DO TEMPO]]></text></staticText>
+            <textField textAdjust="StretchHeight"><reportElement positionType="Float" x="0" y="540" width="515" height="58" backcolor="#F6FBFB" mode="Opaque" forecolor="#3B5355"/><textElement><font size="8"/><paragraph leftIndent="14" rightIndent="14" spacingBefore="9" spacingAfter="4"/></textElement><textFieldExpression><![CDATA[$P{LINHA_DO_TEMPO}]]></textFieldExpression></textField>
         </band>
     </detail>
 

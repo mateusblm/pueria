@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -95,7 +96,7 @@ public class ResumoConsultaPdfService {
 
     public byte[] gerar(UUID criancaId, String email, boolean detalhado) {
         Crianca crianca = validar(criancaId, email);
-        Map<String, Object> parametros = parametros(crianca, criancaId, email);
+        Map<String, Object> parametros = parametros(crianca, criancaId, email, detalhado);
 
         String modelo = detalhado ? "relatorios/resumo-consulta.jrxml" : "relatorios/resumo-consulta-breve.jrxml";
         try (InputStream in = new ClassPathResource(modelo).getInputStream()) {
@@ -108,22 +109,25 @@ public class ResumoConsultaPdfService {
         }
     }
 
-    private Map<String, Object> parametros(Crianca crianca, UUID criancaId, String email) {
+    private Map<String, Object> parametros(Crianca crianca, UUID criancaId, String email, boolean detalhado) {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("NOME_CRIANCA", crianca.getNome());
         parametros.put("IDENTIFICACAO", identificacao(crianca));
         parametros.put("GERADO_EM", "Gerado em " + LocalDate.now().format(DATA));
 
         preencherCrescimento(parametros, criancaId, email);
-        parametros.put("ALIMENTACAO", resumoAlimentacao(criancaId, email));
-        parametros.put("SONO", resumoSono(criancaId, email));
-        parametros.put("TRANSITO", resumoTransito(criancaId, email));
-        parametros.put("TELAS", resumoTelas(criancaId, email));
+        int limiteRotina = detalhado ? 2 : 1;
+        parametros.put("ALIMENTACAO", resumoAlimentacao(criancaId, email, limiteRotina));
+        parametros.put("SONO", resumoSono(criancaId, email, limiteRotina));
+        parametros.put("TRANSITO", resumoTransito(criancaId, email, limiteRotina));
+        parametros.put("TELAS", resumoTelas(criancaId, email, limiteRotina));
         parametros.put("PONTOS_DESENVOLVIMENTO", desenvolvimento(criancaId, email));
         parametros.put("OBSERVACOES", trajetoria(criancaId));
         parametros.put("RELATOS_FAMILIA", contexto(criancaId, email));
         parametros.put("SAUDE_CUIDADOS", registrosSaude(criancaId, email));
         parametros.put("ATIVIDADES", atividades(criancaId, email));
+        parametros.put("RESUMO_EXECUTIVO", resumoExecutivo(criancaId, email));
+        parametros.put("LINHA_DO_TEMPO", linhaDoTempo(criancaId, email));
         return parametros;
     }
 
@@ -167,8 +171,10 @@ public class ResumoConsultaPdfService {
         parametros.put("CRESCIMENTO_TABELA", tabela);
     }
 
-    private String resumoAlimentacao(UUID criancaId, String email) {
-        return alimentacao.executar(criancaId, email).stream().findFirst()
+    private String resumoAlimentacao(UUID criancaId, String email, int limite) {
+        String resumo = alimentacao.executar(criancaId, email).stream()
+                .sorted(Comparator.comparing(detalhado -> detalhado.registro().getDataRegistro(), Comparator.reverseOrder()))
+                .limit(limite)
                 .map(detalhado -> {
                     var registro = detalhado.registro();
                     List<String> itens = new java.util.ArrayList<>();
@@ -178,11 +184,14 @@ public class ResumoConsultaPdfService {
                     if (Boolean.TRUE.equals(registro.getConsomeLegumesVerduras())) itens.add("legumes e verduras");
                     return resumoComData(registro.getDataRegistro(), itens, "Registro alimentar salvo.");
                 })
-                .orElse("Ainda sem registro alimentar.");
+                .collect(Collectors.joining("\n\n"));
+        return resumo.isBlank() ? "Ainda sem registro alimentar." : resumo;
     }
 
-    private String resumoSono(UUID criancaId, String email) {
-        return sono.executar(criancaId, email).stream().findFirst()
+    private String resumoSono(UUID criancaId, String email, int limite) {
+        String resumo = sono.executar(criancaId, email).stream()
+                .sorted(Comparator.comparing(detalhado -> detalhado.registro().getDataRegistro(), Comparator.reverseOrder()))
+                .limit(limite)
                 .map(detalhado -> {
                     var registro = detalhado.registro();
                     List<String> itens = new java.util.ArrayList<>();
@@ -193,11 +202,14 @@ public class ResumoConsultaPdfService {
                     if (registro.getDespertaresNoturnos() != null) itens.add(registro.getDespertaresNoturnos() + " despertares noturnos");
                     return resumoComData(registro.getDataRegistro(), itens, "Registro de sono salvo.");
                 })
-                .orElse("Ainda sem registro de sono.");
+                .collect(Collectors.joining("\n\n"));
+        return resumo.isBlank() ? "Ainda sem registro de sono." : resumo;
     }
 
-    private String resumoTransito(UUID criancaId, String email) {
-        return transitoIntestinal.executar(criancaId, email).stream().findFirst()
+    private String resumoTransito(UUID criancaId, String email, int limite) {
+        String resumo = transitoIntestinal.executar(criancaId, email).stream()
+                .sorted(Comparator.comparing(detalhado -> detalhado.registro().getDataRegistro(), Comparator.reverseOrder()))
+                .limit(limite)
                 .map(detalhado -> {
                     var registro = detalhado.registro();
                     List<String> itens = new java.util.ArrayList<>();
@@ -205,11 +217,14 @@ public class ResumoConsultaPdfService {
                     if (registro.getEvacuacoesPorDia() != null) itens.add(registro.getEvacuacoesPorDia() + " evacuações/dia");
                     return resumoComData(registro.getDataRegistro(), itens, "Registro intestinal salvo.");
                 })
-                .orElse("Ainda sem registro intestinal.");
+                .collect(Collectors.joining("\n\n"));
+        return resumo.isBlank() ? "Ainda sem registro intestinal." : resumo;
     }
 
-    private String resumoTelas(UUID criancaId, String email) {
-        return telas.executar(criancaId, email).stream().findFirst()
+    private String resumoTelas(UUID criancaId, String email, int limite) {
+        String resumo = telas.executar(criancaId, email).stream()
+                .sorted(Comparator.comparing(detalhado -> detalhado.registro().getDataRegistro(), Comparator.reverseOrder()))
+                .limit(limite)
                 .map(detalhado -> {
                     var registro = detalhado.registro();
                     List<String> itens = new java.util.ArrayList<>();
@@ -217,8 +232,60 @@ public class ResumoConsultaPdfService {
                     if (registro.getTipoConteudoPredominante() != null) itens.add(rotuloEnum(registro.getTipoConteudoPredominante().name()));
                     return resumoComData(registro.getDataRegistro(), itens, "Registro de telas salvo.");
                 })
-                .orElse("Ainda sem registro de telas.");
+                .collect(Collectors.joining("\n\n"));
+        return resumo.isBlank() ? "Ainda sem registro de telas." : resumo;
     }
+
+    private String resumoExecutivo(UUID criancaId, String email) {
+        int medidasRegistradas = medidas.listarPorCrianca(criancaId).size();
+        int marcosParaConversa = (int) marcos.executar(criancaId, email).stream()
+                .filter(marco -> marco.status() == StatusMarcoDesenvolvimento.AINDA_NAO_OBSERVADO
+                        || marco.status() == StatusMarcoDesenvolvimento.NAO_TENHO_CERTEZA)
+                .count();
+        int registrosRotina = alimentacao.executar(criancaId, email).size()
+                + sono.executar(criancaId, email).size()
+                + transitoIntestinal.executar(criancaId, email).size()
+                + telas.executar(criancaId, email).size();
+
+        List<String> partes = new ArrayList<>();
+        if (medidasRegistradas > 0) partes.add(medidasRegistradas + " medida(s) de crescimento");
+        if (marcosParaConversa > 0) partes.add(marcosParaConversa + " ponto(s) de desenvolvimento para conversar");
+        if (registrosRotina > 0) partes.add(registrosRotina + " registro(s) de rotina");
+
+        if (partes.isEmpty()) {
+            return "Ainda há poucos registros para uma leitura em conjunto. Este documento organiza o que a família já observou, sem substituir a avaliação profissional.";
+        }
+        return "Este documento organiza " + String.join(", ", partes)
+                + ". Use como apoio para conversar sobre padrões e dúvidas na consulta; registros isolados não definem diagnóstico.";
+    }
+
+    private String linhaDoTempo(UUID criancaId, String email) {
+        List<EventoLinhaDoTempo> eventos = new ArrayList<>();
+        medidas.listarPorCrianca(criancaId).forEach(medida -> eventos.add(new EventoLinhaDoTempo(
+                medida.getDataMedicao(), "Crescimento", "nova medida registrada")));
+        alimentacao.executar(criancaId, email).forEach(detalhado -> eventos.add(new EventoLinhaDoTempo(
+                detalhado.registro().getDataRegistro(), "Alimentação", "registro alimentar")));
+        sono.executar(criancaId, email).forEach(detalhado -> eventos.add(new EventoLinhaDoTempo(
+                detalhado.registro().getDataRegistro(), "Sono", "rotina de sono")));
+        transitoIntestinal.executar(criancaId, email).forEach(detalhado -> eventos.add(new EventoLinhaDoTempo(
+                detalhado.registro().getDataRegistro(), "Eliminações", "registro intestinal")));
+        telas.executar(criancaId, email).forEach(detalhado -> eventos.add(new EventoLinhaDoTempo(
+                detalhado.registro().getDataRegistro(), "Telas", "registro de uso")));
+        saude.listar(criancaId, email).forEach(registro -> eventos.add(new EventoLinhaDoTempo(
+                registro.getDataRegistro(), "Saúde", registro.getTipo() == TipoRegistroSaude.MEDICAMENTO_SUPLEMENTO
+                        ? "uso diário registrado" : "intercorrência registrada")));
+        relatos.listar(criancaId, email).forEach(relato -> eventos.add(new EventoLinhaDoTempo(
+                relato.getRegistradoEm().toLocalDate(), "Família", rotuloRelato(relato.getTipo().name()))));
+
+        String linha = eventos.stream()
+                .sorted(Comparator.comparing(EventoLinhaDoTempo::data).reversed())
+                .limit(8)
+                .map(evento -> evento.data().format(DATA) + " · " + evento.categoria() + " — " + evento.descricao())
+                .collect(Collectors.joining("\n"));
+        return linha.isBlank() ? "Os acontecimentos registrados aparecerão aqui conforme a família usar o acompanhamento." : linha;
+    }
+
+    private record EventoLinhaDoTempo(LocalDate data, String categoria, String descricao) { }
 
     private String desenvolvimento(UUID criancaId, String email) {
         String texto = marcos.executar(criancaId, email).stream()

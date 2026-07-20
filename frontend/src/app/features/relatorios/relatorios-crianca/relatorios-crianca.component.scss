@@ -44,7 +44,21 @@
 
 .relatorios__resumo-texto { display: grid; gap: 8px; }
 .relatorios__resumo-texto p:last-child { color: var(--pueria-texto-suave); line-height: 1.5; max-width: 44ch; }
-.relatorios__botao { align-self: start; display: inline-flex; gap: 8px; justify-content: center; min-width: 118px; }
+.relatorios__acoes { align-items: stretch; display: grid; gap: 8px; justify-items: stretch; }
+.relatorios__botao { align-self: start; display: inline-flex; gap: 8px; justify-content: center; min-width: 140px; }
+.relatorios__detalhado {
+  background: transparent;
+  border: 1px solid #e6cdd0;
+  border-radius: 10px;
+  color: var(--pueria-vermelho-profundo);
+  cursor: pointer;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  min-height: 38px;
+  padding: 8px 12px;
+}
+.relatorios__detalhado:disabled { cursor: wait; opacity: .6; }
 
 .relatorios__resumo footer {
   border-top: 1px solid #efced2;
@@ -115,7 +129,7 @@
 
 @media (max-width: 480px) {
   .relatorios__resumo { grid-template-columns: 1fr; padding: 18px; }
-  .relatorios__botao { width: 100%; }
+  .relatorios__botao, .relatorios__detalhado { width: 100%; }
   .relatorios__resumo footer { flex-direction: column; gap: 5px; }
   .relatorios__previa, .relatorios__inclui { padding: 18px; }
   .relatorios__folhas { gap: 8px; }
