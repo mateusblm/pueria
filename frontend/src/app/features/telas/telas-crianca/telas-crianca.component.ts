@@ -104,7 +104,7 @@ export class TelasCriancaComponent implements OnInit {
     [...this.registros()].sort((a, b) => this.compararRegistrosRecentes(a, b))
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
-  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6).reverse());
+  readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6));
   readonly mediaPorDia = computed(() => {
     const valores = this.registros().map((registro) => registro.minutosMediosDia).filter((minutos): minutos is number => minutos !== null && minutos !== undefined);
     return valores.length ? Math.round(valores.reduce((total, minutos) => total + minutos, 0) / valores.length) : null;

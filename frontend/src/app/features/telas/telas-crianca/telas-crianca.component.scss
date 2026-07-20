@@ -252,11 +252,10 @@
 .telas-page__state--vazio p { color: var(--pueria-texto-suave); line-height: 1.5; margin: .7rem 0 0; max-width: 34rem; }
 .telas-page__state--vazio small { color: var(--pueria-texto-suave); }
 .telas-page__state-icon { align-items: center; background: #dcebed; border-radius: 50%; color: #4f7c81; display: inline-flex; height: 6rem; justify-content: center; width: 6rem; }
-.telas-page--vazio .telas-atualizacao, .telas-page--vazio .telas-historico { display: none; }
+.telas-page--vazio .telas-atualizacao { display: none; }
 
 .telas-sintese,
-.telas-form,
-.telas-historico {
+.telas-form {
   min-width: 0;
   padding: 1.5rem;
 }
@@ -295,9 +294,7 @@
 
 .telas-sintese__metric { background: #e7f2f1 !important; border-top: 3px solid #4f7c81 !important; }
 
-.telas-sintese__grid span,
-.telas-historico span,
-.telas-historico small {
+.telas-sintese__grid span {
   color: var(--pueria-texto-suave);
   font-size: 0.9rem;
 }
@@ -479,26 +476,6 @@
 
 .telas-form__observacao {
   display: grid;
-}
-
-.telas-historico {
-  display: grid;
-  gap: 1rem;
-  position: sticky;
-  top: 1rem;
-}
-
-.telas-historico__lista {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.telas-historico article {
-  border: 1px solid rgba(147, 43, 57, 0.14);
-  border-radius: 8px;
-  display: grid;
-  gap: 0.45rem;
-  padding: 0.85rem;
 }
 
 /* Contexto antes de julgamento: o registro é curto e acontece em duas etapas. */
@@ -713,24 +690,6 @@
   background: #416d72;
 }
 
-.telas-historico {
-  align-self: start;
-  border: 1px solid #dfe9e9;
-  border-radius: 14px;
-  background: #fff;
-  padding: 1.1rem;
-}
-
-.telas-historico h2 {
-  margin: .15rem 0 0;
-  font-size: 1.25rem;
-}
-
-.telas-historico article {
-  border-color: #e1ebeb;
-  border-radius: 10px;
-}
-
 @media (max-width: 980px) {
   .telas-sintese__grid,
   .telas-layout {
@@ -743,10 +702,6 @@
     flex-direction: column;
   }
 
-  .telas-historico {
-    position: static;
-  }
-
   .telas-sintese__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -754,8 +709,7 @@
 
 @media (max-width: 620px) {
   .telas-sintese,
-  .telas-form,
-  .telas-historico {
+  .telas-form {
     padding: 1rem;
   }
 

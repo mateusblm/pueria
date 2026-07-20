@@ -204,25 +204,6 @@
         }
       </form>
       </app-registro-rapido>
-
-      <aside class="pueria-card telas-historico">
-        <p class="pueria-eyebrow">Histórico</p>
-        <h2>Registros</h2>
-        @if (registrosOrdenados().length === 0) {
-          <p>Nenhum registro salvo.</p>
-        } @else {
-          <div class="telas-historico__lista">
-            @for (registro of registrosOrdenados(); track registro.id) {
-              <article>
-                <strong>{{ formatarData(registro.dataRegistro) }}</strong>
-                <span>{{ formatarDuracao(registro.minutosMediosDia) }} por dia</span>
-                <small>{{ labelTipoConteudo(registro.tipoConteudoPredominante) }}</small>
-                <button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button>
-              </article>
-            }
-          </div>
-        }
-      </aside>
     </div>
   }
 
