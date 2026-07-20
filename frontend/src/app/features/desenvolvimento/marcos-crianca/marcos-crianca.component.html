@@ -7,9 +7,20 @@
       <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
       <p class="pueria-subtitle">Uma habilidade por vez, sem misturar idades futuras.</p>
     </div>
-    <button type="button" class="marcos-page__entenda" (click)="abrirEntenda()" aria-label="Entenda como acompanhar os marcos" title="Como funciona">
-      <app-icon name="brain" [size]="22" />
-    </button>
+    @if (modo() === 'visao') {
+      <label class="marcos-page__fase">
+        <small>Fase</small>
+        <select [value]="idadeSelecionada()" (change)="selecionarIdade(+$any($event.target).value)" aria-label="Escolher fase de desenvolvimento">
+          @for (grupo of historicoPorIdade(); track grupo.idadeMeses) {
+            <option [value]="grupo.idadeMeses">{{ grupo.titulo }}</option>
+          }
+        </select>
+      </label>
+    } @else {
+      <button type="button" class="marcos-page__entenda" (click)="abrirEntenda()" aria-label="Entenda como acompanhar os marcos" title="Como funciona">
+        <app-icon name="brain" [size]="22" />
+      </button>
+    }
   </div>
 
   @if (carregando()) {
@@ -23,6 +34,14 @@
       <p>{{ textoSemMarcos() }}</p>
     </div>
   } @else {
+    @if (modo() === 'visao') {
+      <section class="marcos-visao__navegacao" aria-label="Ações desta etapa">
+        <button type="button" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong>Revisar habilidades</strong><small>Uma habilidade por vez</small></span></button>
+        <button type="button" class="marcos-visao__nav--ativa" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong>Visão geral</strong><small>Como está esta fase</small></span></button>
+        <button type="button" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong>Atividades</strong><small>Ideias para a rotina</small></span></button>
+        <button type="button" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong>Para a consulta</strong><small>Resumo para conversar</small></span></button>
+      </section>
+    } @else {
     <section class="pueria-card painel-etapa">
       <div class="painel-etapa__intro">
         <div>
@@ -66,12 +85,21 @@
         }
       </div>
     </section>
+    }
 
     @if (modo() === 'visao') {
       <section class="marcos-visao" aria-label="Visão geral dos marcos">
+        <aside class="marcos-visao__conclusao" [class.marcos-visao__conclusao--atencao]="pontosDeAtencao().length > 0">
+          <span><app-icon [name]="pontosDeAtencao().length > 0 ? 'heartPulse' : 'heart'" [size]="22" /></span>
+          <div>
+            <p class="pueria-eyebrow">Como está esta fase</p>
+            <strong>{{ conclusaoDaFase() }}</strong>
+            <p>Escolha só as atividades que combinarem com a rotina. Observe de novo nas próximas semanas e leve exemplos para a consulta se a dúvida continuar.</p>
+          </div>
+        </aside>
         <section class="marcos-visao__areas">
           <div class="marcos-visao__cabecalho">
-            <div><p class="pueria-eyebrow">Visão geral da fase</p><h2>Como está o acompanhamento</h2></div>
+            <div><h2>Por área do desenvolvimento</h2></div>
             <p>Uma resposta isolada não define o desenvolvimento.</p>
           </div>
           <div class="areas-resumo">
@@ -79,33 +107,21 @@
               <article class="area-resumo" [attr.data-tema]="temaArea(area.area)">
                 <header>
                   <span class="area-resumo__icone"><app-icon [name]="iconeArea(area.area)" [size]="20" /></span>
-                  <div><strong>{{ area.label }}</strong><span>{{ area.observados }} de {{ area.total }} habilidades observadas</span></div>
+                  <strong>{{ area.label }}</strong>
+                  @if (area.pontosAtencao > 0) {
+                    <span class="area-resumo__badge area-resumo__badge--atencao">{{ area.pontosAtencao }} {{ area.pontosAtencao === 1 ? 'a acompanhar' : 'a acompanhar' }}</span>
+                  } @else if (area.pendentes > 0) {
+                    <span class="area-resumo__badge">{{ area.pendentes }} {{ area.pendentes === 1 ? 'sem resposta' : 'sem respostas' }}</span>
+                  } @else {
+                    <span class="area-resumo__badge area-resumo__badge--concluida">✓ Observado</span>
+                  }
                 </header>
                 <div class="area-resumo__barra" role="progressbar" [attr.aria-label]="area.label + ': ' + area.observados + ' de ' + area.total + ' habilidades observadas'" aria-valuemin="0" [attr.aria-valuenow]="area.observados" [attr.aria-valuemax]="area.total"><span [style.width.%]="area.percentualObservado"></span></div>
-                @if (area.pontosAtencao > 0) {
-                  <p class="area-resumo__situacao area-resumo__situacao--atencao">{{ area.pontosAtencao }} {{ area.pontosAtencao === 1 ? 'habilidade para acompanhar' : 'habilidades para acompanhar' }}</p>
-                } @else if (area.pendentes > 0) {
-                  <p class="area-resumo__situacao">{{ area.pendentes }} {{ area.pendentes === 1 ? 'habilidade ainda sem resposta' : 'habilidades ainda sem resposta' }}</p>
-                } @else {
-                  <p class="area-resumo__situacao area-resumo__situacao--concluida">Fase registrada nesta área</p>
-                }
               </article>
             }
           </div>
         </section>
-
-        <aside class="marcos-visao__conclusao" [class.marcos-visao__conclusao--atencao]="pontosDeAtencao().length > 0">
-          <span><app-icon [name]="pontosDeAtencao().length > 0 ? 'heartPulse' : 'heart'" [size]="23" /></span>
-          <div>
-            <p class="pueria-eyebrow">Conclusão da fase</p>
-            <strong>{{ conclusaoDaFase() }}</strong>
-            @if (pontosDeAtencao().length > 0) {
-              <p>Escolha apenas as atividades que combinarem com a rotina. Observe de novo nas próximas semanas e, se a dúvida continuar ou houver perda de uma habilidade, leve exemplos para a consulta.</p>
-            } @else {
-              <p>Você pode revisar as habilidades ou escolher uma atividade para a rotina quando fizer sentido.</p>
-            }
-          </div>
-        </aside>
+        <button type="button" class="pueria-button marcos-visao__atividades" (click)="abrirExperimentos()">Ver atividades sugeridas para esta fase</button>
       </section>
     } @else if (modo() === 'responder') {
       @if (marcoAtual(); as marco) {

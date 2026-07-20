@@ -743,8 +743,80 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .etapa-nav span {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
+.etapa-nav span {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+}
+
+/* Visão geral: uma leitura rápida, com a fase escolhida no próprio cabeçalho. */
+.marcos-page__fase {
+  align-items: end;
+  background: #fff;
+  border: 1px solid #d8caff;
+  border-radius: 12px;
+  display: grid;
+  gap: 1px;
+  min-width: 152px;
+  padding: 7px 12px;
+}
+
+.marcos-page__fase small { color: var(--pueria-texto-suave); font-size: .67rem; }
+.marcos-page__fase select { appearance: auto; background: transparent; border: 0; color: #55368f; cursor: pointer; font: inherit; font-weight: 780; outline: 0; padding: 0; }
+
+.marcos-visao__navegacao {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.marcos-visao__navegacao button {
+  align-items: center;
+  background: #fffdf9;
+  border: 1px solid var(--pueria-borda);
+  border-radius: 12px;
+  color: var(--pueria-texto);
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  min-height: 56px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.marcos-visao__navegacao app-icon { color: #76507d; flex: 0 0 auto; }
+.marcos-visao__navegacao span { display: grid; gap: 2px; min-width: 0; }
+.marcos-visao__navegacao strong { font-size: .84rem; line-height: 1.16; }
+.marcos-visao__navegacao small { color: var(--pueria-texto-suave); font-size: .72rem; line-height: 1.15; }
+.marcos-visao__nav--ativa { background: #f0eafe !important; border-color: #7047d4 !important; color: #51339b !important; }
+
+.marcos-visao { gap: 16px; }
+.marcos-visao__conclusao { border-radius: 16px; padding: 18px 22px; }
+.marcos-visao__conclusao strong { font-family: var(--pueria-fonte-titulo); font-size: clamp(1.25rem, 2vw, 1.6rem); }
+.marcos-visao__areas { gap: 10px; }
+.marcos-visao__cabecalho { align-items: center; }
+.marcos-visao__cabecalho h2 { font-size: 1.1rem; }
+.areas-resumo { gap: 12px; }
+.area-resumo { border-left-width: 1px; border-radius: 14px; gap: 10px; min-height: 0; padding: 15px 18px; }
+.area-resumo header { width: 100%; }
+.area-resumo header strong { flex: 1 1 auto; }
+.area-resumo__badge { background: #f2eee8; border-radius: 999px; color: var(--pueria-texto-suave); font-size: .72rem; font-weight: 760; padding: 5px 9px; white-space: nowrap; }
+.area-resumo__badge--atencao { background: #fff1d6; color: #a56a14; }
+.area-resumo__badge--concluida { background: #e2f1e5; color: #36764b; }
+.marcos-visao__atividades { background: #6842c2; border-color: #6842c2; box-shadow: 0 12px 20px rgba(104, 66, 194, .18); color: #fff; justify-content: center; min-height: 50px; width: 100%; }
+
+@media (max-width: 760px) {
+  .marcos-page__hero { align-items: start; }
+  .marcos-page__fase { min-width: 132px; }
+  .marcos-visao__navegacao { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 480px) {
+  .marcos-page__fase { width: 100%; }
+  .marcos-visao__navegacao { grid-template-columns: 1fr; }
+  .marcos-visao__navegacao button { min-height: 50px; }
+  .marcos-visao__cabecalho { align-items: start; flex-direction: column; }
+  .marcos-visao__cabecalho > p { max-width: none; text-align: left; }
+  .area-resumo { padding: 14px; }
+  .area-resumo__badge { font-size: .68rem; }
 }
