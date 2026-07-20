@@ -2,6 +2,16 @@
   <a [routerLink]="rotaRetorno()" class="contexto-page__back">← {{ textoRetorno() }}</a>
   @if (carregando()) { <div class="pueria-card">Carregando...</div> } @else if (crianca(); as crianca) {
     <header class="contexto-page__hero"><div><p class="pueria-eyebrow">Contexto da família</p><h1 class="pueria-title">{{ titulo }}</h1><p class="pueria-subtitle">{{ descricao }}</p></div><span><app-icon [name]="contexto === 'humor' ? 'heartPulse' : 'message'" [size]="28" /></span></header>
+    @if (registrosOrdenados().length > 0) {
+      <section class="pueria-card pueria-leitura-automatica" aria-label="O que observamos recentemente no contexto da família">
+        <span><app-icon [name]="contexto === 'humor' ? 'heartPulse' : 'message'" [size]="20" /></span>
+        <div>
+          <p class="pueria-eyebrow">O que observamos recentemente</p>
+          <h2>{{ contexto === 'humor' ? 'Uma visão do período' : 'Contexto para lembrar depois' }}</h2>
+          <p>Há {{ registrosOrdenados().length }} {{ registrosOrdenados().length === 1 ? 'registro' : 'registros' }} neste espaço. A observação mais recente foi feita em {{ formatarData(registrosOrdenados()[0].dataRegistro) }} e pode ajudar a dar contexto à conversa na consulta.</p>
+        </div>
+      </section>
+    }
     <div class="contexto-page__layout">
       <form class="pueria-card contexto-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div><p class="pueria-eyebrow">{{ editandoId() ? 'Editar registro' : 'Novo registro' }}</p><h2>{{ contexto === 'humor' ? 'Como foi o período?' : 'O que vale guardar?' }}</h2></div>

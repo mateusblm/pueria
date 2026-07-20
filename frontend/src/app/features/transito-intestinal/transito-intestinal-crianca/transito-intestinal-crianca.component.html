@@ -18,6 +18,14 @@
     </div>
 
     @if (registrosRecentes().length > 0) {
+      <section class="pueria-card pueria-leitura-automatica" aria-label="O que observamos recentemente sobre eliminações fisiológicas">
+        <span><app-icon name="toilet" [size]="20" /></span>
+        <div>
+          <p class="pueria-eyebrow">O que observamos recentemente</p>
+          <h2>Os registros começam a mostrar um padrão</h2>
+          <p>Nos {{ registrosRecentes().length }} registros recentes, a frequência média foi de {{ frequenciaMedia() ?? '—' }} evacuações por dia.@if (bristolComum() !== 'NAO_INFORMADO') { A consistência que mais apareceu foi {{ labelTipoFezes(bristolComum()).toLowerCase() }}. } @if (sinaisObservados()[0]; as sinal) { O sinal mais citado foi {{ sinal.nome.toLowerCase() }}. }</p>
+        </div>
+      </section>
       <section class="intestinal-painel">
         <article class="intestinal-metrica"><p>Frequência média</p><strong>{{ frequenciaMedia() ?? '—' }}<small>/dia</small></strong><span>quando informado</span></article>
         <article class="intestinal-metrica"><p>Consistência comum</p><strong>{{ labelTipoFezes(bristolComum()) }}</strong><span>Bristol {{ bristolComum().replace('TIPO_', 'tipo ') }}</span></article>

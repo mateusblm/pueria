@@ -21,6 +21,16 @@
   } @else if (erro() && !crianca()) {
     <div class="pueria-message pueria-message--erro">{{ erro() }}</div>
   } @else {
+    @if (registros().length > 0) {
+      <section class="pueria-card pueria-leitura-automatica" aria-label="O que observamos recentemente sobre saúde e cuidados">
+        <span><app-icon name="heartPulse" [size]="20" /></span>
+        <div>
+          <p class="pueria-eyebrow">O que observamos recentemente</p>
+          <h2>Informações organizadas para a rotina</h2>
+          <p>Há {{ registrosMedicamentos().length }} {{ registrosMedicamentos().length === 1 ? 'item de uso diário' : 'itens de uso diário' }} e {{ intercorrencias().length }} {{ intercorrencias().length === 1 ? 'intercorrência registrada' : 'intercorrências registradas' }}.@if (intercorrencias()[0]; as ultima) { A mais recente foi em {{ formatarData(ultima.dataRegistro) }}. }</p>
+        </div>
+      </section>
+    }
     <section class="saude-painel" aria-label="Resumo dos registros de saúde">
       <article><p>Uso diário</p><strong>{{ registrosMedicamentos().length }}</strong><small>itens contínuos</small></article>
       <article><p>Intercorrências</p><strong>{{ intercorrencias().length }}</strong><small>@if (intercorrencias().length) { última em {{ formatarData(intercorrencias()[0].dataRegistro) }} } @else { nenhuma registrada }</small></article>

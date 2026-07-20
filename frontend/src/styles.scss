@@ -142,6 +142,56 @@ button {
   text-transform: uppercase;
 }
 
+.pueria-leitura-automatica {
+  align-items: flex-start;
+  background: #f4f8f5;
+  border: 1px solid #cfe2d4;
+  border-left: 4px solid #4b8a64;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: 16px 18px;
+}
+
+.pueria-leitura-automatica > span {
+  align-items: center;
+  background: #dceee0;
+  border-radius: 50%;
+  color: #2f7250;
+  display: inline-flex;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.pueria-leitura-automatica h2,
+.pueria-leitura-automatica p {
+  margin: 0;
+}
+
+.pueria-leitura-automatica h2 {
+  font-family: var(--pueria-fonte-titulo);
+  font-size: 1.35rem;
+  margin-top: 2px;
+}
+
+.pueria-leitura-automatica p:not(.pueria-eyebrow) {
+  color: var(--pueria-texto-suave);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+@media (max-width: 639px) {
+  .pueria-leitura-automatica {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .pueria-leitura-automatica h2 {
+    font-size: 1.18rem;
+  }
+}
+
 .pueria-title {
   margin: 0;
   color: var(--pueria-texto);

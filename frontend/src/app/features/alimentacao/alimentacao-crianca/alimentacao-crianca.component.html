@@ -20,6 +20,14 @@
     </div>
 
     @if (ultimoRegistro(); as registro) {
+      <section class="pueria-card pueria-leitura-automatica" aria-label="O que observamos recentemente na alimentação">
+        <span><app-icon name="apple" [size]="20" /></span>
+        <div>
+          <p class="pueria-eyebrow">O que observamos recentemente</p>
+          <h2>Uma rotina em construção</h2>
+          <p>No último registro, {{ crianca.nome }} fez {{ registro.refeicoesPorDia ?? 'algumas' }} refeições na fase {{ labelEstagio(registro.estagioAlimentar).toLowerCase() }}. A rotina reúne {{ alimentosDaRotina().length }} alimentos em {{ gruposDaRotina() }} grupos.</p>
+        </div>
+      </section>
       <section class="alimentacao-painel" aria-label="Resumo da rotina alimentar">
         <article><p>Fase alimentar</p><strong>{{ labelEstagio(registro.estagioAlimentar) }}</strong><small>textura: {{ labelTextura(registro.texturaPredominante) }}</small></article>
         <article><p>Refeições por dia</p><strong>{{ registro.refeicoesPorDia ?? '—' }}</strong><small>no último registro</small></article>

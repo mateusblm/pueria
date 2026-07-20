@@ -19,6 +19,14 @@
     </div>
 
     @if (registrosRecentes().length > 0) {
+      <section class="pueria-card pueria-leitura-automatica" aria-label="O que observamos recentemente sobre telas">
+        <span><app-icon name="smartphone" [size]="20" /></span>
+        <div>
+          <p class="pueria-eyebrow">O que observamos recentemente</p>
+          <h2>O contexto ajuda a entender a rotina</h2>
+          <p>Nos {{ registros().length }} registros, {{ crianca.nome }} teve em média {{ formatarDuracao(mediaPorDia()) }} de telas por dia.@if (momentosObservados()[0]; as momento) { O momento que mais apareceu foi {{ momento.nome.toLowerCase() }}. }</p>
+        </div>
+      </section>
       <section class="telas-painel" aria-label="Resumo visual do uso de telas">
         <article class="telas-metrica"><p>Média por dia</p><strong>{{ formatarDuracao(mediaPorDia()) }}</strong><small>nos {{ registros().length }} registros</small></article>
         <article class="telas-metrica"><p>Aparelho principal</p><strong>{{ aparelhoPrincipal() }}</strong><small>{{ labelTipoConteudo(ultimoRegistro()?.tipoConteudoPredominante ?? 'NAO_INFORMADO') }}</small></article>
