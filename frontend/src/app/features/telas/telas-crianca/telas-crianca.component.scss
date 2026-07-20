@@ -58,11 +58,34 @@
 .telas-padrao__contextos { display:flex; flex-wrap:wrap; gap:.38rem; }
 .telas-padrao__contextos span { background:#e9f3f2; border-radius:999px; color:#3f6f72; font-size:.78rem; line-height:1.2; padding:.34rem .55rem; }
 
+/* Leitura visual da rotina: duração, contexto e histórico no mesmo ritmo dos demais módulos. */
+.telas-painel { display:grid; gap:14px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.telas-metrica { background:#fff; border:1px solid #e8ddd5; border-radius:16px; display:grid; gap:5px; min-height:108px; padding:18px; }
+.telas-metrica p { color:#76716d; font-size:.76rem; font-weight:800; margin:0; text-transform:uppercase; }
+.telas-metrica strong { color:#285f63; font-family:var(--pueria-fonte-destaque); font-size:1.7rem; line-height:1.05; }
+.telas-metrica small { color:#a5968d; }
+.telas-leitura { display:grid; gap:16px; grid-template-columns:minmax(0, 1.2fr) minmax(260px, .85fr); }
+.telas-grafico, .telas-momentos { padding:20px; }
+.telas-grafico h2 { font-family:var(--pueria-fonte-destaque); font-size:1.35rem; margin:.2rem 0 0; }
+.telas-grafico__area { border-bottom:1px solid #e4d9d1; height:190px; margin:20px 8px 12px 44px; position:relative; }
+.telas-grafico__area::before, .telas-grafico__area::after { border-top:1px solid #eadfd7; content:''; inset-inline:0; position:absolute; }
+.telas-grafico__area::before { top:0; }.telas-grafico__area::after { top:50%; }
+.telas-grafico__eixo { color:#9f9289; font-size:.78rem; left:-36px; position:absolute; }.telas-grafico__eixo--alto { top:-7px; }.telas-grafico__eixo--meio { top:calc(50% - 7px); }.telas-grafico__eixo--baixo { bottom:-8px; }
+.telas-grafico__barras { align-items:end; display:flex; height:100%; justify-content:space-around; padding-inline:14%; }
+.telas-grafico__barras > div { align-items:center; display:flex; flex:1; flex-direction:column; height:100%; justify-content:end; max-width:90px; position:relative; }
+.telas-grafico__barras strong { color:#b4701e; font-size:.82rem; margin-bottom:5px; }.telas-grafico__barras span { background:#dca04a; border-radius:7px 7px 0 0; min-height:14px; width:70px; }.telas-grafico__barras > div:nth-child(even) strong { color:#2e7275; }.telas-grafico__barras > div:nth-child(even) span { background:#347a7d; }.telas-grafico__barras small { bottom:-21px; color:#8f827a; font-size:.75rem; position:absolute; }
+.telas-grafico__nota { color:#8d8179; font-size:.78rem; line-height:1.4; margin:0; }
+.telas-momentos { display:grid; align-content:start; gap:15px; }.telas-momentos > div { display:grid; gap:5px; grid-template-columns:minmax(0, 1fr) auto; }.telas-momentos span { font-size:.9rem; }.telas-momentos small { color:#a5968d; }.telas-momentos i { background:#edf1ee; border-radius:99px; grid-column:1 / -1; height:7px; overflow:hidden; }.telas-momentos b { background:#347a7d; border-radius:inherit; display:block; height:100%; }.telas-momentos b.telas-momentos__barra--destaque { background:#d99b46; }
+.telas-padrao__titulo { align-items:start; display:grid; gap:3px; grid-template-columns:1fr auto; }.telas-padrao__titulo h2 { grid-column:1; }.telas-padrao__titulo small { color:#a5968d; grid-column:2; grid-row:1 / span 2; }.telas-padrao__dia button { background:transparent; border:0; color:var(--pueria-vermelho-profundo); cursor:pointer; font:inherit; font-size:.8rem; font-weight:700; justify-self:end; }
+.telas-layout { grid-template-columns:minmax(0, 1.2fr) minmax(260px, .85fr); }.telas-contexto { align-items:start; background:#e6f2f3; border:1px solid #c5e0e2; border-radius:14px; color:#387177; display:flex; font-size:.84rem; gap:8px; line-height:1.4; margin:0; padding:15px; }
+
 @media (max-width: 620px) {
   .telas-padrao { padding: 1rem; }
   .telas-padrao__dia { align-items:start; gap:.6rem; grid-template-columns:4.35rem minmax(0, 1fr); padding:.75rem; }
   .telas-padrao__contextos { grid-column:2; }
 }
+
+@media (max-width: 760px) { .telas-painel, .telas-leitura, .telas-layout { grid-template-columns:1fr; } .telas-padrao__titulo { grid-template-columns:1fr; }.telas-padrao__titulo small { grid-column:1; grid-row:auto; } }
 
 .telas-entenda__fundo {
   align-items: center;

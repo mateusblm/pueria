@@ -12,6 +12,7 @@ import { ToastService } from '../../../core/toast/toast.service';
 import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
 
 type Opcao<T extends string> = { valor: T; label: string };
+type MomentoTelas = { nome: string; quantidade: number; largura: number; destaque: boolean };
 
 @Component({
   selector: 'app-telas-crianca',
@@ -104,6 +105,31 @@ export class TelasCriancaComponent implements OnInit {
   );
   readonly ultimoRegistro = computed(() => this.registrosOrdenados()[0] ?? null);
   readonly registrosRecentes = computed(() => this.registrosOrdenados().slice(0, 6).reverse());
+  readonly mediaPorDia = computed(() => {
+    const valores = this.registros().map((registro) => registro.minutosMediosDia).filter((minutos): minutos is number => minutos !== null && minutos !== undefined);
+    return valores.length ? Math.round(valores.reduce((total, minutos) => total + minutos, 0) / valores.length) : null;
+  });
+  readonly aparelhoPrincipal = computed(() => {
+    const contagem = new Map<TipoDispositivoTela, number>();
+    this.registros().flatMap((registro) => registro.contextosUso ?? []).forEach((contexto) => contagem.set(contexto.dispositivo, (contagem.get(contexto.dispositivo) ?? 0) + 1));
+    const dispositivo = [...contagem.entries()].sort(([, a], [, b]) => b - a)[0]?.[0];
+    return dispositivo ? this.labelDispositivo(dispositivo) : 'Não informado';
+  });
+  readonly momentosObservados = computed<MomentoTelas[]>(() => {
+    const momentos = [
+      { nome: 'Nas refeições', quantidade: this.registros().filter((registro) => registro.telaDuranteRefeicoes).length },
+      { nome: 'Antes de dormir', quantidade: this.registros().filter((registro) => registro.telaAntesDormir).length },
+      { nome: 'Para acalmar', quantidade: this.registros().filter((registro) => registro.telaParaAcalmar).length },
+      { nome: 'Ao acordar', quantidade: this.registros().filter((registro) => registro.telaAoAcordar).length }
+    ];
+    const maior = Math.max(1, ...momentos.map((momento) => momento.quantidade));
+    return momentos.map((momento) => ({ ...momento, largura: momento.quantidade ? Math.max(28, (momento.quantidade / maior) * 100) : 0, destaque: momento.nome === 'Para acalmar' || momento.nome === 'Ao acordar' }));
+  });
+  readonly barrasTempo = computed(() => {
+    const registros = this.registrosRecentes().filter((registro): registro is RegistroTelas & { minutosMediosDia: number } => registro.minutosMediosDia !== null && registro.minutosMediosDia !== undefined);
+    const maximo = Math.max(240, ...registros.map((registro) => registro.minutosMediosDia));
+    return registros.map((registro) => ({ ...registro, altura: Math.max(12, (registro.minutosMediosDia / maximo) * 100) }));
+  });
 
   abrirEntenda(): void {
     this.entendaAberto.set(true);
@@ -287,6 +313,10 @@ export class TelasCriancaComponent implements OnInit {
 
   labelTipoConteudo(valor: TipoConteudoTela): string {
     return this.tiposConteudo.find((opcao) => opcao.valor === valor)?.label ?? 'Não informado';
+  }
+
+  labelDispositivo(dispositivo: TipoDispositivoTela): string {
+    return this.dispositivos.find((opcao) => opcao.valor === dispositivo)?.label ?? 'Não informado';
   }
 
   formatarDuracao(minutos?: number | null): string {

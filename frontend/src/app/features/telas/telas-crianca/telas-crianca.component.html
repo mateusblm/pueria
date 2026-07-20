@@ -19,26 +19,37 @@
     </div>
 
     @if (registrosRecentes().length > 0) {
+      <section class="telas-painel" aria-label="Resumo visual do uso de telas">
+        <article class="telas-metrica"><p>Média por dia</p><strong>{{ formatarDuracao(mediaPorDia()) }}</strong><small>nos {{ registros().length }} registros</small></article>
+        <article class="telas-metrica"><p>Aparelho principal</p><strong>{{ aparelhoPrincipal() }}</strong><small>{{ labelTipoConteudo(ultimoRegistro()?.tipoConteudoPredominante ?? 'NAO_INFORMADO') }}</small></article>
+        <article class="telas-metrica"><p>Momento mais comum</p><strong>{{ momentosObservados()[0]?.quantidade ? momentosObservados()[0].nome : 'Não informado' }}</strong><small>apareceu nos registros observados</small></article>
+      </section>
+
+      <section class="telas-leitura">
+        <article class="pueria-card telas-grafico">
+          <p class="pueria-eyebrow">Tempo por dia</p><h2>Como variou nos registros</h2>
+          <div class="telas-grafico__area" aria-label="Gráfico de colunas do tempo de tela por dia">
+            <span class="telas-grafico__eixo telas-grafico__eixo--alto">4h</span><span class="telas-grafico__eixo telas-grafico__eixo--meio">2h</span><span class="telas-grafico__eixo telas-grafico__eixo--baixo">0</span>
+            <div class="telas-grafico__barras">
+              @for (registro of barrasTempo(); track registro.id) {
+                <div><strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong><span [style.height.%]="registro.altura"></span><small>{{ formatarData(registro.dataRegistro) }}</small></div>
+              }
+            </div>
+          </div>
+          <p class="telas-grafico__nota">O tempo é uma parte da leitura: os momentos de uso ajudam a dar contexto à rotina.</p>
+        </article>
+        <article class="pueria-card telas-momentos"><p class="pueria-eyebrow">Momentos observados</p>
+          @for (momento of momentosObservados(); track momento.nome) {
+            <div><span>{{ momento.nome }}</span><small>{{ momento.quantidade }}×</small><i><b [class.telas-momentos__barra--destaque]="momento.destaque" [style.width.%]="momento.largura"></b></i></div>
+          }
+        </article>
+      </section>
+
       <section class="pueria-card telas-padrao" aria-labelledby="telas-padrao-titulo">
-        <div>
-          <p class="pueria-eyebrow">Uso recente</p>
-          <h2 id="telas-padrao-titulo">Quando as telas apareceram?</h2>
-          <p>O tempo é só uma parte da rotina. Veja também os momentos e os apoios marcados em cada registro.</p>
-        </div>
-        <div class="telas-padrao__lista" aria-label="Tempo e contexto de tela por registro">
+        <div class="telas-padrao__titulo"><p class="pueria-eyebrow">Uso recente</p><h2 id="telas-padrao-titulo">Quando as telas apareceram?</h2><small>{{ registrosRecentes().length }} registros</small></div>
+        <div class="telas-padrao__lista">
           @for (registro of registrosRecentes(); track registro.id) {
-            <article class="telas-padrao__dia">
-              <time [attr.datetime]="registro.dataRegistro">{{ formatarData(registro.dataRegistro) }}</time>
-              <div class="telas-padrao__duracao">
-                <span class="telas-padrao__icone"><app-icon name="smartphone" [size]="18" /></span>
-                <strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong>
-              </div>
-              <div class="telas-padrao__contextos">
-                @for (contexto of contextosRecentes(registro); track contexto) {
-                  <span>{{ contexto }}</span>
-                }
-              </div>
-            </article>
+            <article class="telas-padrao__dia"><time [attr.datetime]="registro.dataRegistro">{{ formatarData(registro.dataRegistro) }}</time><div class="telas-padrao__duracao"><span class="telas-padrao__icone"><app-icon name="smartphone" [size]="16" /></span><strong>{{ formatarDuracao(registro.minutosMediosDia) }}</strong></div><div class="telas-padrao__contextos">@for (contexto of contextosRecentes(registro); track contexto) { <span>{{ contexto }}</span> }</div><button type="button" (click)="editar(registro)">Editar</button></article>
           }
         </div>
       </section>
@@ -56,6 +67,7 @@
       <section class="telas-atualizacao">
         <button type="button" class="telas-atualizacao__abrir pueria-button" (click)="abrirRegistro()"><app-icon name="smartphone" [size]="20" />{{ ultimoRegistro() ? 'Registrar telas' : 'Registrar a rotina com telas' }}</button>
       </section>
+      @if (registrosRecentes().length > 0) { <p class="telas-contexto"><app-icon name="help" [size]="16" />Momentos como “para acalmar” ou “nas refeições” ajudam mais na conversa do que o total de horas isolado.</p> }
       <app-registro-rapido [aberto]="registroAberto()" [titulo]="editandoId() ? 'Editar registro de telas' : 'Telas na rotina'" descricao="Uma estimativa de um dia comum já ajuda." [etapa]="etapaRegistro()" [totalEtapas]="2" (fechar)="fecharRegistro()">
       <form class="telas-form" [formGroup]="form" (ngSubmit)="salvar()">
 
