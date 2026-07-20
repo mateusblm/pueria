@@ -7,7 +7,7 @@
       <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
       <p class="pueria-subtitle">Uma habilidade por vez, sem misturar idades futuras.</p>
     </div>
-    @if (modo() === 'visao') {
+    @if (modo() === 'visao' || modo() === 'responder') {
       <label class="marcos-page__fase">
         <small>Fase</small>
         <select [value]="idadeSelecionada()" (change)="selecionarIdade(+$any($event.target).value)" aria-label="Escolher fase de desenvolvimento">
@@ -34,10 +34,10 @@
       <p>{{ textoSemMarcos() }}</p>
     </div>
   } @else {
-    @if (modo() === 'visao') {
+    @if (modo() === 'visao' || modo() === 'responder') {
       <section class="marcos-visao__navegacao" aria-label="Ações desta etapa">
-        <button type="button" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong>Revisar habilidades</strong><small>Uma habilidade por vez</small></span></button>
-        <button type="button" class="marcos-visao__nav--ativa" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong>Visão geral</strong><small>Como está esta fase</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'responder'" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong>Revisar habilidades</strong><small>Uma habilidade por vez</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'visao'" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong>Visão geral</strong><small>Como está esta fase</small></span></button>
         <button type="button" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong>Atividades</strong><small>Ideias para a rotina</small></span></button>
         <button type="button" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong>Para a consulta</strong><small>Resumo para conversar</small></span></button>
       </section>
@@ -125,7 +125,15 @@
       </section>
     } @else if (modo() === 'responder') {
       @if (marcoAtual(); as marco) {
-        <article class="pueria-card etapa-card">
+        <div class="revisao-progresso" aria-label="Progresso das habilidades desta fase">
+          <span>Habilidade <strong>{{ indiceEtapa() + 1 }}</strong> de {{ marcosDaIdade().length }} nesta fase</span>
+          <div aria-hidden="true">
+            @for (item of marcosDaIdade(); track item.id; let indice = $index) {
+              <i [class.revisao-progresso__ponto--atual]="indice === indiceEtapa()" [class.revisao-progresso__ponto--respondido]="item.status !== 'NAO_AVALIADO'"></i>
+            }
+          </div>
+        </div>
+        <article class="pueria-card etapa-card etapa-card--revisao">
           <picture class="etapa-card__media">
             <source media="(max-width: 700px)" [srcset]="imagemMarco(marco, 'mobile')" />
             <img [src]="imagemMarco(marco, 'desktop')" [alt]="'Ilustração do marco: ' + marco.descricao" />
@@ -151,7 +159,7 @@
                 [class.resposta--active]="marco.status === 'OBSERVADO'"
                 [disabled]="salvandoId() === marco.id"
                 (click)="registrar(marco, 'OBSERVADO')">
-                Sim, sempre
+                Sim, com frequência
               </button>
               <button
                 type="button"
@@ -176,7 +184,7 @@
                   [class.resposta--active]="marco.status === 'NAO_LEMBRO'"
                   [disabled]="salvandoId() === marco.id"
                   (click)="registrar(marco, 'NAO_LEMBRO')">
-                  Não lembro com segurança
+                  Não sei dizer
                 </button>
               }
             </div>

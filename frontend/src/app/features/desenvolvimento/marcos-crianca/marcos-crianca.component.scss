@@ -337,13 +337,10 @@
 .areas-resumo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .area-resumo { align-content: start; border: 1px solid var(--pueria-borda); border-left: 4px solid var(--area-cor, #76507d); border-top: 1px solid var(--pueria-borda); display: grid; gap: 12px; min-height: 0; padding: 16px; }
 .area-resumo header { align-items: center; display: flex; gap: 10px; min-width: 0; }
-.area-resumo header > div { display: grid; gap: 3px; min-width: 0; }
 .area-resumo header strong { font-size: 1rem; }
 .area-resumo header span:not(.area-resumo__icone) { color: var(--pueria-texto-suave); font-size: .82rem; line-height: 1.3; }
 .area-resumo__barra { background: var(--area-fundo, #eee3f4); border-radius: 999px; height: 9px; overflow: hidden; }
 .area-resumo__barra span { background: var(--area-cor, #76507d); border-radius: inherit; display: block; height: 100%; min-width: 4px; transition: width 180ms ease; }
-.area-resumo__situacao { border-top: 1px solid var(--pueria-borda); color: var(--pueria-texto-suave); font-size: .8rem; line-height: 1.35; margin: 0; padding-top: 10px; }
-.area-resumo__situacao--atencao { color: #9b5c16; font-weight: 720; }.area-resumo__situacao--concluida { color: var(--pueria-folha-escura); }
 .marcos-visao__conclusao { align-items: flex-start; background: #f2f9f4; border: 1px solid #cfe5d4; border-left: 4px solid var(--pueria-folha-escura); display: flex; gap: 12px; padding: 18px; }
 .marcos-visao__conclusao > span { align-items: center; background: #dceee0; border-radius: 50%; color: var(--pueria-folha-escura); display: inline-flex; flex: 0 0 42px; height: 42px; justify-content: center; }
 .marcos-visao__conclusao > div { display: grid; gap: 5px; }.marcos-visao__conclusao p, .marcos-visao__conclusao strong { margin: 0; }.marcos-visao__conclusao strong { font-size: 1.02rem; line-height: 1.35; }.marcos-visao__conclusao div > p:last-child { color: var(--pueria-texto-suave); font-size: .87rem; line-height: 1.45; }
@@ -819,4 +816,36 @@
   .marcos-visao__cabecalho > p { max-width: none; text-align: left; }
   .area-resumo { padding: 14px; }
   .area-resumo__badge { font-size: .68rem; }
+}
+
+.revisao-progresso { align-items:center; color:var(--pueria-texto-suave); display:flex; font-size:.82rem; justify-content:space-between; margin-top:6px; }
+
+.revisao-progresso strong { color: #6842c2; }
+.revisao-progresso > div { align-items: center; display: flex; gap: 5px; }
+.revisao-progresso i { background: #dcd3c5; border-radius: 50%; display: block; height: 7px; width: 7px; }
+.revisao-progresso__ponto--respondido { background: #6ca77d !important; }
+.revisao-progresso__ponto--atual { background: #6842c2 !important; border-radius: 999px !important; width: 20px !important; }
+
+.etapa-card--revisao {
+  min-height: 0;
+}
+
+.etapa-card--revisao .resposta--active {
+  background: #f0eafe;
+  border-color: #7047d4;
+  color: #51339b;
+}
+
+.etapa-card--revisao .estimulo-do-marco {
+  background: #fff0f3;
+  border-color: #f2ccd4;
+}
+
+.etapa-card--revisao .estimulo-do-marco .pueria-button {
+  background: var(--pueria-vermelho);
+  border-color: var(--pueria-vermelho);
+}
+
+@media (max-width: 620px) {
+  .revisao-progresso { align-items: start; flex-direction: column; gap: 8px; }
 }
