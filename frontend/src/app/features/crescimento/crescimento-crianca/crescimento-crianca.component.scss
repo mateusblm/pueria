@@ -355,7 +355,25 @@
 .crescimento-historico { order:3; }
 .crescimento-atualizacao__abrir { box-shadow:0 14px 24px rgba(217,45,74,.18); min-height:56px; }
 .crescimento-tendencia, .crescimento-curvas { min-height:260px; padding:22px; }
-.crescimento-curva__resultado { align-items:center; border-left:0; border-bottom:1px solid #eee4df; grid-template-columns:minmax(0, 1fr) auto; padding:8px 0; }
+.crescimento-curva__resultado {
+  align-items: center;
+  border-bottom: 1px solid #eee4df;
+  border-left: 0;
+  column-gap: .7rem;
+  grid-template-columns: minmax(6.5rem, .8fr) minmax(0, 1.45fr);
+  padding: 8px 0;
+}
+.crescimento-curva__resultado strong,
+.crescimento-curva__resultado span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.crescimento-curva__resultado span {
+  box-sizing: border-box;
+  line-height: 1.3;
+  max-width: 100%;
+  width: 100%;
+}
 .crescimento-curva__resultado:last-child { border-bottom:0; }
 @media (max-width:640px) { .crescimento-page__hero { padding:18px; }.crescimento-page__hero-actions { display:none; }.crescimento-graficos--principal, .crescimento-tendencia, .crescimento-curvas { padding:16px; }.crescimento-linha svg { height:15rem; } }
 
