@@ -358,3 +358,21 @@
 .crescimento-curva__resultado { align-items:center; border-left:0; border-bottom:1px solid #eee4df; grid-template-columns:minmax(0, 1fr) auto; padding:8px 0; }
 .crescimento-curva__resultado:last-child { border-bottom:0; }
 @media (max-width:640px) { .crescimento-page__hero { padding:18px; }.crescimento-page__hero-actions { display:none; }.crescimento-graficos--principal, .crescimento-tendencia, .crescimento-curvas { padding:16px; }.crescimento-linha svg { height:15rem; } }
+
+@media (max-width: 640px) {
+  .crescimento-curva__resultado {
+    align-items: start;
+    gap: .45rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .crescimento-curva__resultado strong,
+  .crescimento-curva__resultado span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .crescimento-curva__resultado span {
+    justify-self: start;
+  }
+}
