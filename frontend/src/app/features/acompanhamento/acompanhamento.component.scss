@@ -712,8 +712,9 @@
 
 /* Composição final do painel: uma leitura vertical e concentrada, como o handoff. */
 .acompanhamento-page {
-  width: min(100%, 900px);
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0;
 }
 
 .acompanhamento-home {

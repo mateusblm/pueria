@@ -4,7 +4,7 @@
   min-width: 0;
 }
 
-.observacoes-page { display: grid; gap: 1.25rem; width: 100%; min-width: 0; margin: 0 auto; max-width: 980px; }
+.observacoes-page { display: grid; gap: 1.25rem; width: 100%; min-width: 0; margin: 0; max-width: 1600px; }
 .observacoes-page__back { color: var(--pueria-vermelho-profundo); font-size: .9rem; font-weight: 750; text-decoration: none; width: fit-content; }
 .observacoes-page__back:hover { text-decoration: underline; }
 .observacoes-page__state { padding: 2rem; text-align: center; }

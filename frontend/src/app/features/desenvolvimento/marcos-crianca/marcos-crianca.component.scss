@@ -168,9 +168,9 @@
 
 /* Fluxo principal: uma descoberta por vez, com detalhes disponíveis só quando desejados. */
 .marcos-page {
-  width: min(100%, 880px);
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0;
   gap: 16px;
 }
 

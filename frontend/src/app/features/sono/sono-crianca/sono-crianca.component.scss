@@ -2,7 +2,7 @@
   display: grid;
   gap: 1.5rem;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1600px;
   width: 100%;
 }
 
@@ -15,12 +15,12 @@
 .sono-page__hero,
 .sono-sintese,
 .sono-layout {
-  max-width: 1180px;
+  max-width: 1600px;
   width: 100%;
 }
 
 .sono-page__state {
-  max-width: 1180px;
+  max-width: 1600px;
   padding: 1.5rem;
 }
 
@@ -32,7 +32,7 @@
   text-align: center;
 }
 
-@media (min-width: 981px) { .sono-page, .sono-page__hero, .sono-sintese, .sono-layout, .sono-page__state { margin-left:0; margin-right:0; max-width:1280px !important; } }
+@media (min-width: 981px) { .sono-page, .sono-page__hero, .sono-sintese, .sono-layout, .sono-page__state { margin-left:0; margin-right:0; max-width:1600px !important; } }
 .sono-page__state--vazio h2 { font-family: var(--pueria-fonte-destaque); font-size: clamp(1.7rem, 3vw, 2.25rem); margin: 0; }
 .sono-page__state--vazio p { color: var(--pueria-texto-suave); line-height: 1.5; margin: .7rem 0 0; max-width: 34rem; }
 .sono-page__state--vazio small { color: var(--pueria-texto-suave); }

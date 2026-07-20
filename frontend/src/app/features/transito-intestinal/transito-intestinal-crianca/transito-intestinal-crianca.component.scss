@@ -2,7 +2,7 @@
   display: grid;
   gap: 1.5rem;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1600px;
   width: 100%;
 }
 
@@ -25,7 +25,7 @@
   width: 100%;
 }
 
-@media (min-width: 981px) { .intestinal-page { margin-left:0; margin-right:0; max-width:1280px !important; } }
+@media (min-width: 981px) { .intestinal-page { margin-left:0; margin-right:0; max-width:1600px !important; } }
 .intestinal-page__identidade { align-items: center; color: #89533f; display: flex; gap: .55rem; }.intestinal-page__identidade > span { align-items: center; background: #f4dfd5; border-radius: 50%; display: inline-flex; height: 50px; justify-content: center; width: 50px; }
 
 .intestinal-page__state {
@@ -632,7 +632,7 @@
 .intestinal-entenda__fechar { align-items:center; background:#fff; border:1px solid #eed9c2; border-radius:50%; color:#9a6911; cursor:pointer; display:inline-flex; flex:0 0 2.5rem; height:2.5rem; justify-content:center; padding:0; width:2.5rem; }
 .intestinal-page__hero { align-items:flex-start; display:flex; justify-content:space-between; }
 .intestinal-page__entenda { margin-left:auto; }
-.intestinal-padrao { display:grid; gap:1rem; max-width:1180px; padding:1.35rem 1.5rem; width:100%; }
+.intestinal-padrao { display:grid; gap:1rem; max-width:1600px; padding:1.35rem 1.5rem; width:100%; }
 .intestinal-padrao h2 { color:#6d3f30; font-family:var(--pueria-fonte-destaque); font-size:clamp(1.45rem, 3vw, 2rem); margin:.2rem 0 .35rem; }
 .intestinal-padrao p { color:var(--pueria-texto-suave); margin:0; }
 .intestinal-padrao__lista { display:grid; gap:.65rem; }

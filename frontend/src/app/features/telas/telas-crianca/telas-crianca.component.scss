@@ -2,7 +2,7 @@
   display: grid;
   gap: 1.5rem;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1600px;
   width: 100%;
 }
 
@@ -36,7 +36,7 @@
 .telas-padrao {
   display: grid;
   gap: 1rem;
-  max-width: 1180px;
+  max-width: 1600px;
   padding: 1.35rem 1.5rem;
   width: 100%;
 }
@@ -223,7 +223,7 @@
 .telas-page__hero,
 .telas-sintese,
 .telas-layout {
-  max-width: 1180px;
+  max-width: 1600px;
   width: 100%;
 }
 
@@ -233,7 +233,7 @@
   line-height: 1;
 }
 
-@media (min-width: 981px) { .telas-page, .telas-page__hero, .telas-sintese, .telas-layout { margin-left:0; margin-right:0; max-width:1280px !important; } }
+@media (min-width: 981px) { .telas-page, .telas-page__hero, .telas-sintese, .telas-layout { margin-left:0; margin-right:0; max-width:1600px !important; } }
 .telas-page__hero { background: #fff; border: 1px solid #d7e7e8; border-left: 5px solid #4f7c81; border-radius: 8px; padding: 1.5rem; }.telas-page__identidade { align-items: center; color: #416d72; display: flex; gap: .55rem; }.telas-page__identidade > span { align-items: center; background: #dcebed; border-radius: 50%; display: inline-flex; height: 50px; justify-content: center; width: 50px; }
 
 .telas-page__state {
