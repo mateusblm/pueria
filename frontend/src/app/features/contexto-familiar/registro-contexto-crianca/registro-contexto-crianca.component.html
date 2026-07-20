@@ -2,26 +2,40 @@
   <a [routerLink]="rotaRetorno()" class="contexto-page__back">← {{ textoRetorno() }}</a>
   @if (carregando()) { <div class="pueria-card">Carregando...</div> } @else if (crianca(); as crianca) {
     <header class="contexto-page__hero"><div><p class="pueria-eyebrow">Contexto da família</p><h1 class="pueria-title">{{ titulo }}</h1><p class="pueria-subtitle">{{ descricao }}</p></div><span><app-icon [name]="contexto === 'humor' ? 'heartPulse' : 'message'" [size]="28" /></span></header>
-    @if (registrosOrdenados().length > 0) {
+    @if (registrosOrdenados().length > 0 && contexto !== 'humor') {
       <section class="pueria-card pueria-leitura-automatica" aria-label="O que observamos recentemente no contexto da família">
-        <span><app-icon [name]="contexto === 'humor' ? 'heartPulse' : 'message'" [size]="20" /></span>
+        <span><app-icon name="message" [size]="20" /></span>
         <div>
           <p class="pueria-eyebrow">O que observamos recentemente</p>
-          <h2>{{ contexto === 'humor' ? 'Uma visão do período' : 'Contexto para lembrar depois' }}</h2>
+          <h2>Contexto para lembrar depois</h2>
           <p>Há {{ registrosOrdenados().length }} {{ registrosOrdenados().length === 1 ? 'registro' : 'registros' }} neste espaço. A observação mais recente foi feita em {{ formatarData(registrosOrdenados()[0].dataRegistro) }} e pode ajudar a dar contexto à conversa na consulta.</p>
         </div>
+      </section>
+    }
+    @if (contexto === 'humor') {
+      <section class="pueria-card humor-semana" aria-label="Semana em relance">
+        <div class="humor-semana__cabecalho"><p class="pueria-eyebrow">Semana em relance</p><span>Últimos 7 dias</span></div>
+        <div class="humor-semana__dias">
+          @for (dia of semanaHumor(); track dia.iso) {
+            <div class="humor-dia" [class.humor-dia--vazio]="!dia.humor" [attr.data-humor]="dia.humor"><small>{{ dia.dia }}</small><strong>{{ emojiHumor(dia.humor) }}</strong></div>
+          }
+        </div>
+        <p class="humor-semana__leitura">{{ registrosOrdenados().length ? 'A semana reúne os registros que você fez. Observe o conjunto com calma; um dia mais difícil isolado não define um padrão.' : 'Quando você registrar alguns dias, esta visão vai ajudar a perceber o período com mais clareza.' }}</p>
       </section>
     }
     <div class="contexto-page__layout">
       <form class="pueria-card contexto-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div><p class="pueria-eyebrow">{{ editandoId() ? 'Editar registro' : 'Novo registro' }}</p><h2>{{ contexto === 'humor' ? 'Como foi o período?' : 'O que vale guardar?' }}</h2></div>
+        @if (contexto === 'humor') {
+          <fieldset class="humor-form__campo"><legend>Humor predominante</legend><div class="humor-form__humores">@for (opcao of opcoesHumor; track opcao.id) { <button type="button" [class.humor-form__humor--selecionado]="humorSelecionado() === opcao.id" [attr.data-humor]="opcao.id" (click)="selecionarHumor(opcao.id)"><strong>{{ opcao.emoji }}</strong><span>{{ opcao.rotulo }}</span></button> }</div></fieldset>
+        }
         <label class="contexto-form__data"><span>Data</span><input type="text" formControlName="dataRegistro" placeholder="dd/mm/aaaa" inputmode="numeric" /></label>
-        @if (contexto === 'humor') { <p class="contexto-form__guia">Você pode contar sobre humor, choro, facilidade para se acalmar, interesse em brincar ou interação. Escreva somente o que fez sentido observar.</p> }
+        @if (contexto === 'humor') { <fieldset class="humor-form__campo"><legend>O que você observou?</legend><div class="humor-form__observacoes">@for (observacao of observacoesHumor; track observacao) { <button type="button" [class.humor-form__observacao--selecionada]="observacaoSelecionada(observacao)" (click)="alternarObservacao(observacao)">{{ observacao }}</button> }</div></fieldset> }
         <label><span>{{ contexto === 'humor' ? 'Observação do período' : 'Observação ou evento' }}</span><textarea formControlName="descricao" rows="7" [placeholder]="contexto === 'humor' ? 'Ex.: esteve mais bem-humorado pela manhã e buscou mais colo no fim do dia.' : 'Ex.: começou na creche, recebeu visita de familiares ou houve uma mudança na rotina.'"></textarea></label>
         @if (erro()) { <p class="pueria-message pueria-message--erro">{{ erro() }}</p> }
         <div class="contexto-form__acoes">@if (editandoId()) { <button type="button" class="pueria-button pueria-button--secondary" (click)="cancelarEdicao()">Cancelar</button> }<button type="submit" class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar observação' }}</button></div>
       </form>
-      <aside class="pueria-card contexto-historico"><p class="pueria-eyebrow">Linha do tempo</p><h2>Registros</h2>@if (registrosOrdenados().length === 0) { <p>Ainda não há registros neste espaço.</p> } @else { @for (registro of registrosOrdenados(); track registro.id) { <article><time>{{ formatarData(registro.dataRegistro) }}</time><p>{{ registro.descricao }}</p><button type="button" class="pueria-button pueria-button--secondary" (click)="editar(registro)">Editar</button></article> } }</aside>
+      <aside class="pueria-card contexto-historico"><p class="pueria-eyebrow">Linha do tempo</p><h2>{{ contexto === 'humor' ? 'Como foram os dias' : 'Registros' }}</h2>@if (registrosOrdenados().length === 0) { <p>Ainda não há registros neste espaço.</p> } @else { @for (registro of registrosOrdenados(); track registro.id; let indice = $index) { @if (contexto !== 'humor' || contextoHistoricoCompleto() || indice < 4) { <article><span class="contexto-historico__marcador">{{ contexto === 'humor' ? emojiHumor(humorDoRegistro(registro.descricao)) : '' }}</span><div><time>{{ formatarData(registro.dataRegistro) }}</time><p>{{ contexto === 'humor' ? descricaoParaLinhaDoTempo(registro.descricao) : registro.descricao }}</p><button type="button" class="contexto-historico__editar" (click)="editar(registro)">Editar</button></div></article> } } @if (contexto === 'humor' && registrosOrdenados().length > 4) { <button type="button" class="contexto-historico__todos" (click)="contextoHistoricoCompleto.set(!contextoHistoricoCompleto())">{{ contextoHistoricoCompleto() ? 'Mostrar menos' : 'Ver todos os registros ›' }}</button> } }</aside>
     </div>
   }
 </section>
