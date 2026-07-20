@@ -13,12 +13,9 @@
       <div class="crescimento-page__hero-copy">
         <p class="pueria-eyebrow">Crescimento</p>
         <div class="crescimento-page__identidade">
-          <span class="crescimento-page__avatar"><app-icon name="baby" [size]="31" /></span>
-          <h1 class="pueria-title">{{ crianca.nome }}</h1>
+          <span class="crescimento-page__avatar"><app-icon name="chart" [size]="27" /></span>
+          <h1 class="pueria-title">Como está a evolução</h1>
         </div>
-        <p class="pueria-subtitle">
-          Acompanhe a evolução medida a medida, com a referência adequada para a idade.
-        </p>
       </div>
       <div class="crescimento-page__hero-visual" aria-hidden="true">
         <span class="crescimento-orbita crescimento-orbita--um"><app-icon name="ruler" [size]="27" /></span>
@@ -41,14 +38,6 @@
 
     @if (medidasOrdenadas().length > 0) {
       <section class="pueria-card crescimento-graficos crescimento-graficos--principal" aria-labelledby="crescimento-graficos-titulo">
-        <div class="crescimento-historico__header">
-          <div>
-            <p class="pueria-eyebrow">Análise do crescimento</p>
-            <h2 id="crescimento-graficos-titulo">Como está a evolução</h2>
-          </div>
-          <span class="crescimento-referencia"><app-icon name="sparkles" [size]="16" />{{ referenciaAtual() }}</span>
-        </div>
-
         @if (contextoIdadeAtual()) {
           <p class="crescimento-graficos__contexto">{{ contextoIdadeAtual() }}</p>
         }
@@ -68,13 +57,10 @@
               >{{ grafico.titulo }}</button>
             }
           </div>
+          <span class="crescimento-referencia"><app-icon name="sparkles" [size]="16" />{{ referenciaAtual() }}</span>
           @if (graficoAtivo(); as grafico) {
               <article class="crescimento-grafico crescimento-grafico--ativo" [attr.data-tema]="grafico.tema" [attr.data-situacao]="grafico.situacao">
               <div class="crescimento-grafico__header">
-                <div>
-                  <div class="crescimento-grafico__titulo"><span class="crescimento-grafico__icone"><app-icon [name]="grafico.icone" [size]="22" /></span><h3>{{ grafico.titulo }}</h3></div>
-                  <p>Trajetória nas medidas registradas.</p>
-                </div>
                 <button
                   type="button"
                   class="crescimento-grafico__details-button"

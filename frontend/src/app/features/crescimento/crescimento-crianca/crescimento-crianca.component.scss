@@ -333,3 +333,28 @@
   .crescimento-entenda__imagem img { max-height: none; }
   .crescimento-entenda__acao { justify-self: stretch; }
 }
+
+/* A curva é a leitura principal; detalhes e cadastro entram depois dela. */
+.crescimento-page { margin:0; max-width:none; width:100%; }
+.crescimento-page__hero { align-items:center; background:#f7fbf7; grid-template-columns:minmax(0, 1fr) auto; padding:20px 24px; }
+.crescimento-page__hero-visual { display:none; }
+.crescimento-page__identidade { gap:12px; }
+.crescimento-page__avatar { border-radius:14px; color:#397c50; height:48px; width:48px; }
+.crescimento-page__hero-actions { grid-column:auto; justify-self:end; }
+.crescimento-page__hero-actions > a { display:none; }
+.crescimento-page__hero .pueria-title { font-size:clamp(1.85rem, 3vw, 2.4rem); }
+.crescimento-graficos--principal { display:grid; gap:14px; padding:22px; }
+.crescimento-graficos__tabs { margin-top:0; }
+.crescimento-referencia { border:1px solid #cde1d2; border-radius:8px; justify-self:start; margin:0; }
+.crescimento-grafico { background:#fffdfb; padding:14px; }
+.crescimento-grafico__header { justify-content:flex-end; min-height:0; }
+.crescimento-linha svg { height:clamp(15rem, 25vw, 20rem); }
+.crescimento-grafico > .crescimento-grafico__legenda:last-child { border-top:1px solid #eee3dc; padding-top:10px; }
+.crescimento-side { order:1; }
+.crescimento-atualizacao { order:2; border:0; background:transparent; padding:0; }
+.crescimento-historico { order:3; }
+.crescimento-atualizacao__abrir { box-shadow:0 14px 24px rgba(217,45,74,.18); min-height:56px; }
+.crescimento-tendencia, .crescimento-curvas { min-height:260px; padding:22px; }
+.crescimento-curva__resultado { align-items:center; border-left:0; border-bottom:1px solid #eee4df; grid-template-columns:minmax(0, 1fr) auto; padding:8px 0; }
+.crescimento-curva__resultado:last-child { border-bottom:0; }
+@media (max-width:640px) { .crescimento-page__hero { padding:18px; }.crescimento-page__hero-actions { display:none; }.crescimento-graficos--principal, .crescimento-tendencia, .crescimento-curvas { padding:16px; }.crescimento-linha svg { height:15rem; } }
