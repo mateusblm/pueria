@@ -11,12 +11,6 @@ public class StatusController {
         return new StatusResponse("Pueria API em execução");
     }
 
-    // TODO: remover imediatamente após validar o primeiro evento no Sentry.
-    @GetMapping("/api/status/sentry-test")
-    public void sentryTest() {
-        throw new IllegalStateException("Sentry smoke test: exceção intencional");
-    }
-
     public record StatusResponse(String mensagem) {
     }
 }

@@ -64,7 +64,6 @@ public class SegurancaConfig {
                                 "/api/auth/recuperar-senha",
                                 "/api/auth/redefinir-senha",
                                 "/api/status",
-                                "/api/status/sentry-test",
                                 "/actuator/health"
                         ).permitAll()
                         .anyRequest().authenticated()
