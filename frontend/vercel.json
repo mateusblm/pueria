@@ -16,7 +16,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.up.railway.app; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.up.railway.app https://o4511775443124224.ingest.us.sentry.io; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
         },
         {
           "key": "X-Content-Type-Options",
