@@ -4,19 +4,23 @@ import { App } from './app/app';
 import * as Sentry from '@sentry/angular';
 
 const sentryDsn = window.__PUERIA_CONFIG__?.sentryDsn?.trim();
+const sentrySmokeTest = new URLSearchParams(window.location.search).get('sentryTest') === 'true';
+
 if (sentryDsn) {
   Sentry.init({
     dsn: sentryDsn,
     environment: 'production',
     tracesSampleRate: 0.1,
-    sendDefaultPii: false
+    sendDefaultPii: false,
   });
-
-  // Teste temporário: remover após validar o primeiro evento do frontend.
-  if (new URLSearchParams(window.location.search).get('sentryTest') === 'true') {
-    Sentry.captureException(new Error('Sentry frontend smoke test: exceção intencional'));
-  }
 }
 
 bootstrapApplication(App, appConfig)
+  .then(async () => {
+    // Temporary test: remove after validating the first frontend event.
+    if (sentryDsn && sentrySmokeTest) {
+      Sentry.captureException(new Error('Sentry frontend smoke test: excecao intencional'));
+      await Sentry.flush(5000);
+    }
+  })
   .catch((err) => console.error(err));
