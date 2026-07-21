@@ -1222,7 +1222,7 @@
 .inicio-home-roteiro__cabecalho > div > p:last-child { max-width: 560px; }
 .inicio-home-roteiro__progresso { background: #e8dfff; }
 .inicio-home-roteiro__progresso span { background: #7047c8; }
-.inicio-home-roteiro__cta { margin-top: 2px; background: #7047c8; box-shadow: 0 12px 20px rgba(112, 71, 200, .2); }
+.inicio-home-roteiro__cta { display: inline-flex; margin-top: 2px; background: #7047c8; box-shadow: 0 12px 20px rgba(112, 71, 200, .2); }
 .inicio-home-roteiro__lista { display: none; }
 
 .inicio-destinos { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
