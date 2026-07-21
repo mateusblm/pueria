@@ -1050,8 +1050,8 @@
 .acompanhamento-page { max-width: none; }
 .acompanhamento-home {
   grid-template-columns: minmax(0, 1fr) !important;
-  width: min(100%, 800px);
-  max-width: 800px;
+  width: min(100%, 1160px);
+  max-width: none;
   margin-inline: auto;
   gap: 24px;
 }
