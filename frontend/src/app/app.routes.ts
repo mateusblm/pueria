@@ -4,6 +4,7 @@ import { publicOnlyGuard } from './core/guards/public-only.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', loadComponent: () => import('./features/inicio/pagina-inicial/pagina-inicial.component').then((m) => m.PaginaInicialComponent) },
+  { path: 'privacidade', loadComponent: () => import('./features/privacidade/privacidade.component').then((m) => m.PrivacidadeComponent) },
   {
     path: '',
     canActivate: [publicOnlyGuard],
