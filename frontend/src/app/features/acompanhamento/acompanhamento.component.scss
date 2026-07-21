@@ -201,7 +201,6 @@
   background: #edf8ef;
 }
 .inicio-home-tranquilo__icone { display: grid; width: 54px; height: 54px; place-items: center; border-radius: 15px; background: #d5ecd9; color: #397a54; }
-.inicio-home-tranquilo .pueria-eyebrow { color: #397a54; }
 .acompanhamento-home__saudacao strong { color: #397a54; }
 .inicio-home-roteiro__cta { display: none; }
 
@@ -1072,6 +1071,7 @@
   line-height: 1.03;
   letter-spacing: -.01em;
 }
+.acompanhamento-home__saudacao h1 em { color: var(--pueria-vermelho-flor); }
 .acompanhamento-home__saudacao p:last-child {
   max-width: 740px;
   margin-top: 14px;
