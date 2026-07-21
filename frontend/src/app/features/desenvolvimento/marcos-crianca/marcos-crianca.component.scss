@@ -832,7 +832,7 @@
 }
 
 /* Revisão dos marcos: versão compacta do fluxo para celular. */
-.marcos-page__hero-icone,.marcos-visao__nav-curto { display:none; }
+.marcos-page__hero-icone { display:none; }.marcos-visao__navegacao .marcos-visao__nav-curto { display:none !important; }
 @media (max-width:620px) {
   .marcos-page { gap:14px; }.marcos-page__back { color:#6d625d; font-size:.76rem; font-weight:650; }
   .marcos-page__hero { align-items:center; gap:10px; grid-template-columns:40px minmax(0,1fr) auto; min-height:68px; padding:12px 14px; }
