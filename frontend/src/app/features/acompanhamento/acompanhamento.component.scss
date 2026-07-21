@@ -178,7 +178,6 @@
   border-radius: 18px;
   background: #fff0f1;
 }
-.inicio-home-atencao__conteudo { padding: 24px 28px; }
 .inicio-home-atencao h2,
 .inicio-home-tranquilo h2 {
   margin: 0;
@@ -191,7 +190,6 @@
 .inicio-home-atencao__conteudo > p:not(.pueria-eyebrow),
 .inicio-home-tranquilo p:last-child { margin: 8px 0 0; color: #805b63; line-height: 1.45; }
 .inicio-home-atencao__acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-.inicio-home-atencao__acoes .pueria-button { min-height: 42px; }
 .inicio-home-atencao__imagem { width: 100%; height: 100%; min-height: 190px; object-fit: cover; object-position: center; }
 .inicio-home-tranquilo {
   display: grid;
@@ -1148,7 +1146,8 @@
 }
 .inicio-home-atencao__conteudo > p:not(.pueria-eyebrow) { max-width: 510px; color: #725f5b; font-size: .84rem; }
 .inicio-home-atencao__acoes { margin-top: 17px; }
-.inicio-home-atencao__acoes .pueria-button { min-height: 46px; padding-inline: 20px; }
+.inicio-home-atencao__acoes .pueria-button { min-height: 46px; padding-inline: 18px; font-size: .84rem; font-weight: 650; }
+.inicio-home-atencao__acoes .pueria-button--secondary { border-color: #f0cfc7; background: #fffaf7; color: var(--pueria-vermelho-profundo); }
 .inicio-home-atencao__imagem { width: 100%; height: 100%; min-height: 100%; object-fit: cover; object-position: center; }
 
 .inicio-home-tranquilo {
