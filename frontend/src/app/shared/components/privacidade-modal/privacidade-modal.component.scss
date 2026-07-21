@@ -1,0 +1,110 @@
+.privacidade-modal {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(35, 30, 28, .58);
+  backdrop-filter: blur(3px);
+}
+
+.privacidade-modal__painel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(100%, 42rem);
+  max-height: min(88vh, 48rem);
+  overflow: hidden;
+  border: 1px solid #eadfd5;
+  border-radius: 1.25rem;
+  background: #fffdf9;
+  box-shadow: 0 1.5rem 4rem rgba(35, 30, 28, .24);
+}
+
+.privacidade-modal__cabecalho,
+.privacidade-modal__rodape {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 1.5rem;
+}
+
+.privacidade-modal__cabecalho {
+  border-bottom: 1px solid #eee5dd;
+}
+
+.privacidade-modal__cabecalho h2 {
+  margin: .2rem 0 .25rem;
+  color: #302b29;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+.privacidade-modal__meta {
+  margin: 0;
+  color: #776e68;
+  font-size: .82rem;
+}
+
+.privacidade-modal__fechar {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #eadfd5;
+  border-radius: 50%;
+  background: #fff8f4;
+  color: #5e514a;
+  cursor: pointer;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.privacidade-modal__conteudo {
+  overflow-y: auto;
+  padding: 1.35rem 1.5rem;
+  color: #4d4641;
+  font-size: .94rem;
+  line-height: 1.58;
+}
+
+.privacidade-modal__conteudo h3 {
+  margin: 1.35rem 0 .35rem;
+  color: #302b29;
+  font-size: 1rem;
+}
+
+.privacidade-modal__conteudo p {
+  margin: .45rem 0;
+}
+
+.privacidade-modal__conteudo a {
+  color: #285c3a;
+  font-weight: 700;
+}
+
+.privacidade-modal__versao {
+  margin-top: 1.4rem !important;
+  border-top: 1px solid #eee5dd;
+  padding-top: 1rem;
+  font-size: .88rem;
+}
+
+.privacidade-modal__rodape {
+  justify-content: flex-end;
+  border-top: 1px solid #eee5dd;
+}
+
+@media (max-width: 38rem) {
+  .privacidade-modal {
+    align-items: end;
+    padding: 0;
+  }
+
+  .privacidade-modal__painel {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 1.25rem 1.25rem 0 0;
+  }
+}

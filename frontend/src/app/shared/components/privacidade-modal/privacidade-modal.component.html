@@ -1,0 +1,45 @@
+@if (dialog.aberta()) {
+  <div class="privacidade-modal" role="presentation" (click)="dialog.fechar()">
+    <section class="privacidade-modal__painel" role="dialog" aria-modal="true" aria-labelledby="privacidade-modal-titulo" (click)="$event.stopPropagation()">
+      <header class="privacidade-modal__cabecalho">
+        <div>
+          <p class="pueria-eyebrow">Transparência e cuidado</p>
+          <h2 id="privacidade-modal-titulo">Aviso de Privacidade</h2>
+          <p class="privacidade-modal__meta">Versão 1.0 · 21 de julho de 2026</p>
+        </div>
+        <button class="privacidade-modal__fechar" type="button" aria-label="Fechar Aviso de Privacidade" (click)="dialog.fechar()">×</button>
+      </header>
+
+      <div class="privacidade-modal__conteudo">
+        <p>O Pueria organiza registros da família e não substitui avaliação, diagnóstico ou orientação de profissionais de saúde.</p>
+
+        <h3>Quem trata seus dados</h3>
+        <p>O controlador temporário é <strong>Mateus Burlamaqui Moreira</strong>, responsável pelo Pueria. Canal de privacidade: <a href="mailto:privacidade@pueria.com">privacidade@pueria.com</a>.</p>
+
+        <h3>Dados coletados</h3>
+        <p>Tratamos dados da conta, dados de nascimento e contexto da criança, registros de crescimento, desenvolvimento, alimentação, sono, telas, trânsito intestinal, saúde e cuidados, além de dados técnicos necessários à segurança.</p>
+
+        <h3>Finalidades</h3>
+        <p>Usamos os dados para autenticar sua conta, guardar e apresentar seus registros, gerar resumos, recuperar acesso, prevenir abuso e cumprir obrigações legais.</p>
+
+        <h3>Crianças e saúde</h3>
+        <p>O cadastro deve ser feito por pai, mãe ou responsável legal. Informações de saúde e desenvolvimento recebem proteção reforçada, não são vendidas e não são usadas para publicidade comportamental. O melhor interesse da criança orienta o tratamento.</p>
+
+        <h3>Compartilhamentos</h3>
+        <p>Usamos Railway, Vercel, Sentry e serviços de e-mail para operar o produto. Cada fornecedor recebe apenas o necessário para sua função.</p>
+
+        <h3>Seus direitos</h3>
+        <p>Você pode pedir acesso, correção, informações sobre compartilhamentos, exportação, bloqueio, eliminação e revogação de consentimento quando aplicável. Fale conosco em <a href="mailto:privacidade@pueria.com">privacidade@pueria.com</a>.</p>
+
+        <h3>Segurança e retenção</h3>
+        <p>Aplicamos autenticação, sessões com prazo limitado, proteção contra abuso, controle de acesso, backups e monitoramento técnico. Mantemos dados enquanto forem necessários à finalidade ou a obrigações legais.</p>
+
+        <p class="privacidade-modal__versao">O aviso completo e a versão vigente estão disponíveis em <a routerLink="/privacidade" (click)="dialog.fechar()">/privacidade</a>.</p>
+      </div>
+
+      <footer class="privacidade-modal__rodape">
+        <button class="pueria-button" type="button" (click)="dialog.fechar()">Entendi</button>
+      </footer>
+    </section>
+  </div>
+}
