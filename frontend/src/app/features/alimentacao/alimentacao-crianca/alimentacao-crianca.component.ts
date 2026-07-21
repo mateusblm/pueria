@@ -53,6 +53,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
   });
   readonly editandoId = signal('');
   readonly formularioAberto = signal(false);
+  readonly cadastroRapidoAberto = signal(false);
   readonly entendaAberto = signal(false);
   readonly modalAlimentosAberta = signal(false);
   readonly buscaAlimento = signal('');
@@ -64,6 +65,11 @@ export class AlimentacaoCriancaComponent implements OnInit {
 
   abrirFormulario(): void {
     this.formularioAberto.set(true);
+  }
+
+  fecharCadastroRapido(): void {
+    this.cadastroRapidoAberto.set(false);
+    this.formularioAberto.set(false);
   }
 
   readonly gruposAlimentos: GrupoCatalogo[] = [
@@ -236,6 +242,10 @@ export class AlimentacaoCriancaComponent implements OnInit {
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });
     this.carregar();
+    if (this.route.snapshot.queryParamMap.get('cadastro') === 'rapido') {
+      this.formularioAberto.set(true);
+      this.cadastroRapidoAberto.set(true);
+    }
   }
 
   carregar(): void {

@@ -118,6 +118,40 @@
   grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
 }
 
+.alimentacao-layout--cadastro-rapido {
+  background: rgba(49, 37, 23, .52);
+  inset: 0;
+  overflow: auto;
+  padding: clamp(1rem, 4vw, 2rem);
+  place-content: start center;
+  position: fixed;
+  z-index: 1200;
+}
+
+.alimentacao-layout--cadastro-rapido .alimentacao-atualizacao {
+  background: #fffdf9;
+  border-radius: 18px;
+  box-shadow: 0 24px 64px rgba(49, 37, 23, .28);
+  max-width: 52rem;
+  width: 100%;
+}
+
+.alimentacao-layout__fechar {
+  background: #fffdf9;
+  border: 0;
+  border-radius: 50%;
+  color: #6a5145;
+  cursor: pointer;
+  font-size: 1.75rem;
+  height: 2.5rem;
+  justify-self: end;
+  line-height: 1;
+  position: absolute;
+  right: clamp(1rem, 4vw, 2rem);
+  top: clamp(1rem, 4vw, 2rem);
+  width: 2.5rem;
+}
+
 .alimentacao-form {
   border-top: 4px solid #6b9274;
   display: grid;

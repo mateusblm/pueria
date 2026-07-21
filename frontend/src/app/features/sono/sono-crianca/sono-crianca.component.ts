@@ -162,6 +162,9 @@ export class SonoCriancaComponent implements OnInit {
   ngOnInit(): void {
     this.form.patchValue({ dataRegistro: this.formatarEntradaData(this.dataMaximaIso) });
     this.carregar();
+    if (this.route.snapshot.queryParamMap.get('cadastro') === 'rapido') {
+      this.abrirRegistro();
+    }
   }
 
   carregar(): void {

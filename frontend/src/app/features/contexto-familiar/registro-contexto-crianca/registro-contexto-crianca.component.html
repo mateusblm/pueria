@@ -25,7 +25,10 @@
       </section>
     }
 
-    <div class="contexto-page__layout">
+    <div class="contexto-page__layout" [class.contexto-page__layout--cadastro-rapido]="cadastroRapidoAberto()">
+      @if (cadastroRapidoAberto()) {
+        <button type="button" class="contexto-page__fechar-cadastro" (click)="fecharCadastroRapido()" aria-label="Fechar cadastro">×</button>
+      }
       <form class="pueria-card contexto-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div><p class="pueria-eyebrow">{{ editandoId() ? 'Editar registro' : 'Novo registro' }}</p><h2>{{ contexto === 'humor' ? 'Como foi o período?' : 'O que vale guardar?' }}</h2></div>
 

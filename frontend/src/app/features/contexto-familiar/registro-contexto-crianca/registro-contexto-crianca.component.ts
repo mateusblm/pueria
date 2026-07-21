@@ -55,6 +55,7 @@ export class RegistroContextoCriancaComponent implements OnInit {
   readonly observacoesSelecionadas = signal<string[]>([]);
   readonly contextoHistoricoCompleto = signal(false);
   readonly eventoSelecionado = signal<TipoEventoContexto>('ROTINA');
+  readonly cadastroRapidoAberto = signal(false);
   readonly dataMaximaIso = new Date().toISOString().slice(0, 10);
   readonly titulo = this.contexto === 'humor' ? 'Humor e comportamento' : 'Observações e eventos marcantes';
   readonly descricao = this.contexto === 'humor'
@@ -83,11 +84,14 @@ export class RegistroContextoCriancaComponent implements OnInit {
 
   ngOnInit(): void {
     this.redefinir();
+    this.cadastroRapidoAberto.set(this.route.snapshot.queryParamMap.get('cadastro') === 'rapido');
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     forkJoin({ crianca: this.criancasService.buscarPorId(id), registros: this.saudeService.listar(id) })
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({ next: ({ crianca, registros }) => { this.crianca.set(crianca); this.registros.set(registros.filter((registro) => registro.tipo === this.tipo)); }, error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar este contexto agora.')) });
   }
+
+  fecharCadastroRapido(): void { this.cadastroRapidoAberto.set(false); }
 
   rotaRetorno(): string[] { return ['/acompanhamento']; }
   textoRetorno(): string { return 'Acompanhamento'; }

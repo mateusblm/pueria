@@ -62,7 +62,10 @@
     }
 
     @if (formularioAberto() || editandoId()) {
-    <div class="alimentacao-layout">
+    <div class="alimentacao-layout" [class.alimentacao-layout--cadastro-rapido]="cadastroRapidoAberto()">
+      @if (cadastroRapidoAberto()) {
+        <button type="button" class="alimentacao-layout__fechar" (click)="fecharCadastroRapido()" aria-label="Fechar cadastro de alimentação">×</button>
+      }
       <section class="alimentacao-atualizacao">
       <form class="pueria-card alimentacao-form" [formGroup]="form" (ngSubmit)="salvar()">
         <div class="alimentacao-form__header">

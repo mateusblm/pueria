@@ -17,7 +17,7 @@
         <p>Registro rápido</p>
         <div>
           @for (modulo of acessosRapidos; track modulo.rota) {
-            <a [routerLink]="['/criancas', crianca.id, modulo.rota]" [queryParams]="{ origem: 'acompanhamento' }" [attr.data-tema]="modulo.tema"><app-icon [name]="modulo.icone" [size]="14" /><span>{{ modulo.titulo }}</span></a>
+            <a [routerLink]="['/criancas', crianca.id, modulo.rota]" [queryParams]="{ origem: 'acompanhamento', cadastro: 'rapido' }" [attr.data-tema]="modulo.tema"><app-icon [name]="modulo.icone" [size]="14" /><span>{{ modulo.titulo }}</span></a>
           }
         </div>
       </section>
