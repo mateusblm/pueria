@@ -9,6 +9,7 @@ declare global {
   interface Window {
     __PUERIA_CONFIG__?: {
       apiUrl?: string;
+      sentryDsn?: string;
     };
   }
 }

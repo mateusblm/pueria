@@ -1,1 +1,1 @@
-window.__PUERIA_CONFIG__ = {"apiUrl":""};
+window.__PUERIA_CONFIG__ = {"apiUrl":"","sentryDsn":""};
