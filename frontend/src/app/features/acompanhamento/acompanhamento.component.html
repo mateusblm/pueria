@@ -124,6 +124,13 @@
         <a class="inicio-home-retrato__ver-todas" [routerLink]="['/criancas', foco.crianca.id, 'observacoes']">Ver todas as áreas</a>
       </section>
 
+      @if (estadoHome === 'INICIAL') {
+        <section class="inicio-home-contexto" aria-label="Como o acompanhamento funciona">
+          <span><app-icon name="heart" [size]="18" /></span>
+          <p>Assim que houver alguns registros, o Pueria monta aqui um panorama do desenvolvimento de {{ foco.crianca.nome }} e sinaliza, com calma, o que valer acompanhar.</p>
+        </section>
+      }
+
       @if (progressoAtual.respondidos > 0 && experimentos.length > 0) {
         @let ideiaDaSemana = experimentos[0];
         <section class="inicio-home-ideia" aria-label="Uma ideia para esta semana">

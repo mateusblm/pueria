@@ -1186,6 +1186,28 @@
 .inicio-home-area small { font-size: .73rem; }
 .inicio-home-retrato__ver-todas { display: none; }
 
+.inicio-home-contexto {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-height: 78px;
+  padding: 14px 22px;
+  border: 1px solid #ebded4;
+  border-radius: 16px;
+  background: #fffaf6;
+}
+.inicio-home-contexto > span {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--pueria-vermelho-flor);
+}
+.inicio-home-contexto p { margin: 0; color: #746660; font-size: .8rem; line-height: 1.45; }
+
 .inicio-home-ideia {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1254,6 +1276,7 @@
   .inicio-home-atencao__ilustracao { display: none; }
   .inicio-home-tranquilo { min-height: 0; padding: 20px 18px; }
   .inicio-home-retrato__titulo h2 { font-size: 1.2rem; }
+  .inicio-home-contexto { min-height: 0; padding: 14px; gap: 12px; }
   .inicio-home-areas { grid-template-columns: 1fr; }
   .inicio-home-area:nth-child(odd) { border-right: 0; }
   .inicio-home-area:nth-last-child(-n+2) { border-bottom: 1px solid #eee4dc; }
