@@ -2,6 +2,7 @@
   <a [routerLink]="rotaRetorno()" class="marcos-page__back">&larr; {{ textoRetorno() }}</a>
 
   <div class="marcos-page__hero">
+    <span class="marcos-page__hero-icone"><app-icon name="brain" [size]="18" /></span>
     <div>
       <p class="pueria-eyebrow">Neurodesenvolvimento</p>
       <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
@@ -36,10 +37,10 @@
   } @else {
     @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos' || modo() === 'resultados') {
       <section class="marcos-visao__navegacao" aria-label="Ações desta etapa">
-        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'responder'" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong>Revisar habilidades</strong><small>Uma habilidade por vez</small></span></button>
-        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'visao'" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong>Visão geral</strong><small>Como está esta fase</small></span></button>
-        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'experimentos'" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong>Atividades</strong><small>Ideias para a rotina</small></span></button>
-        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'resultados'" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong>Para a consulta</strong><small>Resumo para conversar</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'responder'" (click)="abrirResponder()"><app-icon name="brain" [size]="17" /><span><strong><span class="marcos-visao__nav-completo">Revisar habilidades</span><span class="marcos-visao__nav-curto">Revisar</span></strong><small>Uma habilidade por vez</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'visao'" (click)="abrirVisao()"><app-icon name="chart" [size]="17" /><span><strong><span class="marcos-visao__nav-completo">Visão geral</span><span class="marcos-visao__nav-curto">Visão geral</span></strong><small>Como está esta fase</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'experimentos'" (click)="abrirExperimentos()"><app-icon name="sparkles" [size]="17" /><span><strong><span class="marcos-visao__nav-completo">Atividades</span><span class="marcos-visao__nav-curto">Atividades</span></strong><small>Ideias para a rotina</small></span></button>
+        <button type="button" [class.marcos-visao__nav--ativa]="modo() === 'resultados'" (click)="abrirResultados()"><app-icon name="stethoscope" [size]="17" /><span><strong><span class="marcos-visao__nav-completo">Para a consulta</span><span class="marcos-visao__nav-curto">Consulta</span></strong><small>Resumo para conversar</small></span></button>
       </section>
     } @else {
     <section class="pueria-card painel-etapa">
