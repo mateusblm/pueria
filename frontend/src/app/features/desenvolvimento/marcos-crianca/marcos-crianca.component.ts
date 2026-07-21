@@ -67,6 +67,10 @@ export class MarcosCriancaComponent implements OnInit {
   textoRetorno(): string {
     return 'Acompanhamento';
   }
+
+  nomeCurto(nome: string | null | undefined): string {
+    return nome?.trim().split(/\s+/)[0] || 'cada fase';
+  }
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
   private readonly criancasService = inject(CriancasService);
   private readonly toast = inject(ToastService);

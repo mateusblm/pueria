@@ -5,7 +5,7 @@
     <span class="marcos-page__hero-icone"><app-icon name="brain" [size]="18" /></span>
     <div>
       <p class="pueria-eyebrow">Neurodesenvolvimento</p>
-      <h1 class="pueria-title">Marcos de {{ crianca()?.nome ?? 'cada fase' }}</h1>
+      <h1 class="pueria-title">Marcos de {{ nomeCurto(crianca()?.nome) }}</h1>
       <p class="pueria-subtitle">Uma habilidade por vez, sem misturar idades futuras.</p>
     </div>
     @if (modo() === 'visao' || modo() === 'responder' || modo() === 'experimentos' || modo() === 'resultados') {

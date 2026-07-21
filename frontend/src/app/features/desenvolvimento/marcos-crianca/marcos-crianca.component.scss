@@ -830,3 +830,16 @@
   .estimulos-card__cabecalho { align-items:start; flex-direction:column; gap:2px; }.estimulos-card__quantidade { padding-top:0; }.estimulos-card__lista article { align-items:start; grid-template-columns:minmax(0,1fr); }.estimulos-card__lista .pueria-button,.estimulos-card__feito { grid-column:auto; justify-self:start; }
   .resumo-consulta,.resumo-consulta__numeros { align-items:stretch; flex-direction:column; }.resumo-consulta { gap:14px; }.resumo-consulta__numeros { gap:10px; }.resumo-consulta__numeros article { border:0 !important; padding:0; }.resumo-consulta__botoes { display:grid; width:100%; }.resumo-consulta__botoes .pueria-button { width:100%; }
 }
+
+/* Revisão dos marcos: versão compacta do fluxo para celular. */
+.marcos-page__hero-icone,.marcos-visao__nav-curto { display:none; }
+@media (max-width:620px) {
+  .marcos-page { gap:14px; }.marcos-page__back { color:#6d625d; font-size:.76rem; font-weight:650; }
+  .marcos-page__hero { align-items:center; gap:10px; grid-template-columns:40px minmax(0,1fr) auto; min-height:68px; padding:12px 14px; }
+  .marcos-page__hero-icone { align-items:center; background:#eee4ff; border-radius:10px; color:#6745c5; display:inline-flex; height:38px; justify-content:center; width:38px; }
+  .marcos-page__hero .pueria-eyebrow { font-size:.62rem; line-height:1.1; margin:0 0 2px; }.marcos-page__hero .pueria-title { font-size:1.05rem; line-height:1.1; }.marcos-page__hero .pueria-subtitle { display:none; }
+  .marcos-page__fase { min-width:0; padding:5px 8px; width:auto; }.marcos-page__fase small { font-size:.56rem; }.marcos-page__fase select { font-size:.68rem; }
+  .marcos-visao__navegacao { display:flex; gap:8px; grid-template-columns:none; overflow-x:auto; padding:1px 0 2px; scrollbar-width:none; }.marcos-visao__navegacao button { flex:0 0 auto; min-height:34px; padding:7px 14px; }.marcos-visao__navegacao app-icon,.marcos-visao__navegacao small { display:none; }.marcos-visao__navegacao strong { font-size:.72rem; white-space:nowrap; }.marcos-visao__nav-curto { display:inline; }.marcos-visao__nav-completo { display:none; }.marcos-visao__nav--ativa { background:#6842c2 !important; border-color:#6842c2 !important; color:#fff !important; }
+  .revisao-progresso { align-items:center; flex-direction:row; font-size:.72rem; gap:8px; margin-top:0; }.revisao-progresso>div { gap:4px; flex:0 0 auto; }.revisao-progresso i { height:6px; width:6px; }.revisao-progresso__ponto--atual { width:16px !important; }
+  .etapa-card { border-radius:16px; }.etapa-card__media { height:150px; min-height:150px; }.etapa-card__media img { max-height:150px; object-fit:contain; padding:14px; }.etapa-card__body { gap:12px; padding:16px 18px 18px; }.marco-area { font-size:.66rem; padding:5px 8px; }.etapa-card h2 { font-size:1.18rem; line-height:1.18; }.etapa-card__contexto { font-size:.76rem; }.marco-card__actions { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }.resposta { font-size:.74rem; min-height:44px; padding:8px 6px; }.estimulo-do-marco { gap:8px; padding:14px; }.estimulo-do-marco__cabecalho h3 { font-size:.92rem; }.estimulo-do-marco>p { font-size:.75rem; }.estimulo-do-marco .pueria-button { min-height:40px; }
+}
