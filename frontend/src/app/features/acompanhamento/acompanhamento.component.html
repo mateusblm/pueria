@@ -47,7 +47,8 @@
         <div>
           <p class="acompanhamento-home__data">Hoje</p>
           <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-          <p>{{ mensagemHomePorEstado[estadoHome] }}</p>
+          @let mensagemHome = mensagemHomePorEstado[estadoHome];
+          <p>{{ mensagemHome.antes }}@if (mensagemHome.destaque) { <strong>{{ mensagemHome.destaque }}</strong> }{{ mensagemHome.depois }}</p>
         </div>
       </header>
 
