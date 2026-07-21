@@ -50,6 +50,11 @@ export class AcompanhamentoComponent implements OnInit {
   readonly erro = signal('');
   readonly erroCadastro = signal('');
   readonly criancaEmFocoId = signal<string | null>(this.lerCriancaEmFocoSalva());
+  readonly mensagemHomePorEstado: Record<ResumoHomeDesenvolvimento['estado'], string> = {
+    INICIAL: 'Aos poucos você monta o retrato dele. Não precisa preencher tudo hoje — comece pelo que fizer sentido agora.',
+    ATENCAO: 'O acompanhamento dele está em dia. Há um ponto no desenvolvimento que vale levar ao pediatra — sem pressa, com calma.',
+    TRANQUILO: 'Está tudo tranquilo por aqui. Nenhum ponto pede atenção agora — continue acompanhando no seu ritmo.'
+  };
 
   readonly possuiCriancas = computed(() => this.resumos().length > 0);
   readonly criancaEmFoco = computed(() => {

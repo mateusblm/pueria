@@ -47,13 +47,7 @@
         <div>
           <p class="acompanhamento-home__data">Hoje</p>
           <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-          @if (estadoHome === 'INICIAL') {
-            <p>Aos poucos você monta o retrato dele. Não precisa preencher tudo hoje — comece pelo que fizer sentido agora.</p>
-          } @else if (estadoHome === 'ATENCAO') {
-            <p>O acompanhamento dele está <strong>em dia</strong>. Há um ponto no desenvolvimento que vale levar ao pediatra — sem pressa, com calma.</p>
-          } @else {
-            <p>Está tudo tranquilo por aqui. <strong>Nenhum ponto pede atenção agora</strong> — continue acompanhando no seu ritmo.</p>
-          }
+          <p>{{ mensagemHomePorEstado[estadoHome] }}</p>
         </div>
       </header>
 
