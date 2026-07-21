@@ -7,7 +7,9 @@ import { Crianca, Parentesco, Sexo, TipoParto } from '../../shared/models/crianc
 import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
 import { CriancasService } from '../criancas/criancas.service';
 import { DesenvolvimentoService, ResumoHomeDesenvolvimento } from '../desenvolvimento/desenvolvimento.service';
+import { SonoService } from '../sono/sono.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
+import { RegistroSono } from '../../shared/models/sono.model';
 
 type ResumoCrianca = {
   crianca: Crianca;
@@ -15,6 +17,7 @@ type ResumoCrianca = {
   estimulos: EstimuloDesenvolvimento[];
   relatos: RelatoDesenvolvimento[];
   trajetoria: EventoTrajetoriaDesenvolvimento[];
+  registrosSono: RegistroSono[];
   resumoHome: ResumoHomeDesenvolvimento;
   erro?: string;
 };
@@ -37,6 +40,7 @@ type AtalhoCuidado = {
 export class AcompanhamentoComponent implements OnInit {
   private readonly criancasService = inject(CriancasService);
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
+  private readonly sonoService = inject(SonoService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
 
@@ -119,10 +123,11 @@ export class AcompanhamentoComponent implements OnInit {
               estimulos: this.desenvolvimentoService.listarRecomendacoes(crianca.id).pipe(catchError(() => of([]))),
               relatos: this.desenvolvimentoService.listarRelatos(crianca.id).pipe(catchError(() => of([]))),
               trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([]))),
+              registrosSono: this.sonoService.listar(crianca.id).pipe(catchError(() => of([]))),
               resumoHome: this.desenvolvimentoService.resumoHome(crianca.id)
             }).pipe(
-              map(({ marcos, estimulos, relatos, trajetoria, resumoHome }) => ({ crianca, marcos, estimulos, relatos, trajetoria, resumoHome })),
-              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
+              map(({ marcos, estimulos, relatos, trajetoria, registrosSono, resumoHome }) => ({ crianca, marcos, estimulos, relatos, trajetoria, registrosSono, resumoHome })),
+              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], registrosSono: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
         }),
@@ -270,6 +275,14 @@ export class AcompanhamentoComponent implements OnInit {
     const respondidos = marcosDaIdade.filter((marco) => marco.status !== 'NAO_AVALIADO').length;
 
     return { total, respondidos, percentual: total === 0 ? 0 : Math.round((respondidos / total) * 100) };
+  }
+
+  resumoSono(registros: RegistroSono[]): string {
+    if (registros.length === 0) {
+      return 'Sem registros';
+    }
+    const maisRecente = [...registros].sort((a, b) => b.dataRegistro.localeCompare(a.dataRegistro))[0];
+    return maisRecente.analise.classificacaoDuracao === 'FAIXA_ESPERADA' ? 'Rotina regular' : 'Acompanhar rotina';
   }
 
   pontosAtencao(marcos: MarcoDesenvolvimento[]): number {
