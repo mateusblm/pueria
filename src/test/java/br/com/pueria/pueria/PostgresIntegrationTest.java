@@ -18,6 +18,6 @@ class PostgresIntegrationTest {
     @Test
     void contextoSobeComPostgresEFlywayAplicado() {
         assertThat(flyway.info().current()).isNotNull();
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("38");
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("39");
     }
 }
