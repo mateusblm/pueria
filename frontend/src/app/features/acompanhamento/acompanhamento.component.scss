@@ -1151,7 +1151,6 @@
 .inicio-home-retrato { margin-top: 4px; }
 .inicio-home-retrato__titulo h2 { font-size: 1.38rem; }
 .inicio-home-retrato__titulo p { margin-bottom: 14px; }
-.inicio-home-areas { border-radius: 16px; }
 .inicio-home-area { min-height: 66px; padding: 11px 16px; }
 .inicio-home-area strong { font-size: .84rem; }
 .inicio-home-area small { font-size: .73rem; }
@@ -1245,7 +1244,10 @@
   .inicio-home-atencao__acoes { flex-direction: column; }
   .inicio-home-atencao__acoes .pueria-button { width: 100%; }
   .inicio-home-atencao__acoes .pueria-button--secondary { min-height: 28px; border: 0; background: transparent; }
-  .inicio-home-tranquilo { min-height: 0; padding: 20px 18px; }
+  .inicio-home-tranquilo { gap: 15px; min-height: 0; padding: 20px 18px; border-radius: 18px; }
+  .inicio-home-tranquilo__icone { width: 48px; height: 48px; border-radius: 13px; }
+  .inicio-home-tranquilo h2 { font-size: 1.08rem; line-height: 1.28; }
+  .inicio-home-tranquilo p:last-child { margin-top: 5px; font-size: .74rem; line-height: 1.42; }
   .inicio-home-retrato__titulo h2 { font-size: 1.2rem; }
   .inicio-home-contexto { min-height: 0; padding: 14px; gap: 12px; }
   .inicio-home-areas { grid-template-columns: 1fr; }
