@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AlimentacaoInicial, Crianca, Sexo, StatusCondicaoClinica, StatusTriagemNeonatal, TipoGestacao, TipoParto } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 @Component({
   selector: 'app-editar-crianca',
@@ -156,7 +157,7 @@ export class EditarCriancaComponent implements OnInit {
           });
         },
         error: (erro: HttpErrorResponse) => {
-          this.erro.set(this.extrairMensagemErro(erro, 'Não foi possível carregar os dados da criança.'));
+          this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar os dados da criança.'));
         }
       });
   }
@@ -243,7 +244,7 @@ export class EditarCriancaComponent implements OnInit {
           void this.router.navigate(['/criancas', crianca.id]);
         },
         error: (erro: HttpErrorResponse) => {
-          this.erro.set(this.extrairMensagemErro(erro, 'Não foi possível salvar as alterações agora.'));
+          this.erro.set(mensagemErroHttp(erro, 'Não foi possível salvar as alterações agora.'));
         }
       });
   }

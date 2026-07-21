@@ -5,6 +5,7 @@ import { finalize, TimeoutError } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 @Component({
   selector: 'app-minhas-criancas',
@@ -34,7 +35,7 @@ export class MinhasCriancasComponent implements OnInit {
           this.criancas.set(criancas);
         },
         error: (erro: unknown) => {
-          this.erro.set(this.extrairMensagemErro(erro));
+          this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar suas crianças agora.'));
         }
       });
   }
