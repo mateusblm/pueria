@@ -8,9 +8,4 @@ import { ToastContainerComponent } from './core/toast/toast-container.component'
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  // Temporary Sentry verification control; remove after the first frontend event is confirmed.
-  throwTestError(): void {
-    throw new Error('Sentry Test Error');
-  }
-}
+export class App {}
