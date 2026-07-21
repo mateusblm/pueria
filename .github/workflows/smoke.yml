@@ -1,0 +1,53 @@
+name: Production smoke test
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'URL pública da API, sem barra final'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: API smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check health endpoint
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+        run: |
+          set -euo pipefail
+          response="$(curl --fail-with-body --silent --show-error --location --max-time 20 \
+            --header 'Accept: application/json' "$BASE_URL/actuator/health")"
+          echo "$response"
+          echo "$response" | jq -e '.status == "UP"' >/dev/null
+
+      - name: Check API status endpoint
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+        run: |
+          set -euo pipefail
+          response="$(curl --fail-with-body --silent --show-error --location --max-time 20 \
+            --header 'Accept: application/json' "$BASE_URL/api/status")"
+          echo "$response"
+          echo "$response" | jq -e '.mensagem' >/dev/null
+
+      - name: Check authenticated flow when test credentials are configured
+        if: ${{ secrets.SMOKE_EMAIL != '' && secrets.SMOKE_PASSWORD != '' }}
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+          SMOKE_EMAIL: ${{ secrets.SMOKE_EMAIL }}
+          SMOKE_PASSWORD: ${{ secrets.SMOKE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          login="$(curl --fail-with-body --silent --show-error --location --max-time 20 \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg email "$SMOKE_EMAIL" --arg senha "$SMOKE_PASSWORD" '{email:$email,senha:$senha}')" \
+            "$BASE_URL/api/auth/login")"
+          token="$(echo "$login" | jq -er '.token')"
+          curl --fail-with-body --silent --show-error --location --max-time 20 \
+            -H "Authorization: Bearer $token" "$BASE_URL/api/criancas" >/dev/null
