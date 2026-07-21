@@ -59,6 +59,21 @@ class AuthControllerTest {
     }
 
     @Test
+    void naoDeveCadastrarUsuarioComDadosInvalidos() throws Exception {
+        mockMvc.perform(post("/api/auth/cadastro")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "nome": "",
+                                  "email": "email-invalido",
+                                  "senha": "123"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.mensagens").isArray());
+    }
+
+    @Test
     void naoDeveCadastrarUsuarioComEmailDuplicado() throws Exception {
         String body = """
                 {
@@ -121,6 +136,12 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/auth/refresh")
                         .header("Origin", "http://localhost:4200")
                         .cookie(refreshAnterior))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void deveRecusarRenovacaoSemCookie() throws Exception {
+        mockMvc.perform(post("/api/auth/refresh"))
                 .andExpect(status().isUnauthorized());
     }
 
