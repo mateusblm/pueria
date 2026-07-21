@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import * as Sentry from '@sentry/angular';
 import { ToastContainerComponent } from './core/toast/toast-container.component';
 
 @Component({
@@ -10,7 +11,10 @@ import { ToastContainerComponent } from './core/toast/toast-container.component'
 })
 export class App {
   // Temporary Sentry verification control; remove after the first frontend event is confirmed.
-  throwTestError(): void {
-    throw new Error('Sentry Test Error');
+  async throwTestError(): Promise<void> {
+    const error = new Error('Sentry Test Error');
+    Sentry.captureException(error);
+    await Sentry.flush(5000);
+    throw error;
   }
 }
