@@ -6,7 +6,7 @@ import { catchError, finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { Crianca, Parentesco, Sexo, TipoParto } from '../../shared/models/crianca.model';
 import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento } from '../../shared/models/desenvolvimento.model';
 import { CriancasService } from '../criancas/criancas.service';
-import { DesenvolvimentoService } from '../desenvolvimento/desenvolvimento.service';
+import { DesenvolvimentoService, ResumoHomeDesenvolvimento } from '../desenvolvimento/desenvolvimento.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
 
 type ResumoCrianca = {
@@ -15,6 +15,7 @@ type ResumoCrianca = {
   estimulos: EstimuloDesenvolvimento[];
   relatos: RelatoDesenvolvimento[];
   trajetoria: EventoTrajetoriaDesenvolvimento[];
+  resumoHome: ResumoHomeDesenvolvimento;
   erro?: string;
 };
 
@@ -112,10 +113,11 @@ export class AcompanhamentoComponent implements OnInit {
               marcos: this.desenvolvimentoService.listarMarcos(crianca.id),
               estimulos: this.desenvolvimentoService.listarRecomendacoes(crianca.id).pipe(catchError(() => of([]))),
               relatos: this.desenvolvimentoService.listarRelatos(crianca.id).pipe(catchError(() => of([]))),
-              trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([])))
+              trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([]))),
+              resumoHome: this.desenvolvimentoService.resumoHome(crianca.id)
             }).pipe(
-              map(({ marcos, estimulos, relatos, trajetoria }) => ({ crianca, marcos, estimulos, relatos, trajetoria })),
-              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], erro: 'Não foi possível carregar o desenvolvimento agora.' }))
+              map(({ marcos, estimulos, relatos, trajetoria, resumoHome }) => ({ crianca, marcos, estimulos, relatos, trajetoria, resumoHome })),
+              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
         }),

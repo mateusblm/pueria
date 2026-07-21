@@ -36,19 +36,20 @@
     </section>
   } @else {
     @let foco = criancaEmFoco();
+    @let estadoHome = foco.resumoHome.estado;
     @let progressoAtual = progresso(foco.marcos);
-    @let pontos = pontosAtencao(foco.marcos);
+    @let pontos = foco.resumoHome.pontosAtencao;
     @let relatos = relatosParaConversa(foco.relatos);
     @let experimentos = experimentosRecomendados(foco);
 
     <section class="acompanhamento-home">
       <header class="acompanhamento-home__saudacao">
         <div>
-          <p class="pueria-eyebrow">Início</p>
+          <p class="acompanhamento-home__data">Hoje</p>
           <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
-          @if (progressoAtual.respondidos === 0) {
+          @if (estadoHome === 'INICIAL') {
             <p>Aos poucos você monta o retrato dele. Não precisa preencher tudo hoje — comece pelo que fizer sentido agora.</p>
-          } @else if (existePerdaHabilidade(foco.relatos) || pontos > 0) {
+          } @else if (estadoHome === 'ATENCAO') {
             <p>Há uma observação que vale acompanhar com mais calma.</p>
           } @else {
             <p>Está tudo tranquilo por aqui. <strong>Nenhum ponto pede atenção agora</strong> — continue acompanhando no seu ritmo.</p>
@@ -56,17 +57,18 @@
         </div>
       </header>
 
-      @if (progressoAtual.respondidos === 0) {
+      @if (estadoHome === 'INICIAL') {
         <section class="inicio-home-roteiro">
           <div class="inicio-home-roteiro__cabecalho">
             <div>
               <p class="pueria-eyebrow">Primeiros passos</p>
-              <h2>Complete quando puder</h2>
-              <p>Cada área ajuda a montar o retrato da criança. Comece pelas que fizerem sentido hoje.</p>
+              <h2>Comece pelos marcos de {{ foco.crianca.nome }}</h2>
+              <p>Responder a fase atual leva poucos minutos e já revela o que observar na rotina. O resto você preenche quando quiser.</p>
             </div>
-            <span><strong>0</strong> de 6 áreas com registros</span>
+            <span><strong>1</strong> de 7 áreas iniciadas</span>
           </div>
-          <div class="inicio-home-roteiro__progresso"><span></span></div>
+          <div class="inicio-home-roteiro__progresso"><span [style.width.%]="progressoAtual.percentual"></span></div>
+          <a class="inicio-home-roteiro__cta pueria-button" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }">Responder marcos da fase</a>
           <div class="inicio-home-roteiro__lista">
             <a [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><i><app-icon name="ruler" [size]="16" /></i><span><strong>Crescimento</strong><small>Registre uma medida quando tiver</small></span><b>Registrar ›</b></a>
             <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }"><i><app-icon name="brain" [size]="16" /></i><span><strong>Marcos</strong><small>Ainda não iniciado</small></span><b>Responder ›</b></a>
@@ -77,11 +79,11 @@
           </div>
         </section>
       } @else {
-        @if (existePerdaHabilidade(foco.relatos) || pontos > 0) {
+        @if (estadoHome === 'ATENCAO') {
           <section class="inicio-home-alertas" aria-label="Vale atenção">
             <p class="pueria-eyebrow">Vale atenção</p>
             <div>
-              @if (existePerdaHabilidade(foco.relatos)) {
+              @if (foco.resumoHome.temPerdaHabilidade) {
                 <a class="inicio-home-alerta inicio-home-alerta--urgente" [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']"><app-icon name="heartPulse" [size]="21" /><span><strong>Perda de habilidade registrada</strong><small>Vale conversar com o pediatra o quanto antes.</small><b>Ver resumo ›</b></span></a>
               }
               @if (pontos > 0) {
@@ -92,7 +94,7 @@
         }
       }
 
-      @if (progressoAtual.respondidos > 0 && (existePerdaHabilidade(foco.relatos) || pontos > 0)) {
+      @if (estadoHome === 'ATENCAO') {
         <section class="inicio-home-atencao" aria-label="Vale a sua atenção">
           <div class="inicio-home-atencao__conteudo">
             <p class="pueria-eyebrow">Vale a sua atenção</p>
@@ -105,10 +107,39 @@
           </div>
           <img class="inicio-home-atencao__imagem" src="assets/inicio/inicio-acolhedora.png" alt="Mãe e criança conversando em casa" />
         </section>
-      } @else if (progressoAtual.respondidos > 0) {
+      } @else if (estadoHome === 'TRANQUILO') {
         <section class="inicio-home-tranquilo" aria-label="Acompanhamento tranquilo">
           <span class="inicio-home-tranquilo__icone"><app-icon name="heart" [size]="24" /></span>
           <div><p class="pueria-eyebrow">Tudo em dia</p><h2>O desenvolvimento de {{ foco.crianca.nome }} segue bem.</h2><p>As áreas que você acompanha estão dentro do esperado. Registros pontuais bastam para manter o retrato atualizado.</p></div>
+        </section>
+      }
+
+      <section class="inicio-home-retrato" aria-label="Retrato do acompanhamento">
+        <div class="inicio-home-retrato__titulo">
+          <h2>{{ progressoAtual.respondidos === 0 ? 'O retrato de ' : 'Como ' }}{{ foco.crianca.nome }}{{ progressoAtual.respondidos === 0 ? '' : ' está' }}</h2>
+          <p>{{ progressoAtual.respondidos === 0 ? 'Cada área que você registrar aparece aqui com o panorama.' : 'Um panorama tranquilo das áreas que você acompanha.' }}</p>
+        </div>
+        <div class="inicio-home-areas">
+          <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><span class="inicio-home-area__icone"><app-icon name="chart" [size]="17" /></span><div><strong>Crescimento</strong><small>{{ progressoAtual.respondidos > 0 ? 'Dentro da faixa esperada' : '1 medida registrada' }}</small></div>@if (progressoAtual.respondidos === 0) { <b>Ver</b> }</a>
+          <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']"><span class="inicio-home-area__icone"><app-icon name="brain" [size]="17" /></span><div><strong>Neurodesenvolvimento</strong><small>{{ progressoAtual.respondidos > 0 ? (pontos > 0 ? pontos + ' pontos em observação' : 'Fase acompanhada') : 'Ainda não iniciado' }}</small></div>@if (progressoAtual.respondidos === 0) { <b>Começar ›</b> }</a>
+          <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'sono']"><span class="inicio-home-area__icone"><app-icon name="moon" [size]="17" /></span><div><strong>Sono</strong><small>{{ progressoAtual.respondidos > 0 ? 'Rotina regular' : 'Sem registros' }}</small></div>@if (progressoAtual.respondidos === 0) { <b>Registrar ›</b> }</a>
+          <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'alimentacao']"><span class="inicio-home-area__icone"><app-icon name="salad" [size]="17" /></span><div><strong>Alimentação</strong><small>{{ progressoAtual.respondidos > 0 ? 'Boa variedade' : 'Sem registros' }}</small></div>@if (progressoAtual.respondidos === 0) { <b>Registrar ›</b> }</a>
+          <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'humor-comportamento']"><span class="inicio-home-area__icone"><app-icon name="heart" [size]="17" /></span><div><strong>Humor</strong><small>{{ progressoAtual.respondidos > 0 ? 'Semana tranquila' : 'Sem registros' }}</small></div>@if (progressoAtual.respondidos === 0) { <b>Registrar ›</b> }</a>
+          <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'telas']"><span class="inicio-home-area__icone"><app-icon name="smartphone" [size]="17" /></span><div><strong>Telas</strong><small>{{ progressoAtual.respondidos > 0 ? 'Acompanhar rotina' : 'Sem registros ainda' }}</small></div>@if (progressoAtual.respondidos === 0) { <b>Registrar ›</b> }</a>
+        </div>
+        <a class="inicio-home-retrato__ver-todas" [routerLink]="['/criancas', foco.crianca.id, 'observacoes']">Ver todas as áreas</a>
+      </section>
+
+      @if (progressoAtual.respondidos > 0 && experimentos.length > 0) {
+        @let ideiaDaSemana = experimentos[0];
+        <section class="inicio-home-ideia" aria-label="Uma ideia para esta semana">
+          <span class="inicio-home-ideia__icone"><app-icon name="sparkles" [size]="20" /></span>
+          <div>
+            <p class="pueria-eyebrow">Uma ideia para esta semana</p>
+            <h2>{{ ideiaDaSemana.titulo }}</h2>
+            <p>{{ ideiaDaSemana.descricao }}</p>
+          </div>
+          <a class="pueria-button pueria-button--secondary" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'experimentos' }">Ver ideias</a>
         </section>
       }
 
@@ -156,17 +187,11 @@
         <section class="pueria-card inicio-primeiros-passos"><div><p class="pueria-eyebrow">Neurodesenvolvimento</p><h2>Que tal revisitar os marcos?</h2><p>As respostas da fase atual já foram registradas. Você pode rever os resultados ou guardar novas observações da rotina quando precisar.</p></div><a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }" class="pueria-button">Ver resultados</a></section>
       }
 
-      <section class="inicio-destinos" aria-label="Áreas principais">
-        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-card inicio-destino inicio-destino--marcos">
-          <span class="inicio-destino__icone"><app-icon name="brain" [size]="23" /></span>
-          <div><p class="pueria-eyebrow">Marcos</p><h2>Neurodesenvolvimento</h2><p>{{ progressoAtual.respondidos }} de {{ progressoAtual.total }} habilidades desta fase registradas.</p></div>
-          <app-icon name="chevronRight" [size]="19" />
-        </a>
-        <a [routerLink]="['/criancas', foco.crianca.id, 'observacoes']" class="pueria-card inicio-destino inicio-destino--observacoes">
-          <span class="inicio-destino__icone"><app-icon name="message" [size]="23" /></span>
-          <div><p class="pueria-eyebrow">Acompanhamento</p><h2>Observações da rotina</h2><p>Registre apenas o que ajudar a entender um padrão ou preparar a consulta.</p></div>
-          <app-icon name="chevronRight" [size]="19" />
-        </a>
+      <section class="inicio-destinos" aria-label="Atalhos principais">
+        <a [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento' }" class="pueria-card inicio-destino inicio-destino--marcos"><span class="inicio-destino__icone"><app-icon name="brain" [size]="18" /></span><strong>Marcos</strong></a>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'observacoes']" class="pueria-card inicio-destino inicio-destino--observacoes"><span class="inicio-destino__icone"><app-icon name="message" [size]="18" /></span><strong>Acompanhamento</strong></a>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'crescimento']" class="pueria-card inicio-destino inicio-destino--crescimento"><span class="inicio-destino__icone"><app-icon name="chart" [size]="18" /></span><strong>Crescimento</strong></a>
+        <a [routerLink]="['/criancas', foco.crianca.id, 'para-a-consulta']" class="pueria-card inicio-destino inicio-destino--consulta"><span class="inicio-destino__icone"><app-icon name="stethoscope" [size]="18" /></span><strong>Para a consulta</strong></a>
       </section>
 
       <section class="inicio-home-atividade">

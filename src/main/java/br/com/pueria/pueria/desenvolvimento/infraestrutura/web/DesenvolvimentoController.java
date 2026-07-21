@@ -2,6 +2,7 @@ package br.com.pueria.pueria.desenvolvimento.infraestrutura.web;
 
 import br.com.pueria.pueria.desenvolvimento.aplicacao.ListarMarcosDesenvolvimentoUseCase;
 import br.com.pueria.pueria.desenvolvimento.aplicacao.RegistrarMarcoDesenvolvimentoUseCase;
+import br.com.pueria.pueria.desenvolvimento.aplicacao.GerenciarRelatosDesenvolvimentoUseCase;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +21,12 @@ public class DesenvolvimentoController {
 
     private final ListarMarcosDesenvolvimentoUseCase listarUseCase;
     private final RegistrarMarcoDesenvolvimentoUseCase registrarUseCase;
+    private final GerenciarRelatosDesenvolvimentoUseCase relatosUseCase;
 
-    public DesenvolvimentoController(ListarMarcosDesenvolvimentoUseCase listarUseCase, RegistrarMarcoDesenvolvimentoUseCase registrarUseCase) {
+    public DesenvolvimentoController(ListarMarcosDesenvolvimentoUseCase listarUseCase, RegistrarMarcoDesenvolvimentoUseCase registrarUseCase, GerenciarRelatosDesenvolvimentoUseCase relatosUseCase) {
         this.listarUseCase = listarUseCase;
         this.registrarUseCase = registrarUseCase;
+        this.relatosUseCase = relatosUseCase;
     }
 
     @GetMapping
@@ -32,6 +35,15 @@ public class DesenvolvimentoController {
                 .stream()
                 .map(MarcoDesenvolvimentoResponse::de)
                 .toList();
+    }
+
+    @GetMapping("/resumo-home")
+    public ResumoHomeDesenvolvimentoResponse resumoHome(@PathVariable UUID criancaId, Authentication authentication) {
+        String emailResponsavel = authentication.getName();
+        return ResumoHomeDesenvolvimentoResponse.de(
+                listarUseCase.executar(criancaId, emailResponsavel),
+                relatosUseCase.listar(criancaId, emailResponsavel)
+        );
     }
 
     @PutMapping("/{marcoId}")

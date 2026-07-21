@@ -1,17 +1,13 @@
 <div class="app-shell">
   <header class="app-shell__topbar">
+    <app-brand-mark></app-brand-mark>
     @if (criancaEmFoco(); as crianca) {
       <button type="button" class="app-shell__child-switcher app-shell__child-switcher--mobile" (click)="alternarSeletorCrianca()" [attr.aria-expanded]="seletorCriancaAberto()">
         <span class="app-shell__child-avatar"><app-icon name="baby" [size]="17" /></span>
         <span><strong>{{ crianca.nome }}</strong><small>{{ idadeDaCrianca(crianca) }}</small></span>
         <app-icon name="chevronRight" [size]="16" />
       </button>
-    } @else {
-      <app-brand-mark></app-brand-mark>
     }
-    <button type="button" class="app-shell__menu-button" (click)="abrirMenu()" aria-label="Abrir menu" title="Abrir menu">
-      <app-icon name="menu" [size]="20" />
-    </button>
   </header>
 
   @if (menuAberto) {

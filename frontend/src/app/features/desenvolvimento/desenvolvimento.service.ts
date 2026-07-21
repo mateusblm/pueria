@@ -3,6 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
 import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvolvimento, RelatoDesenvolvimento, RegistrarMarcoDesenvolvimentoRequest, RegistrarRelatoDesenvolvimentoRequest } from '../../shared/models/desenvolvimento.model';
 
+export interface ResumoHomeDesenvolvimento {
+  estado: 'INICIAL' | 'ATENCAO' | 'TRANQUILO';
+  total: number;
+  respondidos: number;
+  pontosAtencao: number;
+  temPerdaHabilidade: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class DesenvolvimentoService {
   private readonly tempoLimiteRequisicaoMs = 10000;
@@ -11,6 +19,11 @@ export class DesenvolvimentoService {
 
   listarMarcos(criancaId: string): Observable<MarcoDesenvolvimento[]> {
     return this.http.get<MarcoDesenvolvimento[]>(`/api/criancas/${criancaId}/desenvolvimento/marcos`)
+      .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
+  }
+
+  resumoHome(criancaId: string): Observable<ResumoHomeDesenvolvimento> {
+    return this.http.get<ResumoHomeDesenvolvimento>(`/api/criancas/${criancaId}/desenvolvimento/marcos/resumo-home`)
       .pipe(timeout({ first: this.tempoLimiteRequisicaoMs }));
   }
 
