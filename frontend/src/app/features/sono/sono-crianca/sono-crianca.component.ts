@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { AmbienteSono, ClassificacaoDuracaoSono, RegistroSono, SalvarRegistroSonoRequest, SuperficieSono, TipoDespertarNoturno } from '../../../shared/models/sono.model';
@@ -32,6 +32,7 @@ type PontoSono = BarraSono & { x: number; y: number };
 })
 export class SonoCriancaComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly sonoService = inject(SonoService);
@@ -250,6 +251,7 @@ export class SonoCriancaComponent implements OnInit {
           this.cancelarEdicao();
           this.registroAberto.set(false);
           this.aviso.set(MENSAGEM_REGISTRO_SALVO);
+          this.retornarAcompanhamentoSeCadastroRapido();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
@@ -328,6 +330,13 @@ export class SonoCriancaComponent implements OnInit {
   fecharRegistro(): void {
     this.registroAberto.set(false);
     this.cancelarEdicao();
+    this.retornarAcompanhamentoSeCadastroRapido();
+  }
+
+  private retornarAcompanhamentoSeCadastroRapido(): void {
+    if (this.route.snapshot.queryParamMap.get('cadastro') === 'rapido') {
+      void this.router.navigate(['/criancas', this.route.snapshot.paramMap.get('id'), 'observacoes']);
+    }
   }
 
   abrirDetalhe(registroId: string): void {

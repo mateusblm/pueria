@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { RegistroSaude, SalvarRegistroSaudeRequest, TipoRegistroSaude } from '../../../shared/models/saude.model';
@@ -39,6 +39,7 @@ const TIPOS_EVENTO: ReadonlyArray<{ id: TipoEventoContexto; rotulo: string; simb
 })
 export class RegistroContextoCriancaComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly saudeService = inject(SaudeService);
@@ -91,7 +92,7 @@ export class RegistroContextoCriancaComponent implements OnInit {
       .subscribe({ next: ({ crianca, registros }) => { this.crianca.set(crianca); this.registros.set(registros.filter((registro) => registro.tipo === this.tipo)); }, error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar este contexto agora.')) });
   }
 
-  fecharCadastroRapido(): void { this.cadastroRapidoAberto.set(false); }
+  fecharCadastroRapido(): void { this.cadastroRapidoAberto.set(false); this.retornarAcompanhamento(); }
 
   rotaRetorno(): string[] { return ['/acompanhamento']; }
   textoRetorno(): string { return 'Acompanhamento'; }
@@ -105,8 +106,10 @@ export class RegistroContextoCriancaComponent implements OnInit {
     try { request = { tipo: this.tipo, dataRegistro: this.lerData(this.form.controls.dataRegistro.value), descricao: this.descricaoParaSalvar() }; } catch (erro) { this.erro.set(erro instanceof Error ? erro.message : 'Revise o registro.'); return; }
     this.salvando.set(true);
     const operacao = this.editandoId() ? this.saudeService.atualizar(crianca.id, this.editandoId(), request) : this.saudeService.registrar(crianca.id, request);
-    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (registro) => { this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)]); this.redefinir(); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); }, error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível salvar este registro agora.')) });
+    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (registro) => { this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)]); this.redefinir(); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); if (this.cadastroRapidoAberto()) this.retornarAcompanhamento(); }, error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível salvar este registro agora.')) });
   }
+
+  private retornarAcompanhamento(): void { void this.router.navigate(['/criancas', this.route.snapshot.paramMap.get('id'), 'observacoes']); }
 
   editar(registro: RegistroSaude): void {
     this.editandoId.set(registro.id);

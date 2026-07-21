@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize, forkJoin } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { AceitacaoAlimento, AlimentoRegistroAlimentacao, ClassificacaoGluten, EstagioAlimentar, GrupoAlimento, OrigemPreparoAlimento, RegistroAlimentacao, SalvarRegistroAlimentacaoRequest, SituacaoSinaisOferta, TexturaAlimentar, TipoLeiteAlimentacao, TipoOrigemAlimento } from '../../../shared/models/alimentacao.model';
@@ -24,6 +24,7 @@ type GrupoCatalogo = { valor: FiltroCatalogo; label: string };
 })
 export class AlimentacaoCriancaComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly criancasService = inject(CriancasService);
   private readonly alimentacaoService = inject(AlimentacaoService);
@@ -70,6 +71,7 @@ export class AlimentacaoCriancaComponent implements OnInit {
   fecharCadastroRapido(): void {
     this.cadastroRapidoAberto.set(false);
     this.formularioAberto.set(false);
+    this.retornarAcompanhamento();
   }
 
   readonly gruposAlimentos: GrupoCatalogo[] = [
@@ -307,9 +309,14 @@ export class AlimentacaoCriancaComponent implements OnInit {
           });
           this.cancelarEdicao();
           this.aviso.set(MENSAGEM_REGISTRO_SALVO);
+          if (this.cadastroRapidoAberto()) this.retornarAcompanhamento();
         },
         error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
       });
+  }
+
+  private retornarAcompanhamento(): void {
+    void this.router.navigate(['/criancas', this.route.snapshot.paramMap.get('id'), 'observacoes']);
   }
 
   editar(registro: RegistroAlimentacao): void {
