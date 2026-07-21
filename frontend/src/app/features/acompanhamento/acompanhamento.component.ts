@@ -13,6 +13,7 @@ import { AlimentacaoService } from '../alimentacao/alimentacao.service';
 import { TelasService } from '../telas/telas.service';
 import { SaudeService } from '../saude/saude.service';
 import { AreaResumoHome, ModuloHome, ResumoHome, ResumoHomeService } from './resumo-home.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
 import { RegistroSono } from '../../shared/models/sono.model';
 import { MedidaCrescimento } from '../../shared/models/crescimento.model';
@@ -60,6 +61,7 @@ export class AcompanhamentoComponent implements OnInit {
   private readonly telasService = inject(TelasService);
   private readonly saudeService = inject(SaudeService);
   private readonly resumoHomeService = inject(ResumoHomeService);
+  private readonly authService = inject(AuthService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
 
@@ -73,6 +75,7 @@ export class AcompanhamentoComponent implements OnInit {
   readonly erro = signal('');
   readonly erroCadastro = signal('');
   readonly criancaEmFocoId = signal<string | null>(this.lerCriancaEmFocoSalva());
+  readonly nomeResponsavel = signal('');
   readonly mensagemHomePorEstado: Record<ResumoHomeDesenvolvimento['estado'], { antes: string; destaque?: string; depois?: string }> = {
     INICIAL: { antes: 'Aos poucos você monta o retrato dele. Não precisa preencher tudo hoje — comece pelo que fizer sentido agora.' },
     ATENCAO: { antes: 'O acompanhamento dele está ', destaque: 'em dia', depois: '. Há um ponto no desenvolvimento que vale levar ao pediatra — sem pressa, com calma.' },
@@ -117,6 +120,9 @@ export class AcompanhamentoComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.authService.usuarioAtual().pipe(catchError(() => of(null))).subscribe((usuario) => {
+      this.nomeResponsavel.set(usuario?.nome.trim().split(/\s+/)[0] ?? '');
+    });
     const criancaId = this.route.snapshot.queryParamMap.get('crianca');
     if (criancaId) {
       this.criancaEmFocoId.set(criancaId);
@@ -333,6 +339,12 @@ export class AcompanhamentoComponent implements OnInit {
     if (sono.estado === 'EM_DIA' && alimentacao.estado === 'EM_DIA') return 'Em dia';
     if (sono.estado === 'SEM_REGISTROS' && alimentacao.estado === 'SEM_REGISTROS') return 'Sem registros';
     return 'Registros atualizados';
+  }
+
+  areasIniciadas(resumo: ResumoCrianca): number {
+    return resumo.resumoInteligente.areas
+      .filter((area) => area.modulo !== 'SAUDE' && area.quantidadeRegistros > 0)
+      .length;
   }
 
   pontosAtencao(marcos: MarcoDesenvolvimento[]): number {

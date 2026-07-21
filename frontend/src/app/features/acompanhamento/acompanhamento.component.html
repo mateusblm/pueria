@@ -46,7 +46,11 @@
       <header class="acompanhamento-home__saudacao">
         <div>
           <p class="acompanhamento-home__data">Hoje</p>
-          <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+          @if (estadoHome === 'INICIAL') {
+            <h1>Bem-vinda@if (nomeResponsavel()) {, {{ nomeResponsavel() }}}. Vamos conhecer {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em>.</h1>
+          } @else {
+            <h1>Olá! {{ artigoDaCrianca(foco.crianca.sexo) }} <em>{{ foco.crianca.nome }}</em> tem {{ calcularIdade(foco.crianca.dataNascimento) }}.</h1>
+          }
           @let mensagemHome = mensagemHomePorEstado[estadoHome];
           <p>{{ mensagemHome.antes }}@if (mensagemHome.destaque) { <strong>{{ mensagemHome.destaque }}</strong> }{{ mensagemHome.depois }}</p>
         </div>
@@ -60,9 +64,9 @@
               <h2>Comece pelos marcos de {{ foco.crianca.nome }}</h2>
               <p>Responder a fase atual leva poucos minutos e já revela o que observar na rotina. O resto você preenche quando quiser.</p>
             </div>
-            <span><strong>1</strong> de 7 áreas iniciadas</span>
+            <span><strong>{{ areasIniciadas(foco) }}</strong>/7 áreas</span>
           </div>
-          <div class="inicio-home-roteiro__progresso"><span [style.width.%]="estadoHome === 'INICIAL' ? 14 : progressoAtual.percentual"></span></div>
+          <div class="inicio-home-roteiro__progresso"><span [style.width.%]="(areasIniciadas(foco) / 7) * 100"></span></div>
           <a class="inicio-home-roteiro__cta pueria-button" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }">Responder marcos da fase</a>
           <div class="inicio-home-roteiro__lista">
             <a [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><i><app-icon name="ruler" [size]="16" /></i><span><strong>Crescimento</strong><small>Registre uma medida quando tiver</small></span><b>Registrar ›</b></a>
@@ -114,7 +118,7 @@
           <h2>{{ progressoAtual.respondidos === 0 ? 'O retrato de ' : 'Como ' }}{{ foco.crianca.nome }}{{ progressoAtual.respondidos === 0 ? '' : ' está' }}</h2>
           <p>{{ progressoAtual.respondidos === 0 ? 'Cada área que você registrar aparece aqui com o panorama.' : 'Um panorama tranquilo das áreas que você acompanha.' }}</p>
         </div>
-        <div class="inicio-home-areas">
+        <div class="inicio-home-areas" [class.inicio-home-areas--inicial]="estadoHome === 'INICIAL'">
           @let crescimento = areaHome(foco, 'CRESCIMENTO'); @let neuro = areaHome(foco, 'NEURODESENVOLVIMENTO'); @let sono = areaHome(foco, 'SONO'); @let alimentacao = areaHome(foco, 'ALIMENTACAO'); @let humor = areaHome(foco, 'HUMOR'); @let telas = areaHome(foco, 'TELAS');
           <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><span class="inicio-home-area__icone"><app-icon name="chart" [size]="17" /></span><div><strong>Crescimento</strong><small>{{ crescimento.resumo }}</small></div>@if (crescimento.acao === 'REGISTRAR') { <b>Registrar ›</b> }</a>
           <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']"><span class="inicio-home-area__icone"><app-icon name="brain" [size]="17" /></span><div><strong>Neurodesenvolvimento</strong><small>{{ neuro.resumo }}</small></div>@if (neuro.acao === 'COMECAR') { <b>Começar ›</b> }</a>
