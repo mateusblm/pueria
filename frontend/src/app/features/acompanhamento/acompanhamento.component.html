@@ -61,7 +61,7 @@
             </div>
             <span><strong>1</strong> de 7 áreas iniciadas</span>
           </div>
-          <div class="inicio-home-roteiro__progresso"><span [style.width.%]="progressoAtual.percentual"></span></div>
+          <div class="inicio-home-roteiro__progresso"><span [style.width.%]="estadoHome === 'INICIAL' ? 14 : progressoAtual.percentual"></span></div>
           <a class="inicio-home-roteiro__cta pueria-button" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'responder' }">Responder marcos da fase</a>
           <div class="inicio-home-roteiro__lista">
             <a [routerLink]="['/criancas', foco.crianca.id, 'crescimento']"><i><app-icon name="ruler" [size]="16" /></i><span><strong>Crescimento</strong><small>Registre uma medida quando tiver</small></span><b>Registrar ›</b></a>
