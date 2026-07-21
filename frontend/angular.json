@@ -46,6 +46,12 @@
                   "inlineCritical": false
                 }
               },
+              "sourceMap": {
+                "scripts": true,
+                "styles": true,
+                "hidden": true,
+                "sourcesContent": true
+              },
               "budgets": [
                 {
                   "type": "initial",
