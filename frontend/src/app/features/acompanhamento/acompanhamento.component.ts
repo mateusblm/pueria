@@ -8,8 +8,16 @@ import { EstimuloDesenvolvimento, EventoTrajetoriaDesenvolvimento, MarcoDesenvol
 import { CriancasService } from '../criancas/criancas.service';
 import { DesenvolvimentoService, ResumoHomeDesenvolvimento } from '../desenvolvimento/desenvolvimento.service';
 import { SonoService } from '../sono/sono.service';
+import { CrescimentoService } from '../crescimento/crescimento.service';
+import { AlimentacaoService } from '../alimentacao/alimentacao.service';
+import { TelasService } from '../telas/telas.service';
+import { SaudeService } from '../saude/saude.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
 import { RegistroSono } from '../../shared/models/sono.model';
+import { MedidaCrescimento } from '../../shared/models/crescimento.model';
+import { RegistroAlimentacao } from '../../shared/models/alimentacao.model';
+import { RegistroTelas } from '../../shared/models/telas.model';
+import { RegistroSaude } from '../../shared/models/saude.model';
 
 type ResumoCrianca = {
   crianca: Crianca;
@@ -18,6 +26,10 @@ type ResumoCrianca = {
   relatos: RelatoDesenvolvimento[];
   trajetoria: EventoTrajetoriaDesenvolvimento[];
   registrosSono: RegistroSono[];
+  medidasCrescimento: MedidaCrescimento[];
+  registrosAlimentacao: RegistroAlimentacao[];
+  registrosTelas: RegistroTelas[];
+  registrosSaude: RegistroSaude[];
   resumoHome: ResumoHomeDesenvolvimento;
   erro?: string;
 };
@@ -41,6 +53,10 @@ export class AcompanhamentoComponent implements OnInit {
   private readonly criancasService = inject(CriancasService);
   private readonly desenvolvimentoService = inject(DesenvolvimentoService);
   private readonly sonoService = inject(SonoService);
+  private readonly crescimentoService = inject(CrescimentoService);
+  private readonly alimentacaoService = inject(AlimentacaoService);
+  private readonly telasService = inject(TelasService);
+  private readonly saudeService = inject(SaudeService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
 
@@ -124,10 +140,14 @@ export class AcompanhamentoComponent implements OnInit {
               relatos: this.desenvolvimentoService.listarRelatos(crianca.id).pipe(catchError(() => of([]))),
               trajetoria: this.desenvolvimentoService.listarTrajetoria(crianca.id).pipe(catchError(() => of([]))),
               registrosSono: this.sonoService.listar(crianca.id).pipe(catchError(() => of([]))),
+              medidasCrescimento: this.crescimentoService.listar(crianca.id).pipe(catchError(() => of([]))),
+              registrosAlimentacao: this.alimentacaoService.listar(crianca.id).pipe(catchError(() => of([]))),
+              registrosTelas: this.telasService.listar(crianca.id).pipe(catchError(() => of([]))),
+              registrosSaude: this.saudeService.listar(crianca.id).pipe(catchError(() => of([]))),
               resumoHome: this.desenvolvimentoService.resumoHome(crianca.id)
             }).pipe(
-              map(({ marcos, estimulos, relatos, trajetoria, registrosSono, resumoHome }) => ({ crianca, marcos, estimulos, relatos, trajetoria, registrosSono, resumoHome })),
-              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], registrosSono: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
+              map(({ marcos, estimulos, relatos, trajetoria, registrosSono, medidasCrescimento, registrosAlimentacao, registrosTelas, registrosSaude, resumoHome }) => ({ crianca, marcos, estimulos, relatos, trajetoria, registrosSono, medidasCrescimento, registrosAlimentacao, registrosTelas, registrosSaude, resumoHome })),
+              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], registrosSono: [], medidasCrescimento: [], registrosAlimentacao: [], registrosTelas: [], registrosSaude: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
         }),
@@ -283,6 +303,17 @@ export class AcompanhamentoComponent implements OnInit {
     }
     const maisRecente = [...registros].sort((a, b) => b.dataRegistro.localeCompare(a.dataRegistro))[0];
     return maisRecente.analise.classificacaoDuracao === 'FAIXA_ESPERADA' ? 'Rotina regular' : 'Acompanhar rotina';
+  }
+
+  resumoRegistros(total: number, singular = 'registro', plural = 'registros'): string {
+    if (total === 0) {
+      return 'Sem registros';
+    }
+    return total === 1 ? `1 ${singular}` : `${total} ${plural}`;
+  }
+
+  totalRegistrosHumor(registros: RegistroSaude[]): number {
+    return registros.filter((registro) => registro.tipo === 'HUMOR_COMPORTAMENTO').length;
   }
 
   pontosAtencao(marcos: MarcoDesenvolvimento[]): number {
