@@ -122,8 +122,8 @@
           <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'alimentacao']"><span class="inicio-home-area__icone"><app-icon name="salad" [size]="17" /></span><div><strong>Alimentação</strong><small>{{ alimentacao.resumo }}</small></div>@if (alimentacao.acao === 'REGISTRAR') { <b>Registrar ›</b> }</a>
           <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'humor-comportamento']"><span class="inicio-home-area__icone"><app-icon name="heart" [size]="17" /></span><div><strong>Humor</strong><small>{{ humor.resumo }}</small></div>@if (humor.acao === 'REGISTRAR') { <b>Registrar ›</b> }</a>
           <a class="inicio-home-area" [routerLink]="['/criancas', foco.crianca.id, 'telas']"><span class="inicio-home-area__icone"><app-icon name="smartphone" [size]="17" /></span><div><strong>Telas</strong><small>{{ telas.resumo }}</small></div>@if (telas.acao === 'REGISTRAR') { <b>Registrar ›</b> }</a>
+          <a class="inicio-home-retrato__ver-todas" [routerLink]="['/criancas', foco.crianca.id, 'observacoes']">Ver todas as áreas</a>
         </div>
-        <a class="inicio-home-retrato__ver-todas" [routerLink]="['/criancas', foco.crianca.id, 'observacoes']">Ver todas as áreas</a>
       </section>
 
       @if (estadoHome === 'INICIAL') {
