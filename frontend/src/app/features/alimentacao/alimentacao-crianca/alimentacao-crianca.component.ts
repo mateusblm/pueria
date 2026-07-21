@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -806,10 +807,6 @@ export class AlimentacaoCriancaComponent implements OnInit {
   }
 
   private extrairMensagemErro(erro: HttpErrorResponse): string {
-    const mensagens = erro.error?.mensagens;
-    if (Array.isArray(mensagens) && mensagens.length > 0) {
-      return mensagens[0];
-    }
-    return 'Não foi possível carregar a alimentação agora.';
+    return mensagemErroHttp(erro, 'Não foi possível carregar a alimentação agora.');
   }
 }

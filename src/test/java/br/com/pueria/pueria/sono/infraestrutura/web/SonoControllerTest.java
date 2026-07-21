@@ -86,6 +86,18 @@ class SonoControllerTest {
     }
 
     @Test
+    void naoDeveAceitarTextoEmDataOuCampoNumerico() throws Exception {
+        String token = cadastrarEAutenticar("Mateus", "sono.tipo-invalido@email.com");
+        String criancaId = criarCriancaVinculada("sono.tipo-invalido@email.com");
+
+        mockMvc.perform(post("/api/criancas/{id}/sono/registros", criancaId)
+                        .header("Authorization", bearer(token))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"dataRegistro\":\"ontem\",\"quantidadeCochilos\":\"muitos\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void naoDeveAcessarSonoDeCriancaSemVinculo() throws Exception {
         String tokenA = cadastrarEAutenticar("Mateus", "sono.a@email.com");
         String tokenB = cadastrarEAutenticar("Outro", "sono.b@email.com");

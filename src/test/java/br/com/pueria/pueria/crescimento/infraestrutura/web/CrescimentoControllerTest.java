@@ -126,6 +126,18 @@ class CrescimentoControllerTest {
     }
 
     @Test
+    void naoDeveAceitarTextoEmDataOuCampoNumerico() throws Exception {
+        String token = cadastrarEAutenticar("Mateus", "crescimento.tipo-invalido@email.com");
+        String criancaId = criarCriancaVinculada("crescimento.tipo-invalido@email.com");
+
+        mockMvc.perform(post("/api/criancas/{criancaId}/crescimento/medidas", criancaId)
+                        .header("Authorization", bearer(token))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"dataMedicao\":\"ontem\",\"pesoKg\":\"muitos\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void naoDeveAcessarMedidasDeCriancaSemVinculo() throws Exception {
         String tokenA = cadastrarEAutenticar("Mateus", "crescimento.a@email.com");
         String tokenB = cadastrarEAutenticar("Outro", "crescimento.b@email.com");
