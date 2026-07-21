@@ -11,6 +11,11 @@ if (sentryDsn) {
     tracesSampleRate: 0.1,
     sendDefaultPii: false
   });
+
+  // Teste temporário: remover após validar o primeiro evento do frontend.
+  if (new URLSearchParams(window.location.search).get('sentryTest') === 'true') {
+    Sentry.captureException(new Error('Sentry frontend smoke test: exceção intencional'));
+  }
 }
 
 bootstrapApplication(App, appConfig)
