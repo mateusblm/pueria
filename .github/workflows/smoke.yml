@@ -37,13 +37,16 @@ jobs:
           echo "$response" | jq -e '.mensagem' >/dev/null
 
       - name: Check authenticated flow when test credentials are configured
-        if: ${{ secrets.SMOKE_EMAIL != '' && secrets.SMOKE_PASSWORD != '' }}
         env:
           BASE_URL: ${{ inputs.base_url }}
           SMOKE_EMAIL: ${{ secrets.SMOKE_EMAIL }}
           SMOKE_PASSWORD: ${{ secrets.SMOKE_PASSWORD }}
         run: |
           set -euo pipefail
+          if [[ -z "$SMOKE_EMAIL" || -z "$SMOKE_PASSWORD" ]]; then
+            echo 'SMOKE_EMAIL/SMOKE_PASSWORD não configurados; fluxo autenticado ignorado.'
+            exit 0
+          fi
           login="$(curl --fail-with-body --silent --show-error --location --max-time 20 \
             -H 'Content-Type: application/json' \
             -d "$(jq -n --arg email "$SMOKE_EMAIL" --arg senha "$SMOKE_PASSWORD" '{email:$email,senha:$senha}')" \
