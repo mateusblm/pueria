@@ -304,6 +304,12 @@
 }
 
 @media (max-width: 639px) {
+  .app-shell__topbar { min-height: 64px; padding: 12px 20px; }
+  .app-shell__child-switcher--mobile { flex: 0 1 122px; gap: 6px; padding: 5px 8px; border-radius: 18px; }
+  .app-shell__child-switcher--mobile .app-shell__child-avatar { width: 24px; height: 24px; }
+  .app-shell__child-switcher--mobile strong { font-size: .7rem; }
+  .app-shell__child-switcher--mobile small { font-size: .62rem; }
+  .app-shell__child-switcher--mobile > app-icon { width: 12px; height: 12px; }
   .app-shell__content {
     padding-inline: 20px;
   }

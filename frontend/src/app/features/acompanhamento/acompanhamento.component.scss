@@ -206,20 +206,6 @@
 .acompanhamento-home__saudacao strong { color: #397a54; }
 .inicio-home-roteiro__cta { display: none; }
 
-@media (max-width: 640px) {
-  .inicio-home-atencao { grid-template-columns: 1fr; }
-  .inicio-home-atencao__imagem { display: none; }
-  .inicio-home-atencao__conteudo { padding: 20px; }
-  .inicio-home-atencao__acoes { flex-direction: column; }
-  .inicio-home-atencao__acoes .pueria-button { width: 100%; }
-  .inicio-home-tranquilo { padding: 20px; }
-  .inicio-home-resumo { grid-template-columns: 1fr; gap: 0; overflow: hidden; }
-  .inicio-home-resumo a { min-height: 66px; border-radius: 0; border-width: 0 0 1px; }
-  .inicio-home-resumo a:last-child { border-bottom: 0; }
-  .inicio-home-roteiro__cta { display: inline-flex; width: 100%; margin: 14px 0 2px; justify-content: center; background: #6744ba; border-color: #6744ba; }
-  .inicio-home-roteiro__lista { display: none; }
-}
-
 .acompanhamento-destaque__painel div:first-child {
   display: flex;
   align-items: baseline;
@@ -1169,6 +1155,7 @@
 .inicio-home-area { min-height: 66px; padding: 11px 16px; }
 .inicio-home-area strong { font-size: .84rem; }
 .inicio-home-area small { font-size: .73rem; }
+.inicio-home-area__mobile-label { display: none; }
 .inicio-home-retrato__ver-todas { display: none; }
 
 .inicio-home-contexto {
@@ -1257,13 +1244,18 @@
   .inicio-home-atencao h2 { font-size: 1.3rem; }
   .inicio-home-atencao__acoes { flex-direction: column; }
   .inicio-home-atencao__acoes .pueria-button { width: 100%; }
+  .inicio-home-atencao__acoes .pueria-button--secondary { min-height: 28px; border: 0; background: transparent; }
   .inicio-home-tranquilo { min-height: 0; padding: 20px 18px; }
   .inicio-home-retrato__titulo h2 { font-size: 1.2rem; }
   .inicio-home-contexto { min-height: 0; padding: 14px; gap: 12px; }
   .inicio-home-areas { grid-template-columns: 1fr; }
+  .inicio-home-area:nth-child(n+4) { display: none; }
   .inicio-home-area:nth-child(odd) { border-right: 0; }
   .inicio-home-area:nth-last-child(-n+2) { border-bottom: 1px solid #eee4dc; }
   .inicio-home-area:last-child { border-bottom: 0; }
+  .inicio-home-area__desktop-label { display: none; }
+  .inicio-home-area__mobile-label { display: inline; }
+  .inicio-home-retrato__ver-todas { display: block; margin-top: 12px; color: var(--pueria-vermelho-flor); font-size: .8rem; font-weight: 700; text-align: center; text-decoration: none; }
   .inicio-home-ideia { grid-template-columns: auto minmax(0, 1fr) auto; min-height: 74px; padding: 12px 14px; }
   .inicio-home-ideia p:last-child { display: none; }
   .inicio-home-ideia .pueria-button { width: auto; min-height: 36px; padding: 0 10px; font-size: 0; }

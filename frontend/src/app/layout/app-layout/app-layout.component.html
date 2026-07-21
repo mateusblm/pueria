@@ -4,7 +4,7 @@
     @if (criancaEmFoco(); as crianca) {
       <button type="button" class="app-shell__child-switcher app-shell__child-switcher--mobile" (click)="alternarSeletorCrianca()" [attr.aria-expanded]="seletorCriancaAberto()">
         <span class="app-shell__child-avatar"><app-icon name="baby" [size]="17" /></span>
-        <span><strong>{{ crianca.nome }}</strong><small>{{ idadeDaCrianca(crianca) }}</small></span>
+        <span><strong>{{ primeiroNome(crianca.nome) }}</strong><small>{{ idadeDaCrianca(crianca) }}</small></span>
         <app-icon name="chevronRight" [size]="16" />
       </button>
     }

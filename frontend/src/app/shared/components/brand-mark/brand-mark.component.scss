@@ -73,3 +73,10 @@
   font-size: 0.66rem;
   line-height: 1.35;
 }
+
+@media (max-width: 639px) {
+  :host-context(.app-shell__topbar) .brand { gap: 7px; }
+  :host-context(.app-shell__topbar) .brand__flor { width: 22px; height: 22px; }
+  :host-context(.app-shell__topbar) .brand strong { font-size: 1rem; }
+  :host-context(.app-shell__topbar) .brand span { display: none; }
+}

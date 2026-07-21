@@ -325,6 +325,16 @@ export class AcompanhamentoComponent implements OnInit {
       ?? { modulo, estado: 'SEM_REGISTROS', resumo: 'Sem registros', quantidadeRegistros: 0, pontosAtencao: 0, acao: 'REGISTRAR' };
   }
 
+  resumoSonoEAlimentacao(resumo: ResumoCrianca): string {
+    const sono = this.areaHome(resumo, 'SONO');
+    const alimentacao = this.areaHome(resumo, 'ALIMENTACAO');
+    if (sono.estado === 'ATENCAO') return sono.resumo;
+    if (alimentacao.estado === 'ATENCAO') return alimentacao.resumo;
+    if (sono.estado === 'EM_DIA' && alimentacao.estado === 'EM_DIA') return 'Em dia';
+    if (sono.estado === 'SEM_REGISTROS' && alimentacao.estado === 'SEM_REGISTROS') return 'Sem registros';
+    return 'Registros atualizados';
+  }
+
   pontosAtencao(marcos: MarcoDesenvolvimento[]): number {
     const idade = marcos.at(-1)?.idadeMeses;
     if (idade === undefined) {

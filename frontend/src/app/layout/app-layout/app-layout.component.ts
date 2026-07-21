@@ -72,6 +72,10 @@ export class AppLayoutComponent implements OnInit {
     return anos <= 0 ? `${meses} ${meses === 1 ? 'mês' : 'meses'}` : `${anos}a ${meses}m`;
   }
 
+  primeiroNome(nome: string): string {
+    return nome.trim().split(/\s+/)[0] || nome;
+  }
+
   sair(): void {
     this.authService.sair();
     void this.router.navigateByUrl('/login');
