@@ -12,6 +12,7 @@ import { CrescimentoService } from '../crescimento/crescimento.service';
 import { AlimentacaoService } from '../alimentacao/alimentacao.service';
 import { TelasService } from '../telas/telas.service';
 import { SaudeService } from '../saude/saude.service';
+import { AreaResumoHome, ModuloHome, ResumoHome, ResumoHomeService } from './resumo-home.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
 import { RegistroSono } from '../../shared/models/sono.model';
 import { MedidaCrescimento } from '../../shared/models/crescimento.model';
@@ -31,6 +32,7 @@ type ResumoCrianca = {
   registrosTelas: RegistroTelas[];
   registrosSaude: RegistroSaude[];
   resumoHome: ResumoHomeDesenvolvimento;
+  resumoInteligente: ResumoHome;
   erro?: string;
 };
 
@@ -57,6 +59,7 @@ export class AcompanhamentoComponent implements OnInit {
   private readonly alimentacaoService = inject(AlimentacaoService);
   private readonly telasService = inject(TelasService);
   private readonly saudeService = inject(SaudeService);
+  private readonly resumoHomeService = inject(ResumoHomeService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
 
@@ -144,10 +147,11 @@ export class AcompanhamentoComponent implements OnInit {
               registrosAlimentacao: this.alimentacaoService.listar(crianca.id).pipe(catchError(() => of([]))),
               registrosTelas: this.telasService.listar(crianca.id).pipe(catchError(() => of([]))),
               registrosSaude: this.saudeService.listar(crianca.id).pipe(catchError(() => of([]))),
-              resumoHome: this.desenvolvimentoService.resumoHome(crianca.id)
+              resumoHome: this.desenvolvimentoService.resumoHome(crianca.id),
+              resumoInteligente: this.resumoHomeService.carregar(crianca.id)
             }).pipe(
-              map(({ marcos, estimulos, relatos, trajetoria, registrosSono, medidasCrescimento, registrosAlimentacao, registrosTelas, registrosSaude, resumoHome }) => ({ crianca, marcos, estimulos, relatos, trajetoria, registrosSono, medidasCrescimento, registrosAlimentacao, registrosTelas, registrosSaude, resumoHome })),
-              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], registrosSono: [], medidasCrescimento: [], registrosAlimentacao: [], registrosTelas: [], registrosSaude: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
+              map(({ marcos, estimulos, relatos, trajetoria, registrosSono, medidasCrescimento, registrosAlimentacao, registrosTelas, registrosSaude, resumoHome, resumoInteligente }) => ({ crianca, marcos, estimulos, relatos, trajetoria, registrosSono, medidasCrescimento, registrosAlimentacao, registrosTelas, registrosSaude, resumoHome, resumoInteligente })),
+              catchError(() => of({ crianca, marcos: [], estimulos: [], relatos: [], trajetoria: [], registrosSono: [], medidasCrescimento: [], registrosAlimentacao: [], registrosTelas: [], registrosSaude: [], resumoHome: { estado: 'INICIAL' as const, total: 0, respondidos: 0, pontosAtencao: 0, temPerdaHabilidade: false }, resumoInteligente: { estado: 'INICIAL' as const, areas: [] }, erro: 'Não foi possível carregar o desenvolvimento agora.' }))
             )
           ));
         }),
@@ -314,6 +318,11 @@ export class AcompanhamentoComponent implements OnInit {
 
   totalRegistrosHumor(registros: RegistroSaude[]): number {
     return registros.filter((registro) => registro.tipo === 'HUMOR_COMPORTAMENTO').length;
+  }
+
+  areaHome(resumo: ResumoCrianca, modulo: ModuloHome): AreaResumoHome {
+    return resumo.resumoInteligente.areas.find((area) => area.modulo === modulo)
+      ?? { modulo, estado: 'SEM_REGISTROS', resumo: 'Sem registros', quantidadeRegistros: 0, pontosAtencao: 0, acao: 'REGISTRAR' };
   }
 
   pontosAtencao(marcos: MarcoDesenvolvimento[]): number {
