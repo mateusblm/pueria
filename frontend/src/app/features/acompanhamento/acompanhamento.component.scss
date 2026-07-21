@@ -1088,6 +1088,7 @@
 /* Home de acompanhamento — composição fiel aos layouts de referência. */
 .acompanhamento-page { max-width: none; }
 .acompanhamento-home {
+  grid-template-columns: minmax(0, 1fr) !important;
   width: min(100%, 800px);
   max-width: 800px;
   margin: 0;
