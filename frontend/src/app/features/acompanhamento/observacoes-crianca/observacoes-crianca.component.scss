@@ -32,6 +32,7 @@
 .observacao-modulo[data-tema='telas'] { --modulo-fundo: #dcebed; --modulo-cor: #356069; }
 .observacao-modulo[data-tema='humor'] { --modulo-fundo: #f4e2ee; --modulo-cor: #934d72; }
 .observacao-modulo[data-tema='eventos'] { --modulo-fundo: #e6edf6; --modulo-cor: #506a8d; }
+.observacoes-rotina-mobile { display:none; }
 @media (max-width: 640px) {
   .observacoes-page {
     gap: 1rem;
@@ -45,4 +46,23 @@
   .observacoes-page__hero-icon { height: 46px; width: 46px; }
   .observacoes-grupo__lista { grid-template-columns: minmax(0, 1fr); }
   .observacao-modulo { min-height: 0; max-width: 100%; }
+
+  .observacoes-page { gap:0; width:100%; max-width:none; margin:0; }
+  .observacoes-page__back,
+  .observacoes-page__hero,
+  .observacoes-page__nota,
+  .observacoes-grupo { display:none; }
+  .observacoes-rotina-mobile { display:grid; gap:18px; width:100%; }
+  .observacoes-rotina-mobile header { display:grid; gap:6px; }
+  .observacoes-rotina-mobile header .pueria-eyebrow,
+  .observacoes-rotina-mobile__rapido>p,
+  .observacoes-rotina-mobile__areas>p { color:#8c7d76; font-size:.68rem; font-weight:750; margin:0; text-transform:uppercase; }
+  .observacoes-rotina-mobile header .pueria-eyebrow { color:#8a4aaa; }
+  .observacoes-rotina-mobile h1 { font-family:var(--pueria-fonte-titulo); font-size:1.55rem; font-weight:500; line-height:1.08; margin:0; }
+  .observacoes-rotina-mobile header>p:last-child { color:#6f625d; font-size:.78rem; line-height:1.45; margin:0; }
+  .observacoes-rotina-mobile__rapido { display:grid; gap:9px; }
+  .observacoes-rotina-mobile__rapido>div { display:flex; gap:8px; overflow-x:auto; padding-bottom:1px; scrollbar-width:none; }
+  .observacoes-rotina-mobile__rapido a { align-items:center; background:#fff; border:1px solid #eadfd8; border-radius:999px; color:var(--pueria-texto); display:inline-flex; flex:0 0 auto; gap:5px; min-height:36px; padding:0 13px; text-decoration:none; }
+  .observacoes-rotina-mobile__rapido app-icon { color:var(--modulo-cor); }.observacoes-rotina-mobile__rapido a[data-tema='sono'] { --modulo-cor:#45618c; }.observacoes-rotina-mobile__rapido a[data-tema='alimentacao'] { --modulo-cor:#bd7b16; }.observacoes-rotina-mobile__rapido a[data-tema='humor'] { --modulo-cor:#cc526c; }.observacoes-rotina-mobile__rapido a[data-tema='eventos'] { --modulo-cor:#7144c1; }.observacoes-rotina-mobile__rapido span { font-size:.72rem; font-weight:750; }
+  .observacoes-rotina-mobile__areas { display:grid; gap:9px; }.observacoes-rotina-mobile__areas>div { display:grid; gap:9px; }.observacoes-rotina-mobile__areas a { align-items:center; background:#fff; border:1px solid #e8ddd5; border-radius:14px; color:var(--pueria-texto); display:grid; gap:12px; grid-template-columns:44px minmax(0,1fr) auto; min-height:67px; padding:10px 13px; text-decoration:none; }.observacoes-rotina-mobile__icone { align-items:center; background:var(--modulo-fundo); border-radius:11px; color:var(--modulo-cor); display:inline-flex; height:38px; justify-content:center; width:38px; }.observacoes-rotina-mobile__areas a[data-tema='sono'] { --modulo-fundo:#e3eaf8; --modulo-cor:#46618e; }.observacoes-rotina-mobile__areas a[data-tema='alimentacao'] { --modulo-fundo:#fff0d4; --modulo-cor:#be7b16; }.observacoes-rotina-mobile__areas a[data-tema='eliminacoes'] { --modulo-fundo:#f1e3d5; --modulo-cor:#956244; }.observacoes-rotina-mobile__areas a[data-tema='humor'] { --modulo-fundo:#fae3eb; --modulo-cor:#ce536d; }.observacoes-rotina-mobile__areas a[data-tema='telas'] { --modulo-fundo:#dceff0; --modulo-cor:#407b84; }.observacoes-rotina-mobile__areas a[data-tema='eventos'] { --modulo-fundo:#e9ddfb; --modulo-cor:#7144c1; }.observacoes-rotina-mobile__areas a[data-tema='saude'] { --modulo-fundo:#fae0e6; --modulo-cor:#b73e57; }.observacoes-rotina-mobile__areas a>span:nth-child(2) { display:grid; gap:2px; min-width:0; }.observacoes-rotina-mobile__areas strong { font-size:.8rem; }.observacoes-rotina-mobile__areas small { color:#9a8c85; font-size:.68rem; line-height:1.25; }.observacoes-rotina-mobile__area--registrada small { color:#397a54; }.observacoes-rotina-mobile__areas>a>app-icon { color:#b8aaa2; }
 }

@@ -264,6 +264,10 @@
   color: var(--pueria-vermelho-flor);
 }
 
+.app-shell__mobile-nav button.ativo {
+  color: #8a4aaa;
+}
+
 @media (min-width: 980px) {
   .app-shell {
     display: grid;
