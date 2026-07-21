@@ -1,5 +1,5 @@
 ALTER TABLE registros_saude_cuidados
-    DROP CONSTRAINT IF EXISTS chk_registros_saude_cuidados_tipo;
+    DROP CONSTRAINT chk_registros_saude_cuidados_tipo;
 
 ALTER TABLE registros_saude_cuidados
     ADD CONSTRAINT chk_registros_saude_cuidados_tipo
