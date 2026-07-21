@@ -12,6 +12,7 @@ import { CrescimentoService } from '../crescimento/crescimento.service';
 import { AlimentacaoService } from '../alimentacao/alimentacao.service';
 import { TelasService } from '../telas/telas.service';
 import { SaudeService } from '../saude/saude.service';
+import { mensagemErroHttp } from '../../core/errors/mensagem-erro';
 import { AreaResumoHome, ModuloHome, ResumoHome, ResumoHomeService } from './resumo-home.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { AppIconComponent, AppIconName } from '../../shared/components/app-icon/app-icon.component';
@@ -170,7 +171,7 @@ export class AcompanhamentoComponent implements OnInit {
             this.abrirCadastroInicial();
           }
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar o acompanhamento agora.'))
       });
   }
 
@@ -289,7 +290,7 @@ export class AcompanhamentoComponent implements OnInit {
           this.tutorialPrimeiroAcompanhamentoAberto.set(true);
           this.carregar();
         },
-        error: (erro: HttpErrorResponse) => this.erroCadastro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erroCadastro.set(mensagemErroHttp(erro, 'Não foi possível salvar o cadastro agora.'))
       });
   }
 

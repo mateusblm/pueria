@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AlimentacaoInicial, Parentesco, Sexo, StatusCondicaoClinica, StatusTriagemNeonatal, TipoGestacao, TipoParto } from '../../../shared/models/crianca.model';
 import { CriancasService } from '../criancas.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 @Component({
   selector: 'app-nova-crianca',
@@ -187,7 +188,7 @@ export class NovaCriancaComponent {
           void this.router.navigate(['/criancas', crianca.id]);
         },
         error: (erro: HttpErrorResponse) => {
-          this.erro = this.extrairMensagemErro(erro);
+          this.erro = mensagemErroHttp(erro, 'Não foi possível cadastrar a criança agora.');
         }
       });
   }

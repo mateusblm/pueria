@@ -7,6 +7,7 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { ContextoUsoTela, RegistroTelas, SalvarRegistroTelasRequest, TipoConteudoTela, TipoDispositivoTela } from '../../../shared/models/telas.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { TelasService } from '../telas.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
@@ -159,7 +160,7 @@ export class TelasCriancaComponent implements OnInit {
           this.crianca.set(crianca);
           this.registros.set(registros);
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar telas agora.'))
       });
   }
 
@@ -222,7 +223,7 @@ export class TelasCriancaComponent implements OnInit {
           this.registroAberto.set(false);
           this.aviso.set(MENSAGEM_REGISTRO_SALVO);
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar telas agora.'))
       });
   }
 

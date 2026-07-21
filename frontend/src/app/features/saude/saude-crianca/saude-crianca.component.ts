@@ -9,6 +9,7 @@ import { Crianca } from '../../../shared/models/crianca.model';
 import { RegistroSaude, SalvarRegistroSaudeRequest, TipoRegistroSaude } from '../../../shared/models/saude.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { SaudeService } from '../saude.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 @Component({
   selector: 'app-saude-crianca',
@@ -77,7 +78,7 @@ export class SaudeCriancaComponent implements OnInit {
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: ({ crianca, registros }) => { this.crianca.set(crianca); this.registros.set(registros); },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar os registros de saúde agora.'))
       });
   }
 
@@ -108,7 +109,7 @@ export class SaudeCriancaComponent implements OnInit {
         this.formularioAberto.set(false);
         this.aviso.set(MENSAGEM_REGISTRO_SALVO);
       },
-      error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar os registros de saúde agora.'))
     });
   }
 
@@ -135,7 +136,7 @@ export class SaudeCriancaComponent implements OnInit {
     this.removendoId.set(registro.id);
     this.saudeService.remover(criancaId, registro.id).pipe(finalize(() => this.removendoId.set(''))).subscribe({
       next: () => { this.registros.update((itens) => itens.filter((item) => item.id !== registro.id)); this.confirmandoRemocaoId.set(''); this.aviso.set('Registro removido.'); },
-      error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar os registros de saúde agora.'))
     });
   }
 

@@ -10,6 +10,7 @@ import { TransitoIntestinalService } from '../transito-intestinal.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
 import { RegistroRapidoComponent } from '../../../shared/components/registro-rapido/registro-rapido.component';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 type Opcao<T extends string> = { valor: T; label: string };
 type BristolOpcao = {
@@ -164,7 +165,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
           this.crianca.set(crianca);
           this.registros.set(registros);
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar o trânsito intestinal agora.'))
       });
   }
 
@@ -281,7 +282,7 @@ export class TransitoIntestinalCriancaComponent implements OnInit {
           this.registroAberto.set(false);
           this.aviso.set(MENSAGEM_REGISTRO_SALVO);
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+      error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar o trânsito intestinal agora.'))
       });
   }
 

@@ -10,6 +10,7 @@ import { AppIconComponent, AppIconName } from '../../../shared/components/app-ic
 import { CriancasService } from '../../criancas/criancas.service';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 type AreaResumo = {
   area: AreaDesenvolvimento;
@@ -273,7 +274,7 @@ export class MarcosCriancaComponent implements OnInit {
           }
           this.carregarExperimentosDaFaixa();
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar o desenvolvimento agora.'))
       });
 
     this.desenvolvimentoService.listarRelatos(this.criancaId()).subscribe({
@@ -307,7 +308,7 @@ export class MarcosCriancaComponent implements OnInit {
           this.carregarExperimentosDaFaixa();
           this.toast.sucesso(MENSAGEM_REGISTRO_SALVO);
         },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível salvar o desenvolvimento agora.'))
       });
   }
 
@@ -329,7 +330,7 @@ export class MarcosCriancaComponent implements OnInit {
       .pipe(finalize(() => this.salvandoId.set(null)))
       .subscribe({
         next: () => { this.marcos.update((marcos) => marcos.map((item) => item.id === marco.id ? { ...item, observacao: valor } : item)); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); },
-        error: (erro: HttpErrorResponse) => this.erro.set(this.extrairMensagemErro(erro))
+        error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar o desenvolvimento agora.'))
       });
   }
 

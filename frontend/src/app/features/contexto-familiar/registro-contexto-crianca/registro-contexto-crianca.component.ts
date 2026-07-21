@@ -9,6 +9,7 @@ import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.c
 import { CriancasService } from '../../criancas/criancas.service';
 import { SaudeService } from '../../saude/saude.service';
 import { MENSAGEM_REGISTRO_SALVO, ToastService } from '../../../core/toast/toast.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 type Contexto = 'humor' | 'observacoes';
 type HumorPredominante = 'DIFICIL' | 'NEUTRO' | 'TRANQUILO' | 'OTIMO';
@@ -85,7 +86,7 @@ export class RegistroContextoCriancaComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     forkJoin({ crianca: this.criancasService.buscarPorId(id), registros: this.saudeService.listar(id) })
       .pipe(finalize(() => this.carregando.set(false)))
-      .subscribe({ next: ({ crianca, registros }) => { this.crianca.set(crianca); this.registros.set(registros.filter((registro) => registro.tipo === this.tipo)); }, error: (erro: HttpErrorResponse) => this.erro.set(this.mensagemErro(erro)) });
+      .subscribe({ next: ({ crianca, registros }) => { this.crianca.set(crianca); this.registros.set(registros.filter((registro) => registro.tipo === this.tipo)); }, error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível carregar este contexto agora.')) });
   }
 
   rotaRetorno(): string[] { return ['/acompanhamento']; }
@@ -100,7 +101,7 @@ export class RegistroContextoCriancaComponent implements OnInit {
     try { request = { tipo: this.tipo, dataRegistro: this.lerData(this.form.controls.dataRegistro.value), descricao: this.descricaoParaSalvar() }; } catch (erro) { this.erro.set(erro instanceof Error ? erro.message : 'Revise o registro.'); return; }
     this.salvando.set(true);
     const operacao = this.editandoId() ? this.saudeService.atualizar(crianca.id, this.editandoId(), request) : this.saudeService.registrar(crianca.id, request);
-    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (registro) => { this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)]); this.redefinir(); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); }, error: (erro: HttpErrorResponse) => this.erro.set(this.mensagemErro(erro)) });
+    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (registro) => { this.registros.update((itens) => [registro, ...itens.filter((item) => item.id !== registro.id)]); this.redefinir(); this.toast.sucesso(MENSAGEM_REGISTRO_SALVO); }, error: (erro: HttpErrorResponse) => this.erro.set(mensagemErroHttp(erro, 'Não foi possível salvar este registro agora.')) });
   }
 
   editar(registro: RegistroSaude): void {
@@ -149,5 +150,4 @@ export class RegistroContextoCriancaComponent implements OnInit {
   private descricaoLivre(descricao: string): string { return descricao.replace(/^Humor predominante:[^\n]*\n?/i, '').replace(/^Observações:[^\n]*\n?/i, '').replace(/^Evento:[^\n]*\n?/i, '').trim(); }
   private paraEntrada(data: string): string { const [ano, mes, dia] = data.split('-'); return `${dia}/${mes}/${ano}`; }
   private lerData(valor: string | null): string { const partes = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec((valor ?? '').trim()); if (!partes) throw new Error('Informe a data no formato dd/mm/aaaa.'); const iso = `${partes[3]}-${partes[2]}-${partes[1]}`; if (iso > this.dataMaximaIso) throw new Error('A data não pode estar no futuro.'); return iso; }
-  private mensagemErro(erro: HttpErrorResponse): string { const mensagens = erro.error?.mensagens; return Array.isArray(mensagens) && mensagens.length ? mensagens[0] : 'Não foi possível salvar este registro agora.'; }
 }
