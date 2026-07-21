@@ -5,6 +5,7 @@ import { finalize } from 'rxjs';
 import { Crianca } from '../../../shared/models/crianca.model';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { CriancasService } from '../criancas.service';
+import { mensagemErroHttp } from '../../../core/errors/mensagem-erro';
 
 @Component({
   selector: 'app-detalhe-crianca',
@@ -74,7 +75,7 @@ export class DetalheCriancaComponent implements OnInit {
         next: () => void this.router.navigateByUrl('/criancas'),
         error: (erro: HttpErrorResponse) => {
           this.confirmandoRemocao.set(false);
-          const mensagens = erro.error?.mensagens;
+          const mensagens = [mensagemErroHttp(erro, 'Não foi possível remover o perfil agora.')];
           this.erro.set(Array.isArray(mensagens) && mensagens.length > 0
             ? mensagens[0]
             : 'Não foi possível remover o perfil agora.');
