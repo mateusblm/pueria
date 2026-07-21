@@ -9,7 +9,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Convert;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,9 +50,8 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
     @Column(length = 120)
     private String tipoPeixe;
 
-    @Convert(converter = ListaDatasJsonConverter.class)
     @Column(length = 2000)
-    private List<LocalDate> datasReexposicao;
+    private String datasReexposicaoJson;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 30)
@@ -104,7 +102,7 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
         this.aceitacao = aceitacao;
         this.classificacaoGluten = classificacaoGluten;
         this.tipoPeixe = tipoPeixe;
-        this.datasReexposicao = datasReexposicao;
+        this.datasReexposicaoJson = new ListaDatasJsonConverter().convertToDatabaseColumn(datasReexposicao);
         this.situacaoSinais = situacaoSinais;
         this.repetiuOutroDia = repetiuOutroDia;
         this.sintomasPele = sintomasPele;
@@ -126,7 +124,9 @@ public class AlimentoRegistroAlimentacaoJpaEmbeddable {
     public AceitacaoAlimento getAceitacao() { return aceitacao; }
     public ClassificacaoGluten getClassificacaoGluten() { return classificacaoGluten; }
     public String getTipoPeixe() { return tipoPeixe; }
-    public List<LocalDate> getDatasReexposicao() { return datasReexposicao; }
+    public List<LocalDate> getDatasReexposicao() {
+        return new ListaDatasJsonConverter().convertToEntityAttribute(datasReexposicaoJson);
+    }
     public SituacaoSinaisOferta getSituacaoSinais() { return situacaoSinais; }
     public Boolean getRepetiuOutroDia() { return repetiuOutroDia; }
     public Boolean getSintomasPele() { return sintomasPele; }
