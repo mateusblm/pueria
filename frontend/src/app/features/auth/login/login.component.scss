@@ -30,6 +30,25 @@
   text-decoration: none;
 }
 
+.auth-form__privacy {
+  justify-self: center;
+  margin-top: -8px !important;
+  text-align: center;
+  font-size: 0.84rem;
+}
+
+.auth-form__privacy a {
+  color: var(--pueria-coral-escuro);
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.auth-form__privacy a:hover,
+.auth-form__privacy a:focus-visible {
+  color: var(--pueria-vermelho-flor);
+}
+
 .auth-form__inicio {
   justify-self: center;
   color: var(--pueria-texto-suave);
