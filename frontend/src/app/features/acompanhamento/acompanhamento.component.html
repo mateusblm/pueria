@@ -105,7 +105,10 @@
               <a class="pueria-button pueria-button--secondary" [routerLink]="['/criancas', foco.crianca.id, 'desenvolvimento']" [queryParams]="{ origem: 'acompanhamento', modo: 'resultados' }">Ver o que foi registrado</a>
             </div>
           </div>
-          <img class="inicio-home-atencao__imagem" src="assets/inicio/inicio-acolhedora.png" alt="Mãe e criança conversando em casa" />
+          <div class="inicio-home-atencao__ilustracao" aria-label="Ilustração acolhedora opcional">
+            <app-icon name="smartphone" [size]="30" />
+            <span>Ilustração acolhedora<br />(opcional)</span>
+          </div>
         </section>
       } @else if (estadoHome === 'TRANQUILO') {
         <section class="inicio-home-tranquilo" aria-label="Acompanhamento tranquilo">
