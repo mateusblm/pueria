@@ -62,7 +62,7 @@
   white-space: nowrap;
 }
 
-.app-shell__child-switcher strong { font-size: .86rem; }
+.app-shell__child-switcher strong { font-size: .86rem; font-weight: 600; }
 .app-shell__child-switcher small,
 .app-shell__child-switcher em { color: var(--pueria-texto-suave); font-size: .73rem; font-style: normal; font-weight: 600; }
 .app-shell__child-switcher > app-icon { color: var(--pueria-vermelho-flor); flex: 0 0 auto; transform: rotate(90deg); }
@@ -187,7 +187,7 @@
   padding: 0 16px;
   text-decoration: none;
   font-size: 0.94rem;
-  font-weight: 780;
+  font-weight: 600;
   text-align: left;
 }
 
@@ -242,7 +242,7 @@
   gap: 2px;
   color: var(--pueria-texto-suave);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -256,7 +256,7 @@
   color: var(--pueria-texto-suave);
   font-family: inherit;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .app-shell__mobile-nav a.ativo,
