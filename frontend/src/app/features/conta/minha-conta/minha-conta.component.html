@@ -13,6 +13,7 @@
     </header>
 
     <div class="minha-conta__grade">
+      @if (convitesRecebidos().length) { <section class="minha-conta__card minha-conta__convites"><p class="pueria-eyebrow">Convites para cuidar</p>@for (convite of convitesRecebidos(); track convite.id) { <article><div><strong>{{ convite.nomeCrianca }}</strong><small>{{ convite.convidadoPor }} convidou você para acompanhar.</small></div><span><button type="button" class="pueria-button" (click)="responderConvite(convite, true)">Aceitar</button><button type="button" (click)="responderConvite(convite, false)">Recusar</button></span></article> }</section> }
       <section class="minha-conta__card minha-conta__dados">
         <p class="pueria-eyebrow">Dados da conta</p>
         <button type="button" (click)="abrirModal('email')"><span><small>Nome</small><strong>{{ usuario.nome }}</strong></span><b>Editar</b></button>
@@ -58,7 +59,7 @@
     <p class="pueria-eyebrow">Segurança da conta</p>
     @if (tipo === 'email') { <h2>Alterar e-mail</h2><p>Confirme sua senha atual para proteger sua conta.</p><form [formGroup]="emailForm" (ngSubmit)="salvarEmail()"><label>Novo e-mail<input type="email" autocomplete="email" formControlName="email" /></label><label>Senha atual<input type="password" autocomplete="current-password" formControlName="senhaAtual" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar e sair' }}</button></form> }
     @else if (tipo === 'senha') { <h2>Alterar senha</h2><p>Você sairá da conta em todos os dispositivos após a alteração.</p><form [formGroup]="senhaForm" (ngSubmit)="salvarSenha()"><label>Senha atual<input type="password" autocomplete="current-password" formControlName="senhaAtual" /></label><label>Nova senha<input type="password" autocomplete="new-password" formControlName="novaSenha" /></label><label>Confirmar nova senha<input type="password" autocomplete="new-password" formControlName="confirmarSenha" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar e sair' }}</button></form> }
-    @else { <h2>Convidar cuidador</h2><p>Informe o e-mail de alguém que já tenha uma conta Pueria. Essa pessoa poderá ver e registrar informações da criança.</p><form [formGroup]="cuidadorForm" (ngSubmit)="convidarCuidador()"><label>E-mail do cuidador<input type="email" autocomplete="email" formControlName="email" placeholder="nome@exemplo.com" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Convidando...' : 'Convidar cuidador' }}</button></form> }
+    @else { <h2>Convidar cuidador</h2><p>Informe o e-mail de alguém que já tenha uma conta Pueria. Ela só poderá ver e registrar informações depois de aceitar o convite.</p><form [formGroup]="cuidadorForm" (ngSubmit)="convidarCuidador()"><label>E-mail do cuidador<input type="email" autocomplete="email" formControlName="email" placeholder="nome@exemplo.com" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Convidando...' : 'Enviar convite' }}</button></form> }
     @if (erro()) { <p class="pueria-message pueria-message--erro">{{ erro() }}</p> }
   </section></div>
 }

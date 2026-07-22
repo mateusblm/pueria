@@ -9,7 +9,7 @@ import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.c
 import { Usuario } from '../../../shared/models/usuario.model';
 import { PwaInstallService } from '../../../core/pwa/pwa-install.service';
 import { Crianca } from '../../../shared/models/crianca.model';
-import { Cuidador } from '../../../shared/models/cuidador.model';
+import { ConviteCuidador, Cuidador } from '../../../shared/models/cuidador.model';
 import { CriancasService } from '../../criancas/criancas.service';
 import { CuidadoresService } from '../../criancas/cuidadores.service';
 
@@ -31,6 +31,7 @@ export class MinhaContaComponent implements OnInit {
   readonly usuario = signal<Usuario | null>(null);
   readonly crianca = signal<Crianca | null>(null);
   readonly cuidadores = signal<Cuidador[]>([]);
+  readonly convitesRecebidos = signal<ConviteCuidador[]>([]);
   readonly modal = signal<'email' | 'senha' | 'cuidador' | null>(null);
   readonly salvando = signal(false);
   readonly erro = signal('');
@@ -46,6 +47,7 @@ export class MinhaContaComponent implements OnInit {
       this.crianca.set(crianca);
       if (crianca) this.carregarCuidadores(crianca.id);
     });
+    this.cuidadoresService.listarConvites().pipe(catchError(() => of([]))).subscribe((convites) => this.convitesRecebidos.set(convites));
   }
 
   iniciais(nome: string): string {
@@ -67,7 +69,8 @@ export class MinhaContaComponent implements OnInit {
   fecharModal(): void { if (!this.salvando()) this.modal.set(null); }
   salvarEmail(): void { if (this.emailForm.invalid) { this.emailForm.markAllAsTouched(); return; } const v = this.emailForm.getRawValue(); this.enviar(this.authService.atualizarEmail(v.email, v.senhaAtual), 'E-mail atualizado. Entre novamente com seu novo e-mail.'); }
   salvarSenha(): void { const v = this.senhaForm.getRawValue(); if (this.senhaForm.invalid || v.novaSenha !== v.confirmarSenha) { this.erro.set(v.novaSenha !== v.confirmarSenha ? 'As novas senhas não coincidem.' : 'Revise os campos obrigatórios.'); return; } this.enviar(this.authService.atualizarSenha(v.senhaAtual, v.novaSenha), 'Senha atualizada. Entre novamente para continuar.'); }
-  convidarCuidador(): void { const crianca = this.crianca(); if (!crianca) { this.erro.set('Selecione uma criança para convidar um cuidador.'); return; } if (this.cuidadorForm.invalid) { this.cuidadorForm.markAllAsTouched(); return; } this.erro.set(''); this.salvando.set(true); this.cuidadoresService.convidar(crianca.id, { email: this.cuidadorForm.getRawValue().email, parentesco: 'OUTRO' }).pipe(finalize(() => this.salvando.set(false))).subscribe({ next: (cuidador) => { this.cuidadores.update((itens) => [...itens, cuidador]); this.modal.set(null); this.toast.sucesso(`${cuidador.nome} agora acompanha ${crianca.nome}.`); }, error: (e: { error?: { mensagem?: string } }) => this.erro.set(e.error?.mensagem ?? 'Não foi possível convidar agora.') }); }
+  convidarCuidador(): void { const crianca = this.crianca(); if (!crianca) { this.erro.set('Selecione uma criança para convidar um cuidador.'); return; } if (this.cuidadorForm.invalid) { this.cuidadorForm.markAllAsTouched(); return; } this.erro.set(''); this.salvando.set(true); this.cuidadoresService.convidar(crianca.id, { email: this.cuidadorForm.getRawValue().email, parentesco: 'OUTRO' }).pipe(finalize(() => this.salvando.set(false))).subscribe({ next: () => { this.modal.set(null); this.toast.sucesso('Convite enviado. A pessoa precisa aceitar antes de acessar a criança.'); }, error: (e: { error?: { mensagem?: string } }) => this.erro.set(e.error?.mensagem ?? 'Não foi possível convidar agora.') }); }
+  responderConvite(convite: ConviteCuidador, aceitar: boolean): void { const operacao = aceitar ? this.cuidadoresService.aceitarConvite(convite.id) : this.cuidadoresService.recusarConvite(convite.id); operacao.subscribe({ next: () => { this.convitesRecebidos.update((itens) => itens.filter((item) => item.id !== convite.id)); this.toast.sucesso(aceitar ? `${convite.nomeCrianca} foi adicionada às suas crianças.` : 'Convite recusado.'); if (aceitar) window.location.reload(); }, error: () => this.toast.erro('Não foi possível responder ao convite.') }); }
   removerCuidador(cuidador: Cuidador): void { const crianca = this.crianca(); if (!crianca || cuidador.principal || !confirm(`Remover ${cuidador.nome} de quem acompanha ${crianca.nome}?`)) return; this.cuidadoresService.remover(crianca.id, cuidador.id).subscribe({ next: () => { this.cuidadores.update((itens) => itens.filter((item) => item.id !== cuidador.id)); this.toast.sucesso('Cuidador removido.'); }, error: () => this.toast.erro('Não foi possível remover este cuidador.') }); }
   private carregarCuidadores(criancaId: string): void { this.cuidadoresService.listar(criancaId).pipe(catchError(() => of([]))).subscribe((itens) => this.cuidadores.set(itens)); }
   private enviar(operacao: ReturnType<AuthService['atualizarEmail']>, mensagem: string): void { this.erro.set(''); this.salvando.set(true); operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({ next: () => { this.authService.sair(); this.toast.sucesso(mensagem); void this.router.navigateByUrl('/login'); }, error: (e: { error?: { mensagem?: string } }) => this.erro.set(e.error?.mensagem ?? 'Não foi possível salvar agora.') }); }

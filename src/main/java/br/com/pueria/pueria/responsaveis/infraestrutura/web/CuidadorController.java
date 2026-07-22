@@ -27,8 +27,8 @@ public class CuidadorController {
     }
 
     @PostMapping
-    public ResponseEntity<CuidadorResponse> convidar(@PathVariable UUID criancaId, @Valid @RequestBody ConvidarCuidadorRequest request, Authentication authentication) {
-        return ResponseEntity.ok(CuidadorResponse.de(cuidadores.convidar(criancaId, authentication.getName(), request.email(), request.parentesco())));
+    public ResponseEntity<ConviteCuidadorResponse> convidar(@PathVariable UUID criancaId, @Valid @RequestBody ConvidarCuidadorRequest request, Authentication authentication) {
+        return ResponseEntity.ok(ConviteCuidadorResponse.de(cuidadores.convidar(criancaId, authentication.getName(), request.email(), request.parentesco())));
     }
 
     @DeleteMapping("/{vinculoId}")

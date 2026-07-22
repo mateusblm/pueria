@@ -5,6 +5,8 @@ import br.com.pueria.pueria.criancas.dominio.Crianca;
 import br.com.pueria.pueria.criancas.dominio.CriancaRepositorio;
 import br.com.pueria.pueria.criancas.dominio.Sexo;
 import br.com.pueria.pueria.responsaveis.dominio.Parentesco;
+import br.com.pueria.pueria.responsaveis.dominio.ConviteCuidador;
+import br.com.pueria.pueria.responsaveis.dominio.ConviteCuidadorRepositorio;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCrianca;
 import br.com.pueria.pueria.responsaveis.dominio.VinculoResponsavelCriancaRepositorio;
 import br.com.pueria.pueria.usuarios.dominio.Usuario;
@@ -26,7 +28,8 @@ class GerenciarCuidadoresUseCaseTest {
     private final Usuarios usuarios = new Usuarios();
     private final Criancas criancas = new Criancas();
     private final Vinculos vinculos = new Vinculos();
-    private final GerenciarCuidadoresUseCase useCase = new GerenciarCuidadoresUseCase(usuarios, criancas, vinculos);
+    private final Convites convites = new Convites();
+    private final GerenciarCuidadoresUseCase useCase = new GerenciarCuidadoresUseCase(usuarios, criancas, vinculos, convites);
 
     @Test void responsavelPrincipalVinculaOutroUsuarioAtivo() {
         Usuario marina = usuarios.salvar(Usuario.cadastrarResponsavel("Marina", "marina@email.com", "hash"));
@@ -34,10 +37,11 @@ class GerenciarCuidadoresUseCaseTest {
         Crianca lucas = criancas.salvar(Crianca.cadastrar("Lucas", LocalDate.of(2025, 1, 10), Sexo.MASCULINO, false, 39, 3200));
         vinculos.salvar(VinculoResponsavelCrianca.criarPrincipal(marina.getId(), lucas.getId(), Parentesco.MAE));
 
-        var cuidador = useCase.convidar(lucas.getId(), marina.getEmail(), rafael.getEmail(), Parentesco.PAI);
+        var convite = useCase.convidar(lucas.getId(), marina.getEmail(), rafael.getEmail(), Parentesco.PAI);
 
-        assertThat(cuidador.nome()).isEqualTo("Rafael");
-        assertThat(cuidador.principal()).isFalse();
+        assertThat(convite.nomeCrianca()).isEqualTo("Lucas");
+        assertThat(vinculos.usuarioPodeAcessarCrianca(rafael.getId(), lucas.getId())).isFalse();
+        useCase.responderConvite(convite.id(), rafael.getEmail(), true);
         assertThat(vinculos.usuarioPodeAcessarCrianca(rafael.getId(), lucas.getId())).isTrue();
     }
 
@@ -88,5 +92,13 @@ class GerenciarCuidadoresUseCaseTest {
         public List<UUID> listarCriancaIdsPorUsuario(UUID usuarioId) { return itens.stream().filter(item -> item.getUsuarioId().equals(usuarioId)).map(VinculoResponsavelCrianca::getCriancaId).toList(); }
         public List<VinculoResponsavelCrianca> listarPorCrianca(UUID criancaId) { return itens.stream().filter(item -> item.getCriancaId().equals(criancaId)).toList(); }
         public void removerPorCrianca(UUID criancaId) { itens.removeIf(item -> item.getCriancaId().equals(criancaId)); }
+    }
+    private static class Convites implements ConviteCuidadorRepositorio {
+        final Map<UUID, ConviteCuidador> itens = new HashMap<>();
+        public ConviteCuidador salvar(ConviteCuidador item) { itens.put(item.getId(), item); return item; }
+        public Optional<ConviteCuidador> buscarPorId(UUID id) { return Optional.ofNullable(itens.get(id)); }
+        public boolean existePendente(UUID criancaId, UUID usuarioId) { return itens.values().stream().anyMatch(item -> item.getCriancaId().equals(criancaId) && item.getConvidadoUsuarioId().equals(usuarioId) && item.getEstado().name().equals("PENDENTE")); }
+        public List<ConviteCuidador> listarPendentesPorConvidado(UUID usuarioId) { return itens.values().stream().filter(item -> item.getConvidadoUsuarioId().equals(usuarioId) && item.getEstado().name().equals("PENDENTE")).toList(); }
+        public List<ConviteCuidador> listarPendentesPorCrianca(UUID criancaId) { return itens.values().stream().filter(item -> item.getCriancaId().equals(criancaId) && item.getEstado().name().equals("PENDENTE")).toList(); }
     }
 }
