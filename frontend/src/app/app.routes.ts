@@ -21,6 +21,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./layout/app-layout/app-layout.component').then((m) => m.AppLayoutComponent),
     children: [
+      { path: 'minha-conta', loadComponent: () => import('./features/conta/minha-conta/minha-conta.component').then((m) => m.MinhaContaComponent) },
       { path: 'acompanhamento', loadComponent: () => import('./features/acompanhamento/acompanhamento.component').then((m) => m.AcompanhamentoComponent) },
       { path: 'criancas', loadComponent: () => import('./features/criancas/minhas-criancas/minhas-criancas.component').then((m) => m.MinhasCriancasComponent) },
       { path: 'criancas/nova', loadComponent: () => import('./features/criancas/nova-crianca/nova-crianca.component').then((m) => m.NovaCriancaComponent) },

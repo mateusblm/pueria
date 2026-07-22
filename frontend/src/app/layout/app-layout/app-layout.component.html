@@ -47,6 +47,11 @@
       </button>
     </nav>
 
+    <a routerLink="/minha-conta" routerLinkActive="ativo" class="app-shell__account-link" (click)="fecharMenu()">
+      <app-icon name="user" [size]="19" />
+      Minha conta
+    </a>
+
     <button type="button" class="app-shell__logout" (click)="sair()">
       <app-icon name="logout" [size]="19" />
       Sair da conta
