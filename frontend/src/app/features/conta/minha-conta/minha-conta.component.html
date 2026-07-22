@@ -22,10 +22,13 @@
 
       <section class="minha-conta__card minha-conta__cuidadores">
         <p class="pueria-eyebrow">Quem acompanha a criança</p>
-        <p class="minha-conta__descricao">Convide quem cuida junto para ver e registrar.</p>
-        <article><span class="minha-conta__mini-avatar">{{ iniciais(usuario.nome) }}</span><span><strong>{{ usuario.nome }} (você)</strong><small>Responsável principal</small></span></article>
-        <p class="minha-conta__vazio">Outros cuidadores poderão ser convidados em breve.</p>
-        <button type="button" class="minha-conta__convidar" (click)="emBreve()">＋ Convidar cuidador <em>Em breve</em></button>
+        @if (crianca(); as crianca) {
+          <p class="minha-conta__descricao">Convide quem cuida junto para ver e registrar sobre {{ crianca.nome }}.</p>
+          @for (cuidador of cuidadores(); track cuidador.id) {
+            <article><span class="minha-conta__mini-avatar" [class.minha-conta__mini-avatar--cuidador]="!cuidador.principal">{{ iniciais(cuidador.nome) }}</span><span><strong>{{ cuidador.nome }}{{ cuidador.email === usuario.email ? ' (você)' : '' }}</strong><small>{{ cuidador.principal ? 'Responsável principal' : 'Cuidador' }}</small></span>@if (!cuidador.principal && souResponsavelPrincipal()) { <button type="button" class="minha-conta__remover-cuidador" (click)="removerCuidador(cuidador)">Remover</button> }</article>
+          } @empty { <p class="minha-conta__vazio">Ainda não há pessoas vinculadas a esta criança.</p> }
+          @if (souResponsavelPrincipal()) { <button type="button" class="minha-conta__convidar" (click)="abrirModal('cuidador')">＋ Convidar cuidador</button> }
+        } @else { <p class="minha-conta__vazio">Cadastre uma criança para começar a compartilhar o cuidado.</p> }
       </section>
 
       <section class="minha-conta__card minha-conta__lembretes">
@@ -54,7 +57,8 @@
   <div class="minha-conta__modal-fundo" (click)="fecharModal()"><section class="minha-conta__modal" (click)="$event.stopPropagation()"><button type="button" class="minha-conta__modal-fechar" (click)="fecharModal()">×</button>
     <p class="pueria-eyebrow">Segurança da conta</p>
     @if (tipo === 'email') { <h2>Alterar e-mail</h2><p>Confirme sua senha atual para proteger sua conta.</p><form [formGroup]="emailForm" (ngSubmit)="salvarEmail()"><label>Novo e-mail<input type="email" autocomplete="email" formControlName="email" /></label><label>Senha atual<input type="password" autocomplete="current-password" formControlName="senhaAtual" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar e sair' }}</button></form> }
-    @else { <h2>Alterar senha</h2><p>Você sairá da conta em todos os dispositivos após a alteração.</p><form [formGroup]="senhaForm" (ngSubmit)="salvarSenha()"><label>Senha atual<input type="password" autocomplete="current-password" formControlName="senhaAtual" /></label><label>Nova senha<input type="password" autocomplete="new-password" formControlName="novaSenha" /></label><label>Confirmar nova senha<input type="password" autocomplete="new-password" formControlName="confirmarSenha" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar e sair' }}</button></form> }
+    @else if (tipo === 'senha') { <h2>Alterar senha</h2><p>Você sairá da conta em todos os dispositivos após a alteração.</p><form [formGroup]="senhaForm" (ngSubmit)="salvarSenha()"><label>Senha atual<input type="password" autocomplete="current-password" formControlName="senhaAtual" /></label><label>Nova senha<input type="password" autocomplete="new-password" formControlName="novaSenha" /></label><label>Confirmar nova senha<input type="password" autocomplete="new-password" formControlName="confirmarSenha" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Salvando...' : 'Salvar e sair' }}</button></form> }
+    @else { <h2>Convidar cuidador</h2><p>Informe o e-mail de alguém que já tenha uma conta Pueria. Essa pessoa poderá ver e registrar informações da criança.</p><form [formGroup]="cuidadorForm" (ngSubmit)="convidarCuidador()"><label>E-mail do cuidador<input type="email" autocomplete="email" formControlName="email" placeholder="nome@exemplo.com" /></label><button class="pueria-button" [disabled]="salvando()">{{ salvando() ? 'Convidando...' : 'Convidar cuidador' }}</button></form> }
     @if (erro()) { <p class="pueria-message pueria-message--erro">{{ erro() }}</p> }
   </section></div>
 }

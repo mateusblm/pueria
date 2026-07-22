@@ -37,7 +37,7 @@ public class RemoverCriancaUseCase {
                 .filter(Usuario::isAtivo)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Responsável autenticado não encontrado."));
 
-        boolean podeAcessar = vinculoRepositorio.usuarioPodeAcessarCrianca(responsavel.getId(), criancaId);
+        boolean podeAcessar = vinculoRepositorio.usuarioEhResponsavelPrincipal(responsavel.getId(), criancaId);
         if (!podeAcessar || criancaRepositorio.buscarPorId(criancaId).isEmpty()) {
             throw new RecursoNaoEncontradoException("Criança não encontrada.");
         }

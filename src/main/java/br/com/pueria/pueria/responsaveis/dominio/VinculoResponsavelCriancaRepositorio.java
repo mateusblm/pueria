@@ -14,6 +14,14 @@ public interface VinculoResponsavelCriancaRepositorio {
 
     boolean usuarioPodeAcessarCrianca(UUID usuarioId, UUID criancaId);
 
+    default boolean usuarioEhResponsavelPrincipal(UUID usuarioId, UUID criancaId) {
+        return usuarioPodeAcessarCrianca(usuarioId, criancaId);
+    }
+
+    default List<VinculoResponsavelCrianca> listarPorCrianca(UUID criancaId) {
+        throw new UnsupportedOperationException("Listagem de vínculos não suportada.");
+    }
+
     List<UUID> listarCriancaIdsPorUsuario(UUID usuarioId);
 
     default void removerPorId(UUID id) {

@@ -81,7 +81,7 @@ public class AtualizarCriancaUseCase {
     }
 
     private Crianca buscarCriancaAcessivel(java.util.UUID criancaId, Usuario responsavel) {
-        boolean podeAcessar = vinculoRepositorio.usuarioPodeAcessarCrianca(responsavel.getId(), criancaId);
+        boolean podeAcessar = vinculoRepositorio.usuarioEhResponsavelPrincipal(responsavel.getId(), criancaId);
         if (!podeAcessar) {
             throw new RecursoNaoEncontradoException("Criança não encontrada.");
         }

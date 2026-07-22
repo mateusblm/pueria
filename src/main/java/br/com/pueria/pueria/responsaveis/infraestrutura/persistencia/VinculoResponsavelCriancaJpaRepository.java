@@ -13,6 +13,10 @@ public interface VinculoResponsavelCriancaJpaRepository extends JpaRepository<Vi
 
     boolean existsByUsuarioIdAndCriancaId(UUID usuarioId, UUID criancaId);
 
+    boolean existsByUsuarioIdAndCriancaIdAndPrincipalTrue(UUID usuarioId, UUID criancaId);
+
+    List<VinculoResponsavelCriancaJpaEntidade> findByCriancaIdOrderByPrincipalDescCriadoEmAsc(UUID criancaId);
+
     @Query("select v.criancaId from VinculoResponsavelCriancaJpaEntidade v where v.usuarioId = :usuarioId")
     List<UUID> findCriancaIdsByUsuarioId(@Param("usuarioId") UUID usuarioId);
 

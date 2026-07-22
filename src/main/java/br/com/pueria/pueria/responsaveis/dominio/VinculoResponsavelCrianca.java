@@ -41,6 +41,17 @@ public class VinculoResponsavelCrianca {
         );
     }
 
+    public static VinculoResponsavelCrianca criarCuidador(UUID usuarioId, UUID criancaId, Parentesco parentesco) {
+        return new VinculoResponsavelCrianca(
+                UUID.randomUUID(),
+                usuarioId,
+                criancaId,
+                parentesco,
+                false,
+                LocalDateTime.now()
+        );
+    }
+
     public static VinculoResponsavelCrianca restaurar(
             UUID id,
             UUID usuarioId,

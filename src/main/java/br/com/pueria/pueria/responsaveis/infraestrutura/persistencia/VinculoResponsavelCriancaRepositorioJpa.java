@@ -40,6 +40,18 @@ public class VinculoResponsavelCriancaRepositorioJpa implements VinculoResponsav
     }
 
     @Override
+    public boolean usuarioEhResponsavelPrincipal(UUID usuarioId, UUID criancaId) {
+        return repository.existsByUsuarioIdAndCriancaIdAndPrincipalTrue(usuarioId, criancaId);
+    }
+
+    @Override
+    public List<VinculoResponsavelCrianca> listarPorCrianca(UUID criancaId) {
+        return repository.findByCriancaIdOrderByPrincipalDescCriadoEmAsc(criancaId).stream()
+                .map(VinculoResponsavelCriancaMapper::paraDominio)
+                .toList();
+    }
+
+    @Override
     public List<UUID> listarCriancaIdsPorUsuario(UUID usuarioId) {
         return repository.findCriancaIdsByUsuarioId(usuarioId);
     }
