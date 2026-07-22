@@ -40,7 +40,7 @@ export class MinhaContaComponent implements OnInit {
   emBreve(): void {
     this.toast.sucesso('Esta funcionalidade estará disponível em breve.');
   }
-  async instalarApp(): Promise<void> { if (await this.pwaInstall.instalar()) this.toast.sucesso('Pueria instalado neste dispositivo.'); }
+  async instalarApp(): Promise<void> { if (await this.pwaInstall.instalar()) this.toast.sucesso('Pueria instalado neste dispositivo.'); else this.toast.sucesso(this.pwaInstall.instrucaoManual()); }
 
   abrirModal(tipo: 'email' | 'senha'): void { this.erro.set(''); this.modal.set(tipo); if (tipo === 'email') this.emailForm.patchValue({ email: this.usuario()?.email ?? '' }); }
   fecharModal(): void { if (!this.salvando()) this.modal.set(null); }
