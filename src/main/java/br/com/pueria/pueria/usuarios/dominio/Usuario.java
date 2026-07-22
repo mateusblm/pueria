@@ -70,6 +70,10 @@ public class Usuario {
         return new Usuario(id, nome, email, novaSenhaCriptografada, tipo, ativo, criadoEm, LocalDateTime.now());
     }
 
+    public Usuario comEmail(String novoEmail) {
+        return new Usuario(id, nome, novoEmail, senhaCriptografada, tipo, ativo, criadoEm, LocalDateTime.now());
+    }
+
     private static UUID validarId(UUID id) {
         if (id == null) {
             throw new RegraDominioException("O usuário deve possuir identificador");

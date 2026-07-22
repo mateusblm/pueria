@@ -58,6 +58,9 @@ export class AuthService {
     return this.http.get<Usuario>('/api/usuarios/me');
   }
 
+  atualizarEmail(email: string, senhaAtual: string): Observable<void> { return this.http.put<void>('/api/usuarios/me/email', { email, senhaAtual }); }
+  atualizarSenha(senhaAtual: string, novaSenha: string): Observable<void> { return this.http.put<void>('/api/usuarios/me/senha', { senhaAtual, novaSenha }); }
+
   sair(): void {
     this.limparSessaoLocal();
     this.http.post<void>('/api/auth/logout', {}, { withCredentials: true }).pipe(timeout(15000)).subscribe({ error: () => undefined });
