@@ -55,6 +55,12 @@
           <p>{{ mensagemHome.antes }}@if (mensagemHome.destaque) { <strong>{{ mensagemHome.destaque }}</strong> }{{ mensagemHome.depois }}</p>
         </div>
       </header>
+      @if (convitePwaVisivel()) {
+        <section class="convite-pwa" aria-label="Instalar Pueria">
+          <span><app-icon name="sparkles" [size]="19" /></span><div><strong>Tenha o Pueria como app</strong><small>Acesse mais rápido pela tela inicial.</small></div>
+          <button type="button" (click)="instalarPwa()">Instalar</button><button type="button" class="convite-pwa__adiar" (click)="adiarConvitePwa()">Agora não</button>
+        </section>
+      }
 
       @if (estadoHome === 'INICIAL') {
         <section class="inicio-home-roteiro">

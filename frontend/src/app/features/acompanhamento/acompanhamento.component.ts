@@ -21,6 +21,7 @@ import { MedidaCrescimento } from '../../shared/models/crescimento.model';
 import { RegistroAlimentacao } from '../../shared/models/alimentacao.model';
 import { RegistroTelas } from '../../shared/models/telas.model';
 import { RegistroSaude } from '../../shared/models/saude.model';
+import { PwaInstallService } from '../../core/pwa/pwa-install.service';
 
 type ResumoCrianca = {
   crianca: Crianca;
@@ -65,6 +66,7 @@ export class AcompanhamentoComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
+  private readonly pwaInstall = inject(PwaInstallService);
 
   readonly resumos = signal<ResumoCrianca[]>([]);
   readonly carregando = signal(true);
@@ -77,6 +79,7 @@ export class AcompanhamentoComponent implements OnInit {
   readonly erroCadastro = signal('');
   readonly criancaEmFocoId = signal<string | null>(this.lerCriancaEmFocoSalva());
   readonly nomeResponsavel = signal('');
+  readonly convitePwaVisivel = signal(false);
   readonly mensagemHomePorEstado: Record<ResumoHomeDesenvolvimento['estado'], { antes: string; destaque?: string; depois?: string }> = {
     INICIAL: { antes: 'Aos poucos você monta o retrato dele. Não precisa preencher tudo hoje — comece pelo que fizer sentido agora.' },
     ATENCAO: { antes: 'O acompanhamento dele está ', destaque: 'em dia', depois: '. Há um ponto no desenvolvimento que vale levar ao pediatra — sem pressa, com calma.' },
@@ -121,6 +124,7 @@ export class AcompanhamentoComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.prepararConvitePwa();
     this.authService.usuarioAtual().pipe(catchError(() => of(null))).subscribe((usuario) => {
       this.nomeResponsavel.set(usuario?.nome.trim().split(/\s+/)[0] ?? '');
     });
@@ -130,6 +134,21 @@ export class AcompanhamentoComponent implements OnInit {
       localStorage.setItem('pueria.criancaEmFocoId', criancaId);
     }
     this.carregar();
+  }
+
+  async instalarPwa(): Promise<void> {
+    await this.pwaInstall.instalar();
+    this.convitePwaVisivel.set(false);
+  }
+
+  adiarConvitePwa(): void {
+    localStorage.setItem('pueria.pwa.conviteAdiadoAte', String(Date.now() + 30 * 24 * 60 * 60 * 1000));
+    this.convitePwaVisivel.set(false);
+  }
+
+  private prepararConvitePwa(): void {
+    const adiadoAte = Number(localStorage.getItem('pueria.pwa.conviteAdiadoAte') ?? 0);
+    this.convitePwaVisivel.set(window.matchMedia('(max-width: 639px)').matches && Date.now() >= adiadoAte && !window.matchMedia('(display-mode: standalone)').matches);
   }
 
   carregar(): void {
