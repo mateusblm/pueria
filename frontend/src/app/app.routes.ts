@@ -3,17 +3,17 @@ import { authGuard } from './core/guards/auth.guard';
 import { publicOnlyGuard } from './core/guards/public-only.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', loadComponent: () => import('./features/inicio/pagina-inicial/pagina-inicial.component').then((m) => m.PaginaInicialComponent) },
-  { path: 'privacidade', loadComponent: () => import('./features/privacidade/privacidade.component').then((m) => m.PrivacidadeComponent) },
+  { path: '', pathMatch: 'full', title: 'Início', loadComponent: () => import('./features/inicio/pagina-inicial/pagina-inicial.component').then((m) => m.PaginaInicialComponent) },
+  { path: 'privacidade', title: 'Privacidade', loadComponent: () => import('./features/privacidade/privacidade.component').then((m) => m.PrivacidadeComponent) },
   {
     path: '',
     canActivate: [publicOnlyGuard],
     loadComponent: () => import('./layout/auth-layout/auth-layout.component').then((m) => m.AuthLayoutComponent),
     children: [
-      { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent) },
-      { path: 'cadastro', loadComponent: () => import('./features/auth/cadastro/cadastro.component').then((m) => m.CadastroComponent) },
-      { path: 'recuperar-senha', loadComponent: () => import('./features/auth/recuperar-senha/recuperar-senha.component').then((m) => m.RecuperarSenhaComponent) },
-      { path: 'redefinir-senha', loadComponent: () => import('./features/auth/redefinir-senha/redefinir-senha.component').then((m) => m.RedefinirSenhaComponent) }
+      { path: 'login', title: 'Entrar', loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent) },
+      { path: 'cadastro', title: 'Criar conta', loadComponent: () => import('./features/auth/cadastro/cadastro.component').then((m) => m.CadastroComponent) },
+      { path: 'recuperar-senha', title: 'Recuperar senha', loadComponent: () => import('./features/auth/recuperar-senha/recuperar-senha.component').then((m) => m.RecuperarSenhaComponent) },
+      { path: 'redefinir-senha', title: 'Redefinir senha', loadComponent: () => import('./features/auth/redefinir-senha/redefinir-senha.component').then((m) => m.RedefinirSenhaComponent) }
     ]
   },
   {
@@ -21,22 +21,22 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./layout/app-layout/app-layout.component').then((m) => m.AppLayoutComponent),
     children: [
-      { path: 'minha-conta', loadComponent: () => import('./features/conta/minha-conta/minha-conta.component').then((m) => m.MinhaContaComponent) },
-      { path: 'acompanhamento', loadComponent: () => import('./features/acompanhamento/acompanhamento.component').then((m) => m.AcompanhamentoComponent) },
-      { path: 'criancas', loadComponent: () => import('./features/criancas/minhas-criancas/minhas-criancas.component').then((m) => m.MinhasCriancasComponent) },
-      { path: 'criancas/nova', loadComponent: () => import('./features/criancas/nova-crianca/nova-crianca.component').then((m) => m.NovaCriancaComponent) },
+      { path: 'minha-conta', title: 'Minha conta', loadComponent: () => import('./features/conta/minha-conta/minha-conta.component').then((m) => m.MinhaContaComponent) },
+      { path: 'acompanhamento', title: 'Início', loadComponent: () => import('./features/acompanhamento/acompanhamento.component').then((m) => m.AcompanhamentoComponent) },
+      { path: 'criancas', title: 'Crianças', loadComponent: () => import('./features/criancas/minhas-criancas/minhas-criancas.component').then((m) => m.MinhasCriancasComponent) },
+      { path: 'criancas/nova', title: 'Cadastrar criança', loadComponent: () => import('./features/criancas/nova-crianca/nova-crianca.component').then((m) => m.NovaCriancaComponent) },
       { path: 'criancas/:id/editar', loadComponent: () => import('./features/criancas/editar-crianca/editar-crianca.component').then((m) => m.EditarCriancaComponent) },
-      { path: 'criancas/:id/desenvolvimento', loadComponent: () => import('./features/desenvolvimento/marcos-crianca/marcos-crianca.component').then((m) => m.MarcosCriancaComponent) },
-      { path: 'criancas/:id/observacoes', loadComponent: () => import('./features/acompanhamento/observacoes-crianca/observacoes-crianca.component').then((m) => m.ObservacoesCriancaComponent) },
-      { path: 'criancas/:id/crescimento', loadComponent: () => import('./features/crescimento/crescimento-crianca/crescimento-crianca.component').then((m) => m.CrescimentoCriancaComponent) },
-      { path: 'criancas/:id/alimentacao', loadComponent: () => import('./features/alimentacao/alimentacao-crianca/alimentacao-crianca.component').then((m) => m.AlimentacaoCriancaComponent) },
-      { path: 'criancas/:id/transito-intestinal', loadComponent: () => import('./features/transito-intestinal/transito-intestinal-crianca/transito-intestinal-crianca.component').then((m) => m.TransitoIntestinalCriancaComponent) },
+      { path: 'criancas/:id/desenvolvimento', title: 'Marcos', loadComponent: () => import('./features/desenvolvimento/marcos-crianca/marcos-crianca.component').then((m) => m.MarcosCriancaComponent) },
+      { path: 'criancas/:id/observacoes', title: 'Acompanhamento', loadComponent: () => import('./features/acompanhamento/observacoes-crianca/observacoes-crianca.component').then((m) => m.ObservacoesCriancaComponent) },
+      { path: 'criancas/:id/crescimento', title: 'Crescimento', loadComponent: () => import('./features/crescimento/crescimento-crianca/crescimento-crianca.component').then((m) => m.CrescimentoCriancaComponent) },
+      { path: 'criancas/:id/alimentacao', title: 'Alimentação', loadComponent: () => import('./features/alimentacao/alimentacao-crianca/alimentacao-crianca.component').then((m) => m.AlimentacaoCriancaComponent) },
+      { path: 'criancas/:id/transito-intestinal', title: 'Eliminações', loadComponent: () => import('./features/transito-intestinal/transito-intestinal-crianca/transito-intestinal-crianca.component').then((m) => m.TransitoIntestinalCriancaComponent) },
       { path: 'criancas/:id/humor-comportamento', loadComponent: () => import('./features/contexto-familiar/registro-contexto-crianca/registro-contexto-crianca.component').then((m) => m.RegistroContextoCriancaComponent), data: { contexto: 'humor' } },
       { path: 'criancas/:id/observacoes-eventos', loadComponent: () => import('./features/contexto-familiar/registro-contexto-crianca/registro-contexto-crianca.component').then((m) => m.RegistroContextoCriancaComponent), data: { contexto: 'observacoes' } },
-      { path: 'criancas/:id/sono', loadComponent: () => import('./features/sono/sono-crianca/sono-crianca.component').then((m) => m.SonoCriancaComponent) },
-      { path: 'criancas/:id/telas', loadComponent: () => import('./features/telas/telas-crianca/telas-crianca.component').then((m) => m.TelasCriancaComponent) },
-      { path: 'criancas/:id/saude', loadComponent: () => import('./features/saude/saude-crianca/saude-crianca.component').then((m) => m.SaudeCriancaComponent) },
-      { path: 'criancas/:id/para-a-consulta', loadComponent: () => import('./features/relatorios/relatorios-crianca/relatorios-crianca.component').then((m) => m.RelatoriosCriancaComponent) },
+      { path: 'criancas/:id/sono', title: 'Sono', loadComponent: () => import('./features/sono/sono-crianca/sono-crianca.component').then((m) => m.SonoCriancaComponent) },
+      { path: 'criancas/:id/telas', title: 'Telas', loadComponent: () => import('./features/telas/telas-crianca/telas-crianca.component').then((m) => m.TelasCriancaComponent) },
+      { path: 'criancas/:id/saude', title: 'Saúde e cuidados', loadComponent: () => import('./features/saude/saude-crianca/saude-crianca.component').then((m) => m.SaudeCriancaComponent) },
+      { path: 'criancas/:id/para-a-consulta', title: 'Para a consulta', loadComponent: () => import('./features/relatorios/relatorios-crianca/relatorios-crianca.component').then((m) => m.RelatoriosCriancaComponent) },
       { path: 'criancas/:id', loadComponent: () => import('./features/criancas/detalhe-crianca/detalhe-crianca.component').then((m) => m.DetalheCriancaComponent) },
       { path: 'app/criancas', pathMatch: 'full', redirectTo: 'criancas' },
       { path: 'app/criancas/nova', pathMatch: 'full', redirectTo: 'criancas/nova' },
