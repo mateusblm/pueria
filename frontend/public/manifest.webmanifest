@@ -1,0 +1,15 @@
+{
+  "name": "Pueria",
+  "short_name": "Pueria",
+  "description": "Cuidado preventivo nos primeiros anos.",
+  "lang": "pt-BR",
+  "start_url": "/acompanhamento",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff7f1",
+  "theme_color": "#fff7f1",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon", "purpose": "any" }
+  ]
+}
