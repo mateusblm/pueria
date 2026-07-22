@@ -7,6 +7,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { ToastService } from '../../../core/toast/toast.service';
 import { AppIconComponent } from '../../../shared/components/app-icon/app-icon.component';
 import { Usuario } from '../../../shared/models/usuario.model';
+import { PwaInstallService } from '../../../core/pwa/pwa-install.service';
 
 @Component({
   selector: 'app-minha-conta',
@@ -19,6 +20,7 @@ export class MinhaContaComponent implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+  readonly pwaInstall = inject(PwaInstallService);
 
   readonly usuario = signal<Usuario | null>(null);
   readonly modal = signal<'email' | 'senha' | null>(null);
@@ -38,6 +40,7 @@ export class MinhaContaComponent implements OnInit {
   emBreve(): void {
     this.toast.sucesso('Esta funcionalidade estará disponível em breve.');
   }
+  async instalarApp(): Promise<void> { if (await this.pwaInstall.instalar()) this.toast.sucesso('Pueria instalado neste dispositivo.'); }
 
   abrirModal(tipo: 'email' | 'senha'): void { this.erro.set(''); this.modal.set(tipo); if (tipo === 'email') this.emailForm.patchValue({ email: this.usuario()?.email ?? '' }); }
   fecharModal(): void { if (!this.salvando()) this.modal.set(null); }
