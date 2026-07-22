@@ -75,4 +75,18 @@ describe('AuthService', () => {
     expect(requisicao.request.body).toEqual({ email: 'mateus@email.com' });
     requisicao.flush(null);
   });
+
+  it('envia as credenciais atuais ao alterar e-mail e senha', () => {
+    service.atualizarEmail('novo@email.com', 'senha1234').subscribe();
+    const email = http.expectOne('/api/usuarios/me/email');
+    expect(email.request.method).toBe('PUT');
+    expect(email.request.body).toEqual({ email: 'novo@email.com', senhaAtual: 'senha1234' });
+    email.flush(null);
+
+    service.atualizarSenha('senha1234', 'novaSenha1').subscribe();
+    const senha = http.expectOne('/api/usuarios/me/senha');
+    expect(senha.request.method).toBe('PUT');
+    expect(senha.request.body).toEqual({ senhaAtual: 'senha1234', novaSenha: 'novaSenha1' });
+    senha.flush(null);
+  });
 });
