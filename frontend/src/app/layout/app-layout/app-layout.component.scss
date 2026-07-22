@@ -16,6 +16,21 @@
   backdrop-filter: blur(14px);
 }
 
+.app-shell__mobile-account {
+  align-items:center;
+  background:#fffdf9;
+  border:1px solid var(--pueria-borda);
+  border-radius:50%;
+  color:var(--pueria-vermelho-profundo);
+  display:inline-flex;
+  flex:0 0 34px;
+  height:34px;
+  justify-content:center;
+  text-decoration:none;
+  width:34px;
+}
+.app-shell__mobile-account.ativo { background:var(--pueria-rosa-nevoa); border-color:#efc4ce; }
+
 .app-shell__menu-button,
 .app-shell__close {
   align-items: center;
@@ -296,6 +311,8 @@
     display: none;
   }
 
+  .app-shell__mobile-account { display:none; }
+
   .app-shell__sidebar {
     position: sticky;
     top: 0;
@@ -324,7 +341,7 @@
 
 @media (max-width: 639px) {
   .app-shell__topbar { min-height: 64px; padding: 12px 20px; }
-  .app-shell__child-switcher--mobile { flex: 0 1 122px; gap: 6px; padding: 5px 8px; border-radius: 18px; }
+  .app-shell__child-switcher--mobile { flex: 0 1 112px; gap: 6px; margin-left:auto; padding: 5px 8px; border-radius: 18px; }
   .app-shell__child-switcher--mobile .app-shell__child-avatar { width: 24px; height: 24px; }
   .app-shell__child-switcher--mobile strong { font-size: .7rem; }
   .app-shell__child-switcher--mobile small { font-size: .62rem; }
